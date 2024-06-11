@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use or modify this software, please cite it as below."
+authors:
+  - family-names: "Dela Cruz"
+    given-names: "Joshua Hero"
+    orcid: "https://orcid.org/0009-0004-1308-2057"
+  - family-names: "Gozon"
+    given-names: "Edward John"
+  - family-names: "Capistrano"
+    given-names: "Lean"
+  - family-names: "Real"
+    given-names: "Alrei"
+title: "ProCESO - Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation."
+version: 2.0.4
+date-released: 2024-12-01
+url: "https://github.com/jhdcruz/ProCESO"
