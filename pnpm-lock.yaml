@@ -10,43 +10,43 @@ importers:
     dependencies:
       '@mantine/charts':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)(recharts@2.12.7(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(recharts@2.12.7(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))
       '@mantine/core':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/dates':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(dayjs@1.11.11)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(dayjs@1.11.11)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/dropzone':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/form':
         specifier: 7.10.1
-        version: 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/hooks':
         specifier: 7.10.1
-        version: 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/modals':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/notifications':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/spotlight':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@mantine/tiptap':
         specifier: 7.10.1
-        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@tiptap/extension-link@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0))(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@tiptap/extension-link@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0))(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@tabler/icons-react':
         specifier: 3.5.0
-        version: 3.5.0(react@19.0.0-rc-6230622a1a-20240610)
+        version: 3.5.0(react@19.0.0-rc-f994737d14-20240522)
       '@tiptap/extension-link':
         specifier: 2.4.0
         version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
       '@tiptap/react':
         specifier: 2.4.0
-        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@tiptap/starter-kit':
         specifier: 2.4.0
         version: 2.4.0(@tiptap/pm@2.4.0)
@@ -58,16 +58,16 @@ importers:
         version: 1.11.11
       next:
         specifier: 15.0.0-rc.0
-        version: 15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       react:
-        specifier: 19.0.0-rc-6230622a1a-20240610
-        version: 19.0.0-rc-6230622a1a-20240610
+        specifier: 19.0.0-rc-f994737d14-20240522
+        version: 19.0.0-rc-f994737d14-20240522
       react-dom:
-        specifier: 19.0.0-rc-6230622a1a-20240610
-        version: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+        specifier: 19.0.0-rc-f994737d14-20240522
+        version: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
       recharts:
         specifier: 2.12.7
-        version: 2.12.7(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+        version: 2.12.7(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.8.1
@@ -2092,10 +2092,10 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  react-dom@19.0.0-rc-6230622a1a-20240610:
-    resolution: {integrity: sha512-56G4Pum5E7FeGL1rwHX5IxidSJxQnXP4yORRo0pVeOJuu5DQJvNKpUwmJoftMP/ez0AiglYTY77L2Gs8iyt1Hg==}
+  react-dom@19.0.0-rc-f994737d14-20240522:
+    resolution: {integrity: sha512-J4CsfTSptPKkhaPbaR6n/KohQiHZTrRZ8GL4H8rbAqN/Qpy69g2MIoLBr5/PUX21ye6JxC1ZRWJFna7Xdg1pdA==}
     peerDependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
   react-dropzone-esm@15.0.1:
     resolution: {integrity: sha512-RdeGpqwHnoV/IlDFpQji7t7pTtlC2O1i/Br0LWkRZ9hYtLyce814S71h5NolnCZXsIN5wrZId6+8eQj2EBnEzg==}
@@ -2160,8 +2160,8 @@ packages:
       react: '>=16.6.0'
       react-dom: '>=16.6.0'
 
-  react@19.0.0-rc-6230622a1a-20240610:
-    resolution: {integrity: sha512-SMgWGY//7nO7F3HMuBfmC15Cr4vTe2tlpSCATfnz/wymSftDOKUqc+0smjRhcUeCFCc1zhOAWJ+N//U5CrmOzQ==}
+  react@19.0.0-rc-f994737d14-20240522:
+    resolution: {integrity: sha512-SeU2v5Xy6FotVhKz0pMS2gvYP7HlkF0qgTskj3JzA1vlxcb3dQjxlm9t0ZlJqcgoyI3VFAw7bomuDMdgy1nBuw==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -2232,8 +2232,8 @@ packages:
     resolution: {integrity: sha512-CdASjNJPvRa7roO6Ra/gLYBTzYzzPyyBXxIMdGW3USQLyjWEls2RgW5UBTXaQVp+OrpeCK3bLem8smtmheoRuw==}
     engines: {node: '>= 0.4'}
 
-  scheduler@0.25.0-rc-6230622a1a-20240610:
-    resolution: {integrity: sha512-GTIQdJXthps5mgkIFo7yAq03M0QQYTfN8z+GrnMC/SCKFSuyFP5tk2BMaaWUsVy4u4r+dTLdiXH8JEivVls0Bw==}
+  scheduler@0.25.0-rc-f994737d14-20240522:
+    resolution: {integrity: sha512-qS+xGFF7AljP2APO2iJe8zESNsK20k25MACz+WGOXPybUsRdi1ssvaoF93im2nSX2q/XT3wKkjdz6RQfbmaxdw==}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -2735,18 +2735,18 @@ snapshots:
       '@floating-ui/core': 1.6.2
       '@floating-ui/utils': 0.2.2
 
-  '@floating-ui/react-dom@2.1.0(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@floating-ui/react-dom@2.1.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
       '@floating-ui/dom': 1.6.5
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  '@floating-ui/react@0.26.16(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@floating-ui/react@0.26.16(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@floating-ui/react-dom': 2.1.0(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+      '@floating-ui/react-dom': 2.1.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       '@floating-ui/utils': 0.2.2
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
       tabbable: 6.2.0
 
   '@floating-ui/utils@0.2.2': {}
@@ -2862,91 +2862,91 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@mantine/charts@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)(recharts@2.12.7(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))':
+  '@mantine/charts@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)(recharts@2.12.7(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      recharts: 2.12.7(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      recharts: 2.12.7(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@floating-ui/react': 0.26.16(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
+      '@floating-ui/react': 0.26.16(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
       clsx: 2.1.1
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      react-number-format: 5.4.0(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      react-remove-scroll: 2.5.10(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
-      react-textarea-autosize: 8.5.3(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      react-number-format: 5.4.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      react-remove-scroll: 2.5.10(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
+      react-textarea-autosize: 8.5.3(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
       type-fest: 4.20.0
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dates@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(dayjs@1.11.11)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/dates@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(dayjs@1.11.11)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
       clsx: 2.1.1
       dayjs: 1.11.11
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/dropzone@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/dropzone@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      react-dropzone-esm: 15.0.1(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      react-dropzone-esm: 15.0.1(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/form@7.10.1(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/form@7.10.1(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
       fast-deep-equal: 3.1.3
       klona: 2.0.6
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
-  '@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
-  '@mantine/modals@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/modals@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/notifications@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/notifications@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/store': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      react-transition-group: 4.4.5(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/store': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      react-transition-group: 4.4.5(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/spotlight@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/spotlight@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/store': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/store': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  '@mantine/store@7.10.1(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/store@7.10.1(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
-  '@mantine/tiptap@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@tiptap/extension-link@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0))(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610))(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@mantine/tiptap@7.10.1(@mantine/core@7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@tiptap/extension-link@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0))(@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522))(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-6230622a1a-20240610))(@types/react@18.3.3)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      '@mantine/hooks': 7.10.1(react@19.0.0-rc-6230622a1a-20240610)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1(react@19.0.0-rc-f994737d14-20240522))(@types/react@18.3.3)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      '@mantine/hooks': 7.10.1(react@19.0.0-rc-f994737d14-20240522)
       '@tiptap/extension-link': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
-      '@tiptap/react': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      '@tiptap/react': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
   '@next/env@15.0.0-rc.0': {}
 
@@ -3006,10 +3006,10 @@ snapshots:
     dependencies:
       tslib: 2.6.3
 
-  '@tabler/icons-react@3.5.0(react@19.0.0-rc-6230622a1a-20240610)':
+  '@tabler/icons-react@3.5.0(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
       '@tabler/icons': 3.5.0
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
   '@tabler/icons@3.5.0': {}
 
@@ -3133,14 +3133,14 @@ snapshots:
       prosemirror-transform: 1.9.0
       prosemirror-view: 1.33.8
 
-  '@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)':
+  '@tiptap/react@2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)':
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.4.0)
       '@tiptap/extension-bubble-menu': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
       '@tiptap/extension-floating-menu': 2.4.0(@tiptap/core@2.4.0(@tiptap/pm@2.4.0))(@tiptap/pm@2.4.0)
       '@tiptap/pm': 2.4.0
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
   '@tiptap/starter-kit@2.4.0(@tiptap/pm@2.4.0)':
     dependencies:
@@ -4431,7 +4431,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610):
+  next@15.0.0-rc.0(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       '@next/env': 15.0.0-rc.0
       '@swc/helpers': 0.5.11
@@ -4439,9 +4439,9 @@ snapshots:
       caniuse-lite: 1.0.30001632
       graceful-fs: 4.2.11
       postcss: 8.4.31
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      styled-jsx: 5.1.3(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      styled-jsx: 5.1.3(react@19.0.0-rc-f994737d14-20240522)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.0.0-rc.0
       '@next/swc-darwin-x64': 15.0.0-rc.0
@@ -4756,79 +4756,79 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610):
+  react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
-      scheduler: 0.25.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
+      scheduler: 0.25.0-rc-f994737d14-20240522
 
-  react-dropzone-esm@15.0.1(react@19.0.0-rc-6230622a1a-20240610):
+  react-dropzone-esm@15.0.1(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       prop-types: 15.8.1
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
   react-is@16.13.1: {}
 
-  react-number-format@5.4.0(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610):
+  react-number-format@5.4.0(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       prop-types: 15.8.1
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  react-remove-scroll-bar@2.3.6(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  react-remove-scroll-bar@2.3.6(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-style-singleton: 2.2.1(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-style-singleton: 2.2.1(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
       tslib: 2.6.3
     optionalDependencies:
       '@types/react': 18.3.3
 
-  react-remove-scroll@2.5.10(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  react-remove-scroll@2.5.10(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-remove-scroll-bar: 2.3.6(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
-      react-style-singleton: 2.2.1(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-remove-scroll-bar: 2.3.6(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
+      react-style-singleton: 2.2.1(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
       tslib: 2.6.3
-      use-callback-ref: 1.3.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
-      use-sidecar: 1.1.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      use-callback-ref: 1.3.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
+      use-sidecar: 1.1.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
     optionalDependencies:
       '@types/react': 18.3.3
 
-  react-smooth@4.0.1(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610):
+  react-smooth@4.0.1(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       fast-equals: 5.0.1
       prop-types: 15.8.1
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
-      react-transition-group: 4.4.5(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
+      react-transition-group: 4.4.5(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
 
-  react-style-singleton@2.2.1(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  react-style-singleton@2.2.1(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       get-nonce: 1.0.1
       invariant: 2.2.4
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
       tslib: 2.6.3
     optionalDependencies:
       '@types/react': 18.3.3
 
-  react-textarea-autosize@8.5.3(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  react-textarea-autosize@8.5.3(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       '@babel/runtime': 7.24.7
-      react: 19.0.0-rc-6230622a1a-20240610
-      use-composed-ref: 1.3.0(react@19.0.0-rc-6230622a1a-20240610)
-      use-latest: 1.2.1(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      use-composed-ref: 1.3.0(react@19.0.0-rc-f994737d14-20240522)
+      use-latest: 1.2.1(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
     transitivePeerDependencies:
       - '@types/react'
 
-  react-transition-group@4.4.5(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610):
+  react-transition-group@4.4.5(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       '@babel/runtime': 7.24.7
       dom-helpers: 5.2.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
 
-  react@19.0.0-rc-6230622a1a-20240610: {}
+  react@19.0.0-rc-f994737d14-20240522: {}
 
   read-cache@1.0.0:
     dependencies:
@@ -4842,15 +4842,15 @@ snapshots:
     dependencies:
       decimal.js-light: 2.5.1
 
-  recharts@2.12.7(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610):
+  recharts@2.12.7(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       clsx: 2.1.1
       eventemitter3: 4.0.7
       lodash: 4.17.21
-      react: 19.0.0-rc-6230622a1a-20240610
-      react-dom: 19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      react-dom: 19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522)
       react-is: 16.13.1
-      react-smooth: 4.0.1(react-dom@19.0.0-rc-6230622a1a-20240610(react@19.0.0-rc-6230622a1a-20240610))(react@19.0.0-rc-6230622a1a-20240610)
+      react-smooth: 4.0.1(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
       recharts-scale: 0.4.5
       tiny-invariant: 1.3.3
       victory-vendor: 36.9.2
@@ -4918,7 +4918,7 @@ snapshots:
       es-errors: 1.3.0
       is-regex: 1.1.4
 
-  scheduler@0.25.0-rc-6230622a1a-20240610: {}
+  scheduler@0.25.0-rc-f994737d14-20240522: {}
 
   semver@6.3.1: {}
 
@@ -5075,10 +5075,10 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  styled-jsx@5.1.3(react@19.0.0-rc-6230622a1a-20240610):
+  styled-jsx@5.1.3(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       client-only: 0.0.1
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
   sucrase@3.35.0:
     dependencies:
@@ -5258,34 +5258,34 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-callback-ref@1.3.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  use-callback-ref@1.3.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
       tslib: 2.6.3
     optionalDependencies:
       '@types/react': 18.3.3
 
-  use-composed-ref@1.3.0(react@19.0.0-rc-6230622a1a-20240610):
+  use-composed-ref@1.3.0(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
 
-  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  use-isomorphic-layout-effect@1.1.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
     optionalDependencies:
       '@types/react': 18.3.3
 
-  use-latest@1.2.1(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  use-latest@1.2.1(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
-      react: 19.0.0-rc-6230622a1a-20240610
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610)
+      react: 19.0.0-rc-f994737d14-20240522
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522)
     optionalDependencies:
       '@types/react': 18.3.3
 
-  use-sidecar@1.1.2(@types/react@18.3.3)(react@19.0.0-rc-6230622a1a-20240610):
+  use-sidecar@1.1.2(@types/react@18.3.3)(react@19.0.0-rc-f994737d14-20240522):
     dependencies:
       detect-node-es: 1.1.0
-      react: 19.0.0-rc-6230622a1a-20240610
+      react: 19.0.0-rc-f994737d14-20240522
       tslib: 2.6.3
     optionalDependencies:
       '@types/react': 18.3.3
