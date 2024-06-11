@@ -1,7 +1,7 @@
 # ProCESO
 
 **Complete Title:**
-Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation for TIP Manila - CESO Department.
+ProCESO - Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation for TIP Manila - CESO Department.
 
 > [!IMPORTANT]
 > This system/application is **not meant for public usage**, and is specifically tailored for a specific client. This only serves as public reference for similar system or application.
@@ -72,6 +72,7 @@ Overview of current technologies and resources to be used in the system.
 
 - Vercel
 - Docker
+- Kubernetes
 
 
 ## License
