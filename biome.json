@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineEnding": "lf"
+  },
+  "organizeImports": { "enabled": true },
+  "linter": { "enabled": true, "rules": { "recommended": true } },
+  "overrides": [
+    {
+      "include": ["*.json", "*.yml", "*.yaml"],
+      "formatter": {
+        "indentWidth": 2
+      }
+    }
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git"
+  }
+}

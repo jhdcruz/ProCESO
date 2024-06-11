@@ -1,0 +1,16 @@
+{
+  "extends": ["config:base"],
+  "baseBranches": ["main"],
+  "packageRules": [
+    {
+      "updateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true
+  },
+  "commitMessagePrefix": "chore(deps):",
+  "dependencyDashboard": false
+}
