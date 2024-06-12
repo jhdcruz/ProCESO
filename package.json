@@ -1,11 +1,11 @@
 {
   "name": "proceso",
-  "description": "",
-  "version": "0.1.0",
+  "description": "Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint && biome lint",
@@ -40,8 +40,6 @@
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
-    "eslint": "9.4.0",
-    "eslint-config-next": "14.2.4",
     "husky": "9.0.11",
     "lint-staged": "15.2.6",
     "postcss": "8.4.38",
