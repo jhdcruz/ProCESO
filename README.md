@@ -33,7 +33,7 @@ Overview of current technologies and resources to be used in the system.
 - TypeScript
 - Next.js
 - [Mantine](https://mantine.dev/)
-- TailwindCSS 
+- TailwindCSS
 - [@toast-ui/calendar](https://github.com/nhn/tui.calendar/tree/main/apps/react-calendar)  (Calendar UI)
 - [@toast-ui/editor](https://github.com/nhn/tui.editor/tree/master/apps/react-editor) (Editor)
 
@@ -43,13 +43,6 @@ Overview of current technologies and resources to be used in the system.
 - Trigger.dev (Background Jobs, Cron Jobs)
 - Resend (Email)
 - Novu (Notifications)
-
-
-### Core Libraries
-
-- Turbopack (Bundler)
-- Biome (Formatter/Linter)
-- ESLint (Linter)
 
 ### AI Models
 
@@ -74,9 +67,14 @@ Overview of current technologies and resources to be used in the system.
 - Docker
 - Kubernetes
 
-
 ## License
 
 This work ("system") is distributed under [Apache License, Version 2.0](https://opensource.org/license/apache-2-0).
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjhdcruz%2FProCESO.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjhdcruz%2FProCESO?ref=badge_large&issueType=license)
+
+## Disclaimer
+
+All trademarks, logos, and service marks displayed on this website are the property of their respective owners.
+
+> T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (T.I.P) in the Philippines.
