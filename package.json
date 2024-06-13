@@ -25,7 +25,7 @@
     "@mantine/tiptap": "7.10.2",
     "@supabase/ssr": "0.3.0",
     "@supabase/supabase-js": "2.43.4",
-    "@tabler/icons-react": "3.5.0",
+    "@tabler/icons-react": "3.6.0",
     "@tiptap/extension-link": "2.4.0",
     "@tiptap/react": "2.4.0",
     "@tiptap/starter-kit": "2.4.0",
