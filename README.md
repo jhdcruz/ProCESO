@@ -65,7 +65,11 @@ Overview of current technologies and resources to be used in the system.
 
 - Vercel
 - Docker
-- Kubernetes
+
+## Monitoring
+
+- OneUptime (Uptime Monitoring)
+- Baselime.io (Observability)
 
 ## License
 
