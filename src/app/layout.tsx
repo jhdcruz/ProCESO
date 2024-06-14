@@ -4,22 +4,30 @@
  * For main app layout, see `src/app/page.tsx`.
  */
 
-import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
-import { Inter } from 'next/font/google'
-import './globals.css'
-import '@mantine/core/styles.css'
+import { Inter } from 'next/font/google';
+import './globals.css';
+import '@mantine/core/styles.css';
 
 import {
   ColorSchemeScript,
   type MantineColorsTuple,
   MantineProvider,
   createTheme,
-} from '@mantine/core'
+} from '@mantine/core';
 
-const inter = Inter({ subsets: ['latin'] })
+const font = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
+/**
+ * Brand colors generated using Mantine's color generator.
+ * https://mantine.dev/colors-generator/
+ */
 const brandColor: MantineColorsTuple = [
   '#fffae1',
   '#fff3cc',
@@ -31,25 +39,32 @@ const brandColor: MantineColorsTuple = [
   '#e3aa00',
   '#ca9600',
   '#ae8200',
-]
+];
 
+/**
+ * Custom theming for Mantine UI
+ */
 const theme = createTheme({
+  primaryColor: 'brand',
   colors: {
-    brandColor,
+    brand: brandColor,
   },
   defaultRadius: 'md',
-})
+});
 
+/**
+ * Site metadata
+ */
 export const metadata: Metadata = {
-  title: 'ProCESO Portal | Technological Institute of the Philippines – Manila',
+  title: 'ProCESO | Technological Institute of the Philippines – Manila',
   description:
     'Community Outreach Internal Management System for TIP Manila - CESO Department.',
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: ReactNode
+  children: ReactNode;
 }>) {
   // noinspection HtmlRequiredTitleElement
   return (
@@ -58,15 +73,16 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
 
-      <body className={inter.className}>
+      <body className={font.variable}>
         <MantineProvider
           theme={theme}
           defaultColorScheme="auto"
           withCssVariables
+          deduplicateCssVariables
         >
           {children}
         </MantineProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -3,9 +3,8 @@
   "description": "Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint && biome lint",
@@ -13,6 +12,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ai-sdk/mistral": "0.0.16",
+    "@ai-sdk/provider-utils": "0.0.13",
     "@baselime/node-opentelemetry": "0.5.8",
     "@mantine/charts": "7.10.2",
     "@mantine/core": "7.10.2",
@@ -24,6 +25,7 @@
     "@mantine/notifications": "7.10.2",
     "@mantine/spotlight": "7.10.2",
     "@mantine/tiptap": "7.10.2",
+    "@opentelemetry/api": "1.9.0",
     "@supabase/ssr": "0.3.0",
     "@supabase/supabase-js": "2.43.4",
     "@tabler/icons-react": "3.6.0",
@@ -31,11 +33,11 @@
     "@tiptap/react": "2.4.0",
     "@tiptap/starter-kit": "2.4.0",
     "@trigger.dev/sdk": "3.0.0-beta.37",
-    "babel-plugin-react-compiler": "0.0.0-experimental-938cd9a-20240601",
+    "ai": "3.1.35",
     "dayjs": "1.11.11",
-    "next": "15.0.0-rc.0",
-    "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "next": "14.2.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "recharts": "2.12.7"
   },
   "devDependencies": {
@@ -46,10 +48,12 @@
     "autoprefixer": "10.4.19",
     "husky": "9.0.11",
     "lint-staged": "15.2.7",
+    "picocolors": "1.0.1",
     "postcss": "8.4.38",
     "postcss-preset-mantine": "1.15.0",
     "postcss-simple-vars": "7.0.1",
     "tailwindcss": "3.4.4",
+    "turbo": "2.0.3",
     "typescript": "5.4.5"
   },
   "lint-staged": {
