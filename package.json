@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@baselime/node-opentelemetry": "0.5.8",
     "@mantine/charts": "7.10.2",
     "@mantine/core": "7.10.2",
     "@mantine/dates": "7.10.2",

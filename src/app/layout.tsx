@@ -1,3 +1,9 @@
+/*
+ * Layout wrapper for Providers and Site metadata.
+ *
+ * For main app layout, see `src/app/page.tsx`.
+ */
+
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
@@ -35,7 +41,7 @@ const theme = createTheme({
 })
 
 export const metadata: Metadata = {
-  title: 'ProCESO Portal | TIP Manila - CESO Dept.',
+  title: 'ProCESO Portal | Technological Institute of the Philippines – Manila',
   description:
     'Community Outreach Internal Management System for TIP Manila - CESO Department.',
 }
@@ -45,6 +51,7 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode
 }>) {
+  // noinspection HtmlRequiredTitleElement
   return (
     <html lang="en">
       <head>
