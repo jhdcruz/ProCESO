@@ -1,0 +1,33 @@
+{
+  "short_name": "ProCESO",
+  "name": "ProCESO Portal",
+  "icons": [
+    {
+      "src": "/ceso-manila.webp",
+      "type": "image/webp",
+      "sizes": ["192x192", "512x512"]
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ffcc38",
+  "shortcuts": [
+    {
+      "name": "Upcoming Events",
+      "short_name": "Events",
+      "description": "View upcoming events.",
+      "url": "/events",
+      "icons": [{ "src": "/icons/flag.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Event Calendar",
+      "short_name": "Calendar",
+      "description": "View the event calendar.",
+      "url": "/calendar",
+      "icons": [{ "src": "/icons/calendar-month.png", "sizes": "192x192" }]
+    }
+  ]
+}
