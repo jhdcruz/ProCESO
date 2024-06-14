@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@ai-sdk/mistral':
-        specifier: 0.0.16
-        version: 0.0.16(zod@3.22.3)
+        specifier: 0.0.17
+        version: 0.0.17(zod@3.22.3)
       '@ai-sdk/provider-utils':
         specifier: 0.0.13
         version: 0.0.13(zod@3.22.3)
@@ -135,14 +135,23 @@ importers:
 
 packages:
 
-  '@ai-sdk/mistral@0.0.16':
-    resolution: {integrity: sha512-91/lT3712v6lonJBX6+wzDi9wPrZ/OuUt4uKul33IrfsZ0INvI1yJjd74zkYxPOk7TsSc9Bi6mk4UMr3QamD2A==}
+  '@ai-sdk/mistral@0.0.17':
+    resolution: {integrity: sha512-MapQtsTI8o4Efb1m42FQHok669kz6O4UxDNnQ7sM1NJIYa7gmnpmzN2kIyygkOlaLIPDPhrvSfKlnr7v98YI5A==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
 
   '@ai-sdk/provider-utils@0.0.13':
     resolution: {integrity: sha512-cB2dPm9flj+yin5sjBLFcXdW8sZtAXLE/OLKgz9uHpHM55s7mnwZrDGfO6ot/ukHTxDDJunZLW7qSjgK/u0F1g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
+  '@ai-sdk/provider-utils@0.0.14':
+    resolution: {integrity: sha512-PCQFN3MlC6DShS/81IFU9NVvt9OekQGiZTEowRc2AwAwWrDsv7er3UkcMswFAL/Z7xZKjgu0dZTNH1z9oUlo7A==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -2704,13 +2713,22 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/mistral@0.0.16(zod@3.22.3)':
+  '@ai-sdk/mistral@0.0.17(zod@3.22.3)':
     dependencies:
       '@ai-sdk/provider': 0.0.10
-      '@ai-sdk/provider-utils': 0.0.13(zod@3.22.3)
+      '@ai-sdk/provider-utils': 0.0.14(zod@3.22.3)
       zod: 3.22.3
 
   '@ai-sdk/provider-utils@0.0.13(zod@3.22.3)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.10
+      eventsource-parser: 1.1.2
+      nanoid: 3.3.6
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.22.3
+
+  '@ai-sdk/provider-utils@0.0.14(zod@3.22.3)':
     dependencies:
       '@ai-sdk/provider': 0.0.10
       eventsource-parser: 1.1.2
