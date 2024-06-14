@@ -12,8 +12,8 @@ importers:
         specifier: 0.0.16
         version: 0.0.16(zod@3.22.3)
       '@ai-sdk/provider-utils':
-        specifier: 0.0.13
-        version: 0.0.13(zod@3.22.3)
+        specifier: 0.0.14
+        version: 0.0.14(zod@3.22.3)
       '@baselime/node-opentelemetry':
         specifier: 0.5.8
         version: 0.5.8(@trpc/server@10.45.2)
@@ -143,6 +143,15 @@ packages:
 
   '@ai-sdk/provider-utils@0.0.13':
     resolution: {integrity: sha512-cB2dPm9flj+yin5sjBLFcXdW8sZtAXLE/OLKgz9uHpHM55s7mnwZrDGfO6ot/ukHTxDDJunZLW7qSjgK/u0F1g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
+  '@ai-sdk/provider-utils@0.0.14':
+    resolution: {integrity: sha512-PCQFN3MlC6DShS/81IFU9NVvt9OekQGiZTEowRc2AwAwWrDsv7er3UkcMswFAL/Z7xZKjgu0dZTNH1z9oUlo7A==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -2711,6 +2720,15 @@ snapshots:
       zod: 3.22.3
 
   '@ai-sdk/provider-utils@0.0.13(zod@3.22.3)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.10
+      eventsource-parser: 1.1.2
+      nanoid: 3.3.6
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.22.3
+
+  '@ai-sdk/provider-utils@0.0.14(zod@3.22.3)':
     dependencies:
       '@ai-sdk/provider': 0.0.10
       eventsource-parser: 1.1.2

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@ai-sdk/mistral": "0.0.16",
-    "@ai-sdk/provider-utils": "0.0.13",
+    "@ai-sdk/provider-utils": "0.0.14",
     "@baselime/node-opentelemetry": "0.5.8",
     "@mantine/charts": "7.10.2",
     "@mantine/core": "7.10.2",
