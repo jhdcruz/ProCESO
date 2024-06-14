@@ -137,8 +137,7 @@ export default async function Login() {
         )}
       </Paper>
 
-      {/* TIP Jitbit support widget legacy script */}
-      {JitbitScript}
+      <JitbitScript />
     </form>
   );
 }

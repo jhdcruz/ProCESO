@@ -19,4 +19,6 @@ export default function JitbitScript() {
       document.body.removeChild(script);
     };
   }, []);
+
+  return null;
 }
