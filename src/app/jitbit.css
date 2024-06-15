@@ -1,0 +1,16 @@
+/**
+ * FIX: Jitbit custom fix for overlapped content;
+ *      only add on page that has Jitbit widget,
+ *      can be destructive when applied globally.
+ */
+a[title*="Contact us"] {
+  right: 43px !important;
+}
+
+div[style*="position: fixed"] {
+  height: 416px !important;
+}
+
+iframe {
+  height: 600px !important;
+}

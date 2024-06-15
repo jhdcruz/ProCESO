@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import JitbitScript from '@/components/Legacy/JitbitScript';
 import cesoLogo from './ceso-manila.webp';
+import '@/app/jitbit.css';
 
 export default async function Login() {
   return (
@@ -89,7 +90,7 @@ async function SystemHealth() {
   return health === 2 ? (
     <Tooltip label="All systems are not working!">
       <Badge
-        className="cursor-pointer normal-case"
+        className="cursor-pointer normal-case font-semibold"
         component="a"
         variant="dot"
         color="red"
@@ -106,7 +107,7 @@ async function SystemHealth() {
   ) : health === 1 ? (
     <Tooltip label="Some functionality might not work.">
       <Badge
-        className="cursor-pointer normal-case"
+        className="cursor-pointer normal-case font-semibold"
         component="a"
         variant="dot"
         color="yellow"
@@ -123,7 +124,7 @@ async function SystemHealth() {
   ) : (
     <Tooltip label="All systems are working as expected.">
       <Badge
-        className="cursor-pointer normal-case"
+        className="cursor-pointer normal-case font-semibold"
         component="a"
         variant="dot"
         color="green"
