@@ -45,11 +45,19 @@ const brandColor: MantineColorsTuple = [
  * Custom theming for Mantine UI
  */
 const theme = createTheme({
+  fontFamily: 'Inter, sans-serif',
   primaryColor: 'brand',
   colors: {
     brand: brandColor,
   },
   defaultRadius: 'md',
+  components: {
+    Title: {
+      classNames: {
+        root: 'font-extrabold',
+      },
+    },
+  },
 });
 
 /**
@@ -68,12 +76,12 @@ export default function RootLayout({
 }>) {
   // noinspection HtmlRequiredTitleElement
   return (
-    <html lang="en">
+    <html lang="en" className={font.variable}>
       <head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
 
-      <body className={font.variable}>
+      <body>
         <MantineProvider
           theme={theme}
           defaultColorScheme="auto"
