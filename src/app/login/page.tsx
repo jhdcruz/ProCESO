@@ -1,4 +1,4 @@
-import { checkHealth, generateQuotes, onEmailLogin } from '@/app/login/actions';
+import { checkHealth, onEmailLogin } from '@/app/login/actions';
 import { GoogleButton } from '@/components/Authentication/GoogleButton';
 import {
   Badge,
@@ -9,9 +9,7 @@ import {
   PasswordInput,
   Space,
   Stack,
-  Text,
   TextInput,
-  Title,
   Tooltip,
 } from '@mantine/core';
 import Image from 'next/image';
@@ -85,7 +83,7 @@ export default async function Login() {
 /**
  * Check the system status and display health badge.
  */
-export async function SystemHealth() {
+async function SystemHealth() {
   const health = await checkHealth();
 
   return health === 2 ? (
