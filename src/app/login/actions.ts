@@ -1,6 +1,5 @@
 'use server';
 
-import { instructAI } from '@/utils/ai-instruct';
 import { createServerClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -50,17 +49,4 @@ export async function onEmailLogin(formData: FormData) {
   }
 
   console.error(error);
-}
-
-export async function generateQuotes() {
-  // avoid repeated calling to the API
-  if (process.env.NODE_ENV === 'production') {
-    const query =
-      'Give a single concise quote about planning and executing plans or events. No need for explanation, just a quote.';
-    const res = await instructAI(query);
-
-    return res[0].generated_text;
-  }
-
-  return "In the end, we only regret the chances we didn't take. - Lewis Carroll";
 }
