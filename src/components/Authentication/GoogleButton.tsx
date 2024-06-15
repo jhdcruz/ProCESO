@@ -33,6 +33,11 @@ function GoogleIcon(props: ComponentPropsWithoutRef<'svg'>) {
   );
 }
 
+/**
+ * 'Continue with Google' login button
+ *
+ * OAuth function is already included.
+ */
 export function GoogleButton(
   props: ButtonProps & ComponentPropsWithoutRef<'button'>,
 ) {

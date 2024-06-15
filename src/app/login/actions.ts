@@ -4,6 +4,11 @@ import { createServerClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+/**
+ * Check the health of the system.
+ *
+ * Query all the services and check if they are up.
+ */
 export async function checkHealth() {
   const url = process.env.SUPABASE_URL!!;
 
@@ -30,6 +35,9 @@ export async function checkHealth() {
   return 2; // critical, all down
 }
 
+/**
+ * Login to supabase auth using email login.
+ */
 export async function onEmailLogin(formData: FormData) {
   'use server';
 
