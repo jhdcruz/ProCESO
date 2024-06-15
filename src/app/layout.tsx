@@ -9,7 +9,7 @@ import type { ReactNode } from 'react';
 
 import { Inter } from 'next/font/google';
 import './globals.css';
-import '@mantine/core/styles.css';
+import '@mantine/core/styles.layer.css';
 
 import {
   ColorSchemeScript,

@@ -26,7 +26,8 @@ export default async function Login() {
       action={onEmailLogin}
     >
       <Paper
-        className="flex flex-col shadow-2xl justify-between items-center min-h-screen sm:max-w-md pt-10 max-w-full"
+        className="flex flex-col justify-between items-center min-h-screen sm:max-w-md pt-10 max-w-full"
+        shadow="xl"
         radius={0}
         p={30}
       >

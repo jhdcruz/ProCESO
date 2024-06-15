@@ -1,13 +1,12 @@
-@layer tailwind {
+@layer base, mantine, tailwind;
+
+@layer base {
   @tailwind base;
 }
-@tailwind components;
-@tailwind utilities;
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+@layer tailwind {
+  @tailwind components;
+  @tailwind utilities;
 }
 
 @view-transition {
