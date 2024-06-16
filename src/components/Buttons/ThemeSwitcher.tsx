@@ -24,8 +24,8 @@ export function ThemeSwitcher() {
         size="xl"
         aria-label="Toggle color scheme"
       >
-        <IconSun className="w-10 hidden dark:block" stroke={1.5} />
-        <IconMoon className="w-10 block dark:hidden" stroke={1.5} />
+        <IconSun className="hidden w-10 dark:block" stroke={1.5} />
+        <IconMoon className="block w-10 dark:hidden" stroke={1.5} />
       </ActionIcon>
     </Group>
   );

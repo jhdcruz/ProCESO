@@ -22,19 +22,19 @@ import '@/app/jitbit.css';
 export default async function Login() {
   return (
     <form
-      className="min-h-screen bg-cover bg-no-repeat bg-right bg-[url('/assets/bg-2425.webp')]"
+      className="min-h-screen bg-[url('/assets/bg-2425.webp')] bg-cover bg-right bg-no-repeat"
       action={onEmailLogin}
     >
       <Paper
-        className="flex flex-col justify-between items-center min-h-screen sm:max-w-md pt-10 max-w-full"
+        className="flex min-h-screen max-w-full flex-col items-center justify-between pt-10 sm:max-w-md"
         shadow="xl"
         radius={0}
         p={30}
       >
-        <main className="w-[90%] h-max">
+        <main className="h-max w-[90%]">
           <Stack mt={30} mb={20} align="stretch" justify="center" gap="sm">
             <Image
-              className="rounded-[--mantine-radius-md] mx-auto mb-4 bg-contain shadow-lg"
+              className="mx-auto mb-4 rounded-[--mantine-radius-md] bg-contain shadow-lg"
               draggable={false}
               src={cesoLogo}
               height={104}
@@ -91,7 +91,7 @@ async function SystemHealth() {
   return health === 2 ? (
     <Tooltip label="All systems are not working!">
       <Badge
-        className="cursor-pointer normal-case font-semibold"
+        className="cursor-pointer font-semibold normal-case"
         component="a"
         variant="dot"
         color="red"
@@ -108,7 +108,7 @@ async function SystemHealth() {
   ) : health === 1 ? (
     <Tooltip label="Some functionality might not work.">
       <Badge
-        className="cursor-pointer normal-case font-semibold"
+        className="cursor-pointer font-semibold normal-case"
         component="a"
         variant="dot"
         color="yellow"
@@ -125,7 +125,7 @@ async function SystemHealth() {
   ) : (
     <Tooltip label="All systems are working as expected.">
       <Badge
-        className="cursor-pointer normal-case font-semibold"
+        className="cursor-pointer font-semibold normal-case"
         component="a"
         variant="dot"
         color="green"

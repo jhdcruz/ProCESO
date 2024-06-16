@@ -17,7 +17,7 @@ export default function Loading() {
           priority
         />
 
-        <Text>We're preparing the system, please wait...</Text>
+        <Text>We&apos;re preparing the system, please wait...</Text>
       </Stack>
     </Paper>
   );
