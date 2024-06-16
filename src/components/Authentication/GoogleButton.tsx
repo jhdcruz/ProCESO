@@ -1,6 +1,7 @@
 'use client';
 
 import { createBrowserClient } from '@/utils/supabase/client';
+import { siteUrl } from '@/utils/url';
 import { Button, ButtonProps } from '@mantine/core';
 import { ComponentPropsWithoutRef } from 'react';
 
@@ -48,21 +49,16 @@ export function GoogleButton(
     // OAuth only works on browser clients
     const supabase = createBrowserClient();
 
-    // get origin url
-    const origin = window.location.origin;
-
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${origin}/auth/callback`,
+        redirectTo: `${siteUrl()}/auth/callback`,
       },
     });
 
     if (error) {
       return { error };
     }
-
-    return { data };
   };
 
   return (

@@ -1,17 +1,16 @@
 import {
-  IconAdjustments,
   IconCalendarStats,
   IconFileAnalytics,
   IconGauge,
-  IconLock,
   IconNotes,
   IconPresentationAnalytics,
 } from '@tabler/icons-react';
-import { FC } from 'react';
+import type { FC } from 'react';
 
 export type Routes = {
   label: string;
   icon: FC;
+  link?: string;
   initiallyOpened?: boolean;
   links?: NestedRoutes[];
 }[];
@@ -22,37 +21,25 @@ export type NestedRoutes = {
 };
 
 export const sidebarRoutes = [
-  { label: 'Dashboard', icon: IconGauge },
+  { label: 'Dashboard', icon: IconGauge, link: '/dashboard' },
   {
-    label: 'Market news',
+    label: 'Events',
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: 'Overview', link: '/' },
-      { label: 'Forecasts', link: '/' },
-      { label: 'Outlook', link: '/' },
-      { label: 'Real time', link: '/' },
+      { label: 'All Events', link: '/dashboard/events' },
+      { label: 'Upcoming events', link: '/dashboard/events/up' },
+      { label: 'Previous releases', link: '/dashboard/events/prev' },
     ],
   },
   {
-    label: 'Releases',
+    label: 'Calendar',
     icon: IconCalendarStats,
     links: [
-      { label: 'Upcoming releases', link: '/' },
-      { label: 'Previous releases', link: '/' },
-      { label: 'Releases schedule', link: '/' },
+      { label: 'Monthly Calendar', link: '/dashboard/cal' },
+      { label: 'Calendar Feed', link: '/dashboard/cal/feed' },
     ],
   },
   { label: 'Analytics', icon: IconPresentationAnalytics },
-  { label: 'Contracts', icon: IconFileAnalytics },
-  { label: 'Settings', icon: IconAdjustments },
-  {
-    label: 'Security',
-    icon: IconLock,
-    links: [
-      { label: 'Enable 2FA', link: '/' },
-      { label: 'Change password', link: '/' },
-      { label: 'Recovery codes', link: '/' },
-    ],
-  },
+  { label: 'Certificates', icon: IconFileAnalytics },
 ];

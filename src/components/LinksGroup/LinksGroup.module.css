@@ -5,6 +5,15 @@
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
   color: var(--mantine-color-text);
   font-size: var(--mantine-font-size-sm);
+  text-decoration: none;
+
+  [aria-selected='true'] {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7)
+    );
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
+  }
 
   @mixin hover {
     background-color: light-dark(
@@ -26,6 +35,10 @@
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
   border-left: 1px solid
     light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+
+  .active {
+    @include hover;
+  }
 
   @mixin hover {
     background-color: light-dark(

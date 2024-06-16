@@ -21,11 +21,11 @@ export default function ThemeSwitcher() {
           setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')
         }
         variant="default"
-        size="xl"
+        size="lg"
         aria-label="Toggle color scheme"
       >
-        <IconSun className="hidden w-10 dark:block" stroke={1.5} />
-        <IconMoon className="block w-10 dark:hidden" stroke={1.5} />
+        <IconSun className="hidden w-5 dark:block" stroke={1.2} />
+        <IconMoon className="block w-5 dark:hidden" stroke={1.2} />
       </ActionIcon>
     </Group>
   );

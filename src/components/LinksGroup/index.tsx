@@ -4,6 +4,7 @@ import {
   Box,
   Collapse,
   Group,
+  NavLink,
   Text,
   ThemeIcon,
   UnstyledButton,
@@ -11,12 +12,14 @@ import {
 } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import Link from 'next/link';
-import { FC, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import classes from './LinksGroup.module.css';
+import { usePathname } from 'next/navigation';
 
 interface LinksGroupProps {
   icon: FC<any>;
   label: string;
+  link?: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
 }
@@ -24,17 +27,24 @@ interface LinksGroupProps {
 export default function LinksGroup({
   icon: Icon,
   label,
+  link,
   initiallyOpened,
   links,
 }: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
+  const pathname = usePathname();
 
-  // Route links
+  // Check if link matches current path
+  const isActive = (navLink: string) => {
+    return pathname === navLink ? ' active' : '';
+  };
+
+  // sub links component
   const items = (hasLinks ? links : []).map((link) => (
     <Text
       component={Link}
-      className={classes.link}
+      className={classes.link + ' active'}
       href={link.link}
       key={link.label}
       onClick={(event) => event.preventDefault()}
@@ -46,6 +56,8 @@ export default function LinksGroup({
   return (
     <>
       <UnstyledButton
+        component="a"
+        href={link}
         onClick={() => setOpened((o) => !o)}
         className={classes.control}
       >
@@ -64,13 +76,14 @@ export default function LinksGroup({
               style={{
                 width: rem(16),
                 height: rem(16),
-                transform: opened ? 'rotate(-90deg)' : 'none',
+                transform: opened ? 'rotate(90deg)' : 'none',
               }}
             />
           )}
         </Group>
       </UnstyledButton>
 
+      {/* Sub links */}
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   );

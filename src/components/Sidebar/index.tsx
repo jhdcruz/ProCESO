@@ -1,10 +1,11 @@
-import { Code, Group, Image, ScrollArea } from '@mantine/core';
-import NextImage from 'next/image';
+import { Group, ScrollArea } from '@mantine/core';
+import Image from 'next/image';
 import classes from './Sidebar.module.css';
 
 import type { Routes } from '@/app/routes';
 import LinksGroup from '@/components/LinksGroup';
 import UserButton, { type UserAvatarProps } from '@/components/UserButton';
+import ThemeSwitcher from '../Buttons/ThemeSwitcher';
 
 /**
  * Main sidebar component
@@ -24,19 +25,19 @@ export default function Sidebar({
       <div className={classes.header}>
         <Group justify="space-between">
           <Image
-            component={NextImage}
-            width={500}
-            height={400}
-            src="/ceso-manila.webp"
+            className="rounded-md bg-contain"
+            width={140}
+            height={60}
+            src="/assets/ceso-manila.webp"
             alt=""
           />
 
-          <Code fw={700}>v3.1.2</Code>
+          <Group gap={2}>{/* TODO */}</Group>
         </Group>
       </div>
 
       <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>{links}</div>
+        <div className="py-1">{links}</div>
       </ScrollArea>
 
       <div className={classes.footer}>
