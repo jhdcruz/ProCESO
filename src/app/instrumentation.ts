@@ -8,7 +8,7 @@ export async function register() {
 
     const sdk = new BaselimeSDK({
       serverless: true,
-      service: 'proceso-web',
+      service: 'proceso-manila-web',
       instrumentations: [
         new BetterHttpInstrumentation({
           plugins: [
