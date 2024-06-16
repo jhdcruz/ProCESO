@@ -1,7 +1,6 @@
-import { checkHealth, onEmailLogin } from '@/app/login/actions';
+import { onEmailLogin } from '@/app/login/actions';
 import { GoogleButton } from '@/components/Authentication/GoogleButton';
 import {
-  Badge,
   Button,
   Divider,
   Group,
@@ -10,14 +9,17 @@ import {
   Space,
   Stack,
   TextInput,
-  Tooltip,
 } from '@mantine/core';
 import Image from 'next/image';
 
-import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
+import ThemeSwitcher from '@/components/Buttons/ThemeSwitcher';
+import SystemHealth from '@/components/Badges/SystemHealth';
+
 import JitbitScript from '@/components/Legacy/JitbitScript';
 import cesoLogo from './ceso-manila.webp';
 import '@/app/jitbit.css';
+
+export const dynamic = 'force-dynamic';
 
 export default async function Login() {
   return (
@@ -79,65 +81,5 @@ export default async function Login() {
 
       <JitbitScript />
     </form>
-  );
-}
-
-/**
- * Check the system status and display health badge.
- */
-async function SystemHealth() {
-  const health = await checkHealth();
-
-  return health === 2 ? (
-    <Tooltip label="All systems are not working!">
-      <Badge
-        className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
-        color="red"
-        size="md"
-        px={15}
-        py={12}
-        radius="md"
-        target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
-      >
-        All systems down!
-      </Badge>
-    </Tooltip>
-  ) : health === 1 ? (
-    <Tooltip label="Some functionality might not work.">
-      <Badge
-        className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
-        color="yellow"
-        size="md"
-        px={15}
-        py={12}
-        radius="md"
-        target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
-      >
-        Some systems are down.
-      </Badge>
-    </Tooltip>
-  ) : (
-    <Tooltip label="All systems are working as expected.">
-      <Badge
-        className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
-        color="green"
-        size="md"
-        px={15}
-        py={12}
-        radius="md"
-        target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
-      >
-        All systems working.
-      </Badge>
-    </Tooltip>
   );
 }

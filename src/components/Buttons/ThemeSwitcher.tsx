@@ -8,7 +8,7 @@ import {
 } from '@mantine/core';
 import { IconMoon, IconSun } from '@tabler/icons-react';
 
-export function ThemeSwitcher() {
+export default function ThemeSwitcher() {
   const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
