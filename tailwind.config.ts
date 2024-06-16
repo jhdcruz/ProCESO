@@ -9,6 +9,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'spin-stretch': {
+          '50%': {
+            transform: 'rotate(360deg) scale(0.4, 0.33)',
+            borderWidth: '8px',
+          },
+          '100%': {
+            transform: 'rotate(720deg) scale(1, 1)',
+            borderWidth: '3px',
+          },
+        },
+      },
+      animation: {
+        'spin-stretch': 'spin-stretch 2s ease infinite',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -16,6 +31,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('prettier-plugin-tailwindcss'),
+    require('tailwindcss-animate'),
+  ],
 };
 export default config;

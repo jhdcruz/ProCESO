@@ -7,8 +7,8 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint && biome lint",
-    "fmt": "biome format --write",
+    "lint": "eslint src",
+    "fmt": "eslint src --fix && prettier --write src",
     "prepare": "husky"
   },
   "dependencies": {
@@ -39,24 +39,33 @@
     "sharp": "0.33.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.1",
+    "@eslint/compat": "1.1.0",
     "@types/node": "20.14.2",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
+    "eslint": "9.5.0",
+    "eslint-config-next": "14.2.4",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-prettier": "5.1.3",
     "husky": "9.0.11",
     "lint-staged": "15.2.7",
     "picocolors": "1.0.1",
     "postcss": "8.4.38",
     "postcss-preset-mantine": "1.15.0",
     "postcss-simple-vars": "7.0.1",
+    "prettier": "3.3.2",
+    "prettier-plugin-tailwindcss": "0.6.4",
     "tailwindcss": "3.4.4",
+    "tailwindcss-animate": "1.0.7",
     "turbo": "2.0.4",
     "typescript": "5.4.5"
   },
   "lint-staged": {
-    "*": [
-      "biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+    "*.(md,json,yml)": "prettier --write",
+    "*.(js?(x),ts?(x))": [
+      "next lint --fix",
+      "prettier --write"
     ]
   },
   "repository": {
