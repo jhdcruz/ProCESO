@@ -13,7 +13,10 @@ import UserButton, { type UserAvatarProps } from '@/components/UserButton';
 export default function Sidebar({
   user,
   routes,
-}: { user: UserAvatarProps; routes: Routes }) {
+}: {
+  user: UserAvatarProps;
+  routes: Routes;
+}) {
   const links = routes.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (

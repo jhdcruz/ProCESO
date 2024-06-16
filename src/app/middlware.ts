@@ -1,20 +1,20 @@
-import { createMiddlwareClient } from '@/utils/supabase/middleware'
-import { type NextRequest, NextResponse } from 'next/server'
+import { createMiddlwareClient } from '@/utils/supabase/middleware';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
-  const { supabase, response } = createMiddlwareClient(request)
+  const { pathname } = request.nextUrl;
+  const { supabase, response } = createMiddlwareClient(request);
 
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   // Require auth for all routes except login
   if (!session && !pathname.startsWith('/login')) {
-    return NextResponse.redirect('/login')
+    return NextResponse.redirect('/login');
   }
 
-  return response
+  return response;
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -29,4 +29,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
-}
+};
