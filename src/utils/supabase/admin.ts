@@ -1,5 +1,5 @@
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import type { cookies } from 'next/headers';
 
 /**
  *
@@ -9,9 +9,17 @@ import { cookies } from 'next/headers';
  * **Use with extreme caution, and prevent exposure of the service key.**
  */
 export const createAdminClient = (cookieStore: ReturnType<typeof cookies>) => {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
+  }
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY) {
+    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY');
+  }
+
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY,
     {
       cookies: {
         get(name: string) {
