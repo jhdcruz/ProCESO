@@ -7,14 +7,14 @@ export default function Loading() {
     <Paper className="flex h-screen w-screen items-center self-center align-middle">
       <Stack className="mx-auto text-center">
         <Image
-          className="rounded-md"
-          src={cesoLogo}
           alt="Loading"
+          className="rounded-md"
           draggable={false}
-          placeholder="blur"
-          width={300}
           height={130}
+          placeholder="blur"
           priority
+          src={cesoLogo}
+          width={300}
         />
 
         <Text>We&apos;re preparing the system, please wait...</Text>

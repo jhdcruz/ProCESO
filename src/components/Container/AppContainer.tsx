@@ -23,22 +23,22 @@ export function AppContainer(user: UserAvatarProps) {
 
   return (
     <AppShell
-      layout="alt"
       header={{ height: 60 }}
+      layout="alt"
       navbar={{ width: 260, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      padding="md"
       transitionDuration={500}
       transitionTimingFunction="ease"
-      padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md" className="content-center">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+        <Group className="content-center" h="100%" px="md">
+          <Burger hiddenFrom="sm" onClick={toggle} opened={opened} size="sm" />
           <h3>Test</h3>
         </Group>
       </AppShell.Header>
 
       <AppShell.Navbar>
-        <Sidebar user={user} routes={sidebarRoutes} />
+        <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
       <AppShell.Main>

@@ -20,15 +20,15 @@ export default function SystemHealth() {
     <Tooltip label="All systems are not working!">
       <Badge
         className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
         color="red"
-        size="md"
+        component="a"
+        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
         py={12}
         radius="md"
+        size="md"
         target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
+        variant="dot"
       >
         All systems down!
       </Badge>
@@ -37,15 +37,15 @@ export default function SystemHealth() {
     <Tooltip label="Some functionality might not work.">
       <Badge
         className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
         color="yellow"
-        size="md"
+        component="a"
+        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
         py={12}
         radius="md"
+        size="md"
         target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
+        variant="dot"
       >
         Some systems are down.
       </Badge>
@@ -54,15 +54,15 @@ export default function SystemHealth() {
     <Tooltip label="All systems are working as expected.">
       <Badge
         className="cursor-pointer font-semibold normal-case"
-        component="a"
-        variant="dot"
         color="green"
-        size="md"
+        component="a"
+        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
         py={12}
         radius="md"
+        size="md"
         target="__blank"
-        href={process.env.NEXT_PUBLIC_STATUS_PAGE}
+        variant="dot"
       >
         All systems working.
       </Badge>

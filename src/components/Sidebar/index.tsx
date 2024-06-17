@@ -25,11 +25,11 @@ export default function Sidebar({
       <div className={classes.header}>
         <Group justify="space-between">
           <Image
+            alt=""
             className="rounded-md bg-contain"
-            width={140}
             height={60}
             src="/assets/ceso-manila.webp"
-            alt=""
+            width={140}
           />
 
           <Group gap={2}>{/* TODO */}</Group>

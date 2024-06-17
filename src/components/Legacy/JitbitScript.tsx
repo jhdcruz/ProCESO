@@ -6,9 +6,9 @@ import { memo } from 'react';
 function JitbitScript() {
   return (
     <script
-      type="text/javascript"
-      src="https://tip.jitbit.com/helpdesk/js/support-widget-light.js"
       defer
+      src="https://tip.jitbit.com/helpdesk/js/support-widget-light.js"
+      type="text/javascript"
     />
   );
 }

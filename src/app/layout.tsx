@@ -76,17 +76,17 @@ export default function RootLayout({
 }>) {
   // noinspection HtmlRequiredTitleElement
   return (
-    <html lang="en" className={font.variable}>
+    <html className={font.variable} lang="en">
       <head>
         <ColorSchemeScript defaultColorScheme="auto" />
       </head>
 
       <body>
         <MantineProvider
-          theme={theme}
-          defaultColorScheme="auto"
-          withCssVariables
           deduplicateCssVariables
+          defaultColorScheme="auto"
+          theme={theme}
+          withCssVariables
         >
           {children}
         </MantineProvider>

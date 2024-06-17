@@ -6,10 +6,16 @@ import prettierPlugin from 'eslint-plugin-prettier/recommended';
 const compat = new FlatCompat();
 
 const config = [
-  ...fixupConfigRules(compat.extends('next/core-web-vitals', 'prettier')),
-  prettierPlugin,
+  ...fixupConfigRules(compat.extends('next/core-web-vitals')),
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
+    ...prettierPlugin,
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'react/jsx-sort-props': 'warn',
+      'react/jsx-uses-vars': 'off',
+    },
     ignores: ['node_modules', '.next', 'out'],
   },
 ];

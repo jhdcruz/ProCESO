@@ -43,8 +43,8 @@ export default function LinksGroup({
   // sub links component
   const items = (hasLinks ? links : []).map((link) => (
     <Text
-      component={Link}
       className={classes.link + ' active'}
+      component={Link}
       href={link.link}
       key={link.label}
       onClick={(event) => event.preventDefault()}
@@ -56,14 +56,14 @@ export default function LinksGroup({
   return (
     <>
       <UnstyledButton
+        className={classes.control}
         component="a"
         href={link}
         onClick={() => setOpened((o) => !o)}
-        className={classes.control}
       >
-        <Group justify="space-between" gap={0}>
+        <Group gap={0} justify="space-between">
           <Box style={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant="light" size={30}>
+            <ThemeIcon size={30} variant="light">
               <Icon style={{ width: rem(18), height: rem(18) }} />
             </ThemeIcon>
             <Box ml="md">{label}</Box>

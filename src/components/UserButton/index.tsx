@@ -28,25 +28,25 @@ export default function UserButton({
   name,
 }: UserAvatarProps) {
   return (
-    <Menu shadow="md" width={200} position="right">
+    <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
           <Group>
-            <Avatar src={avatarUrl} radius="xl" />
+            <Avatar radius="xl" src={avatarUrl} />
 
             <div className="flex-1">
-              <Text size="sm" fw={500} lineClamp={1}>
+              <Text fw={500} lineClamp={1} size="sm">
                 {name}
               </Text>
 
-              <Text c="dimmed" size="xs" lineClamp={1}>
+              <Text c="dimmed" lineClamp={1} size="xs">
                 {email}
               </Text>
             </div>
 
             <IconChevronRight
-              style={{ width: rem(14), height: rem(14) }}
               stroke={1.5}
+              style={{ width: rem(14), height: rem(14) }}
             />
           </Group>
         </UnstyledButton>
