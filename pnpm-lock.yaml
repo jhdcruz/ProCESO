@@ -63,8 +63,8 @@ importers:
         specifier: 2.4.0
         version: 2.4.0(@tiptap/pm@2.4.0)
       '@trigger.dev/sdk':
-        specifier: 3.0.0-beta.37
-        version: 3.0.0-beta.37(typescript@5.4.5)
+        specifier: 3.0.0-beta.39
+        version: 3.0.0-beta.39(typescript@5.4.5)
       dayjs:
         specifier: 1.11.11
         version: 1.11.11
@@ -1113,16 +1113,16 @@ packages:
   '@tiptap/starter-kit@2.4.0':
     resolution: {integrity: sha512-DYYzMZdTEnRn9oZhKOeRCcB+TjhNz5icLlvJKoHoOGL9kCbuUyEf8WRR2OSPckI0+KUIPJL3oHRqO4SqSdTjfg==}
 
-  '@trigger.dev/core-backend@3.0.0-beta.37':
-    resolution: {integrity: sha512-cXmQJmu6phQoY8rQUbC+Ay1MevmtVgalXFMcAOmTVhgq7xGrZHMdqCdkAFoBe5pI7k+Cdsvl595Xx3ZbInNL5g==}
+  '@trigger.dev/core-backend@3.0.0-beta.39':
+    resolution: {integrity: sha512-jYHRd5MxG/aWAPn5tIfaAxWAKUJTgMuVvFqeL75gjqmTVlblXMLhQDORTnlcv34XeRN3pzKe7hnhRIbDdAzS4w==}
     engines: {node: '>=18.0.0'}
 
-  '@trigger.dev/core@3.0.0-beta.37':
-    resolution: {integrity: sha512-4TRqd9g6tqfa6/Fl4PxlYWqkwCKYFhadOo6LWt4CUtCSR6er2o7mpQY2cGqm1zd4KUSSxGQlWwiWfp0AjjncAA==}
+  '@trigger.dev/core@3.0.0-beta.39':
+    resolution: {integrity: sha512-DXokIW2Ys56Tp+RvJ8QIJ3gHwSxgYsOOoJYzltCgL6+AkxL+6oaNYBOokgDQKLJ5nN1f4sFHobM+UG+drBp4Ww==}
     engines: {node: '>=18.0.0'}
 
-  '@trigger.dev/sdk@3.0.0-beta.37':
-    resolution: {integrity: sha512-lHrGrWG8Lmek2radQxlaKZEEsG1m8I4MPx2gfcGuMJIyVUjFdoB7t8Khb52KS5ymKpgANdYrfrB58UzuSZSE1A==}
+  '@trigger.dev/sdk@3.0.0-beta.39':
+    resolution: {integrity: sha512-sbMCgPIrrd5j9JgF1Afo/acZfFsaq/co42SOWHDKQxWLOsfXa9nabj4yAjvpOlvF27G1qSeI/nHR4wZHKHR60g==}
     engines: {node: '>=18.0.0'}
 
   '@trpc/server@10.45.2':
@@ -4474,11 +4474,11 @@ snapshots:
     transitivePeerDependencies:
       - '@tiptap/pm'
 
-  '@trigger.dev/core-backend@3.0.0-beta.37':
+  '@trigger.dev/core-backend@3.0.0-beta.39':
     dependencies:
       '@opentelemetry/api': 1.9.0
 
-  '@trigger.dev/core@3.0.0-beta.37':
+  '@trigger.dev/core@3.0.0-beta.39':
     dependencies:
       '@google-cloud/precise-date': 4.0.0
       '@opentelemetry/api': 1.9.0
@@ -4505,13 +4505,13 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@trigger.dev/sdk@3.0.0-beta.37(typescript@5.4.5)':
+  '@trigger.dev/sdk@3.0.0-beta.39(typescript@5.4.5)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.48.0
       '@opentelemetry/semantic-conventions': 1.25.0
-      '@trigger.dev/core': 3.0.0-beta.37
-      '@trigger.dev/core-backend': 3.0.0-beta.37
+      '@trigger.dev/core': 3.0.0-beta.39
+      '@trigger.dev/core-backend': 3.0.0-beta.39
       chalk: 5.3.0
       cronstrue: 2.50.0
       debug: 4.3.5
