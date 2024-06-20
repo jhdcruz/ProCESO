@@ -76,5 +76,7 @@
   "bugs": {
     "url": "https://github.com/jhdcruz/ProCESO/issues"
   },
-  "packageManager": "pnpm@9.4.0"
+  "trustedDependencies": [
+    "protobufjs"
+  ]
 }
