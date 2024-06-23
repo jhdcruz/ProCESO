@@ -1,4 +1,4 @@
 User-Agent: *
 Disallow: /
 
-Sitemap: https://pro-ceso.vercel.app
+Sitemap: https://proceso.vercel.app
