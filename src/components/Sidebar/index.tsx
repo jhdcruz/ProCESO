@@ -5,7 +5,6 @@ import classes from './Sidebar.module.css';
 import type { Routes } from '@/app/routes';
 import LinksGroup from '@/components/LinksGroup';
 import UserButton, { type UserAvatarProps } from '@/components/UserButton';
-import ThemeSwitcher from '../Buttons/ThemeSwitcher';
 
 /**
  * Main sidebar component

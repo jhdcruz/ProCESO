@@ -1,8 +1,9 @@
-import { cookies } from 'next/headers';
-import { RedirectType, redirect } from 'next/navigation';
-
+import { AppContainer } from '@/components/Container/AppContainer';
 import { UserAvatarProps } from '@/components/UserButton';
 import { createServerClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import { RedirectType, redirect } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 /**
  * Get currently logged-in user.
@@ -31,7 +32,10 @@ async function getUserSession(): Promise<null | UserAvatarProps> {
  *
  * Auth checking is done in the middleware.
  */
-export default async function App() {
+export default async function App({
+  header,
+  children,
+}: Readonly<{ header: ReactNode; children: ReactNode }>) {
   const user = await getUserSession();
 
   // Redirect to log in on invalid session,
@@ -40,5 +44,5 @@ export default async function App() {
     return redirect('/login', RedirectType.replace);
   }
 
-  return redirect('/app', RedirectType.replace);
+  return <AppContainer user={user}>{children}</AppContainer>;
 }

@@ -1,18 +1,26 @@
 'use client';
 
-import { sidebarRoutes } from '@/app/routes';
-import Sidebar from '@/components/Sidebar';
-import { AppShell, Burger, Group, Text } from '@mantine/core';
+import type { ReactNode } from 'react';
+import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { RedirectType, redirect } from 'next/navigation';
-import type { UserAvatarProps } from '../UserButton';
+
+import { sidebarRoutes } from '@/app/routes';
+import Sidebar from '@/components/Sidebar';
+import type { UserAvatarProps } from '@/components/UserButton';
 
 /**
  * Contains the main layout for the application.
  *
  * Auth checking is done in the middleware.
  */
-export function AppContainer(user: UserAvatarProps) {
+export function AppContainer({
+  user,
+  children,
+}: Readonly<{
+  user: UserAvatarProps;
+  children: ReactNode;
+}>) {
   const [opened, { toggle }] = useDisclosure();
 
   // Redirect to log in on invalid session,
@@ -33,7 +41,7 @@ export function AppContainer(user: UserAvatarProps) {
       <AppShell.Header>
         <Group className="content-center" h="100%" px="md">
           <Burger hiddenFrom="sm" onClick={toggle} opened={opened} size="sm" />
-          <h3>Test</h3>
+          Test
         </Group>
       </AppShell.Header>
 
@@ -41,12 +49,7 @@ export function AppContainer(user: UserAvatarProps) {
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
-      <AppShell.Main>
-        Alt layout – Navbar and Aside are rendered on top on Header and Footer
-      </AppShell.Main>
-
-      <AppShell.Aside p="md">Aside</AppShell.Aside>
-      <AppShell.Footer p="md">Footer</AppShell.Footer>
+      <>{children}</>
     </AppShell>
   );
 }

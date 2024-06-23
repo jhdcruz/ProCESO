@@ -1,20 +1,18 @@
 'use client';
 
+import { type FC, useState } from 'react';
+import Link from 'next/link';
 import {
   Box,
   Collapse,
   Group,
-  NavLink,
   Text,
   ThemeIcon,
   UnstyledButton,
   rem,
 } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
-import Link from 'next/link';
-import { FC, memo, useState } from 'react';
 import classes from './LinksGroup.module.css';
-import { usePathname } from 'next/navigation';
 
 interface LinksGroupProps {
   icon: FC<any>;
@@ -33,21 +31,14 @@ export default function LinksGroup({
 }: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
-  const pathname = usePathname();
-
-  // Check if link matches current path
-  const isActive = (navLink: string) => {
-    return pathname === navLink ? ' active' : '';
-  };
 
   // sub links component
   const items = (hasLinks ? links : []).map((link) => (
     <Text
-      className={classes.link + ' active'}
+      className={classes.link}
       component={Link}
       href={link.link}
-      key={link.label}
-      onClick={(event) => event.preventDefault()}
+      key={link.link}
     >
       {link.label}
     </Text>
