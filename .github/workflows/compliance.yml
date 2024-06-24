@@ -36,7 +36,7 @@ jobs:
         run: bun i --frozen-lockfile
 
       - name: Build
-        run: bun build
+        run: bun run build
 
       - name: FOSSA Scan
         uses: fossas/fossa-action@main
