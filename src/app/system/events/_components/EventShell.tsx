@@ -1,19 +1,8 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import {
-  ActionIcon,
-  AppShell,
-  Button,
-  Group,
-  TextInput,
-  rem,
-} from '@mantine/core';
-import {
-  IconArrowRight,
-  IconCalendarPlus,
-  IconSearch,
-} from '@tabler/icons-react';
+import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
+import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 
 export default function EventShell({
   children,
