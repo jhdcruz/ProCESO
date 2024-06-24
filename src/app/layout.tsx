@@ -1,9 +1,3 @@
-/*
- * Layout wrapper for Providers and Site metadata.
- *
- * For main app layout, see `src/app/page.tsx`.
- */
-
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 

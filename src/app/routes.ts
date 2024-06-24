@@ -27,7 +27,7 @@ export type NestedRoutes = {
 export const rootUrl = '/system';
 
 export const sidebarRoutes: Routes = [
-  { label: 'Dashboard', icon: IconGauge, link: `${rootUrl}/dashboard` },
+  { label: 'Dashboard', icon: IconGauge, link: `${rootUrl}` },
   {
     label: 'Events',
     icon: IconNotes,
@@ -43,8 +43,8 @@ export const sidebarRoutes: Routes = [
     icon: IconCalendarStats,
     initiallyOpened: true,
     links: [
-      { label: 'Monthly Calendar', link: `${rootUrl}/dashboard/cal` },
-      { label: 'Calendar Feed', link: `${rootUrl}/dashboard/cal/feed` },
+      { label: 'Monthly Calendar', link: `${rootUrl}/cal` },
+      { label: 'Calendar Feed', link: `${rootUrl}/cal/feed` },
     ],
   },
   {
@@ -55,6 +55,6 @@ export const sidebarRoutes: Routes = [
   {
     label: 'Certificates',
     icon: IconFileAnalytics,
-    link: `${rootUrl}/certificates`,
+    link: `${rootUrl}/certs`,
   },
 ];
