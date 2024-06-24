@@ -3,6 +3,7 @@ import { RedirectType, redirect } from 'next/navigation';
 
 import { UserAvatarProps } from '@/components/UserButton';
 import { createServerClient } from '@/utils/supabase/server';
+import { rootUrl } from './routes';
 
 /**
  * Get currently logged-in user.
@@ -40,5 +41,5 @@ export default async function App() {
     return redirect('/login', RedirectType.replace);
   }
 
-  return redirect('/app', RedirectType.replace);
+  return redirect(rootUrl, RedirectType.replace);
 }

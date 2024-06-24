@@ -24,7 +24,7 @@ export type NestedRoutes = {
  * This is the main app url route.
  * All routes after authetication are prefixed with this.
  */
-const rootUrl = '/system';
+export const rootUrl = '/system';
 
 export const sidebarRoutes: Routes = [
   { label: 'Dashboard', icon: IconGauge, link: `${rootUrl}/dashboard` },

@@ -31,20 +31,13 @@ export function AppContainer({
 
   return (
     <AppShell
-      header={{ height: 60 }}
+      header={{ height: 64 }}
       layout="alt"
       navbar={{ width: 260, breakpoint: 'sm', collapsed: { mobile: !opened } }}
       padding="md"
-      transitionDuration={500}
+      transitionDuration={350}
       transitionTimingFunction="ease"
     >
-      <AppShell.Header>
-        <Group className="content-center" h="100%" px="md">
-          <Burger hiddenFrom="sm" onClick={toggle} opened={opened} size="sm" />
-          Test
-        </Group>
-      </AppShell.Header>
-
       <AppShell.Navbar>
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>

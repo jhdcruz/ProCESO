@@ -33,9 +33,8 @@ async function getUserSession(): Promise<null | UserAvatarProps> {
  * Auth checking is done in the middleware.
  */
 export default async function App({
-  header,
   children,
-}: Readonly<{ header: ReactNode; children: ReactNode }>) {
+}: Readonly<{ children: ReactNode }>) {
   const user = await getUserSession();
 
   // Redirect to log in on invalid session,
