@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-
 
       - name: install deps
-        run: bun i --frozen-lockfile=true
+        run: bun i --frozen-lockfile
 
       - name: Build
         run: bun build
