@@ -1,19 +1,24 @@
 'use client';
 
-import { Tooltip, Badge } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { checkHealth } from './actions';
+import { Tooltip, Badge } from '@mantine/core';
+import { checkHealth } from '../actions';
 
 /**
  * Check the system status and display health badge.
  */
-export default function SystemHealth() {
+export function SystemHealth() {
   const [health, setHealth] = useState(0);
 
   useEffect(() => {
-    checkHealth().then((health) => {
-      setHealth(health);
-    });
+    // check every 15 minutes
+    const interval = setInterval(() => {
+      checkHealth().then((health) => {
+        setHealth(health);
+      });
+    }, 900000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return health === 2 ? (

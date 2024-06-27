@@ -12,51 +12,11 @@ import {
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
-
-import classes from './UserButton.module.css';
 import { createBrowserClient } from '@/utils/supabase/client';
 
-export type UserAvatarProps = {
-  avatarUrl: string;
-  name: string;
-  email: string;
-};
+import classes from './UserButton.module.css';
 
-export default function UserButton({
-  avatarUrl,
-  email,
-  name,
-}: UserAvatarProps) {
-  return (
-    <Menu position="right" shadow="md" width={200}>
-      <Menu.Target>
-        <UnstyledButton className={classes.user}>
-          <Group>
-            <Avatar radius="xl" src={avatarUrl} />
-
-            <div className="flex-1">
-              <Text fw={500} lineClamp={1} size="sm">
-                {name}
-              </Text>
-
-              <Text c="dimmed" lineClamp={1} size="xs">
-                {email}
-              </Text>
-            </div>
-
-            <IconChevronRight
-              stroke={1.5}
-              style={{ width: rem(14), height: rem(14) }}
-            />
-          </Group>
-        </UnstyledButton>
-      </Menu.Target>
-
-      <MenuItems />
-    </Menu>
-  );
-}
-
+// Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
   const router = useRouter();
 
@@ -101,3 +61,40 @@ const MenuItems = () => {
     </Menu.Dropdown>
   );
 };
+
+export interface UserAvatarProps {
+  avatarUrl: string;
+  name: string;
+  email: string;
+}
+
+export function UserButton({ avatarUrl, email, name }: UserAvatarProps) {
+  return (
+    <Menu position="right" shadow="md" width={200}>
+      <Menu.Target>
+        <UnstyledButton className={classes.user}>
+          <Group>
+            <Avatar radius="xl" src={avatarUrl} />
+
+            <div className="flex-1">
+              <Text fw={500} lineClamp={1} size="sm">
+                {name}
+              </Text>
+
+              <Text c="dimmed" lineClamp={1} size="xs">
+                {email}
+              </Text>
+            </div>
+
+            <IconChevronRight
+              stroke={1.5}
+              style={{ width: rem(14), height: rem(14) }}
+            />
+          </Group>
+        </UnstyledButton>
+      </Menu.Target>
+
+      <MenuItems />
+    </Menu>
+  );
+}

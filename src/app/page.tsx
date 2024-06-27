@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { RedirectType, redirect } from 'next/navigation';
 
-import { UserAvatarProps } from '@/components/UserButton';
+import type { UserAvatarProps } from '@/components/UserButton';
 import { createServerClient } from '@/utils/supabase/server';
 import { rootUrl } from './routes';
 

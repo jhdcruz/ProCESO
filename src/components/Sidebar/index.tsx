@@ -1,16 +1,17 @@
-import { Group, ScrollArea } from '@mantine/core';
+import { memo } from 'react';
 import Image from 'next/image';
-import classes from './Sidebar.module.css';
+import { Group, ScrollArea } from '@mantine/core';
 
 import type { Routes } from '@/app/routes';
-import LinksGroup from '@/components/LinksGroup';
-import UserButton, { type UserAvatarProps } from '@/components/UserButton';
+import { type UserAvatarProps, UserButton } from '@/components/UserButton';
+import { LinksGroup } from '@/components/LinksGroup';
+import classes from './Sidebar.module.css';
 
 /**
  * Main sidebar component
  * Reference: https://ui.mantine.dev/component/navbar-nested/
  */
-export default function Sidebar({
+export function Sidebar({
   user,
   routes,
 }: {
@@ -45,3 +46,5 @@ export default function Sidebar({
     </nav>
   );
 }
+
+export default memo(Sidebar);

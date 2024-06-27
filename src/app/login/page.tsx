@@ -1,5 +1,3 @@
-import { onEmailLogin } from '@/app/login/actions';
-import { GoogleButton } from '@/components/Authentication/GoogleButton';
 import {
   Button,
   Divider,
@@ -12,23 +10,22 @@ import {
 } from '@mantine/core';
 import Image from 'next/image';
 
-import ThemeSwitcher from '@/components/Buttons/ThemeSwitcher';
-import SystemHealth from '@/components/Badges/SystemHealth';
+import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
+import { JitbitScript } from '@/components/Integrations/JitbitScript';
 
-import JitbitScript from '@/components/Legacy/JitbitScript';
-import cesoLogo from './ceso-manila.webp';
+import { onEmailLogin } from '@/app/login/actions';
+import { SystemHealth } from './_components/SystemHealth';
+import { GoogleButton } from './_components/GoogleButton';
+
+import cesoLogo from '@/app/_assets/img/ceso-manila.webp';
+import loginBg from '@/app/_assets/img/login-bg.webp';
 import '@/app/jitbit.css';
-
-export const dynamic = 'force-dynamic';
 
 export default async function Login() {
   return (
-    <form
-      action={onEmailLogin}
-      className="min-h-screen bg-[url('/assets/bg-2425.webp')] bg-cover bg-right bg-no-repeat"
-    >
+    <form action={onEmailLogin} className="min-h-screen max-w-full md:flex">
       <Paper
-        className="flex min-h-screen max-w-full flex-col items-center justify-between pt-10 sm:max-w-md"
+        className="z-10 flex min-h-screen max-w-full flex-col items-center justify-between pt-10 md:w-[28rem] md:max-w-md"
         p={30}
         radius={0}
         shadow="xl"
@@ -78,6 +75,17 @@ export default async function Login() {
           <Space w="xm" />
         </Group>
       </Paper>
+
+      {/* Image Wall */}
+      <Image
+        alt=""
+        className="hidden overflow-hidden bg-no-repeat md:block"
+        fill
+        objectFit="cover"
+        placeholder="blur"
+        priority={false}
+        src={loginBg}
+      />
 
       <JitbitScript />
     </form>

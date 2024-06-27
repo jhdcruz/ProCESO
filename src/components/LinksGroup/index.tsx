@@ -22,7 +22,7 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
 }
 
-export default function LinksGroup({
+export function LinksGroup({
   icon: Icon,
   label,
   link,
