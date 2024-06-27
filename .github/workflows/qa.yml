@@ -33,7 +33,7 @@ jobs:
           path: |
             ~/.bun
             ${{ github.workspace }}/.next/cache
-          # Generate a new cache whenever packages or source files change.                                                        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
