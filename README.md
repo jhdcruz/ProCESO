@@ -1,27 +1,36 @@
-# ProCESO
+# ProCESO – Community Outreach Management System
 
 **Complete Title:**
-ProCESO - Community Outreach Internal Management System with Feedback Sentiment Analysis and Automated Certificate Generation for TIP Manila - CESO Department.
+ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate
+Generation for TIP Manila – CESO Department
 
 > [!IMPORTANT]
-> This system/application is **not meant for public usage**, and is specifically tailored for a specific client. This only serves as public reference for similar system or application.
+> This system/application is **not meant for public usage**, and is tailored for a client.
+> This only serves as public reference for similar system or application.
+
+## Project Objectives
+
+This capstone project aims to develop an AI-integrated web-based community outreach management system that simplifies
+and centralizes administrative tasks to enhance the efficiency and impact of the institution’s community extension
+services in fostering sustainable community relationships.
+
+- **Develop a feature that simplifies planning and participating in community outreach activities**, such as faculty
+  delegations and student participants’ newsletters, increasing engagement and participation;
+- **Implement automation of generating and distributing of e-certificates** to participants, reducing manual workload and
+  enhancing operational efficiency; and
+- **Integrate AI in facilitating feedback analysis and evaluation**, using sentiment analysis for effective feedback
+  collection and data-driven decision-making.
 
 ## Features
 
 Proposed feature **to be implemented**.
 
-- Attendance Monitoring
-- Event Management
-  - Faculty Placement/Delegation
-  - Event Analytics and Feedback Sentiment Analysis
-- Event Calendar View
+- Student Attendance Monitoring
+- Outreach Activities Management
+    - Faculty Delegation
+    - Sentiment Analysis of Feedbacks
+- Activities Calendar View
 - Automated Certificate Generation
-
-
-## Limitations
-
-- The system only focuses on internal management and processes. External participants and/or processes are considered as out-of-scope.
-
 
 ## Tech Stack
 
@@ -29,29 +38,31 @@ Overview of current technologies and resources to be used in the system.
 
 ### Front-End
 
-- React.js
-- TypeScript
 - Next.js
+- React
+- TypeScript
 - [Mantine](https://mantine.dev/)
 - TailwindCSS
-- [@toast-ui/calendar](https://github.com/nhn/tui.calendar/tree/main/apps/react-calendar)  (Calendar UI)
-- [@toast-ui/editor](https://github.com/nhn/tui.editor/tree/master/apps/react-editor) (Editor)
+
+### Core Packages
+
+- [@toast-ui/calendar](https://github.com/nhn/tui.calendar/tree/main/apps/react-calendar)
+- [@mantine/tiptap](https://mantine.dev/x/tiptap/)
+- [pdfkit](https://pdfkit.org/)
+- [jimp](https://www.npmjs.com/package/jimp)
 
 ### Back-End
 
 - Supabase (Database, Auth, Storage)
 - Trigger.dev (Background Jobs, Cron Jobs)
 - Resend (Email)
-- Novu (Notifications)
 
 ### AI Models
 
-- [cardiffnlp/twitter-roberta-base-sentiment-latest](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest) (Sentiment Analysis)
-- [mistralai/Mistral-7B-Instruct-v0.3](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3) (Text Generation)
-
-> **NOTE:** Selected AI models should be self-hostable. See [Panel Questions](https://app.plane.so/deuz/projects/11d20b8a-9a14-409b-b87e-86167001e336/pages/219e3135-449a-4184-99aa-cb9329780317).
->
-> For Mistral: <https://discuss.huggingface.co/t/run-with-docker-locally-registry-hf-space/35198/7>
+- [finiteautomata/bertweet-base-sentiment-analysis](https://huggingface.co/finiteautomata/bertweet-base-sentiment-analysis) (
+  Sentiment Analysis)
+- [microsoft/Phi-3-mini-128k-instruct](https://huggingface.co/microsoft/Phi-3-mini-128k-instruct) (Text Generation)
+- [google/tapas-large-finetuned-wtq](https://huggingface.co/google/tapas-large-finetuned-wtq) (Table QA)
 
 ### Utilities
 
@@ -81,4 +92,5 @@ This work ("system") is distributed under [Apache License, Version 2.0](https://
 
 All trademarks, logos, and service marks displayed on this website are the property of their respective owners.
 
-> T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (T.I.P) in the Philippines.
+> T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
+> T.I.P) in the Philippines.
