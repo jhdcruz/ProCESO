@@ -22,7 +22,7 @@ export type NestedRoutes = {
 
 /**
  * This is the main app url route.
- * All routes after authetication are prefixed with this.
+ * All routes after authentication are prefixed with this.
  */
 export const rootUrl = '/system';
 
