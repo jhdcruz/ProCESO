@@ -2,7 +2,7 @@ name: compliance
 
 on:
   push:
-    branches: ['main']
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -17,26 +17,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
+      - uses: pnpm/action-setup@v2
 
-      - uses: actions/cache@v4
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - uses: actions/cache@v3
         with:
           path: |
-            ~/.bun
+            ~/.pnpm
             ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.json') }}-
 
       - name: install deps
-        run: bun i --frozen-lockfile
+        run: pnpm i
 
       - name: Build
-        run: bun run build
+        run: pnpm build
 
       - name: FOSSA Scan
         uses: fossas/fossa-action@main
