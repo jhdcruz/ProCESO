@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use or modify this software, please cite it as below."
 authors:
-  - family-names: "Herrera Dela Cruz"
+  - family-names: "Dela Cruz"
     given-names: "Joshua Hero"
     orcid: "https://orcid.org/0009-0004-1308-2057"
   - family-names: "Gozon"
