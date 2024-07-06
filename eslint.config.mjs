@@ -1,23 +1,24 @@
-import { fixupConfigRules } from '@eslint/compat';
-import { FlatCompat } from '@eslint/eslintrc';
+import nextPlugin from '@next/eslint-plugin-next';
+import reactPlugin from 'eslint-plugin-react';
+import hooksPlugin from 'eslint-plugin-react-hooks';
+import prettierPlugin from 'eslint-plugin-prettier';
 
-import prettierPlugin from 'eslint-plugin-prettier/recommended';
-
-const compat = new FlatCompat();
-
-const config = [
-  ...fixupConfigRules(compat.extends('next/core-web-vitals')),
+export default [
   {
-    files: ['**/*.{js,mjs,cjs,jsx,mjsx,ts,tsx,mtsx}'],
-    ...prettierPlugin,
-    rules: {
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      'react/jsx-sort-props': 'warn',
-      'react/jsx-uses-vars': 'off',
+    files: ['**/*.js, **/*.jsx, **/*.ts', '**/*.tsx'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': hooksPlugin,
+      '@next/next': nextPlugin,
+      prettier: prettierPlugin,
     },
-    ignores: ['node_modules', '.next', 'out'],
+    rules: {
+      ...reactPlugin.configs['jsx-runtime'].rules,
+      ...hooksPlugin.configs.recommended.rules,
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
+      '@next/next/no-img-element': 'error',
+      ...prettierPlugin.configs.recommended.rules,
+    },
   },
 ];
-
-export default config;
