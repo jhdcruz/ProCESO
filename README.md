@@ -5,8 +5,9 @@ ProCESO – AI-Integrated Community Outreach Management System with Sentiment An
 Generation for TIP Manila – CESO Department
 
 > [!IMPORTANT]
-> This system/application is **not meant for public usage**, and is tailored for a client.
-> This only serves as public reference for similar system or application.
+> This system/application is **not meant for public usage**, and is tailored for a specific client in academic institutional context.
+> 
+> This "system" only serves as public reference for similar system or application.
 
 ## Project Objectives
 
