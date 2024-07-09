@@ -31,7 +31,7 @@
     "@opentelemetry/api": "1.9.0",
     "@supabase/ssr": "0.4.0",
     "@supabase/supabase-js": "2.44.3",
-    "@tabler/icons-react": "3.9.0",
+    "@tabler/icons-react": "3.10.0",
     "@tiptap/extension-link": "2.4.0",
     "@tiptap/react": "2.4.0",
     "@tiptap/starter-kit": "2.4.0",
