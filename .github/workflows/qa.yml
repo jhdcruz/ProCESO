@@ -2,9 +2,20 @@ name: qa
 
 on:
   push:
-    branches: [ 'main' ]
+    branches: ['main']
+    paths:
+      - 'src'
+      - '.github'
+      - 'package.json'
+      - 'bun.lockb'
+      - 'tailwind.config.js'
+      - 'next.config.mjs'
+      - 'tsconfig.json'
+      - 'vercel.json'
+      - 'trigger.config.ts'
+      - 'postcss.config.mjs'
   pull_request:
-    branches: [ 'main' ]
+    branches: ['main']
 
 jobs:
   cql-scan:
