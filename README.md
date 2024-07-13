@@ -1,12 +1,11 @@
 # ProCESO – Community Outreach Management System
 
 **Complete Title:**
-ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate
-Generation for TIP Manila – CESO Department
+ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP Manila – CESO Department
 
 > [!IMPORTANT]
 > This system/application is **not meant for public usage**, and is tailored for a specific client in academic institutional context.
-> 
+>
 > This "system" only serves as public reference for similar system or application.
 
 ## Project Objectives
@@ -17,21 +16,18 @@ services in fostering sustainable community relationships.
 
 - **Develop a feature that simplifies planning and participating in community outreach activities**, such as faculty
   delegations and student participants’ newsletters, increasing engagement and participation;
-- **Implement automation of generating and distributing of e-certificates** to participants, reducing manual workload and
-  enhancing operational efficiency; and
-- **Integrate AI in facilitating feedback analysis and evaluation**, using sentiment analysis for effective feedback
-  collection and data-driven decision-making.
+- **To implement automated processes for generating, distributing, and validating e-certificates** of participants, thereby reducing manual workload and improving operational efficiency; and
+- **To integrate AI** for analyzing and evaluating feedback, such as sentiment analysis, to effectively collect feedback and support data-driven decision-making through AI-assisted summary and insights.
 
 ## Features
 
-Proposed feature **to be implemented**.
-
-- Student Attendance Monitoring
-- Outreach Activities Management
-    - Faculty Delegation
-    - Sentiment Analysis of Feedbacks
-- Activities Calendar View
-- Automated Certificate Generation
+- Outreach Activities Mgmt.
+  - Faculty Delegation
+  - Event Timeline/Backtracking
+- Automated E-Certificates (Generation, Distribution, Valdation)
+- Feedback Analysis
+  - Sentiment Analysis
+  - AI-assisted Summary & Insights
 
 ## Tech Stack
 
@@ -69,14 +65,13 @@ Overview of current technologies and resources to be used in the system.
 
 - GitHub Actions (CI)
 - Codacy (SAST)
-- FOSSA (Pkgs License Compliance)
+- FOSSA (License Compliance)
 - Mend Renovate (Deps. Mgmt.)
 - Mend Bolt (Deps. Vulnerability Scanner)
 
 ### Deployment
 
 - Vercel
-- Docker
 
 ## Monitoring
 
@@ -87,7 +82,7 @@ Overview of current technologies and resources to be used in the system.
 
 This work ("system") is distributed under [Apache License, Version 2.0](https://opensource.org/license/apache-2-0).
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fjhdcruz%2FProCESO.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fjhdcruz%2FProCESO?ref=badge_large&issueType=license)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B26392%2Fgithub.com%2Fjhdcruz%2FProCESO.svg?type=large&issueType=license)](https://app.fossa.com/projects/custom%2B26392%2Fgithub.com%2Fjhdcruz%2FProCESO?ref=badge_large&issueType=license)
 
 ## Disclaimer
 
