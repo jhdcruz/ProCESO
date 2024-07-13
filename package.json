@@ -81,6 +81,8 @@
     "url": "https://github.com/jhdcruz/ProCESO/issues"
   },
   "trustedDependencies": [
-    "protobufjs"
+    "msw",
+    "protobufjs",
+    "sharp"
   ]
 }
