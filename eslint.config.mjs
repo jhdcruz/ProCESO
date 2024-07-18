@@ -1,7 +1,7 @@
 import nextPlugin from '@next/eslint-plugin-next';
 import reactPlugin from 'eslint-plugin-react';
 import hooksPlugin from 'eslint-plugin-react-hooks';
-import prettierPlugin from 'eslint-plugin-prettier';
+import eslintPrettier from 'eslint-plugin-prettier/recommended';
 
 export default [
   {
@@ -10,7 +10,6 @@ export default [
       react: reactPlugin,
       'react-hooks': hooksPlugin,
       '@next/next': nextPlugin,
-      prettier: prettierPlugin,
     },
     rules: {
       ...reactPlugin.configs['jsx-runtime'].rules,
@@ -20,5 +19,6 @@ export default [
       '@next/next/no-img-element': 'error',
       ...prettierPlugin.configs.recommended.rules,
     },
+    eslintPrettier,
   },
 ];
