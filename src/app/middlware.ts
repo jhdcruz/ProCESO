@@ -1,5 +1,5 @@
-import { createMiddlwareClient } from '@/utils/supabase/middleware';
 import { type NextRequest, NextResponse } from 'next/server';
+import { createMiddlwareClient } from '@/utils/supabase/middleware';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
+// FIXES: Unable to load static assets and styles
 // noinspection JSUnusedGlobalSymbols
 export const config = {
   matcher: [

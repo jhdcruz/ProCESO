@@ -1,31 +1,8 @@
-import { AppContainer } from '@/components/Container/AppContainer';
-import { UserAvatarProps } from '@/components/UserButton';
-import { createServerClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
-import { RedirectType, redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { RedirectType, redirect } from 'next/navigation';
 
-/**
- * Get currently logged-in user.
- */
-async function getUserSession(): Promise<null | UserAvatarProps> {
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session) {
-    return {
-      email: session.user.email ?? '',
-      name: session.user.user_metadata.name ?? '',
-      avatarUrl: session.user.user_metadata.avatar_url ?? '',
-    };
-  }
-
-  return null;
-}
+import { AppContainer } from '@/components/Container/AppContainer';
+import { getUserSession } from '@/utils/supabase/api/user';
 
 /**
  * Contains the main layout for the application.
