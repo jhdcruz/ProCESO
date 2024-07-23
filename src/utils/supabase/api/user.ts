@@ -1,3 +1,5 @@
+'use server';
+
 import { cookies } from 'next/headers';
 
 import type { UserAvatarProps } from '@/components/UserButton';
@@ -28,22 +30,21 @@ export const getUserSession = async (): Promise<null | UserAvatarProps> => {
 /**
  * Get currently logged-in user's role from db.
  */
-export const getUserRole = async () => {
+export const getUserRole = async (): Promise<string> => {
   const cookieStore = cookies();
   const supabase = createServerClient(cookieStore);
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  // fetch role from db instead of session token
-  // for security purposes
-  const { data } = await supabase
+  // get user role
+  const { data: role } = await supabase
     .from('users')
     .select('role')
-    .eq('email', session?.user.email)
+    .eq('email', user?.email)
     .limit(1)
     .single();
 
-  return data?.role ?? 'student';
+  return role?.role ?? 'student';
 };
