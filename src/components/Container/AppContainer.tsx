@@ -1,13 +1,14 @@
 'use client';
 
-import type { ReactNode } from 'react';
-import { AppShell, Burger, Group } from '@mantine/core';
+import { Suspense, type ReactNode } from 'react';
+import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { RedirectType, redirect } from 'next/navigation';
 
 import { sidebarRoutes } from '@/app/routes';
-import Sidebar from '@/components/Sidebar';
+import { PageLoader } from '@/components/Loader/PageLoader';
 import type { UserAvatarProps } from '@/components/UserButton';
+import Sidebar from '@/components/Sidebar';
 
 /**
  * Contains the main layout for the application.
@@ -21,7 +22,7 @@ export function AppContainer({
   user: UserAvatarProps;
   children: ReactNode;
 }>) {
-  const [opened, { toggle }] = useDisclosure();
+  const [opened] = useDisclosure();
 
   // Redirect to log in on invalid session,
   // presumably expired/timeout.
@@ -42,7 +43,9 @@ export function AppContainer({
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
-      <>{children}</>
+      <Suspense fallback={<PageLoader />}>
+        <>{children}</>
+      </Suspense>
     </AppShell>
   );
 }

@@ -11,6 +11,7 @@ export default async function DashboardPage() {
     case 'faculty':
       return <>Faculty</>;
     default:
-      return <>Student-level</>;
+      // students, or else
+      return <>Students</>;
   }
 }

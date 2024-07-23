@@ -68,7 +68,6 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  // noinspection HtmlRequiredTitleElement
   return (
     <html className={font.variable} lang="en">
       <head>
