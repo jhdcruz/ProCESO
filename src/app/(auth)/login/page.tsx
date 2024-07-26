@@ -13,15 +13,15 @@ import Image from 'next/image';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 
-import { onEmailLogin } from '@/app/login/actions';
+import { onEmailLogin } from './actions';
 import { SystemHealth } from './_components/SystemHealth';
 import { GoogleButton } from './_components/GoogleButton';
 
-import cesoLogo from '@/app/_assets/img/ceso-manila.webp';
-import loginBg from '@/app/_assets/img/login-bg.webp';
+import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
+import loginBg from '@/components/_assets/img/login-bg.webp';
 import '@/app/jitbit.css';
 
-export default async function Login() {
+export default function Login() {
   return (
     <form action={onEmailLogin} className="min-h-screen max-w-full md:flex">
       <Paper
@@ -79,9 +79,8 @@ export default async function Login() {
       {/* Image Wall */}
       <Image
         alt=""
-        className="hidden overflow-hidden bg-no-repeat md:block"
+        className="hidden overflow-hidden bg-no-repeat object-cover md:block"
         fill
-        objectFit="cover"
         placeholder="blur"
         priority={false}
         src={loginBg}

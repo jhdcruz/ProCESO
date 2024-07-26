@@ -26,7 +26,7 @@ export default function EventShell({
 
           {/* Event Buttons */}
           <Button leftSection={<IconCalendarPlus size={14} />}>
-            Schedule new event
+            Schedule new activity
           </Button>
         </Group>
       </AppShell.Header>

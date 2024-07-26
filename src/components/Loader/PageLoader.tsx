@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Paper, Stack, Text } from '@mantine/core';
 
-import cesoLogo from '@/app/_assets/img/ceso-manila.webp';
+import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
 
 export const PageLoader = () => (
   <Paper className="flex h-screen w-screen items-center self-center align-middle">

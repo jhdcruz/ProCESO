@@ -24,37 +24,31 @@ export type NestedRoutes = {
  * This is the main app url route.
  * All routes after authentication are prefixed with this.
  */
-export const rootUrl = '/system';
-
 export const sidebarRoutes: Routes = [
-  { label: 'Dashboard', icon: IconGauge, link: `${rootUrl}` },
+  { label: 'Dashboard', icon: IconGauge, link: '/' },
   {
     label: 'Events',
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: 'All Events', link: `${rootUrl}/events` },
-      { label: 'Upcoming events', link: `${rootUrl}/events/upcoming` },
-      { label: 'Previous releases', link: `${rootUrl}/events/past` },
+      { label: 'All Events', link: '/events' },
+      { label: 'Upcoming events', link: '/events/upcoming' },
+      { label: 'Previous events', link: '/events/past' },
     ],
   },
   {
     label: 'Calendar',
     icon: IconCalendarStats,
-    initiallyOpened: true,
-    links: [
-      { label: 'Monthly Calendar', link: `${rootUrl}/cal` },
-      { label: 'Calendar Feed', link: `${rootUrl}/cal/feed` },
-    ],
+    link: '/calendar',
   },
   {
     label: 'Analytics',
     icon: IconPresentationAnalytics,
-    link: `${rootUrl}/analytics`,
+    link: '/analytics',
   },
   {
     label: 'Certificates',
     icon: IconFileAnalytics,
-    link: `${rootUrl}/certs`,
+    link: '/certs',
   },
 ];

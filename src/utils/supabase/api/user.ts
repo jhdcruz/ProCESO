@@ -8,7 +8,7 @@ import { createServerClient } from '../server';
 /**
  * Get currently logged-in user from session.
  */
-export const getUserSession = async (): Promise<null | UserAvatarProps> => {
+export const getUserSession = async (): Promise<UserAvatarProps> => {
   const cookieStore = cookies();
   const supabase = createServerClient(cookieStore);
 
@@ -16,15 +16,12 @@ export const getUserSession = async (): Promise<null | UserAvatarProps> => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) {
-    return {
-      email: session.user.email ?? '',
-      name: session.user.user_metadata.name ?? '',
-      avatarUrl: session.user.user_metadata.avatar_url ?? '',
-    };
-  }
-
-  return null;
+  // auth checks are done in the middleware, so this shouldn't be null
+  return {
+    email: session?.user.email ?? '',
+    name: session?.user.user_metadata.name ?? '',
+    avatarUrl: session?.user.user_metadata.avatar_url ?? '',
+  };
 };
 
 /**
