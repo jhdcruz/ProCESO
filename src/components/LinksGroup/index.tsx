@@ -39,6 +39,7 @@ export function LinksGroup({
       component={Link}
       href={link.link}
       key={link.link}
+      prefetch={false}
     >
       {link.label}
     </Text>
@@ -48,8 +49,9 @@ export function LinksGroup({
     <>
       <UnstyledButton
         className={classes.control}
-        component="a"
-        href={link}
+        component={Link}
+        href={link ?? '#'}
+        prefetch={false}
         onClick={() => setOpened((o) => !o)}
       >
         <Group gap={0} justify="space-between">

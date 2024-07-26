@@ -5,8 +5,6 @@ export async function middleware(request: NextRequest) {
   return await updateSession(request);
 }
 
-// FIXES: Unable to load static assets and styles
-// noinspection JSUnusedGlobalSymbols
 export const config = {
   matcher: [
     /*

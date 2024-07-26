@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import {
   Button,
   Divider,
@@ -11,6 +13,7 @@ import {
 import Image from 'next/image';
 
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
+import { metadata as defaultMetadata } from '@/app/layout';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 
 import { onEmailLogin } from './actions';
@@ -20,6 +23,14 @@ import { GoogleButton } from './_components/GoogleButton';
 import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
 import loginBg from '@/components/_assets/img/login-bg.webp';
 import '@/app/jitbit.css';
+
+/**
+ * Site metadata
+ */
+export const metadata: Metadata = {
+  title: 'Login - ' + defaultMetadata.title,
+  description: defaultMetadata.description,
+};
 
 export default function Login() {
   return (

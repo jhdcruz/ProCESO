@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import DashboardShell from './_components/DashboardShell';
-import { defaultMetadata } from '@/components/RootLayout';
+import { metadata as defaultMetadata } from '@/app/layout';
 
 export const metadata: Metadata = {
   title: 'Dashboard - ' + defaultMetadata.title,

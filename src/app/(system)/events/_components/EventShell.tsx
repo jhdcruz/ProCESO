@@ -25,8 +25,11 @@ export default function EventShell({
           </form>
 
           {/* Event Buttons */}
-          <Button leftSection={<IconCalendarPlus size={14} />}>
-            Schedule new activity
+          <Button
+            className="drop-shadow-sm"
+            leftSection={<IconCalendarPlus size={14} />}
+          >
+            Schedule new event
           </Button>
         </Group>
       </AppShell.Header>
