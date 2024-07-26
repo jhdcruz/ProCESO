@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Divider, Text } from '@mantine/core';
+import { Link } from 'react-transition-progress/next';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import EventShell from './_components/EventShell';
@@ -29,14 +30,15 @@ export default function EventsPage() {
       {/* Upcoming Events */}
       <div className="container my-2 h-full flex-1 flex-col space-y-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
-          <a
+          <Link
             href={sidebarRoutes[1]?.links[1].link}
             className="text-inherit no-underline"
+            prefetch={false}
           >
             <Text fw="bold" size="xl">
               Upcoming Events
             </Text>
-          </a>
+          </Link>
         </div>
         <Divider my="xs" />
 
@@ -47,14 +49,15 @@ export default function EventsPage() {
       {/* Past Events */}
       <div className="container mb-2 h-full flex-1 flex-col space-y-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
-          <a
+          <Link
             href={sidebarRoutes[1]?.links[2].link}
             className="text-inherit no-underline"
+            prefetch={false}
           >
             <Text fw="bold" size="xl">
               Previous Events
             </Text>
-          </a>
+          </Link>
         </div>
         <Divider my="xs" />
 

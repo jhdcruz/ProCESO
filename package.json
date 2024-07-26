@@ -38,9 +38,11 @@
     "@tiptap/starter-kit": "2.5.6",
     "@trigger.dev/sdk": "3.0.0-beta.51",
     "dayjs": "1.11.12",
+    "framer-motion": "11.3.18",
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-transition-progress": "0.0.4",
     "recharts": "2.12.7",
     "sharp": "0.33.4"
   },

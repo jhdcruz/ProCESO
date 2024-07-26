@@ -1,16 +1,16 @@
+import { Suspense, type ReactNode } from 'react';
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
-
-import '@/app/globals.css';
-import '@mantine/core/styles.layer.css';
-
 import {
   ColorSchemeScript,
   type MantineColorsTuple,
   MantineProvider,
   createTheme,
 } from '@mantine/core';
+import { ProgressBar, ProgressBarProvider } from 'react-transition-progress';
+
+import '@/app/globals.css';
+import '@mantine/core/styles.layer.css';
 
 const font = Inter({
   subsets: ['latin'],
@@ -82,7 +82,11 @@ export default function RootLayout({
           theme={theme}
           withCssVariables
         >
-          {children}
+          <ProgressBarProvider>
+            <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
+
+            {children}
+          </ProgressBarProvider>
         </MantineProvider>
       </body>
     </html>

@@ -1,7 +1,7 @@
 'use client';
 
 import { type FC, useState } from 'react';
-import Link from 'next/link';
+import { Link } from 'react-transition-progress/next';
 import {
   Box,
   Collapse,
@@ -34,24 +34,16 @@ export function LinksGroup({
 
   // sub links component
   const items = (hasLinks ? links : []).map((link) => (
-    <Text
-      className={classes.link}
-      component={Link}
-      href={link.link}
-      key={link.link}
-      prefetch={false}
-    >
+    <Link className={classes.link} href={link.link} key={link.link}>
       {link.label}
-    </Text>
+    </Link>
   ));
 
   return (
     <>
-      <UnstyledButton
+      <Link
         className={classes.control}
-        component={Link}
         href={link ?? '#'}
-        prefetch={false}
         onClick={() => setOpened((o) => !o)}
       >
         <Group gap={0} justify="space-between">
@@ -74,7 +66,7 @@ export function LinksGroup({
             />
           )}
         </Group>
-      </UnstyledButton>
+      </Link>
 
       {/* Sub links */}
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}

@@ -30,7 +30,7 @@ export function AppContainer({
       transitionDuration={350}
       transitionTimingFunction="ease"
     >
-      <AppShell.Navbar>
+      <AppShell.Navbar className="z-10">
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
