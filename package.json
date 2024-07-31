@@ -64,7 +64,7 @@
     "prettier-plugin-tailwindcss": "0.6.5",
     "tailwindcss": "3.4.7",
     "tailwindcss-animate": "1.0.7",
-    "turbo": "2.0.9",
+    "turbo": "2.0.10",
     "typescript": "5.5.4"
   },
   "lint-staged": {
