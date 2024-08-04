@@ -29,7 +29,7 @@ export function Sidebar({
             className="rounded-md bg-contain"
             height={60}
             src="/assets/ceso-manila.webp"
-            width={140}
+            width={160}
           />
 
           <Group gap={2}>{/* TODO */}</Group>
