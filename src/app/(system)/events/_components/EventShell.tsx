@@ -1,8 +1,9 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
-import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
+import { NewEventForm } from './Forms/NewEventForm';
 
 export default function EventShell({
   children,
@@ -11,6 +12,9 @@ export default function EventShell({
     <>
       <AppShell.Header>
         <Group className="content-center" h="100%" px="md">
+          {/* Event Buttons */}
+          <NewEventForm />
+
           {/*  Search input */}
           <form>
             <TextInput
@@ -23,14 +27,6 @@ export default function EventShell({
               placeholder="Search for events"
             />
           </form>
-
-          {/* Event Buttons */}
-          <Button
-            className="drop-shadow-sm"
-            leftSection={<IconCalendarPlus size={14} />}
-          >
-            Schedule new event
-          </Button>
         </Group>
       </AppShell.Header>
 

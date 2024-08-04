@@ -7,6 +7,7 @@ import {
   MantineProvider,
   createTheme,
 } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { ProgressBar, ProgressBarProvider } from 'react-transition-progress';
 
 import '@/app/globals.css';
@@ -84,8 +85,7 @@ export default function RootLayout({
         >
           <ProgressBarProvider>
             <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
-
-            {children}
+            <ModalsProvider>{children}</ModalsProvider>
           </ProgressBarProvider>
         </MantineProvider>
       </body>
