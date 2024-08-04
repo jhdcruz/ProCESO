@@ -1,44 +1,33 @@
-import { type CookieOptions, createServerClient } from '@supabase/ssr';
 import type { cookies } from 'next/headers';
+import {
+  type CookieOptions,
+  createServerClient as supaServerClient,
+} from '@supabase/ssr';
 
-/**
- *
- * This function creates a Supabase client for server-side use
- * using the `SERVICE KEY`, **which bypassess all RLS security**.
- *
- * **Use with extreme caution, and prevent exposure of the service key.**
- */
-export const createAdminClient = (cookieStore: ReturnType<typeof cookies>) => {
+export const createServerClient = (cookieStore: ReturnType<typeof cookies>) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
     throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
   }
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY) {
-    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY');
+    throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
   }
 
-  return createServerClient(
+  return supaServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
-        set(name: string, value: string, options: CookieOptions) {
+        setAll(cookiesToSet) {
           try {
-            cookieStore.set({ name, value, ...options });
-          } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: '', ...options });
-          } catch (error) {
-            // The `delete` method was called from a Server Component.
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options),
+            );
+          } catch {
+            // The `setAll` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
           }

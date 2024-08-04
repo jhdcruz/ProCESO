@@ -1,8 +1,9 @@
+import type { cookies } from 'next/headers';
 import {
   type CookieOptions,
   createServerClient as supaServerClient,
 } from '@supabase/ssr';
-import type { cookies } from 'next/headers';
+import { Database } from './types';
 
 export const createServerClient = (cookieStore: ReturnType<typeof cookies>) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
@@ -13,9 +14,9 @@ export const createServerClient = (cookieStore: ReturnType<typeof cookies>) => {
     throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
   }
 
-  return supaServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  return supaServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
