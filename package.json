@@ -32,7 +32,7 @@
     "@mantine/tiptap": "7.12.0",
     "@opentelemetry/api": "1.9.0",
     "@supabase/ssr": "0.4.0",
-    "@supabase/supabase-js": "2.45.0",
+    "@supabase/supabase-js": "2.45.1",
     "@tabler/icons-react": "3.11.0",
     "@tiptap/extension-link": "2.5.8",
     "@tiptap/react": "2.5.8",
