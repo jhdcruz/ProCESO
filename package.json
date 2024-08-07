@@ -39,7 +39,7 @@
     "@tiptap/starter-kit": "2.5.9",
     "@trigger.dev/sdk": "3.0.0-beta.52",
     "dayjs": "1.11.12",
-    "framer-motion": "11.3.22",
+    "framer-motion": "11.3.23",
     "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
