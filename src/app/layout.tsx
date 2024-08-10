@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import {
@@ -7,11 +7,11 @@ import {
   MantineProvider,
   createTheme,
 } from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
 import { ModalsProvider } from '@mantine/modals';
 import { ProgressBar, ProgressBarProvider } from 'react-transition-progress';
 
 import '@/app/globals.css';
-import '@mantine/core/styles.layer.css';
 
 const font = Inter({
   subsets: ['latin'],
@@ -77,16 +77,22 @@ export default function RootLayout({
       </head>
 
       <body>
+        {/* App-level providers */}
         <MantineProvider
           deduplicateCssVariables
           defaultColorScheme="auto"
           theme={theme}
           withCssVariables
         >
-          <ProgressBarProvider>
-            <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
-            <ModalsProvider>{children}</ModalsProvider>
-          </ProgressBarProvider>
+          <DatesProvider settings={{ timezone: 'UTC' }}>
+            <ProgressBarProvider>
+              <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
+              <ModalsProvider>
+                {/* Actual content */}
+                {children}
+              </ModalsProvider>
+            </ProgressBarProvider>
+          </DatesProvider>
         </MantineProvider>
       </body>
     </html>

@@ -6,7 +6,7 @@ import type { UserAvatarProps } from '@/components/UserButton';
 import { Enums } from '@/utils/supabase/types';
 
 export interface CurrentUser extends UserAvatarProps {
-  role?: Enums<'role'>;
+  role?: Enums<'user_roles'>;
 }
 
 /**

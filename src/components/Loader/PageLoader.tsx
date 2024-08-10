@@ -1,23 +1,19 @@
-import Image from 'next/image';
-import { Paper, Stack, Text } from '@mantine/core';
-
-import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
+import { rem, Paper, Stack, Text } from '@mantine/core';
+import { IconFidgetSpinner } from '@tabler/icons-react';
 
 export const PageLoader = () => (
   <Paper className="flex h-screen w-screen items-center self-center align-middle">
     <Stack className="mx-auto text-center">
-      <Image
-        alt="Loading"
-        className="rounded-md"
-        draggable={false}
-        height={130}
-        placeholder="blur"
-        priority
-        src={cesoLogo}
-        width={300}
+      <IconFidgetSpinner
+        style={{
+          width: rem(52),
+          height: rem(52),
+          color: 'var(--mantine-color-dimmed)'
+        }}
+        stroke={1.5}
       />
 
-      <Text>We&apos;re preparing the system, please wait...</Text>
+      <Text>Processing request, please wait...</Text>
     </Stack>
   </Paper>
 );

@@ -1,9 +1,9 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
+import { AppShell, Group, TextInput, rem } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
-import { NewEventForm } from './Forms/NewEventForm';
+import { NewEventModal } from './Forms/NewEventModal';
 
 export default function EventShell({
   children,
@@ -13,7 +13,7 @@ export default function EventShell({
       <AppShell.Header>
         <Group className="content-center" h="100%" px="md">
           {/* Event Buttons */}
-          <NewEventForm />
+          <NewEventModal />
 
           {/*  Search input */}
           <form>
