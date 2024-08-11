@@ -15,7 +15,7 @@
     "start": "next start",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
-    "gen:t": "npx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" --schema public > ./src/utils/supabase/types.ts",
+    "gen:t": "bunx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" --schema public > ./src/utils/supabase/types.ts",
     "prepare": "husky"
   },
   "dependencies": {
