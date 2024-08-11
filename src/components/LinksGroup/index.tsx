@@ -2,15 +2,7 @@
 
 import { type FC, useState } from 'react';
 import { Link } from 'react-transition-progress/next';
-import {
-  Box,
-  Collapse,
-  Group,
-  Text,
-  ThemeIcon,
-  UnstyledButton,
-  rem,
-} from '@mantine/core';
+import { Box, Collapse, Group, ThemeIcon, rem } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import classes from './LinksGroup.module.css';
 
