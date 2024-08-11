@@ -5,11 +5,7 @@ export const PageLoader = () => (
   <Paper className="flex h-screen w-screen items-center self-center align-middle">
     <Stack className="mx-auto text-center">
       <IconFidgetSpinner
-        style={{
-          width: rem(52),
-          height: rem(52),
-          color: 'var(--mantine-color-dimmed)'
-        }}
+        className="var(--mantine-color-dimmed) mx-auto block h-10 w-10 animate-spin"
         stroke={1.5}
       />
 
