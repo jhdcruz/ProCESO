@@ -22,7 +22,7 @@ import { GoogleButton } from './_components/GoogleButton';
 
 import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
 import loginBg from '@/components/_assets/img/login-bg.webp';
-import '@/app/jitbit.css';
+import '@/styles/jitbit.css';
 
 /**
  * Site metadata

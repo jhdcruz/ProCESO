@@ -12,7 +12,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { ProgressBar, ProgressBarProvider } from 'react-transition-progress';
 
-import '@/app/globals.css';
+import '@/styles/globals.css';
 
 const font = Inter({
   subsets: ['latin'],
