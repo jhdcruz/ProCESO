@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 import { ProgressBar, ProgressBarProvider } from 'react-transition-progress';
 
 import '@/app/globals.css';
@@ -88,6 +89,7 @@ export default function RootLayout({
             <ProgressBarProvider>
               <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
               <ModalsProvider>
+                <Notifications />
                 {/* Actual content */}
                 {children}
               </ModalsProvider>

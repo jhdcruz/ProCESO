@@ -36,7 +36,7 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
       value={query}
       data={data}
       limit={5}
-      onChange={setQuery}
+      onChangeCapture={(e) => setQuery(e.currentTarget.value)}
       rightSection={loading ? <Loader size="1rem" /> : null}
       label="Event Series"
       placeholder="Brigada Eskwela"

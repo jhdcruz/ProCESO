@@ -1,27 +1,26 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { DateTimePicker } from '@mantine/dates';
+import { DateTimePicker, DateValue } from '@mantine/dates';
 import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconUpload, IconX } from '@tabler/icons-react';
-import { SeriesInput } from './SeriesInput';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
 import {
   Button,
+  Checkbox,
   Divider,
   Grid,
   Group,
   Input,
   Modal,
   SegmentedControl,
+  SimpleGrid,
   Text,
   TextInput,
-  Autocomplete,
-  Loader,
 } from '@mantine/core';
 import {
   Dropzone,
@@ -29,9 +28,16 @@ import {
   type FileWithPath,
 } from '@mantine/dropzone';
 
+import { SeriesInput } from './SeriesInput';
+import { features, FeatureCard } from './FeatureCard';
+
 export const NewEventModal = memo(() => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [visibility, setVisibility] = useState('Everyone');
+
+  // event starting/end dates state
+  const [startDate, setStartDate] = useState<DateValue | null>(null);
+  const [endDate, setEndDate] = useState<DateValue | null>(null);
+  const [endDateError, setEndDateError] = useState<string | boolean>(false);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -42,25 +48,35 @@ export const NewEventModal = memo(() => {
   // form submission
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: {
-      email: '',
-    },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+    initialValues: {
+      visibility: 'Everyone',
+      features: ['Analytics', 'Feedback'],
     },
   });
 
-  // reset state on modal close
+  // reset all state on cancel
   const resetState = () => {
     if (coverFile) {
       setCoverFile([]);
     }
 
-    setVisibility('Everyone');
+    setEndDateError(false);
+    setStartDate(null);
+    setEndDate(null);
+
+    form.reset();
 
     close();
   };
+
+  // make sure end date is not before start date
+  // we're doing validation here for immediate feedback
+  useEffect(() => {
+    if (startDate && endDate && startDate > endDate) {
+      setEndDateError('Cannot set end date before start date.');
+    }
+  }, [startDate, endDate]);
 
   return (
     <>
@@ -72,14 +88,18 @@ export const NewEventModal = memo(() => {
         Schedule new event
       </Button>
 
-      <Modal opened={opened} onClose={resetState} size="70%" title="New Event">
+      <Modal opened={opened} onClose={close} size="70%" title="New Event">
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           <Grid grow>
+            {/* Left Column Grid */}
             <Grid.Col span={4}>
               <Dropzone
                 multiple={false}
                 accept={IMAGE_MIME_TYPE}
-                onDrop={setCoverFile}
+                onDrop={(files) => {
+                  setCoverFile(files);
+                  form.setFieldValue('image_url', files[0]);
+                }}
                 maxSize={15 * 1024 ** 2} // 15MB
               >
                 <Group
@@ -88,7 +108,7 @@ export const NewEventModal = memo(() => {
                   style={{ pointerEvents: 'none' }}
                 >
                   {/* Selected image preview */}
-                  {coverFile.length && (
+                  {coverFile.length ? (
                     <Image
                       className="mx-auto block"
                       key={imagePreview as string}
@@ -97,6 +117,16 @@ export const NewEventModal = memo(() => {
                       height={240}
                       alt="Image preview of the uploaded image."
                     />
+                  ) : (
+                    <Dropzone.Idle>
+                      <IconUpload
+                        className="mx-auto mb-4 block h-[4rem] w-[4rem]"
+                        stroke={1.5}
+                      />
+                      <Text ta="center" c="dimmed">
+                        Select/drop a cover thumbnail image here.
+                      </Text>
+                    </Dropzone.Idle>
                   )}
 
                   <Dropzone.Reject>
@@ -106,16 +136,6 @@ export const NewEventModal = memo(() => {
                     />
                     <Text ta="center">Selected image file is invalid.</Text>
                   </Dropzone.Reject>
-
-                  <Dropzone.Idle>
-                    <IconUpload
-                      className="mx-auto mb-4 block h-[4rem] w-[4rem]"
-                      stroke={1.5}
-                    />
-                    <Text ta="center" c="dimmed">
-                      Select/drop a cover thumbnail image here.
-                    </Text>
-                  </Dropzone.Idle>
                 </Group>
               </Dropzone>
 
@@ -127,53 +147,84 @@ export const NewEventModal = memo(() => {
                 classNames={classes}
                 data-autofocus
                 required
+                {...form.getInputProps('title')}
               />
 
-              <SeriesInput classNames={classes} />
+              <SeriesInput
+                key={form.key('series')}
+                {...form.getInputProps('series')}
+                classNames={classes}
+              />
 
               <Input.Wrapper
                 label="Visibility"
-                description={
-                  visibility === 'Everyone'
-                    ? 'Visible to everyone in the system.'
-                    : visibility === 'Faculty'
-                      ? 'Visible to faculty members only.'
-                      : 'Visible to admin/staffs only.'
-                }
+                description="Who can view and participate in this event?"
               >
                 <SegmentedControl
+                  key={form.key('visibility')}
                   className="mt-2"
-                  value={visibility}
-                  onChange={setVisibility}
                   data={['Everyone', 'Faculty', 'Internal']}
+                  {...form.getInputProps('visibility')}
                 />
               </Input.Wrapper>
             </Grid.Col>
 
+            {/* Right Column Grid */}
             <Grid.Col span={8}>
               <Group grow>
                 <DateTimePicker
+                  key={form.key('date_starting')}
+                  onChange={(e) => {
+                    setStartDate(e);
+                    form.setFieldValue('date_starting', e);
+                  }}
+                  value={startDate}
                   classNames={classes}
                   label="Starting Date & Time"
                   placeholder="Starting date and time of event"
+                  clearable
                 />
 
                 <DateTimePicker
+                  key={form.key('date_ending')}
+                  onChange={(e) => {
+                    setEndDate(e);
+                    form.setFieldValue('date_ending', e);
+                  }}
+                  value={endDate}
                   classNames={classes}
+                  error={endDateError}
                   label="Ending Date & Time"
                   placeholder="Last day and time of event."
+                  clearable
                 />
               </Group>
+
+              {/* Features List */}
+              <Checkbox.Group
+                key={form.key('features')}
+                label="Features"
+                description="Select which features should be enabled."
+                defaultValue={['Analytics', 'Feedback']}
+                {...form.getInputProps('features', { type: 'checkbox' })}
+              >
+                <SimpleGrid cols={{ base: 1, sm: 2 }} mt={8}>
+                  {features.map((feature) => (
+                    <FeatureCard key={feature.name} feature={feature} />
+                  ))}
+                </SimpleGrid>
+              </Checkbox.Group>
             </Grid.Col>
           </Grid>
 
           {/* Save Buttons */}
           <Group justify="flex-end">
-            <Button variant="subtle" mt="md" onClick={close}>
-              Save
+            <Button variant="subtle" mt="md" onClick={resetState}>
+              Cancel
             </Button>
 
             <Button
+              type="submit"
               mt="md"
               onClick={close}
               rightSection={<IconArrowRight size={16} />}
