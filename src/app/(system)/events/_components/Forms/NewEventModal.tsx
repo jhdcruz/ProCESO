@@ -1,14 +1,15 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import Image from 'next/image';
-import { DateTimePicker, DateValue } from '@mantine/dates';
-import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
+import { DateTimePicker, type DateValue } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { IconUpload, IconX } from '@tabler/icons-react';
+import { z } from 'zod';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
+import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
 import {
   Button,
   Checkbox,
@@ -31,13 +32,18 @@ import {
 import { SeriesInput } from './SeriesInput';
 import { features, FeatureCard } from './FeatureCard';
 
+export interface NewEvent {
+  image_url?: FileWithPath;
+  series?: string;
+  title: string;
+  visibility: 'Everyone' | 'Faculty' | 'Internal';
+  features: string[];
+  date_starting: DateValue;
+  date_ending: DateValue;
+}
+
 export const NewEventModal = memo(() => {
   const [opened, { open, close }] = useDisclosure(false);
-
-  // event starting/end dates state
-  const [startDate, setStartDate] = useState<DateValue | null>(null);
-  const [endDate, setEndDate] = useState<DateValue | null>(null);
-  const [endDateError, setEndDateError] = useState<string | boolean>(false);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -46,12 +52,37 @@ export const NewEventModal = memo(() => {
     : null;
 
   // form submission
-  const form = useForm({
+  const form = useForm<NewEvent>({
     mode: 'uncontrolled',
+    validateInputOnBlur: true,
 
     initialValues: {
+      title: '',
       visibility: 'Everyone',
       features: ['Analytics', 'Feedback'],
+      date_starting: null,
+      date_ending: null,
+    },
+
+    validate: {
+      title: (value) => (!value.trim() ? 'Title cannot be empty.' : null),
+
+      visibility: (value) =>
+        !['Everyone', 'Faculty', 'Internal'].includes(value)
+          ? 'Invalid visibility option.'
+          : null,
+
+      date_starting: (value) =>
+        z.string().datetime().safeParse(value).error
+          ? 'Invalid date, use the date picker.'
+          : null,
+
+      date_ending: (value, values) =>
+        z.string().datetime().safeParse(value).error
+          ? 'Invalid date, use the date picker.'
+          : value && value < values.date_starting! // end date is disabled if start date is empty anyways
+            ? 'Must be after the set start date.'
+            : null,
     },
   });
 
@@ -61,22 +92,9 @@ export const NewEventModal = memo(() => {
       setCoverFile([]);
     }
 
-    setEndDateError(false);
-    setStartDate(null);
-    setEndDate(null);
-
     form.reset();
-
     close();
   };
-
-  // make sure end date is not before start date
-  // we're doing validation here for immediate feedback
-  useEffect(() => {
-    if (startDate && endDate && startDate > endDate) {
-      setEndDateError('Cannot set end date before start date.');
-    }
-  }, [startDate, endDate]);
 
   return (
     <>
@@ -89,7 +107,7 @@ export const NewEventModal = memo(() => {
       </Button>
 
       <Modal opened={opened} onClose={close} size="70%" title="New Event">
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <form onSubmit={form.onSubmit(console.log)}>
           <Grid grow>
             {/* Left Column Grid */}
             <Grid.Col span={4}>
@@ -146,7 +164,7 @@ export const NewEventModal = memo(() => {
                 placeholder="Ex. Brigada Eskwela (2024)"
                 classNames={classes}
                 data-autofocus
-                required
+                withAsterisk
                 {...form.getInputProps('title')}
               />
 
@@ -159,6 +177,7 @@ export const NewEventModal = memo(() => {
               <Input.Wrapper
                 label="Visibility"
                 description="Who can view and participate in this event?"
+                withAsterisk
               >
                 <SegmentedControl
                   key={form.key('visibility')}
@@ -174,29 +193,21 @@ export const NewEventModal = memo(() => {
               <Group grow>
                 <DateTimePicker
                   key={form.key('date_starting')}
-                  onChange={(e) => {
-                    setStartDate(e);
-                    form.setFieldValue('date_starting', e);
-                  }}
-                  value={startDate}
                   classNames={classes}
                   label="Starting Date & Time"
                   placeholder="Starting date and time of event"
                   clearable
+                  {...form.getInputProps('date_starting')}
                 />
 
                 <DateTimePicker
                   key={form.key('date_ending')}
-                  onChange={(e) => {
-                    setEndDate(e);
-                    form.setFieldValue('date_ending', e);
-                  }}
-                  value={endDate}
                   classNames={classes}
-                  error={endDateError}
+                  disabled={!form.getValues().date_starting}
                   label="Ending Date & Time"
                   placeholder="Last day and time of event."
                   clearable
+                  {...form.getInputProps('date_ending')}
                 />
               </Group>
 
@@ -226,7 +237,6 @@ export const NewEventModal = memo(() => {
             <Button
               type="submit"
               mt="md"
-              onClick={close}
               rightSection={<IconArrowRight size={16} />}
             >
               Add description
