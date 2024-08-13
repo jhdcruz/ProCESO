@@ -37,7 +37,7 @@ export interface NewEvent {
   series?: string;
   title: string;
   visibility: 'Everyone' | 'Faculty' | 'Internal';
-  features: ['Storage' | 'Certificates' | 'Feedback' | 'Analytics'];
+  features: string[];
   date_starting: DateValue;
   date_ending: DateValue;
   created_by?: string;
@@ -84,6 +84,11 @@ export const NewEventModal = memo(() => {
           : value && value < values.date_starting! // end date is disabled if start date is empty anyways
             ? 'Must be after the set start date.'
             : null,
+
+      features: (value) =>
+        !value.every((feature) => ['Analytics', 'Feedback'].includes(feature))
+          ? 'Invalid feature option.'
+          : null,
     },
   });
 
