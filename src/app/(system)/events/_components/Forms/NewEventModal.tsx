@@ -37,9 +37,10 @@ export interface NewEvent {
   series?: string;
   title: string;
   visibility: 'Everyone' | 'Faculty' | 'Internal';
-  features: string[];
+  features: ['Storage' | 'Certificates' | 'Feedback' | 'Analytics'];
   date_starting: DateValue;
   date_ending: DateValue;
+  created_by?: string;
 }
 
 export const NewEventModal = memo(() => {
