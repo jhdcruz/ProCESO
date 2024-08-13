@@ -1,9 +1,7 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-import { useClient } from './useClient';
 import type { UserAvatarProps } from '@/components/UserButton';
 import { Enums } from '@/utils/supabase/types';
+import { createServerClient } from '@/utils/supabase/server';
 
 export interface CurrentUser extends UserAvatarProps {
   role?: Enums<'user_roles'>;
@@ -12,8 +10,9 @@ export interface CurrentUser extends UserAvatarProps {
 /**
  * Get currently logged-in user from session.
  */
-export const useCurrentUser = async (): Promise<null | CurrentUser> => {
-  const supabase = useClient(cookies);
+export const currentUser = async (): Promise<null | CurrentUser> => {
+  const cookieStore = await import('next/headers').then((mod) => mod.cookies);
+  const supabase = createServerClient(cookieStore());
 
   const {
     data: { user },

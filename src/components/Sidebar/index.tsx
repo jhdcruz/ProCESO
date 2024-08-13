@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, Suspense } from 'react';
 import Image from 'next/image';
 import { Group, ScrollArea } from '@mantine/core';
 
@@ -40,9 +40,11 @@ export function Sidebar({
         <div className="py-1">{links}</div>
       </ScrollArea>
 
-      <div className={classes.footer}>
-        <UserButton {...user} />
-      </div>
+      <Suspense>
+        <div className={classes.footer}>
+          <UserButton {...user} />
+        </div>
+      </Suspense>
     </nav>
   );
 }

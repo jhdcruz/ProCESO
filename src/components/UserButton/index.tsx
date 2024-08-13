@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 
 import classes from './UserButton.module.css';
+import { memo } from 'react';
 
 // Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
@@ -68,8 +69,8 @@ export interface UserAvatarProps {
   email: string;
 }
 
-export function UserButton({ avatarUrl, email, name }: UserAvatarProps) {
-  return (
+export const UserButton = memo(
+  ({ avatarUrl, email, name }: UserAvatarProps) => (
     <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
@@ -96,5 +97,6 @@ export function UserButton({ avatarUrl, email, name }: UserAvatarProps) {
 
       <MenuItems />
     </Menu>
-  );
-}
+  ),
+);
+UserButton.displayName = 'UserButton';

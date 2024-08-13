@@ -4,7 +4,7 @@ import { redirect, RedirectType } from 'next/navigation';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { AppContainer } from '@/components/Container';
-import { useCurrentUser } from '@/hooks/supabase/useUser';
+import { currentUser } from '@/api/supabase/user';
 import '@mantine/dropzone/styles.css';
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export default async function Layout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const user = await useCurrentUser();
+  const user = await currentUser();
 
   if (!user) {
     redirect('/login', RedirectType.replace);
