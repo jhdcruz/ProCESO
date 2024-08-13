@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import { IconUpload, IconX } from '@tabler/icons-react';
-import { z } from 'zod';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconUpload, IconX } from '@tabler/icons-react';
 import classes from '@/styles/forms/ContainedInput.module.css';
+import { Enums } from '@/utils/supabase/types';
 
 import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
 import {
@@ -17,6 +18,7 @@ import {
   Grid,
   Group,
   Input,
+  Loader,
   Modal,
   SegmentedControl,
   SimpleGrid,
@@ -31,13 +33,14 @@ import {
 
 import { SeriesInput } from './SeriesInput';
 import { features, FeatureCard } from './FeatureCard';
+import { submitEvent } from '../../action';
 
 export interface NewEvent {
   image_url?: FileWithPath;
   series?: string;
   title: string;
-  visibility: 'Everyone' | 'Faculty' | 'Internal';
-  features: string[];
+  visibility: Enums<'event_visibility'>;
+  features: Enums<'event_features'>[] | [];
   date_starting: DateValue;
   date_ending: DateValue;
   created_by?: string;
@@ -45,6 +48,7 @@ export interface NewEvent {
 
 export const NewEventModal = memo(() => {
   const [opened, { open, close }] = useDisclosure(false);
+  const [pending, setPending] = useState(false);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -73,24 +77,30 @@ export const NewEventModal = memo(() => {
           ? 'Invalid visibility option.'
           : null,
 
-      date_starting: (value) =>
-        !z.string().datetime().safeParse(value).success
-          ? 'Invalid date, use the date picker.'
-          : null,
-
       date_ending: (value, values) =>
-        !z.string().datetime().safeParse(value).success
-          ? 'Invalid date, use the date picker.'
-          : value && value < values.date_starting! // end date is disabled if start date is empty anyways
-            ? 'Must be after the set start date.'
-            : null,
-
-      features: (value) =>
-        !value.every((feature) => ['Analytics', 'Feedback'].includes(feature))
-          ? 'Invalid feature option.'
+        value && value < values.date_starting! // end date is disabled if start date is empty anyways
+          ? 'Must be after the set start date.'
           : null,
     },
   });
+
+  // form handler & submission
+  const handleSubmit = async (event: NewEvent) => {
+    setPending(true);
+    const result = await submitEvent(event);
+    setPending(false);
+
+    notifications.show({
+      title: result.title,
+      message: result.message,
+      color:
+        result.status === 0 ? 'green' : result.status === 1 ? 'orange' : 'red',
+      withBorder: true,
+      autoClose: 5000,
+    });
+
+    close();
+  };
 
   // reset all state on cancel
   const resetState = () => {
@@ -113,7 +123,7 @@ export const NewEventModal = memo(() => {
       </Button>
 
       <Modal opened={opened} onClose={close} size="70%" title="New Event">
-        <form onSubmit={form.onSubmit(console.log)}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid grow>
             {/* Left Column Grid */}
             <Grid.Col span={4}>
@@ -152,6 +162,16 @@ export const NewEventModal = memo(() => {
                       </Text>
                     </Dropzone.Idle>
                   )}
+
+                  <Dropzone.Accept>
+                    <IconCheck
+                      className="mx-auto mb-4 block h-[4rem] w-[4rem] text-[var(--mantine-color-green-6)]"
+                      stroke={1.5}
+                    />
+                    <Text ta="center" c="dimmed">
+                      Release to use the selected image.
+                    </Text>
+                  </Dropzone.Accept>
 
                   <Dropzone.Reject>
                     <IconX
@@ -243,9 +263,11 @@ export const NewEventModal = memo(() => {
             <Button
               type="submit"
               mt="md"
-              rightSection={<IconArrowRight size={16} />}
+              w={148}
+              rightSection={!pending && <IconArrowRight size={16} />}
+              disabled={pending || !form.isValid}
             >
-              Add description
+              {pending ? <Loader size="1rem" type="dots" /> : 'Create Event'}
             </Button>
           </Group>
         </form>
