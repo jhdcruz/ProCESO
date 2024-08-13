@@ -15,7 +15,7 @@
     "start": "next start",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
-    "gen:t": "bunx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" --schema public > ./src/utils/supabase/types.ts",
+    "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/utils/supabase/types.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -63,6 +63,7 @@
     "postcss-simple-vars": "7.0.1",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.6.6",
+    "supabase": "1.188.4",
     "tailwindcss": "3.4.9",
     "tailwindcss-animate": "1.0.7",
     "turbo": "2.0.12",
@@ -85,7 +86,8 @@
   "trustedDependencies": [
     "msw",
     "protobufjs",
-    "sharp"
+    "sharp",
+    "supabase"
   ],
   "packageManager": "pnpm@9.7.0"
 }
