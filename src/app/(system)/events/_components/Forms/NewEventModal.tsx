@@ -73,12 +73,12 @@ export const NewEventModal = memo(() => {
           : null,
 
       date_starting: (value) =>
-        z.string().datetime().safeParse(value).error
+        !z.string().datetime().safeParse(value).success
           ? 'Invalid date, use the date picker.'
           : null,
 
       date_ending: (value, values) =>
-        z.string().datetime().safeParse(value).error
+        !z.string().datetime().safeParse(value).success
           ? 'Invalid date, use the date picker.'
           : value && value < values.date_starting! // end date is disabled if start date is empty anyways
             ? 'Must be after the set start date.'
