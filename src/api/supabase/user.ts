@@ -10,7 +10,7 @@ export interface CurrentUser extends UserAvatarProps {
 /**
  * Get currently logged-in user from session.
  */
-export const currentUser = async (): Promise<null | CurrentUser> => {
+export async function getCurrentUser(): Promise<null | CurrentUser> {
   const cookieStore = await import('next/headers').then((mod) => mod.cookies);
   const supabase = createServerClient(cookieStore());
 
@@ -41,4 +41,4 @@ export const currentUser = async (): Promise<null | CurrentUser> => {
   }
 
   return null;
-};
+}

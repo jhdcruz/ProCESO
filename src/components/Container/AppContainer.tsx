@@ -1,12 +1,10 @@
 'use client';
 
-import { Suspense, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import { sidebarRoutes } from '@/app/routes';
-import { PageLoader } from '@/components/Loader/PageLoader';
-import type { UserAvatarProps } from '@/components/UserButton';
 import Sidebar from '@/components/Sidebar';
 
 /**
@@ -34,9 +32,7 @@ export function AppContainer({
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
-      <Suspense fallback={<PageLoader />}>
-        <>{children}</>
-      </Suspense>
+      <>{children}</>
     </AppShell>
   );
 }
