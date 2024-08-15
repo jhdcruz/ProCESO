@@ -33,16 +33,16 @@ import {
 
 import { SeriesInput } from './SeriesInput';
 import { features, FeatureCard } from './FeatureCard';
-import { submitEvent } from '../../action';
+import { submitEvent } from '../../actions';
 
 export interface NewEvent {
-  image_url?: FileWithPath;
-  series?: string;
   title: string;
   visibility: Enums<'event_visibility'>;
   features: Enums<'event_features'>[] | [];
-  date_starting: DateValue;
-  date_ending: DateValue;
+  image_url?: FileWithPath;
+  series?: string | null;
+  date_starting?: DateValue;
+  date_ending?: DateValue;
   created_by?: string;
 }
 
@@ -64,7 +64,7 @@ export const NewEventModal = memo(() => {
     initialValues: {
       title: '',
       visibility: 'Everyone',
-      features: ['Analytics', 'Feedback'],
+      features: ['Analytics', 'Feedback', 'Storage', 'Certificates'], // requires manual `defaultValue` on checkbox
       date_starting: null,
       date_ending: null,
     },
@@ -78,7 +78,7 @@ export const NewEventModal = memo(() => {
           : null,
 
       date_ending: (value, values) =>
-        value && value < values.date_starting! // end date is disabled if start date is empty anyways
+        value && value < values.date_starting! // end date is disabled if start date is empty anyway
           ? 'Must be after the set start date.'
           : null,
     },
@@ -94,11 +94,13 @@ export const NewEventModal = memo(() => {
       title: result.title,
       message: result.message,
       color:
-        result.status === 0 ? 'green' : result.status === 1 ? 'orange' : 'red',
+        result.status === 0 ? 'green' : result.status === 1 ? 'yellow' : 'red',
       withBorder: true,
-      autoClose: 5000,
+      withCloseButton: true,
+      autoClose: 8000,
     });
 
+    resetState();
     close();
   };
 
@@ -242,7 +244,12 @@ export const NewEventModal = memo(() => {
                 key={form.key('features')}
                 label="Features"
                 description="Select which features should be enabled."
-                defaultValue={['Analytics', 'Feedback']}
+                defaultValue={[
+                  'Analytics',
+                  'Feedback',
+                  'Storage',
+                  'Certificates',
+                ]}
                 {...form.getInputProps('features', { type: 'checkbox' })}
               >
                 <SimpleGrid cols={{ base: 1, sm: 2 }} mt={8}>
