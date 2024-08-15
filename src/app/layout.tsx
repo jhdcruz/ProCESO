@@ -89,7 +89,7 @@ export default function RootLayout({
             <ProgressBarProvider>
               <ProgressBar className="absolute top-0 z-50 h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
               <ModalsProvider>
-                <Notifications />
+                <Notifications limit={8} />
                 {/* Actual content */}
                 {children}
               </ModalsProvider>
