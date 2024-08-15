@@ -3,6 +3,7 @@
 import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import type { UserAvatarProps } from '@/components/UserButton';
 
 import { sidebarRoutes } from '@/app/routes';
 import Sidebar from '@/components/Sidebar';
