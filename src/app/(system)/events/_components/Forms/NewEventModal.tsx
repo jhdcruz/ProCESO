@@ -117,26 +117,26 @@ export const NewEventModal = memo(() => {
   return (
     <>
       <Button
-        onClick={open}
         className="drop-shadow-sm"
         leftSection={<IconCalendarPlus size={16} />}
+        onClick={open}
       >
         Schedule new event
       </Button>
 
-      <Modal opened={opened} onClose={close} size="70%" title="New Event">
+      <Modal onClose={close} opened={opened} size="70%" title="New Event">
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid grow>
             {/* Left Column Grid */}
             <Grid.Col span={4}>
               <Dropzone
-                multiple={false}
                 accept={IMAGE_MIME_TYPE}
+                maxSize={15 * 1024 ** 2} // 15MB
+                multiple={false}
                 onDrop={(files) => {
                   setCoverFile(files);
                   form.setFieldValue('image_url', files[0]);
                 }}
-                maxSize={15 * 1024 ** 2} // 15MB
               >
                 <Group
                   justify="center"
@@ -146,12 +146,12 @@ export const NewEventModal = memo(() => {
                   {/* Selected image preview */}
                   {coverFile.length ? (
                     <Image
+                      alt="Image preview of the uploaded image."
                       className="mx-auto block"
+                      height={240}
                       key={imagePreview as string}
                       src={imagePreview as string}
                       width={240}
-                      height={240}
-                      alt="Image preview of the uploaded image."
                     />
                   ) : (
                     <Dropzone.Idle>
@@ -159,7 +159,7 @@ export const NewEventModal = memo(() => {
                         className="mx-auto mb-4 block h-[4rem] w-[4rem]"
                         stroke={1.5}
                       />
-                      <Text ta="center" c="dimmed">
+                      <Text c="dimmed" ta="center">
                         Select/drop a cover thumbnail image here.
                       </Text>
                     </Dropzone.Idle>
@@ -170,7 +170,7 @@ export const NewEventModal = memo(() => {
                       className="mx-auto mb-4 block h-[4rem] w-[4rem] text-[var(--mantine-color-green-6)]"
                       stroke={1.5}
                     />
-                    <Text ta="center" c="dimmed">
+                    <Text c="dimmed" ta="center">
                       Release to use the selected image.
                     </Text>
                   </Dropzone.Accept>
@@ -188,10 +188,10 @@ export const NewEventModal = memo(() => {
               <Divider className="my-5" />
 
               <TextInput
-                label="Event Title"
-                placeholder="Ex. Brigada Eskwela (2024)"
                 classNames={classes}
                 data-autofocus
+                label="Event Title"
+                placeholder="Ex. Brigada Eskwela (2024)"
                 withAsterisk
                 {...form.getInputProps('title')}
               />
@@ -203,14 +203,14 @@ export const NewEventModal = memo(() => {
               />
 
               <Input.Wrapper
-                label="Visibility"
                 description="Who can view and participate in this event?"
+                label="Visibility"
                 withAsterisk
               >
                 <SegmentedControl
-                  key={form.key('visibility')}
                   className="mt-2"
                   data={['Everyone', 'Faculty', 'Internal']}
+                  key={form.key('visibility')}
                   {...form.getInputProps('visibility')}
                 />
               </Input.Wrapper>
@@ -220,41 +220,41 @@ export const NewEventModal = memo(() => {
             <Grid.Col span={8}>
               <Group grow>
                 <DateTimePicker
-                  key={form.key('date_starting')}
                   classNames={classes}
+                  clearable
+                  key={form.key('date_starting')}
                   label="Starting Date & Time"
                   placeholder="Starting date and time of event"
-                  clearable
                   {...form.getInputProps('date_starting')}
                 />
 
                 <DateTimePicker
-                  key={form.key('date_ending')}
                   classNames={classes}
+                  clearable
                   disabled={!form.getValues().date_starting}
+                  key={form.key('date_ending')}
                   label="Ending Date & Time"
                   placeholder="Last day and time of event."
-                  clearable
                   {...form.getInputProps('date_ending')}
                 />
               </Group>
 
               {/* Features List */}
               <Checkbox.Group
-                key={form.key('features')}
-                label="Features"
-                description="Select which features should be enabled."
                 defaultValue={[
                   'Analytics',
                   'Feedback',
                   'Storage',
                   'Certificates',
                 ]}
+                description="Select which features should be enabled."
+                key={form.key('features')}
+                label="Features"
                 {...form.getInputProps('features', { type: 'checkbox' })}
               >
                 <SimpleGrid cols={{ base: 1, sm: 2 }} mt={8}>
                   {features.map((feature) => (
-                    <FeatureCard key={feature.name} feature={feature} />
+                    <FeatureCard feature={feature} key={feature.name} />
                   ))}
                 </SimpleGrid>
               </Checkbox.Group>
@@ -263,16 +263,16 @@ export const NewEventModal = memo(() => {
 
           {/* Save Buttons */}
           <Group justify="flex-end">
-            <Button variant="subtle" mt="md" onClick={resetState}>
+            <Button mt="md" onClick={resetState} variant="subtle">
               Cancel
             </Button>
 
             <Button
-              type="submit"
-              mt="md"
-              w={148}
-              rightSection={!pending && <IconArrowRight size={16} />}
               disabled={pending || !form.isValid}
+              mt="md"
+              rightSection={!pending && <IconArrowRight size={16} />}
+              type="submit"
+              w={148}
             >
               {pending ? <Loader size="1rem" type="dots" /> : 'Create Event'}
             </Button>

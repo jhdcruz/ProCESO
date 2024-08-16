@@ -42,7 +42,7 @@ export const FeatureCard = ({ feature, ...props }: FeatureCardProps) => {
       value={feature.name}
       {...props}
     >
-      <Group wrap="nowrap" align="flex-start">
+      <Group align="flex-start" wrap="nowrap">
         <Checkbox.Indicator />
         <div>
           <Text className={classes.label}>{feature.name}</Text>

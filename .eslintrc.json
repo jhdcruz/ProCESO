@@ -3,5 +3,9 @@
     "next/core-web-vitals",
     "plugin:prettier/recommended",
     "prettier"
-  ]
+  ],
+  "rules": {
+    "react/jsx-sort-props": "warn",
+    "react/sort-default-props": "warn"
+  }
 }

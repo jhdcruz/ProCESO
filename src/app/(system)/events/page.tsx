@@ -31,8 +31,8 @@ export default function EventsPage() {
       <div className="container my-2 h-full flex-1 flex-col space-y-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <Link
-            href={sidebarRoutes?.[1]?.links?.[1]?.link ?? '#'}
             className="text-inherit no-underline"
+            href={sidebarRoutes?.[1]?.links?.[1]?.link ?? '#'}
             prefetch={false}
           >
             <Text fw="bold" size="xl">
@@ -50,8 +50,8 @@ export default function EventsPage() {
       <div className="container mb-2 h-full flex-1 flex-col space-y-8 md:flex">
         <div className="flex items-center justify-between space-y-2">
           <Link
-            href={sidebarRoutes?.[1]?.links?.[2]?.link ?? '#'}
             className="text-inherit no-underline"
+            href={sidebarRoutes?.[1]?.links?.[2]?.link ?? '#'}
             prefetch={false}
           >
             <Text fw="bold" size="xl">
