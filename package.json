@@ -45,7 +45,7 @@
     "react-dom": "18.3.1",
     "react-transition-progress": "0.0.4",
     "recharts": "2.12.7",
-    "sharp": "0.33.4"
+    "sharp": "0.33.5"
   },
   "devDependencies": {
     "@types/node": "22.3.0",
