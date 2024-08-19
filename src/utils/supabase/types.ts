@@ -21,7 +21,64 @@ export type Database = {
         }
         Relationships: []
       }
-      event_handlers: {
+      events: {
+        Row: {
+          created_at: string
+          created_by: string
+          date_ending: string | null
+          date_starting: string | null
+          description: string
+          id: string
+          image_url: string | null
+          series: string | null
+          title: string
+          updated_at: string | null
+          visibility: Database["public"]["Enums"]["event_visibility"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          date_ending?: string | null
+          date_starting?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          series?: string | null
+          title: string
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["event_visibility"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          date_ending?: string | null
+          date_starting?: string | null
+          description?: string
+          id?: string
+          image_url?: string | null
+          series?: string | null
+          title?: string
+          updated_at?: string | null
+          visibility?: Database["public"]["Enums"]["event_visibility"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_series_fkey"
+            columns: ["series"]
+            isOneToOne: false
+            referencedRelation: "series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      faculty_assignments: {
         Row: {
           created_at: string
           event_id: string | null
@@ -57,81 +114,21 @@ export type Database = {
           },
         ]
       }
-      events: {
-        Row: {
-          created_at: string
-          created_by: string
-          date_ending: string | null
-          date_starting: string | null
-          description: string
-          features: Database["public"]["Enums"]["event_features"][] | null
-          id: string
-          image_url: string | null
-          series: string | null
-          title: string
-          updated_at: string | null
-          visibility: Database["public"]["Enums"]["event_visibility"]
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string
-          date_ending?: string | null
-          date_starting?: string | null
-          description?: string
-          features?: Database["public"]["Enums"]["event_features"][] | null
-          id?: string
-          image_url?: string | null
-          series?: string | null
-          title: string
-          updated_at?: string | null
-          visibility?: Database["public"]["Enums"]["event_visibility"]
-        }
-        Update: {
-          created_at?: string
-          created_by?: string
-          date_ending?: string | null
-          date_starting?: string | null
-          description?: string
-          features?: Database["public"]["Enums"]["event_features"][] | null
-          id?: string
-          image_url?: string | null
-          series?: string | null
-          title?: string
-          updated_at?: string | null
-          visibility?: Database["public"]["Enums"]["event_visibility"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "events_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "events_series_fkey"
-            columns: ["series"]
-            isOneToOne: false
-            referencedRelation: "series"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       series: {
         Row: {
-          active: boolean | null
+          active: boolean
           created_at: string
           id: string
           title: string
         }
         Insert: {
-          active?: boolean | null
+          active?: boolean
           created_at?: string
           id?: string
           title: string
         }
         Update: {
-          active?: boolean | null
+          active?: boolean
           created_at?: string
           id?: string
           title?: string
@@ -179,7 +176,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      event_features: "Storage" | "Certificates" | "Feedback" | "Analytics"
       event_visibility: "Everyone" | "Faculty" | "Internal"
       user_roles: "admin" | "staff" | "faculty" | "officer" | "student"
     }

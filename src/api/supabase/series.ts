@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@/utils/supabase/client';
-import type { ApiResponse } from '@/api/types';
+import type { SeriesResponse } from '@/api/types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
@@ -7,7 +7,9 @@ import type { SupabaseClient } from '@supabase/supabase-js';
  *
  * @param filter - Ilike filter to apply to the query (case-insensitive).
  */
-export async function getFilteredSeries(filter?: string): Promise<ApiResponse> {
+export async function getFilteredSeries(
+  filter?: string,
+): Promise<SeriesResponse> {
   const supabase = createBrowserClient();
 
   const { data: series, error } = await supabase
@@ -44,7 +46,7 @@ export async function postSeries({
 }: {
   title: string;
   supabase?: SupabaseClient;
-}): Promise<ApiResponse> {
+}): Promise<SeriesResponse> {
   if (!supabase) supabase = createBrowserClient();
 
   const { data, error } = await supabase

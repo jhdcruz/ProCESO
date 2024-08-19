@@ -7,7 +7,6 @@ import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconUpload, IconX } from '@tabler/icons-react';
-import classes from '@/styles/forms/ContainedInput.module.css';
 import { Enums } from '@/utils/supabase/types';
 
 import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
@@ -21,7 +20,6 @@ import {
   Loader,
   Modal,
   SegmentedControl,
-  SimpleGrid,
   Text,
   TextInput,
 } from '@mantine/core';
@@ -32,21 +30,22 @@ import {
 } from '@mantine/dropzone';
 
 import { SeriesInput } from './SeriesInput';
-import { features, FeatureCard } from './FeatureCard';
-import { submitEvent } from '../../actions';
+import { submitEvent } from '@/app/(system)/events/actions';
+import { FacultyList } from './FacultyList';
+import classes from '@/styles/forms/ContainedInput.module.css';
 
 export interface NewEvent {
   title: string;
   visibility: Enums<'event_visibility'>;
-  features: Enums<'event_features'>[] | [];
   image_url?: FileWithPath;
   series?: string | null;
   date_starting?: DateValue;
   date_ending?: DateValue;
   created_by?: string;
+  handled_by?: string[];
 }
 
-export const NewEventModal = memo(() => {
+export const EventFormModal = memo(() => {
   const [opened, { open, close }] = useDisclosure(false);
   const [pending, setPending] = useState(false);
 
@@ -59,14 +58,14 @@ export const NewEventModal = memo(() => {
   // form submission
   const form = useForm<NewEvent>({
     mode: 'uncontrolled',
-    validateInputOnBlur: true,
+    validateInputOnChange: true,
 
     initialValues: {
       title: '',
       visibility: 'Everyone',
-      features: ['Analytics', 'Feedback', 'Storage', 'Certificates'], // requires manual `defaultValue` on checkbox
       date_starting: null,
       date_ending: null,
+      handled_by: [],
     },
 
     validate: {
@@ -124,7 +123,7 @@ export const NewEventModal = memo(() => {
         Schedule new event
       </Button>
 
-      <Modal onClose={close} opened={opened} size="70%" title="New Event">
+      <Modal onClose={close} opened={opened} size="68%" title="New Event">
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid grow>
             {/* Left Column Grid */}
@@ -239,24 +238,21 @@ export const NewEventModal = memo(() => {
                 />
               </Group>
 
-              {/* Features List */}
+              <Divider className="my-1" />
+
+              {/* Faculty Assignment */}
               <Checkbox.Group
-                defaultValue={[
-                  'Analytics',
-                  'Feedback',
-                  'Storage',
-                  'Certificates',
-                ]}
-                description="Select which features should be enabled."
-                key={form.key('features')}
-                label="Features"
-                {...form.getInputProps('features', { type: 'checkbox' })}
+                description="Faculty members assigned to this event. (can be set later)"
+                key={form.key('faculty')}
+                label="Delegate Faculty"
+                mt="sm"
+                {...form.getInputProps('handled_by', { type: 'checkbox' })}
               >
-                <SimpleGrid cols={{ base: 1, sm: 2 }} mt={8}>
-                  {features.map((feature) => (
-                    <FeatureCard feature={feature} key={feature.name} />
-                  ))}
-                </SimpleGrid>
+                {/*  Faculty Table Checkbox */}
+                <FacultyList
+                  endDate={form.getValues().date_ending}
+                  startDate={form.getValues().date_starting}
+                />
               </Checkbox.Group>
             </Grid.Col>
           </Grid>
@@ -274,7 +270,7 @@ export const NewEventModal = memo(() => {
               type="submit"
               w={148}
             >
-              {pending ? <Loader size="1rem" type="dots" /> : 'Create Event'}
+              {pending ? <Loader size="sm" type="dots" /> : 'Create Event'}
             </Button>
           </Group>
         </form>
@@ -283,4 +279,4 @@ export const NewEventModal = memo(() => {
   );
 });
 
-NewEventModal.displayName = 'NewEventModal';
+EventFormModal.displayName = 'NewEventModal';

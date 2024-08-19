@@ -2,9 +2,10 @@ import { redirect } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { postEvent } from '@/api/supabase/event';
 import type { ApiResponse } from '@/api/types';
-import { NewEvent } from './_components/Forms/NewEventModal';
+import { NewEvent } from './_components/Forms/EventFormModal';
 import { postSeries } from '@/api/supabase/series';
 import { postEventCover } from '@/api/supabase/storage';
+import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
 
 /**
  * Create and process new event.
@@ -39,14 +40,15 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
     if (!seriesResponse.data) return seriesResponse;
 
     // return the id for event link
-    seriesId = seriesResponse.data.id;
+    seriesId = seriesResponse.data[0].id;
   }
 
   // create the event
   const eventResponse = await postEvent({
     userId: session.user.id,
     event: {
-      ...event,
+      title: event.title,
+      visibility: event.visibility,
       series: seriesId,
       date_ending: event.date_ending?.toISOString(),
       date_starting: event.date_starting?.toISOString(),
@@ -55,7 +57,7 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
     supabase,
   });
   if (!eventResponse.data) return eventResponse;
-  const eventId = eventResponse.data?.id;
+  const eventId = eventResponse.data[0].id;
 
   // we process the image after the event is created for the id
   if (event.image_url) {
@@ -66,6 +68,17 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
     });
 
     if (!uploadResponse.data) return uploadResponse;
+  }
+
+  // save assigned faculty
+  if (event.handled_by?.length) {
+    const assignResponse = await postFacultyAssignment({
+      userId: event.handled_by,
+      eventId,
+      supabase,
+    });
+
+    if (!assignResponse.data) return assignResponse;
   }
 
   return {

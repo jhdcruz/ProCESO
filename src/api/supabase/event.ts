@@ -1,6 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { NewEvent } from '@/app/(system)/events/_components/Forms/NewEventModal';
-import type { ApiResponse } from '@/api/types';
+import type { NewEvent } from '@/app/(system)/events/_components/Forms/EventFormModal';
+import type { EventResponse } from '@/api/types';
 import { createBrowserClient } from '@/utils/supabase/client';
 
 // supabase doesn't accept DateValue as value,
@@ -26,7 +26,7 @@ export async function postEvent({
   userId: string;
   event: NewEventRequest;
   supabase?: SupabaseClient;
-}): Promise<ApiResponse> {
+}): Promise<EventResponse> {
   if (!supabase) supabase = createBrowserClient();
 
   const { data: createdEvent, error } = await supabase
@@ -35,9 +35,7 @@ export async function postEvent({
       ...event,
       created_by: userId,
     })
-    .select()
-    .limit(1)
-    .single();
+    .select();
 
   if (error)
     return {
@@ -49,7 +47,7 @@ export async function postEvent({
   return {
     status: 0,
     title: 'Event created',
-    message: 'The event has been successfully',
+    message: 'The event has been successfully created.',
     data: createdEvent,
   };
 }
