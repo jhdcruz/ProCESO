@@ -1,7 +1,8 @@
-import { DateValue } from '@mantine/dates';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { type DateValue } from '@mantine/dates';
+import { type SupabaseClient } from '@supabase/supabase-js';
 import { createBrowserClient } from '@/utils/supabase/client';
 import type {
+  EventResponse,
   FacultyAssignmentsResponse,
   FacultyConflictsResponse,
 } from '../types';
@@ -37,6 +38,36 @@ export async function getFacultyAssignments(
     title: 'Faculty users fetched',
     message: 'List of faculty users have been successfully fetched.',
     data: assignments,
+  };
+}
+
+export async function getFacultyAssignedEvents({
+  userId,
+  supabase,
+}: {
+  userId: string;
+  supabase?: SupabaseClient;
+}): Promise<EventResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data: events, error } = await supabase
+    .from('events')
+    .select()
+    .eq('faculty_assignments.user_id', userId);
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to get faculty users',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Faculty users fetched',
+    message: 'List of faculty users have been successfully fetched.',
+    data: events,
   };
 }
 

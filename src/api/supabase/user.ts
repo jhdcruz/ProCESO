@@ -1,20 +1,19 @@
 import { redirect } from 'next/navigation';
-import type { UserAvatarProps } from '@/components/UserButton';
-import { Enums, Tables } from '@/utils/supabase/types';
-import { createServerClient } from '@/utils/supabase/server';
-import { ApiResponse, UsersResponse } from '../types';
+import { type SupabaseClient } from '@supabase/supabase-js';
 import { createBrowserClient } from '@/utils/supabase/client';
-
-export interface CurrentUser extends UserAvatarProps {
-  role?: Enums<'user_roles'>;
-}
+import { createServerClient } from '@/utils/supabase/server';
+import type { UserResponse, UsersResponse } from '../types';
 
 /**
  * Get currently logged-in user from session.
  */
-export async function getCurrentUser(): Promise<null | CurrentUser> {
-  const cookieStore = await import('next/headers').then((mod) => mod.cookies);
-  const supabase = createServerClient(cookieStore());
+export async function getCurrentUser(
+  supabase?: SupabaseClient,
+): Promise<UserResponse> {
+  if (!supabase) {
+    const cookieStore = await import('next/headers').then((mod) => mod.cookies);
+    supabase = createServerClient(cookieStore());
+  }
 
   const {
     data: { user },
@@ -26,23 +25,27 @@ export async function getCurrentUser(): Promise<null | CurrentUser> {
   }
 
   // get user role
-  const { data: role } = await supabase
+  const { data: current, error } = await supabase
     .from('users')
-    .select('role')
-    .eq('email', user?.email)
+    .select()
+    .eq('id', user?.id)
     .limit(1)
     .single();
 
-  if (user) {
+  if (error) {
     return {
-      email: user?.email,
-      name: user?.user_metadata.name ?? '',
-      avatarUrl: user?.user_metadata.avatar_url ?? '',
-      role: role?.role ?? 'student',
+      status: 2,
+      title: 'Unable to get current user',
+      message: error.message,
     };
   }
 
-  return null;
+  return {
+    status: 0,
+    title: 'Current user fetched',
+    message: 'Current user',
+    data: current,
+  };
 }
 
 /**

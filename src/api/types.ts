@@ -11,16 +11,20 @@ export interface ApiResponse {
   data?: any;
 }
 
+export interface UserResponse extends ApiResponse {
+  data?: Tables<'users'>;
+}
+
+export interface UsersResponse extends ApiResponse {
+  data?: Tables<'users'>[];
+}
+
 export interface EventResponse extends ApiResponse {
   data?: Tables<'events'>[];
 }
 
 export interface SeriesResponse extends ApiResponse {
   data?: Tables<'series'>[];
-}
-
-export interface UsersResponse extends ApiResponse {
-  data?: Tables<'users'>[];
 }
 
 export interface FacultyAssignmentsResponse extends ApiResponse {

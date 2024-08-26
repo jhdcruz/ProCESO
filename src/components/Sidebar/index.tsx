@@ -1,9 +1,10 @@
 import { memo, Suspense } from 'react';
 import Image from 'next/image';
 import { Group, ScrollArea } from '@mantine/core';
+import type { Tables } from '@/utils/supabase/types';
 
 import type { Routes } from '@/app/routes';
-import { type UserAvatarProps, UserButton } from '@/components/UserButton';
+import { UserButton } from '@/components/UserButton';
 import { LinksGroup } from '@/components/LinksGroup';
 import classes from './Sidebar.module.css';
 
@@ -15,7 +16,7 @@ export function Sidebar({
   user,
   routes,
 }: {
-  user: UserAvatarProps;
+  user: Tables<'users'>;
   routes: Routes;
 }) {
   const links = routes.map((item) => <LinksGroup {...item} key={item.label} />);

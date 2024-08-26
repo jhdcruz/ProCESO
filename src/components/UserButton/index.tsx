@@ -1,5 +1,7 @@
 'use client';
 
+import { memo } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Avatar,
   Group,
@@ -11,11 +13,9 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
-
+import type { Tables } from '@/utils/supabase/types';
 import classes from './UserButton.module.css';
-import { memo } from 'react';
 
 // Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
@@ -63,19 +63,13 @@ const MenuItems = () => {
   );
 };
 
-export interface UserAvatarProps {
-  avatarUrl: string;
-  name: string;
-  email: string;
-}
-
 export const UserButton = memo(
-  ({ avatarUrl, email, name }: UserAvatarProps) => (
+  ({ avatar_url, email, name }: Partial<Tables<'users'>>) => (
     <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
           <Group>
-            <Avatar radius="xl" src={avatarUrl} />
+            <Avatar radius="xl" src={avatar_url} />
 
             <div className="flex-1">
               <Text fw={500} lineClamp={1} size="sm">

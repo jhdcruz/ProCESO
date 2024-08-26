@@ -1,69 +1,73 @@
 import type { Metadata } from 'next';
-import { Divider, Text } from '@mantine/core';
-import { Link } from 'react-transition-progress/next';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import EventShell from './_components/EventShell';
-import { sidebarRoutes } from '@/app/routes';
+import { getEvents } from '@/api/supabase/event';
+import { createServerClient } from '@/utils/supabase/server';
+import { cookies } from 'next/headers';
+import { EventAccordion } from './_components/EventAccordion';
+import { getCurrentUser } from '@/api/supabase/user';
+import { getFacultyAssignedEvents } from '@/api/supabase/faculty-assignments';
 
 export const metadata: Metadata = {
   title: 'Events - ' + defaultMetadata.title,
 };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const cookieStore = cookies();
+  const supabase = createServerClient(cookieStore);
+  const currentUser = await getCurrentUser(supabase);
+
+  const eventsAssigned = getFacultyAssignedEvents({
+    userId: currentUser?.data?.id ?? '',
+    supabase: supabase,
+  });
+
+  // recently created events
+  let eventsRecent;
+  if (
+    currentUser?.data?.role !== 'admin' &&
+    currentUser?.data?.role !== 'staff'
+  ) {
+    eventsRecent = getEvents({
+      filter: 'recent',
+      supabase: supabase,
+    });
+  }
+
+  const eventsOngoing = getEvents({
+    filter: 'ongoing',
+    supabase: supabase,
+  });
+
+  const eventsUpcoming = getEvents({
+    filter: 'upcoming',
+    supabase: supabase,
+  });
+
+  const eventsPast = getEvents({
+    filter: 'past',
+    supabase: supabase,
+  });
+
+  const [upcoming, past, ongoing, recent, assigned] = await Promise.all([
+    eventsUpcoming,
+    eventsPast,
+    eventsOngoing,
+    eventsRecent,
+    eventsAssigned,
+  ]);
+
   return (
     <EventShell>
-      <div className="container my-2 h-full flex-1 flex-col space-y-8 md:flex">
-        <div className="flex items-center justify-between space-y-2">
-          <div>
-            <Text fw="bold" size="xl">
-              Ongoing Events
-            </Text>
-          </div>
-        </div>
-        <Divider my="xs" />
-
-        {/* Main Content */}
-        <div>content</div>
-      </div>
-
-      {/* Upcoming Events */}
-      <div className="container my-2 h-full flex-1 flex-col space-y-8 md:flex">
-        <div className="flex items-center justify-between space-y-2">
-          <Link
-            className="text-inherit no-underline"
-            href={sidebarRoutes?.[1]?.links?.[1]?.link ?? '#'}
-            prefetch={false}
-          >
-            <Text fw="bold" size="xl">
-              Upcoming Events
-            </Text>
-          </Link>
-        </div>
-        <Divider my="xs" />
-
-        {/* Main Content */}
-        <div>content</div>
-      </div>
-
-      {/* Past Events */}
-      <div className="container mb-2 h-full flex-1 flex-col space-y-8 md:flex">
-        <div className="flex items-center justify-between space-y-2">
-          <Link
-            className="text-inherit no-underline"
-            href={sidebarRoutes?.[1]?.links?.[2]?.link ?? '#'}
-            prefetch={false}
-          >
-            <Text fw="bold" size="xl">
-              Previous Events
-            </Text>
-          </Link>
-        </div>
-        <Divider my="xs" />
-
-        {/* Main Content */}
-        <div>content</div>
-      </div>
+      <EventAccordion
+        assigned={assigned}
+        ongoing={ongoing}
+        past={past}
+        recent={recent}
+        role={currentUser?.data?.role ?? 'student'}
+        upcoming={upcoming}
+      />
     </EventShell>
   );
 }

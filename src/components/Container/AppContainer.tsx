@@ -3,7 +3,7 @@
 import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import type { UserAvatarProps } from '@/components/UserButton';
+import type { Tables } from '@/utils/supabase/types';
 
 import { sidebarRoutes } from '@/app/routes';
 import Sidebar from '@/components/Sidebar';
@@ -15,7 +15,7 @@ export function AppContainer({
   user,
   children,
 }: Readonly<{
-  user: UserAvatarProps;
+  user: Tables<'users'>;
   children: ReactNode;
 }>) {
   const [opened] = useDisclosure();
@@ -24,7 +24,11 @@ export function AppContainer({
     <AppShell
       header={{ height: 64 }}
       layout="alt"
-      navbar={{ width: 260, breakpoint: 'sm', collapsed: { mobile: !opened } }}
+      navbar={{
+        width: 260,
+        breakpoint: 'sm',
+        collapsed: { mobile: !opened },
+      }}
       padding="md"
       transitionDuration={350}
       transitionTimingFunction="ease"
