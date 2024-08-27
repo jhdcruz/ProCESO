@@ -22,9 +22,9 @@ export function SystemHealth() {
   }, []);
 
   return health === 2 ? (
-    <Tooltip label="All systems are not working!">
+    <Tooltip label="All system components are not working!">
       <Badge
-        className="cursor-pointer font-semibold normal-case"
+        className="cursor-pointer content-center font-semibold normal-case"
         color="red"
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
@@ -41,7 +41,7 @@ export function SystemHealth() {
   ) : health === 1 ? (
     <Tooltip label="Some functionality might not work.">
       <Badge
-        className="cursor-pointer font-semibold normal-case"
+        className="cursor-pointer content-center font-semibold normal-case"
         color="yellow"
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
@@ -52,13 +52,13 @@ export function SystemHealth() {
         target="__blank"
         variant="dot"
       >
-        Some systems are down.
+        Limited functionality.
       </Badge>
     </Tooltip>
   ) : (
     <Tooltip label="All systems are working as expected.">
       <Badge
-        className="cursor-pointer font-semibold normal-case"
+        className="cursor-pointer content-center font-semibold normal-case"
         color="green"
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
