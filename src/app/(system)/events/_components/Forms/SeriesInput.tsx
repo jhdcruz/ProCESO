@@ -27,6 +27,9 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
           title: 'Unable to fetch series',
           message: response.message + ', you can set it later.',
           color: 'yellow',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 8000,
         });
       }
 
