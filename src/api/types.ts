@@ -11,6 +11,10 @@ export interface ApiResponse {
   data?: any;
 }
 
+export interface CountResponse extends ApiResponse {
+  data?: number | null;
+}
+
 export interface UserResponse extends ApiResponse {
   data?: Tables<'users'>;
 }

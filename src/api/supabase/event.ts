@@ -1,21 +1,12 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { NewEvent } from '@/app/(system)/events/_components/Forms/EventFormModal';
-import type { ApiResponse, EventResponse } from '@/api/types';
+import type { CountResponse, EventResponse } from '@/api/types';
+import type { Tables, TablesInsert } from '@/utils/supabase/types';
 import { createBrowserClient } from '@/utils/supabase/client';
-import { Tables } from '@/utils/supabase/types';
-
-// TODO: move this to types.ts
-// supabase doesn't accept DateValue as value,
-// adding string to existing `NewEvent` disables some functions.
-export interface NewEventRequest
-  extends Omit<NewEvent, 'date_starting' | 'date_ending' | 'image_url'> {
-  date_starting?: string | null;
-  date_ending?: string | null;
-}
 
 /**
  * Get events based on filters and/or limit, if provided.
  *
+ * @param countOnly - Return only the exact count of events (no data).
  * @param filter - Filter events based on 'recent' (recently created),
  *                 'ongoing', 'upcoming', or 'past'.
  * @param limit - Limit the number of events to be fetched.
@@ -34,6 +25,7 @@ export async function getEvents({
 
   let query = supabase.from('events').select();
 
+  // filters based on event dates
   if (filter) {
     const now = new Date().toISOString();
 
@@ -83,6 +75,65 @@ export async function getEvents({
 }
 
 /**
+ * Get events based on filters and/or limit, if provided.
+ *
+ * @param countOnly - Return only the exact count of events (no data).
+ * @param filter - Filter events based on 'recent' (recently created),
+ *                 'ongoing', 'upcoming', or 'past'.
+ * @param limit - Limit the number of events to be fetched.
+ * @param supabase - Supabase client instance.
+ */
+export async function getEventsCount({
+  filter,
+  supabase,
+}: {
+  filter?: 'ongoing' | 'upcoming' | 'past';
+  supabase?: SupabaseClient;
+}): Promise<CountResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  let query = supabase
+    .from('events')
+    .select('id', { count: 'exact', head: true });
+
+  // filters based on event dates
+  if (filter) {
+    const now = new Date().toISOString();
+
+    switch (filter) {
+      case 'ongoing':
+        query = query.lte('date_starting', now).gte('date_ending', now);
+        break;
+
+      case 'upcoming':
+        query = query.gte('date_starting', now);
+        break;
+
+      case 'past':
+        query = query.lte('date_ending', now);
+        break;
+    }
+  }
+
+  const { count, error } = await query;
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to fetch event count',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Event count fetched',
+    message: `The exact count of ${count} events has been fetched.`,
+    data: count,
+  };
+}
+
+/**
  * Create a new event.
  *
  * @param userId - The user ID of the current user (for `created_by`).
@@ -95,7 +146,7 @@ export async function postEvent({
   supabase,
 }: {
   userId: string;
-  event: NewEventRequest;
+  event: TablesInsert<'events'>;
   supabase?: SupabaseClient;
 }): Promise<EventResponse> {
   if (!supabase) supabase = createBrowserClient();

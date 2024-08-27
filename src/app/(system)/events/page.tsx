@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import EventShell from './_components/EventShell';
-import { getEvents } from '@/api/supabase/event';
-import { createServerClient } from '@/utils/supabase/server';
-import { cookies } from 'next/headers';
 import { EventAccordion } from './_components/EventAccordion';
+import { createServerClient } from '@/utils/supabase/server';
+import { getEvents } from '@/api/supabase/event';
 import { getCurrentUser } from '@/api/supabase/user';
 import { getFacultyAssignedEvents } from '@/api/supabase/faculty-assignments';
 
@@ -45,14 +45,8 @@ export default async function EventsPage() {
     supabase: supabase,
   });
 
-  const eventsPast = getEvents({
-    filter: 'past',
-    supabase: supabase,
-  });
-
-  const [upcoming, past, ongoing, recent, assigned] = await Promise.all([
+  const [upcoming, ongoing, recent, assigned] = await Promise.all([
     eventsUpcoming,
-    eventsPast,
     eventsOngoing,
     eventsRecent,
     eventsAssigned,
@@ -63,7 +57,6 @@ export default async function EventsPage() {
       <EventAccordion
         assigned={assigned}
         ongoing={ongoing}
-        past={past}
         recent={recent}
         role={currentUser?.data?.role ?? 'student'}
         upcoming={upcoming}

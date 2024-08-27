@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, Suspense } from 'react';
+import { memo, Suspense, useEffect, useState } from 'react';
 import {
   Accordion,
   Text,
@@ -9,25 +9,80 @@ import {
   Badge,
   Group,
 } from '@mantine/core';
-import { Enums, Tables } from '@/utils/supabase/types';
-import { EventCard } from './EventCard';
+import { notifications } from '@mantine/notifications';
 import { EventResponse } from '@/api/types';
+import { getEvents, getEventsCount } from '@/api/supabase/event';
+import type { Enums, Tables } from '@/utils/supabase/types';
+import { EventCard } from './EventCard';
 
 function EventAccordionShell({
   assigned,
   ongoing,
-  past,
   upcoming,
   role,
   recent,
 }: {
   assigned: EventResponse;
   ongoing: EventResponse;
-  past: EventResponse;
   upcoming: EventResponse;
   role: Enums<'user_roles'>;
   recent?: EventResponse;
 }) {
+  const [value, setValue] = useState<string[]>([]);
+  const [past, setPast] = useState<EventResponse>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [pastCount, setPastCount] = useState<number>(0);
+
+  // fetch past events only when past is selected/shown.
+  useEffect(() => {
+    const fetchPastEvents = async () => {
+      setIsLoading(true);
+
+      if (value.some((v) => v === 'past') && !past?.data?.length) {
+        const pastEvents = await getEvents({
+          filter: 'past',
+        });
+
+        setPast(pastEvents);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchPastEvents().catch((e) => {
+      notifications.show({
+        title: "Couldn't fetch past events",
+        message: e.message + ', please refresh or try again later.',
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+    });
+  }, [value]);
+
+  // get the exact count of past events
+  useEffect(() => {
+    const fetchPastCount = async () => {
+      const count = await getEventsCount({
+        filter: 'past',
+      });
+
+      setPastCount(count?.data ?? 0);
+    };
+
+    fetchPastCount().catch((e) => {
+      notifications.show({
+        title: "Couldn't fetch past events count",
+        message: e.message + ', please refresh or try again later.',
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+    });
+  }, []);
+
   // Event Accordion Items Component
   const EventItems = ({
     type,
@@ -44,7 +99,7 @@ function EventAccordionShell({
         </Group>
       </Accordion.Control>
       <Accordion.Panel>
-        <Suspense fallback={<Loader variant="dots" />}>
+        <Suspense fallback={<Loader type="dots" />}>
           {events?.data?.length ? (
             <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
               {events?.data?.map((event: Tables<'events'>) => {
@@ -63,6 +118,8 @@ function EventAccordionShell({
     <Accordion
       defaultValue={['assigned', 'ongoing', 'recent', 'upcoming']}
       multiple={true}
+      onChange={setValue}
+      value={value}
     >
       <EventItems
         events={assigned}
@@ -72,7 +129,29 @@ function EventAccordionShell({
       {recent?.data?.length && <EventItems events={recent} type="recent" />}
       <EventItems events={ongoing} type="ongoing" />
       <EventItems events={upcoming} type="upcoming" />
-      <EventItems events={past} type="past" />
+
+      {/* Past events, fetched on-demand */}
+      <Accordion.Item key="past" value="past">
+        <Accordion.Control>
+          <Group>
+            <Text tt="capitalize">Past Events</Text>
+            <Badge variant="default">{pastCount}</Badge>
+          </Group>
+        </Accordion.Control>
+        <Accordion.Panel>
+          {isLoading ? (
+            <Loader className="mx-auto my-5 block" size="md" type="dots" />
+          ) : past?.data?.length ? (
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
+              {past?.data?.map((event: Tables<'events'>) => {
+                return <EventCard key={event.id} {...event} />;
+              })}
+            </SimpleGrid>
+          ) : (
+            <Text c="dimmed">No past events found.</Text>
+          )}
+        </Accordion.Panel>
+      </Accordion.Item>
     </Accordion>
   );
 }
