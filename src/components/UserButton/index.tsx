@@ -54,6 +54,7 @@ const MenuItems = () => {
 
       <Menu.Item
         color="red"
+        fw="semibold"
         leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
         onClick={onSignOut}
       >
