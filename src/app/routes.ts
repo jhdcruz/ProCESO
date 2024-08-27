@@ -23,8 +23,6 @@ export type NestedRoutes = {
 /**
  * This is the main app url route.
  * All routes after authentication are prefixed with this.
- *
- * IMPORTANT: Do not change order, add new routes at the end.
  */
 export const sidebarRoutes: Routes = [
   { label: 'Dashboard', icon: IconGauge, link: '/' },
@@ -34,8 +32,7 @@ export const sidebarRoutes: Routes = [
     initiallyOpened: true,
     links: [
       { label: 'All Events', link: '/events' },
-      { label: 'Upcoming events', link: '/events/upcoming' },
-      { label: 'Previous events', link: '/events/previous' },
+      { label: 'Event Series', link: '/events/series' },
     ],
   },
   {
