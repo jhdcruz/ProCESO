@@ -1,10 +1,11 @@
 # ProCESO – Community Outreach Management System
 
-**Complete Title:**
-ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP Manila – CESO Department
+AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP
+Manila – CESO Department.
 
 > [!IMPORTANT]
-> This system/application is **not meant for public usage**, and is tailored for a specific client in academic institutional context.
+> This system/application is **not meant for public usage**, and is tailored for a specific client in academic
+> institutional context.
 >
 > This "system" only serves as public reference for similar system or application.
 
@@ -14,20 +15,14 @@ This capstone project aims to develop an AI-integrated web-based community outre
 and centralizes administrative tasks to enhance the efficiency and impact of the institution’s community extension
 services in fostering sustainable community relationships.
 
-- **Develop a feature that simplifies planning and participating in community outreach activities**, such as faculty
-  delegations and student participants’ newsletters, increasing engagement and participation;
-- **To implement automated processes for generating, distributing, and validating e-certificates** of participants, thereby reducing manual workload and improving operational efficiency; and
-- **To integrate AI** for analyzing and evaluating feedback, such as sentiment analysis, to effectively collect feedback and support data-driven decision-making through AI-assisted summary and insights.
-
-## Features
-
-- Outreach Activities Mgmt.
-  - Faculty Delegation
-  - Event Timeline/Backtracking
-- Automated E-Certificates (Generation, Distribution, Valdation)
-- Feedback Analysis
-  - Sentiment Analysis
-  - AI-assisted Summary & Insights
+1. **To develop a system feature that facilitates the planning and coordination of community outreach activities**, such
+   as managing faculty delegation, event sorting and filtering, uploading of after-activity report, and student
+   participation;
+2. **To implement automated processes for generating, distributing, and validating e-certificates** of participants,
+   thereby reducing manual workload and improving operational efficiency;
+3. **To integrate AI models for analyzing and evaluating feedback**, such as sentiment analysis, alternative textual
+   analytics and analytics dashboard to effectively collect feedback and support data-driven decision-making through
+   AI-assisted summary and insights.
 
 ## Tech Stack
 
