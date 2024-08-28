@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 import { metadata as defaultMetadata } from '@/app/layout';
-import EventShell from './_components/EventShell';
+import EventsShell from './_components/EventsShell';
 import { EventAccordion } from './_components/EventAccordion';
 import { createServerClient } from '@/utils/supabase/server';
 import { getEvents } from '@/api/supabase/event';
@@ -40,13 +40,13 @@ export default async function EventsPage() {
   ]);
 
   return (
-    <EventShell>
+    <EventsShell>
       <EventAccordion
         assigned={assigned}
         ongoing={ongoing}
         role={currentUser?.data?.role ?? 'student'}
         upcoming={upcoming}
       />
-    </EventShell>
+    </EventsShell>
   );
 }

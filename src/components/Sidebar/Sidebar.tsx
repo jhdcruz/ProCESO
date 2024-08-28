@@ -1,11 +1,11 @@
 import { memo, Suspense } from 'react';
 import Image from 'next/image';
-import { Group, ScrollArea } from '@mantine/core';
+import { ActionIcon, Group, ScrollArea, Tooltip } from '@mantine/core';
 import type { Tables } from '@/utils/supabase/types';
 
 import type { Routes } from '@/app/routes';
-import { UserButton } from '@/components/UserButton';
-import { LinksGroup } from '@/components/LinksGroup';
+import { SidebarUser } from '@/components/Sidebar/SidebarUser';
+import { LinksGroup } from '@/components/LinksGroup/LinksGroup';
 import classes from './Sidebar.module.css';
 
 /**
@@ -22,7 +22,7 @@ export function Sidebar({
   const links = routes.map((item) => <LinksGroup {...item} key={item.label} />);
 
   return (
-    <nav className={classes.navbar}>
+    <div className={classes.navbar}>
       <div className={classes.header}>
         <Group justify="space-between">
           <Image
@@ -43,10 +43,10 @@ export function Sidebar({
 
       <Suspense>
         <div className={classes.footer}>
-          <UserButton {...user} />
+          <SidebarUser {...user} />
         </div>
       </Suspense>
-    </nav>
+    </div>
   );
 }
 

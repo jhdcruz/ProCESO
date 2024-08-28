@@ -15,7 +15,7 @@ import {
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
 import { createBrowserClient } from '@/utils/supabase/client';
 import type { Tables } from '@/utils/supabase/types';
-import classes from './UserButton.module.css';
+import classes from './SidebarUser.module.css';
 
 // Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
@@ -64,13 +64,13 @@ const MenuItems = () => {
   );
 };
 
-export const UserButton = memo(
+export const SidebarUser = memo(
   ({ avatar_url, email, name }: Partial<Tables<'users'>>) => (
     <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
-          <Group>
-            <Avatar radius="xl" src={avatar_url} />
+          <Group wrap="nowrap">
+            <Avatar color="initials" radius="xl" src={avatar_url} />
 
             <div className="flex-1">
               <Text fw={500} lineClamp={1} size="sm">
@@ -94,4 +94,4 @@ export const UserButton = memo(
     </Menu>
   ),
 );
-UserButton.displayName = 'UserButton';
+SidebarUser.displayName = 'SidebarUser';

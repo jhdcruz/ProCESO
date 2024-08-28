@@ -5,7 +5,7 @@ import { AppShell, Group, TextInput, rem } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { EventFormModal } from './Forms/EventFormModal';
 
-export default function EventShell({
+export default function EventsShell({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (

@@ -2,11 +2,9 @@
 
 import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import type { Tables } from '@/utils/supabase/types';
-
 import { sidebarRoutes } from '@/app/routes';
-import Sidebar from '@/components/Sidebar';
+import Sidebar from '@/components/Sidebar/Sidebar';
+import type { Tables } from '@/utils/supabase/types';
 
 /**
  * The main layout for the application.
@@ -18,22 +16,20 @@ export function AppContainer({
   user: Tables<'users'>;
   children: ReactNode;
 }>) {
-  const [opened] = useDisclosure();
-
   return (
     <AppShell
-      header={{ height: 64 }}
+      footer={{ height: 50 }}
+      header={{ height: 60 }}
       layout="alt"
       navbar={{
         width: 260,
         breakpoint: 'sm',
-        collapsed: { mobile: !opened },
       }}
       padding="md"
       transitionDuration={350}
-      transitionTimingFunction="ease"
+      transitionTimingFunction="ease-out"
     >
-      <AppShell.Navbar className="z-10">
+      <AppShell.Navbar zIndex={300}>
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 

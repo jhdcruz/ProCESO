@@ -6,10 +6,8 @@ import {
   Group,
   Badge,
   Button,
-  Anchor,
   ActionIcon,
   Tooltip,
-  Stack,
 } from '@mantine/core';
 import { Tables } from '@/utils/supabase/types';
 import {
