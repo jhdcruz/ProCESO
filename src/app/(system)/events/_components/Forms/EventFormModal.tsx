@@ -17,7 +17,6 @@ import {
   Grid,
   Group,
   Input,
-  Loader,
   Modal,
   SegmentedControl,
   Text,
@@ -264,13 +263,14 @@ export const EventFormModal = memo(() => {
             </Button>
 
             <Button
-              disabled={pending || !form.isValid}
+              loaderProps={{ type: 'dots' }}
+              loading={pending || !form.isValid}
               mt="md"
               rightSection={!pending && <IconArrowRight size={16} />}
               type="submit"
               w={148}
             >
-              {pending ? <Loader size="sm" type="dots" /> : 'Create Event'}
+              Create event
             </Button>
           </Group>
         </form>
