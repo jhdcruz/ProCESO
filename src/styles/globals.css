@@ -1,7 +1,7 @@
 @import url('@mantine/core/styles.layer.css');
-@import url('@mantine/dates/styles.css');
-@import url('@mantine/dropzone/styles.css');
-@import url('@mantine/notifications/styles.css');
+@import url('@mantine/dates/styles.layer.css');
+@import url('@mantine/dropzone/styles.layer.css');
+@import url('@mantine/notifications/styles.layer.css');
 
 @layer base, mantine, tailwind;
 

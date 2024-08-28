@@ -17,7 +17,6 @@ import {
 } from '@mantine/core';
 import type { Tables } from '@/utils/supabase/types';
 import dayjs from '@/utils/dayjs';
-import '@mantine/tiptap/styles.css';
 import NextImage from 'next/image';
 import {
   IconCalendarClock,

@@ -9,7 +9,7 @@ import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
-import '@mantine/tiptap/styles.css';
+import '@mantine/tiptap/styles.layer.css';
 
 /**
  * Display an editable rich text editor.
