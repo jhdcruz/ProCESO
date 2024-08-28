@@ -1,10 +1,17 @@
+import { lazy, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { notifications } from '@mantine/notifications';
 import { metadata as defaultMetadata } from '@/app/layout';
+import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/utils/supabase/server';
-import { EventDetails } from '../_components/EventDetails/EventDetails';
 import EventPageShell from '../_components/EventDetails/EventPageShell';
+
+const EventDetails = lazy(() =>
+  import('../_components/EventDetails/EventDetails').then((mod) => ({
+    default: mod.EventDetails,
+  })),
+);
 
 interface Props {
   params: { id: string };
@@ -93,7 +100,9 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <EventPageShell>
-      <EventDetails {...event} />
+      <Suspense fallback={<PageLoader />}>
+        <EventDetails {...event} />
+      </Suspense>
     </EventPageShell>
   );
 }

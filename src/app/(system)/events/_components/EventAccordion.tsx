@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, Suspense, useEffect, useState } from 'react';
+import { lazy, memo, Suspense, useEffect, useState } from 'react';
 import {
   Accordion,
   Text,
@@ -13,7 +13,10 @@ import { notifications } from '@mantine/notifications';
 import { EventResponse } from '@/api/types';
 import { getEvents, getEventsCount } from '@/api/supabase/event';
 import type { Enums, Tables } from '@/utils/supabase/types';
-import { EventCard } from './EventCard';
+
+const EventCard = lazy(() =>
+  import('./EventCard').then((mod) => ({ default: mod.EventCard })),
+);
 
 function EventAccordionShell({
   assigned,
@@ -151,11 +154,17 @@ function EventAccordionShell({
           {isLoading ? (
             <Loader className="mx-auto" size="md" type="dots" />
           ) : past?.data?.length ? (
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
-              {past?.data?.map((event: Tables<'events'>) => {
-                return <EventCard key={event.id} {...event} />;
-              })}
-            </SimpleGrid>
+            <Suspense
+              fallback={
+                <Loader className="mx-auto my-5 block" size="md" type="dots" />
+              }
+            >
+              <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
+                {past?.data?.map((event: Tables<'events'>) => {
+                  return <EventCard key={event.id} {...event} />;
+                })}
+              </SimpleGrid>
+            </Suspense>
           ) : (
             <Text c="dimmed">No past events found.</Text>
           )}
