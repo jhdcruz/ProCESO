@@ -20,7 +20,6 @@ function EventAccordionShell({
   ongoing,
   upcoming,
   role,
-  recent,
 }: {
   assigned: EventResponse;
   ongoing: EventResponse;
@@ -31,7 +30,6 @@ function EventAccordionShell({
   const [value, setValue] = useState<string[]>([
     'assigned',
     'ongoing',
-    'recent',
     'upcoming',
   ]);
   const [past, setPast] = useState<EventResponse>();
@@ -134,7 +132,6 @@ function EventAccordionShell({
         type={role === 'admin' || role === 'staff' ? 'assigned' : 'joined'}
       />
 
-      {recent?.data?.length && <EventItems events={recent} type="recent" />}
       <EventItems events={ongoing} type="ongoing" />
       <EventItems events={upcoming} type="upcoming" />
 

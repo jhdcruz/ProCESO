@@ -23,18 +23,6 @@ export default async function EventsPage() {
     supabase: supabase,
   });
 
-  // recently created events
-  let eventsRecent;
-  if (
-    currentUser?.data?.role !== 'admin' &&
-    currentUser?.data?.role !== 'staff'
-  ) {
-    eventsRecent = getEvents({
-      filter: 'recent',
-      supabase: supabase,
-    });
-  }
-
   const eventsOngoing = getEvents({
     filter: 'ongoing',
     supabase: supabase,
@@ -45,10 +33,9 @@ export default async function EventsPage() {
     supabase: supabase,
   });
 
-  const [upcoming, ongoing, recent, assigned] = await Promise.all([
+  const [upcoming, ongoing, assigned] = await Promise.all([
     eventsUpcoming,
     eventsOngoing,
-    eventsRecent,
     eventsAssigned,
   ]);
 
@@ -57,7 +44,6 @@ export default async function EventsPage() {
       <EventAccordion
         assigned={assigned}
         ongoing={ongoing}
-        recent={recent}
         role={currentUser?.data?.role ?? 'student'}
         upcoming={upcoming}
       />
