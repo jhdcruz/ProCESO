@@ -28,10 +28,15 @@ function EventAccordionShell({
   role: Enums<'user_roles'>;
   recent?: EventResponse;
 }) {
-  const [value, setValue] = useState<string[]>([]);
+  const [value, setValue] = useState<string[]>([
+    'assigned',
+    'ongoing',
+    'recent',
+    'upcoming',
+  ]);
   const [past, setPast] = useState<EventResponse>();
+  const [pastCount, setPastCount] = useState<number>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [pastCount, setPastCount] = useState<number>(0);
 
   // fetch past events only when past is selected/shown.
   useEffect(() => {
@@ -89,7 +94,7 @@ function EventAccordionShell({
     events,
   }: {
     type: string;
-    events: EventResponse;
+    events: EventResponse | undefined;
   }) => (
     <Accordion.Item key={type} value={type}>
       <Accordion.Control>
@@ -99,7 +104,11 @@ function EventAccordionShell({
         </Group>
       </Accordion.Control>
       <Accordion.Panel>
-        <Suspense fallback={<Loader type="dots" />}>
+        <Suspense
+          fallback={
+            <Loader className="mx-auto my-5 block" size="md" type="dots" />
+          }
+        >
           {events?.data?.length ? (
             <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
               {events?.data?.map((event: Tables<'events'>) => {
@@ -113,12 +122,11 @@ function EventAccordionShell({
       </Accordion.Panel>
     </Accordion.Item>
   );
-
   return (
     <Accordion
-      defaultValue={['assigned', 'ongoing', 'recent', 'upcoming']}
       multiple={true}
       onChange={setValue}
+      transitionDuration={200}
       value={value}
     >
       <EventItems
@@ -135,12 +143,16 @@ function EventAccordionShell({
         <Accordion.Control>
           <Group>
             <Text tt="capitalize">Past Events</Text>
-            <Badge variant="default">{pastCount}</Badge>
+            {pastCount ? (
+              <Badge variant="default">{pastCount}</Badge>
+            ) : (
+              <Loader size="xs" type="dots" />
+            )}
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
           {isLoading ? (
-            <Loader className="mx-auto my-5 block" size="md" type="dots" />
+            <Loader className="mx-auto" size="md" type="dots" />
           ) : past?.data?.length ? (
             <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
               {past?.data?.map((event: Tables<'events'>) => {
