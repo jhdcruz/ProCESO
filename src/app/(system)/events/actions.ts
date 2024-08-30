@@ -1,3 +1,5 @@
+'use server';
+
 import { redirect } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { postEvent } from '@/api/supabase/event';
@@ -6,6 +8,7 @@ import { NewEvent } from './_components/Forms/EventFormModal';
 import { postSeries } from '@/api/supabase/series';
 import { postEventCover } from '@/api/supabase/storage';
 import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
+import { emailAssigned } from '@/trigger/email';
 
 /**
  * Create and process new event.
@@ -77,6 +80,9 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
       eventId,
       supabase,
     });
+
+    // trigger email notification to assigned faculty
+    await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
 
     if (!assignResponse.data) return assignResponse;
   }

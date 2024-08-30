@@ -1,0 +1,31 @@
+name: qa
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+      - 'src/trigger'
+  pull_request:
+    branches: [ 'main' ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: 🚀 Deploy Trigger.dev
+        env:
+          TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
+        run: |
+          npx trigger.dev@beta deploy

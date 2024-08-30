@@ -13,6 +13,7 @@
     "devt": "next dev --turbo",
     "build": "next build",
     "start": "next start",
+    "tr:dev": "triggerdev dev",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
     "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/utils/supabase/types.ts",
@@ -54,6 +55,7 @@
     "react-dom": "18.3.1",
     "react-transition-progress": "0.0.4",
     "recharts": "2.12.7",
+    "resend": "4.0.0",
     "sharp": "0.33.5"
   },
   "devDependencies": {
@@ -75,6 +77,7 @@
     "supabase": "1.191.3",
     "tailwindcss": "3.4.10",
     "tailwindcss-animate": "1.0.7",
+    "trigger.dev": "3.0.0-beta.56",
     "turbo": "2.1.0",
     "typescript": "5.5.4"
   },
