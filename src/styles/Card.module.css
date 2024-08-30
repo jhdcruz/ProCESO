@@ -1,4 +1,5 @@
 .card {
+  width: rem(320px);
   background-color: light-dark(
     var(--mantine-color-white),
     var(--mantine-color-dark-7)
@@ -11,12 +12,6 @@
   padding-left: var(--mantine-spacing-md);
   padding-right: var(--mantine-spacing-md);
   padding-bottom: var(--mantine-spacing-md);
-}
-
-.like {
-  color: var(--mantine-color-red-6);
-  width: rem(20px);
-  height: rem(20px);
 }
 
 .label {

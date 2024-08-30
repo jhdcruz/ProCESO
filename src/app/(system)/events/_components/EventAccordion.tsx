@@ -1,14 +1,7 @@
 'use client';
 
 import { lazy, memo, Suspense, useEffect, useState } from 'react';
-import {
-  Accordion,
-  Text,
-  Loader,
-  SimpleGrid,
-  Badge,
-  Group,
-} from '@mantine/core';
+import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { EventResponse } from '@/api/types';
 import { getEvents, getEventsCount } from '@/api/supabase/event';
@@ -111,11 +104,18 @@ function EventAccordionShell({
           }
         >
           {events?.data?.length ? (
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
+            <Flex
+              align="flex-start"
+              direction="row"
+              gap="md"
+              justify="flex-start"
+              wrap="wrap"
+            >
+              {' '}
               {events?.data?.map((event: Tables<'events'>) => {
                 return <EventCard key={event.id} {...event} />;
               })}
-            </SimpleGrid>
+            </Flex>
           ) : (
             <Text c="dimmed">No {type} events found.</Text>
           )}
@@ -159,11 +159,17 @@ function EventAccordionShell({
                 <Loader className="mx-auto my-5 block" size="md" type="dots" />
               }
             >
-              <SimpleGrid cols={{ base: 1, sm: 2, lg: 4 }} spacing="xs">
+              <Flex
+                align="flex-start"
+                direction="row"
+                gap="md"
+                justify="flex-start"
+                wrap="wrap"
+              >
                 {past?.data?.map((event: Tables<'events'>) => {
                   return <EventCard key={event.id} {...event} />;
                 })}
-              </SimpleGrid>
+              </Flex>
             </Suspense>
           ) : (
             <Text c="dimmed">No past events found.</Text>

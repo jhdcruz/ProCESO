@@ -1,4 +1,6 @@
 import { memo } from 'react';
+import NextImage from 'next/image';
+import Link from 'next/link';
 import {
   Card,
   Image,
@@ -6,18 +8,17 @@ import {
   Group,
   Badge,
   Button,
+  Stack,
   ActionIcon,
   Tooltip,
 } from '@mantine/core';
-import { Tables } from '@/utils/supabase/types';
 import {
   IconCalendarClock,
   IconFolders,
   IconTimeline,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
-import NextImage from 'next/image';
-import Link from 'next/link';
+import { Tables } from '@/utils/supabase/types';
 import classes from '@/styles/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (
@@ -27,9 +28,12 @@ export const EventCard = memo((data: Tables<'events'>) => (
         <Image
           alt=""
           component={NextImage}
-          height={180}
-          width={340}
+          fit="contain"
+          h="auto"
+          height={120}
           src={data.image_url}
+          w="320"
+          width={320}
         />
       </Card.Section>
     )}
@@ -38,30 +42,28 @@ export const EventCard = memo((data: Tables<'events'>) => (
       className={classes.section}
       mt={data?.image_url ? 'md' : 'xs'}
     >
-      <Text component={Link} fw={500} fz="lg" href={`/events/${data.id}`}>
-        {data.title}
-      </Text>
-
-      {/* Date range badge label */}
-      {data.date_starting && data.date_ending && (
-        <Badge
-          leftSection={<IconCalendarClock size={16} />}
-          my="xs"
-          variant="light"
-        >
-          {formatDateRange(
-            new Date(data.date_starting),
-            new Date(data.date_ending),
-            {
-              includeTime: true,
-            },
-          )}
-        </Badge>
-      )}
-
-      <Text fz="sm" lineClamp={4} mt="sm">
-        {data.description}
-      </Text>
+      <Stack align="stretch" gap={0} justify="flex-start">
+        <Text component={Link} fw={500} fz="lg" href={`/events/${data.id}`}>
+          {data.title}
+        </Text>
+        {/* Date range badge label */}
+        {data.date_starting && data.date_ending && (
+          <Badge
+            leftSection={<IconCalendarClock size={16} />}
+            my="xs"
+            variant="light"
+          >
+            {formatDateRange(
+              new Date(data.date_starting),
+              new Date(data.date_ending),
+              {
+                includeTime: true,
+              },
+            )}
+          </Badge>
+        )}
+        {/* TODO: show other details, except description. */}
+      </Stack>
     </Card.Section>
 
     <Group gap="xs" mt="xs" wrap="nowrap">
