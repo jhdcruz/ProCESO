@@ -1,4 +1,4 @@
-import type { TriggerConfig } from '@trigger.dev/sdk/v3'
+import type { TriggerConfig } from '@trigger.dev/sdk/v3';
 
 export const config: TriggerConfig = {
   project: 'proj_gvzufybtsolqvrrqdcte',
@@ -13,4 +13,4 @@ export const config: TriggerConfig = {
       randomize: true,
     },
   },
-}
+};
