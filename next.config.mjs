@@ -4,6 +4,9 @@ const nextConfig = {
   experimental: {
     instrumentationHook: true,
   },
+  images: {
+    domains: ["https://kcgvoeyhpkxzvanujxlt.supabase.co"],
+  },
 };
 
 export default nextConfig;
