@@ -24,7 +24,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
   <Card className={classes.card} p="sm" radius="md" withBorder>
     {data?.image_url && (
       <Card.Section>
-        <Image alt="" component={NextImage} height={180} src={data.image_url} />
+        <Image alt="" component={NextImage} height={180} width={340} src={data.image_url} />
       </Card.Section>
     )}
 
