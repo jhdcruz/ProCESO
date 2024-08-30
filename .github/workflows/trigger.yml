@@ -1,4 +1,4 @@
-name: qa
+name: trigger.dev
 
 on:
   push:
