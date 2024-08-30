@@ -40,7 +40,7 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
     if (!seriesResponse.data) return seriesResponse;
 
     // return the id for event link
-    seriesId = seriesResponse.data.id;
+    seriesId = seriesResponse.data[0].id;
   }
 
   // create the event
