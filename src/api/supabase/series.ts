@@ -52,9 +52,7 @@ export async function postSeries({
   const { data, error } = await supabase
     .from('series')
     .insert({ title })
-    .select()
-    .limit(1)
-    .single();
+    .select();
 
   if (error) {
     return {
