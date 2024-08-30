@@ -5,7 +5,14 @@ const nextConfig = {
     instrumentationHook: true,
   },
   images: {
-    domains: ["https://kcgvoeyhpkxzvanujxlt.supabase.co"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kcgvoeyhpkxzvanujxlt.supabase.co',
+        port: '',
+        pathname: '/storage/**',
+      },
+    ],
   },
 };
 
