@@ -8,7 +8,6 @@ import { NewEvent } from './_components/Forms/EventFormModal';
 import { postSeries } from '@/api/supabase/series';
 import { postEventCover } from '@/api/supabase/storage';
 import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
-import { emailAssigned } from '@/trigger/email';
 
 /**
  * Create and process new event.
