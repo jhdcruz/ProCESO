@@ -1,3 +1,5 @@
+'use server';
+
 import { redirect } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { postEvent } from '@/api/supabase/event';
@@ -79,8 +81,8 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
       supabase,
     });
 
-    // trigger email notification to assigned faculty
-    await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
+    // TODO: trigger email notification to assigned faculty
+    // await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
 
     if (!assignResponse.data) return assignResponse;
   }
