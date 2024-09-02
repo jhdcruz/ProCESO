@@ -10,27 +10,29 @@ import {
   Text,
   Loader,
   Space,
+  Stack,
   Image,
   Title,
   Button,
   rem,
 } from '@mantine/core';
-import type { Tables } from '@/utils/supabase/types';
 import dayjs from '@/utils/dayjs';
 import NextImage from 'next/image';
 import {
   IconCalendarClock,
   IconEdit,
-  IconCircleCheck,
+  IconCalendarEvent,
+  IconPencilCheck,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
-
-export interface EventDetailsProps extends Partial<Tables<'events'>> {
-  users: Partial<Tables<'users'>> | null;
-}
+import type { EventDetailsProps } from '@/api/types';
 
 const RichEditor = lazy(() => import('@/components/RichTextEditor/RichEditor'));
 
+/**
+ * Main event information such as title, scheduled date & time,
+ * Event cover image and edit button.
+ */
 function EventDetailsHeader({
   event,
   editable,
@@ -42,21 +44,7 @@ function EventDetailsHeader({
 }) {
   return (
     <Group justify="space-between">
-      <div>
-        {/* Only display image when available */}
-        {event?.image_url && (
-          <Image
-            alt=""
-            component={NextImage}
-            h={300}
-            height={300}
-            mb={16}
-            radius="md"
-            src={event.image_url}
-            w={300}
-            width={300}
-          />
-        )}
+      <Stack gap={0}>
         <Title order={2}>{event?.title}</Title>
 
         {/* Event date and end */}
@@ -76,29 +64,54 @@ function EventDetailsHeader({
             )}
           </Badge>
         )}
-      </div>
 
-      <Group>
-        <Button
-          autoContrast
-          leftSection={
-            editable ? (
-              <IconCircleCheck style={{ width: rem(16), height: rem(16) }} />
-            ) : (
-              <IconEdit style={{ width: rem(16), height: rem(16) }} />
-            )
-          }
-          onClick={toggleEdit}
-          variant={editable ? 'filled' : 'default'}
-        >
-          {editable ? 'Save Changes' : 'Edit Event'}
-        </Button>
-      </Group>
+        {/* Event control buttons */}
+        <Group gap="xs" mt={16}>
+          <Button
+            leftSection={
+              <IconCalendarEvent style={{ width: rem(16), height: rem(16) }} />
+            }
+            variant="default"
+          >
+            Adjust Details
+          </Button>
+          <Button
+            leftSection={
+              editable ? (
+                <IconPencilCheck style={{ width: rem(16), height: rem(16) }} />
+              ) : (
+                <IconEdit style={{ width: rem(16), height: rem(16) }} />
+              )
+            }
+            onClick={toggleEdit}
+            variant={editable ? 'filled' : 'default'}
+          >
+            {editable ? 'Save Changes' : 'Edit Description'}
+          </Button>
+        </Group>
+      </Stack>
+
+      <Image
+        alt=""
+        component={NextImage}
+        fallbackSrc="/assets/no-image.png"
+        h="auto"
+        height={340}
+        mb={16}
+        radius="md"
+        src={event.image_url}
+        w="auto"
+        width={340}
+      />
     </Group>
   );
 }
 
-function EventDetailsContent({
+/**
+ * Mainly description of the event with aside information
+ * for published by, date created and updated, etc.
+ */
+function EventInfoContent({
   event,
   editable,
 }: {
@@ -138,7 +151,7 @@ function EventDetailsContent({
   );
 }
 
-export const EventDetails = memo((event: EventDetailsProps) => {
+export const EventInfo = memo((event: EventDetailsProps) => {
   const [editable, setEditable] = useState(false);
 
   return (
@@ -149,8 +162,8 @@ export const EventDetails = memo((event: EventDetailsProps) => {
         toggleEdit={() => setEditable(!editable)}
       />
       <Space h={12} />
-      <EventDetailsContent editable={editable} event={event} />
+      <EventInfoContent editable={editable} event={event} />
     </Container>
   );
 });
-EventDetails.displayName = 'EventDetails';
+EventInfo.displayName = 'EventInfo';

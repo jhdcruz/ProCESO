@@ -35,6 +35,7 @@ export interface FacultyAssignmentsResponse extends ApiResponse {
   data?: Tables<'faculty_assignments'>[];
 }
 
+// Referenced tables
 export interface FacultyConflictsResponse extends ApiResponse {
   data?: {
     faculty_assignments:
@@ -43,4 +44,8 @@ export interface FacultyConflictsResponse extends ApiResponse {
         }[]
       | null;
   }[];
+}
+
+export interface EventDetailsProps extends Partial<Tables<'events'>> {
+  users: Partial<Tables<'users'>> | null;
 }

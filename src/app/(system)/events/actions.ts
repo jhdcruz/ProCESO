@@ -1,3 +1,5 @@
+'use server';
+
 import { redirect } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { postEvent } from '@/api/supabase/event';

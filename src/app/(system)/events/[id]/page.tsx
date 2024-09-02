@@ -2,15 +2,13 @@ import { lazy, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { notifications } from '@mantine/notifications';
+
 import { metadata as defaultMetadata } from '@/app/layout';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/utils/supabase/server';
-import EventPageShell from '../_components/EventDetails/EventPageShell';
 
-const EventDetails = lazy(() =>
-  import('../_components/EventDetails/EventDetails').then((mod) => ({
-    default: mod.EventDetails,
-  })),
+const EventPageShell = lazy(
+  () => import('../_components/EventDetails/EventPageShell'),
 );
 
 interface Props {
@@ -99,10 +97,8 @@ export default async function EventPage({ params }: Props) {
   }
 
   return (
-    <EventPageShell>
-      <Suspense fallback={<PageLoader />}>
-        <EventDetails {...event} />
-      </Suspense>
-    </EventPageShell>
+    <Suspense fallback={<PageLoader />}>
+      <EventPageShell event={event} />
+    </Suspense>
   );
 }
