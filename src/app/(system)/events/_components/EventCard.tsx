@@ -72,6 +72,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
         component={Link}
         fullWidth
         href={`events/${data.id}`}
+        prefetch={false}
       >
         Show details
       </Button>
