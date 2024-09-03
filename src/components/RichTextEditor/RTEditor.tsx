@@ -33,9 +33,7 @@ function RichEditor({
       SubScript,
       Highlight,
       TextStyle,
-      ColorPicker.configure({
-        types: ['heading', 'paragraph'],
-      }),
+      Color,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content:
