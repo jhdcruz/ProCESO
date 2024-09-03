@@ -29,7 +29,7 @@ export function AppContainer({
       transitionDuration={350}
       transitionTimingFunction="ease-out"
     >
-      <AppShell.Navbar zIndex={300}>
+      <AppShell.Navbar zIndex={100}>
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
