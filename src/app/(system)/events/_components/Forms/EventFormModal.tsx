@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, lazy, Suspense, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -26,8 +27,9 @@ import {
   type FileWithPath,
 } from '@mantine/dropzone';
 
-import { submitEvent } from '../../actions';
+import { revalidate, submitEvent } from '../../actions';
 import { SeriesInput } from './SeriesInput';
+import type { EventResponse } from '@/api/types';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { Enums } from '@/utils/supabase/types';
 import classes from '@/styles/forms/ContainedInput.module.css';
@@ -67,6 +69,9 @@ export function EventFormModalComponent({
   close: () => void;
 }) {
   const [pending, setPending] = useState(false);
+
+  // get current url path for revalidation
+  const pathname = usePathname();
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -123,17 +128,19 @@ export function EventFormModalComponent({
 
     // only show error notification, if any
     if (result?.status !== 0) {
-    notifications.show({
+      notifications.show({
         title: result?.title,
         message: result?.message,
         color: result?.status === 1 ? 'yellow' : 'red',
-      withBorder: true,
-      withCloseButton: true,
-      autoClose: 8000,
-    });
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+    } else {
+      await revalidate(pathname);
+    }
 
     resetState();
-    close();
   };
 
   // reset all state on cancel
@@ -303,6 +310,7 @@ export function EventFormModalComponent({
             mt="md"
             rightSection={!pending && <IconArrowRight size={16} />}
             type="submit"
+            variant={pending ? 'default' : 'filled'}
             w={148}
           >
             {event ? 'Save Edits' : 'Create Event'}

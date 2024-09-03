@@ -1,14 +1,25 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 import { createServerClient } from '@/utils/supabase/server';
 import { postEvent, updateEvent } from '@/api/supabase/event';
-import type { ApiResponse, EventResponse } from '@/api/types';
-import { EventFormProps } from './_components/Forms/EventFormModal';
 import { postSeries } from '@/api/supabase/series';
 import { postEventCover } from '@/api/supabase/storage';
 import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
+import type { ApiResponse, EventResponse } from '@/api/types';
+import { EventFormProps } from './_components/Forms/EventFormModal';
+
+/**
+ * Revalidate path.
+ *
+ * Use for every updating and inserting of data.
+ *
+ * @params pathname - The path to revalidate.
+ */
+export async function revalidate(pathname: string) {
+  return revalidatePath(pathname);
+}
 
 /**
  * Create and process new event.
@@ -26,9 +37,9 @@ import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
 export async function submitEvent(
   event: EventFormProps,
   existingId?: string,
-pathname?: string,
+  pathname?: string,
 ): Promise<ApiResponse> {
-const cookieStore = cookies();
+  const cookieStore = cookies();
   const supabase = createServerClient(cookieStore);
 
   // get current user id for created_by
@@ -121,10 +132,10 @@ const cookieStore = cookies();
       message: 'Event has been successfully updated.',
     };
   } else {
-  return {
-    status: 0,
-    title: 'New event created',
-    message: 'Event has been successfully created.',
-  };
+    return {
+      status: 0,
+      title: 'New event created',
+      message: 'Event has been successfully created.',
+    };
   }
 }
