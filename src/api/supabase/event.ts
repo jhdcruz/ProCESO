@@ -236,3 +236,42 @@ export async function postEvent({
     data: createdEvent,
   };
 }
+
+/**
+ * Update event description.
+ *
+ * @param eventId - The event ID to update description for.
+ * @param description - The new description for the event.
+ * @param supabase - The Supabase client to use.
+ */
+export async function updateEventDescription({
+  eventId,
+  description,
+  supabase,
+}: {
+  eventId: string;
+  description: string;
+  supabase?: SupabaseClient;
+}): Promise<EventResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data: updatedEvent, error } = await supabase
+    .from('events')
+    .update({ description: description })
+    .eq('id', eventId)
+    .select();
+
+  if (error)
+    return {
+      status: 2,
+      title: 'Unable to update event description',
+      message: error.message,
+    };
+
+  return {
+    status: 0,
+    title: 'Event description updated',
+    message: 'The event description has been successfully updated.',
+    data: updatedEvent,
+  };
+}

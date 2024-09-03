@@ -18,31 +18,38 @@ import {
   Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import {
+  IconAlertTriangle,
   IconCalendarClock,
   IconCalendarEvent,
   IconEdit,
-  IconPencilCheck,
+  IconEditOff,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
 import dayjs from '@/utils/dayjs';
 import type { EventDetailsProps } from '@/api/types';
 import { EventFormModal, EventFormProps } from '../Forms/EventFormModal';
+import { updateEventDescription } from '@/api/supabase/event';
 
-const RichEditor = lazy(() => import('@/components/RichTextEditor/RTEditor'));
+const RTEditor = lazy(() =>
+  import('@/components/RichTextEditor/RTEditor').then((mod) => ({
+    default: mod.RTEditor,
+  })),
+);
 
 /**
  * Main event information such as title, scheduled date & time,
  * Event cover image and edit button.
  */
 function EventDetailsHeader({
-  event,
   editable,
+  event,
   toggleEdit,
   toggleModal,
 }: {
-  event: EventDetailsProps;
   editable: boolean;
+  event: EventDetailsProps;
   toggleEdit: () => void;
   toggleModal: () => void;
 }) {
@@ -80,18 +87,19 @@ function EventDetailsHeader({
           >
             Adjust Details
           </Button>
+
           <Button
             leftSection={
               editable ? (
-                <IconPencilCheck style={{ width: rem(16), height: rem(16) }} />
+                <IconEditOff style={{ width: rem(16), height: rem(16) }} />
               ) : (
                 <IconEdit style={{ width: rem(16), height: rem(16) }} />
               )
             }
             onClick={toggleEdit}
-            variant={editable ? 'filled' : 'default'}
+            variant="default"
           >
-            {editable ? 'Save Changes' : 'Edit Description'}
+            {editable ? 'Hide Toolbars' : 'Edit Description'}
           </Button>
         </Group>
       </Stack>
@@ -118,11 +126,17 @@ function EventDetailsHeader({
  * for published by, date created and updated, etc.
  */
 function EventInfoContent({
+  content,
   event,
   editable,
+  loading,
+  onSave,
 }: {
+  content: string | null;
   event: EventDetailsProps;
   editable: boolean;
+  loading: boolean;
+  onSave: (content: string) => void;
 }) {
   return (
     <Grid gutter="xl">
@@ -130,7 +144,12 @@ function EventInfoContent({
         <Suspense
           fallback={<Loader className="mx-auto my-5" size="md" type="dots" />}
         >
-          <RichEditor content={event?.description} editable={editable} />
+          <RTEditor
+            content={content}
+            editable={editable}
+            loading={loading}
+            onSubmit={onSave}
+          />
         </Suspense>
       </Grid.Col>
 
@@ -159,6 +178,8 @@ function EventInfoContent({
 
 export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
   const [editable, setEditable] = useState(false);
+  const [content, setContent] = useState(event?.description ?? null);
+  const [loading, setLoading] = useState(false);
   const [opened, { open, close }] = useDisclosure(false);
 
   const eventForm: EventFormProps = {
@@ -169,6 +190,34 @@ export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
     date_starting: dayjs(event.date_starting).toDate(),
     date_ending: dayjs(event.date_ending).toDate(),
     image_url: event.image_url ?? '',
+  };
+
+  const saveDescription = async (content: string) => {
+    if (!event?.id || !editable) return;
+    setLoading(true);
+
+    const result = await updateEventDescription({
+      eventId: event.id,
+      description: content,
+    });
+
+    if (result.status !== 0) {
+      notifications.show({
+        title: 'Cannot update event description',
+        message: result.message,
+        icon: <IconAlertTriangle />,
+        color: result.status === 1 ? 'yellow' : 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+    } else {
+      // reflect changes locally
+      setContent(content);
+      setEditable(false);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -184,7 +233,13 @@ export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
       <EventFormModal close={close} event={eventForm} opened={opened} />
 
       <Space h={12} />
-      <EventInfoContent editable={editable} event={event} />
+      <EventInfoContent
+        content={content}
+        editable={editable}
+        event={event}
+        loading={loading}
+        onSave={saveDescription}
+      />
     </Container>
   );
 });

@@ -1,4 +1,5 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
+import { Button } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -15,45 +16,69 @@ import '@mantine/tiptap/styles.layer.css';
  * Display an editable rich text editor.
  *
  * @param editable - Allow edits. (`false` by default)
+ * @param loading - Show a loading spinner.
+ * @param onSubmit - Callback to run when the user submits the content.
  * @param content - HTML content to render.
  */
-function RTEditor({
+function RichText({
   editable,
+  loading,
+  onSubmit,
   content,
 }: {
   editable: boolean;
-  content: string | undefined | null;
+  loading: boolean;
+  onSubmit: (content: string) => void;
+  content?: string | null;
 }) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      SubScript,
-      Highlight,
-      TextStyle,
-      Color,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-    ],
-    content:
-      content ??
-      '<p>This event has no description yet. Come back again later.</p>',
-    editable: editable,
-    immediatelyRender: false,
-  });
+  const bodyContent =
+    content ??
+    '<p>This event has no description yet. Come back again later.</p>';
 
-  // Set the editor to be editable or not
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(editable);
-    }
-  }, [editable, editor]);
+  const editor = useEditor(
+    {
+      extensions: [
+        StarterKit,
+        Underline,
+        Link,
+        Superscript,
+        SubScript,
+        Highlight,
+        TextStyle,
+        Color,
+        TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      ],
+      content: bodyContent,
+      editable: editable ?? false,
+      immediatelyRender: false,
+    },
+    [content, editable],
+  );
 
   return (
     <RichTextEditor editor={editor}>
       {editor && editable && (
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
+          {/* Saving/discarding controls */}
+          <Button.Group>
+            <Button
+              disabled={loading}
+              onClick={() => editor?.chain().setContent(bodyContent).run()}
+              size="compact-sm"
+              variant="default"
+            >
+              Reset
+            </Button>
+            <Button
+              loaderProps={{ type: 'dots' }}
+              loading={loading}
+              onClick={() => onSubmit(editor.getHTML())}
+              size="compact-sm"
+            >
+              Save Changes
+            </Button>
+          </Button.Group>
+
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.ColorPicker
               colors={[
@@ -124,4 +149,4 @@ function RTEditor({
   );
 }
 
-export default memo(RTEditor);
+export const RTEditor = memo(RichText);
