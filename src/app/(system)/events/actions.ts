@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { postEvent } from '@/api/supabase/event';
 import type { ApiResponse } from '@/api/types';
-import { NewEvent } from './_components/Forms/EventFormModal';
+import { EventFormProps } from './_components/Forms/EventFormModal';
 import { postSeries } from '@/api/supabase/series';
 import { postEventCover } from '@/api/supabase/storage';
 import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
@@ -19,7 +19,7 @@ import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
  *
  * @returns {ApiResponse} which can be used for displaying notifications.
  */
-export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
+export async function submitEvent(event: EventFormProps): Promise<ApiResponse> {
   const supabase = createBrowserClient();
 
   // get current user id for created_by
@@ -62,7 +62,7 @@ export async function submitEvent(event: NewEvent): Promise<ApiResponse> {
   const eventId = eventResponse.data[0].id;
 
   // we process the image after the event is created for the id
-  if (event.image_url) {
+  if (event.image_url && typeof event.image_url === 'object') {
     const uploadResponse = await postEventCover({
       file: event.image_url,
       eventId,

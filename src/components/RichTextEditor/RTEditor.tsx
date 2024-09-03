@@ -1,9 +1,9 @@
 import { memo, useEffect } from 'react';
+import { Link, RichTextEditor } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
-import { Link, RichTextEditor } from '@mantine/tiptap';
-import ColorPicker from '@tiptap/extension-color';
+import { Color } from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
@@ -17,7 +17,7 @@ import '@mantine/tiptap/styles.layer.css';
  * @param editable - Allow edits. (`false` by default)
  * @param content - HTML content to render.
  */
-function RichEditor({
+function RTEditor({
   editable,
   content,
 }: {
@@ -124,4 +124,4 @@ function RichEditor({
   );
 }
 
-export default memo(RichEditor);
+export default memo(RTEditor);

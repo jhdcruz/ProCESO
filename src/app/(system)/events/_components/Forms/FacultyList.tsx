@@ -30,11 +30,13 @@ import { notifications } from '@mantine/notifications';
 export const FacultyList = ({
   startDate,
   endDate,
+  defaultSelection,
 }: {
   startDate: DateValue | undefined;
   endDate: DateValue | undefined;
+  defaultSelection?: string[];
 }) => {
-  const [selection, setSelection] = useState<string[]>([]);
+  const [selection, setSelection] = useState<string[]>(defaultSelection ?? []);
 
   // search
   const [search, setSearch] = useState<string>('');
@@ -78,11 +80,10 @@ export const FacultyList = ({
 
       if (assignReq.data) {
         setAssignments(
-          // get all user IDs
+          // get the user IDs from the faculty assignments data
           assignReq.data
             .flatMap(
-              (item) =>
-                item.faculty_assignments?.flatMap((a) => a.user_id) ?? [],
+              (item) => item?.faculty_assignments?.map((i) => i.user_id) ?? [],
             )
             .filter((id): id is string => id !== null),
         );
@@ -100,45 +101,43 @@ export const FacultyList = ({
     });
   }, [searchQuery, startDate, endDate]);
 
-  const rows = faculty
-    .map((item) => {
-      const selected = selection.includes(item.id);
+  const rows = faculty.map((item) => {
+    const selected = selection.includes(item.id);
 
-      return (
-        <Table.Tr className={selected ? classes.rowSelected : ''} key={item.id}>
-          <Table.Td>
-            <Checkbox
-              checked={selection.includes(item.id)}
-              onChange={() => toggleRow(item.id)}
-              value={item.id}
-            />
-          </Table.Td>
-          <Table.Td>
-            <Group gap="sm">
-              <Avatar radius={26} size={26} src={item.avatar_url} />
-              <Text fw={500} size="sm">
-                {item.name}
-              </Text>
-            </Group>
-          </Table.Td>
-          <Table.Td>{item.email}</Table.Td>
-          <Table.Td>
-            <Suspense fallback={<Loader size="sm" type="dots" />}>
-              {assignments.includes(item.id) ? (
-                <Badge color="gray" fullWidth variant="light">
-                  Busy
-                </Badge>
-              ) : (
-                <Badge fullWidth variant="light">
-                  Available
-                </Badge>
-              )}
-            </Suspense>
-          </Table.Td>
-        </Table.Tr>
-      );
-    })
-    .sort((a) => (assignments.includes(a.key!) ? 1 : -1));
+    return (
+      <Table.Tr className={selected ? classes.rowSelected : ''} key={item.id}>
+        <Table.Td>
+          <Checkbox
+            checked={selected}
+            onChange={() => toggleRow(item.id)}
+            value={item.id}
+          />
+        </Table.Td>
+        <Table.Td>
+          <Group gap="sm">
+            <Avatar radius={26} size={26} src={item.avatar_url} />
+            <Text fw={500} size="sm">
+              {item.name}
+            </Text>
+          </Group>
+        </Table.Td>
+        <Table.Td>{item.email}</Table.Td>
+        <Table.Td>
+          <Suspense fallback={<Loader size="sm" type="dots" />}>
+            {assignments.includes(item.id) ? (
+              <Badge color="gray" fullWidth variant="light">
+                Busy
+              </Badge>
+            ) : (
+              <Badge fullWidth variant="light">
+                Available
+              </Badge>
+            )}
+          </Suspense>
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
 
   return (
     <ScrollArea mah={460}>
@@ -168,7 +167,21 @@ export const FacultyList = ({
         </Table.Thead>
         <Table.Tbody>
           {!loading && faculty.length ? (
-            <>{rows}</>
+            <>
+              {defaultSelection ? (
+                <>
+                  {/* Sort by selection (selected at top) */}
+                  {rows.sort((a) =>
+                    defaultSelection.includes(a.key!) ? -1 : 1,
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* Sort by availability (available at top) */}
+                  {rows.sort((a) => (assignments.includes(a.key!) ? 1 : -1))}
+                </>
+              )}
+            </>
           ) : (
             <Table.Tr>
               <Table.Td colSpan={4} ta="center">

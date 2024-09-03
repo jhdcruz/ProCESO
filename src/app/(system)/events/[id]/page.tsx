@@ -1,104 +1,73 @@
-import { lazy, Suspense } from 'react';
+import { cache, lazy, Suspense } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { notifications } from '@mantine/notifications';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/utils/supabase/server';
+import { getEventsDetails } from '@/api/supabase/event';
 
 const EventPageShell = lazy(
   () => import('../_components/EventDetails/EventPageShell'),
 );
 
-interface Props {
-  params: { id: string };
-}
+// cache the event details to avoid duplicated
+// requests for the page and metadata generation.
+const cacheEventDetails = cache(async (id: string) => {
+  const cookieStore = cookies();
+  const supabase = createServerClient(cookieStore);
+
+  return await getEventsDetails({
+    eventId: id,
+    supabase,
+  });
+});
 
 /**
  * For generating dynamic OpenGraph metadata for sharing links.
  */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = params.id;
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const event = await cacheEventDetails(params.id);
 
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
-
-  const { data: event, error } = await supabase
-    .from('events')
-    .select(
-      `
-      title,
-      description,
-      visibility,
-      series,
-      created_by,
-      created_at,
-      date_ending,
-      image_url
-      `,
-    )
-    .eq('id', id)
-    .single();
-
-  if (error) {
+  if (!event.data) {
     return {
-      title: error.message,
-      description: error.details,
+      title: '404 - Event not found ' + defaultMetadata.title,
+      description: event?.message,
     };
   }
 
   return {
-    title: `${event.title} - ${defaultMetadata.title}`,
-    description: event.description,
+    title: `${event.data.title} - ${defaultMetadata.title}`,
+    description: event.data.description,
     applicationName: 'ProCESO',
-    creator: event.created_by,
-    category: event.series,
+    creator: event.data.created_by,
+    category: event.data.series,
     robots:
-      event.visibility === 'Everyone' ? 'index, follow' : 'noindex, nofollow',
+      event.data.visibility === 'Everyone'
+        ? 'index, follow'
+        : 'noindex, nofollow',
     openGraph: {
-      images: [{ url: event.image_url ?? '' }],
-      publishedTime: event.created_at,
-      expirationTime: event.date_ending ?? '',
+      images: [{ url: event.data.image_url ?? '' }],
+      publishedTime: event.data.created_at ?? '',
+      expirationTime: event.data.date_ending ?? '',
     },
   };
 }
 
-export default async function EventPage({ params }: Props) {
-  const id = params.id;
-
-  const cookieStore = cookies();
-  const supabase = createServerClient(cookieStore);
-
-  const { data: event, error } = await supabase
-    .from('events')
-    .select(
-      `
-      *,
-      
-      users (
-        name,
-        avatar_url
-      )
-      `,
-    )
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    return notifications.show({
-      title: 'Error',
-      message: error.message,
-      color: 'red',
-      withBorder: true,
-      withCloseButton: true,
-      autoClose: 8000,
-    });
-  }
+export default async function EventPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const event = await cacheEventDetails(params.id);
 
   return (
     <Suspense fallback={<PageLoader />}>
-      <EventPageShell event={event} />
+      <EventPageShell event={event?.data ?? null} />
     </Suspense>
   );
 }

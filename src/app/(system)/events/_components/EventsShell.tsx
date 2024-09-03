@@ -1,21 +1,31 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import { AppShell, Group, TextInput, rem } from '@mantine/core';
-import { IconSearch } from '@tabler/icons-react';
+import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { EventFormModal } from './Forms/EventFormModal';
 
 export default function EventsShell({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  const [opened, { open, close }] = useDisclosure(false);
+
   return (
     <>
       <AppShell.Header>
         <Group className="content-center" h="100%" px="md">
-          {/* Event Buttons */}
-          <EventFormModal />
+          {/* New Event */}
+          <Button
+            className="drop-shadow-sm"
+            leftSection={<IconCalendarPlus size={16} />}
+            onClick={open}
+          >
+            Schedule new event
+          </Button>
+          <EventFormModal close={close} opened={opened} />
 
-          {/*  Search input */}
+          {/*  Event search */}
           <form>
             <TextInput
               leftSection={

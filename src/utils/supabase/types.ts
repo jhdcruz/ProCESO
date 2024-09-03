@@ -27,7 +27,7 @@ export type Database = {
           created_by: string
           date_ending: string | null
           date_starting: string | null
-          description: string
+          description: string | null
           id: string
           image_url: string | null
           series: string | null
@@ -40,7 +40,7 @@ export type Database = {
           created_by?: string
           date_ending?: string | null
           date_starting?: string | null
-          description?: string
+          description?: string | null
           id?: string
           image_url?: string | null
           series?: string | null
@@ -53,7 +53,7 @@ export type Database = {
           created_by?: string
           date_ending?: string | null
           date_starting?: string | null
-          description?: string
+          description?: string | null
           id?: string
           image_url?: string | null
           series?: string | null
@@ -62,6 +62,13 @@ export type Database = {
           visibility?: Database["public"]["Enums"]["event_visibility"]
         }
         Relationships: [
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["faculty_id"]
+          },
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
@@ -104,6 +111,27 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "events"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_handlers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_handlers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["event_id"]
+          },
+          {
+            foreignKeyName: "event_handlers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["faculty_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -170,7 +198,34 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      events_details_view: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          creator_avatar: string | null
+          creator_email: string | null
+          date_ending: string | null
+          date_starting: string | null
+          description: string | null
+          id: string | null
+          image_url: string | null
+          series: string | null
+          title: string | null
+          updated_at: string | null
+          visibility: Database["public"]["Enums"]["event_visibility"] | null
+        }
+        Relationships: []
+      }
+      events_faculties_view: {
+        Row: {
+          event_id: string | null
+          faculty_avatar: string | null
+          faculty_email: string | null
+          faculty_id: string | null
+          faculty_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

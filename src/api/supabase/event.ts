@@ -1,10 +1,18 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { CountResponse, EventResponse } from '@/api/types';
+import type {
+  CountResponse,
+  EventResponse,
+  EventDetailsResponse,
+} from '@/api/types';
 import type { Tables, TablesInsert } from '@/utils/supabase/types';
 import { createBrowserClient } from '@/utils/supabase/client';
+import { getAssignedFaculties } from './faculty-assignments';
 
 /**
  * Get events based on filters and/or limit, if provided.
+ *
+ * IMPORTANT: this calls the `events_details` materialized view,
+ *            instead of `events` table.
  *
  * @param countOnly - Return only the exact count of events (no data).
  * @param filter - Filter events based on 'recent' (recently created),
@@ -75,12 +83,67 @@ export async function getEvents({
 }
 
 /**
- * Get events based on filters and/or limit, if provided.
+ * Get event details based on the event ID.
  *
- * @param countOnly - Return only the exact count of events (no data).
+ * @param eventId - The event ID to fetch details for.
+ * @param supabase - Supabase client instance.
+ */
+export async function getEventsDetails({
+  eventId,
+  supabase,
+}: {
+  eventId: string;
+  supabase?: SupabaseClient;
+}): Promise<EventDetailsResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  // get event details from materialized view
+  const eventDetails = supabase
+    .from('events_details_view')
+    .select()
+    .eq('id', eventId)
+    .returns<Tables<'events_details_view'>[]>();
+
+  // get assigned faculties
+  const faculties = getAssignedFaculties({
+    eventId: eventId,
+    supabase: supabase,
+  });
+
+  const [event, assigned] = await Promise.all([eventDetails, faculties]);
+
+  if (event.error) {
+    return {
+      status: 2,
+      title: 'Unable to fetch event details',
+      message: event.error.message,
+    };
+  }
+
+  if (assigned.status !== 0) {
+    return {
+      status: assigned.status,
+      title: assigned.title,
+      message: assigned.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Events fetched',
+    message: 'Events have been successfully fetched.',
+    data: {
+      ...event.data[0],
+      users: assigned?.data ?? null,
+    },
+  };
+}
+
+/**
+ *
+ *
  * @param filter - Filter events based on 'recent' (recently created),
  *                 'ongoing', 'upcoming', or 'past'.
- * @param limit - Limit the number of events to be fetched.
  * @param supabase - Supabase client instance.
  */
 export async function getEventsCount({

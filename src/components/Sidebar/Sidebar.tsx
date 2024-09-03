@@ -1,11 +1,11 @@
 import { memo, Suspense } from 'react';
 import Image from 'next/image';
-import { ActionIcon, Group, ScrollArea, Tooltip } from '@mantine/core';
+import { Group, ScrollArea } from '@mantine/core';
 import type { Tables } from '@/utils/supabase/types';
 
 import type { Routes } from '@/app/routes';
 import { SidebarUser } from '@/components/Sidebar/SidebarUser';
-import { LinksGroup } from '@/components/LinksGroup/LinksGroup';
+import { LinksGroup } from '@/components/Sidebar/LinksGroup';
 import classes from './Sidebar.module.css';
 
 /**

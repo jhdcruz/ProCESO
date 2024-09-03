@@ -3,7 +3,7 @@
 import { lazy, memo, Suspense, useEffect, useState } from 'react';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { EventResponse } from '@/api/types';
+import type { EventResponse } from '@/api/types';
 import { getEvents, getEventsCount } from '@/api/supabase/event';
 import type { Enums, Tables } from '@/utils/supabase/types';
 
@@ -17,11 +17,11 @@ function EventAccordionShell({
   upcoming,
   role,
 }: {
-  assigned: EventResponse;
-  ongoing: EventResponse;
-  upcoming: EventResponse;
+  assigned: Readonly<EventResponse>;
+  ongoing: Readonly<EventResponse>;
+  upcoming: Readonly<EventResponse>;
   role: Enums<'user_roles'>;
-  recent?: EventResponse;
+  recent?: Readonly<EventResponse>;
 }) {
   const [value, setValue] = useState<string[]>([
     'assigned',
@@ -58,6 +58,8 @@ function EventAccordionShell({
         autoClose: 8000,
       });
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   // get the exact count of past events
@@ -88,7 +90,7 @@ function EventAccordionShell({
     events,
   }: {
     type: string;
-    events: EventResponse | undefined;
+    events: Readonly<EventResponse> | undefined;
   }) => (
     <Accordion.Item key={type} value={type}>
       <Accordion.Control>

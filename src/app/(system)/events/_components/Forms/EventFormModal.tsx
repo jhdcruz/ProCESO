@@ -1,15 +1,13 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, lazy, Suspense, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
-import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconCheck, IconUpload, IconX } from '@tabler/icons-react';
-import { Enums } from '@/utils/supabase/types';
 
-import { IconArrowRight, IconCalendarPlus } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import {
   Button,
   Checkbox,
@@ -28,15 +26,22 @@ import {
   type FileWithPath,
 } from '@mantine/dropzone';
 
+import { submitEvent } from '../../actions';
 import { SeriesInput } from './SeriesInput';
-import { submitEvent } from '@/app/(system)/events/actions';
-import { FacultyList } from './FacultyList';
+import { PageLoader } from '@/components/Loader/PageLoader';
+import { Enums } from '@/utils/supabase/types';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
-export interface NewEvent {
+const FacultyList = lazy(() =>
+  import('./FacultyList').then((mod) => ({
+    default: mod.FacultyList,
+  })),
+);
+
+export interface EventFormProps {
   title: string;
   visibility: Enums<'event_visibility'>;
-  image_url?: FileWithPath;
+  image_url?: FileWithPath | string;
   series?: string | null;
   date_starting?: DateValue;
   date_ending?: DateValue;
@@ -44,84 +49,95 @@ export interface NewEvent {
   handled_by?: string[];
 }
 
-export const EventFormModal = memo(() => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [pending, setPending] = useState(false);
+export const EventFormModal = memo(
+  ({
+    event,
+    opened,
+    close,
+  }: {
+    event?: EventFormProps;
+    opened: boolean;
+    close: () => void;
+  }) => {
+    const [pending, setPending] = useState(false);
 
-  // image file preview state
-  const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
-  const imagePreview = coverFile.length
-    ? URL.createObjectURL(coverFile[0])
-    : null;
+    // image file preview state
+    const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
+    const imagePreview = coverFile.length
+      ? URL.createObjectURL(coverFile[0])
+      : null;
 
-  // form submission
-  const form = useForm<NewEvent>({
-    mode: 'uncontrolled',
-    validateInputOnChange: true,
+    // form submission
+    const form = useForm<EventFormProps>({
+      mode: 'uncontrolled',
+      validateInputOnChange: true,
 
-    initialValues: {
-      title: '',
-      visibility: 'Everyone',
-      date_starting: null,
-      date_ending: null,
-      handled_by: [],
-    },
+      initialValues: {
+        title: event?.title ?? '',
+        visibility: event?.visibility ?? 'Everyone',
+        date_starting: event?.date_starting ?? null,
+        date_ending: event?.date_ending ?? null,
+        handled_by: event?.handled_by ?? [],
+      },
 
-    validate: {
-      title: (value) => (!value.trim() ? 'Title cannot be empty.' : null),
+      validate: {
+        title: (value) => (!value.trim() ? 'Title cannot be empty.' : null),
 
-      visibility: (value) =>
-        !['Everyone', 'Faculty', 'Internal'].includes(value)
-          ? 'Invalid visibility option.'
-          : null,
+        visibility: (value) =>
+          !['Everyone', 'Faculty', 'Internal'].includes(value)
+            ? 'Invalid visibility option.'
+            : null,
 
-      date_ending: (value, values) =>
-        value && value < values.date_starting! // end date is disabled if start date is empty anyway
-          ? 'Must be after the set start date.'
-          : null,
-    },
-  });
-
-  // form handler & submission
-  const handleSubmit = async (event: NewEvent) => {
-    setPending(true);
-    const result = await submitEvent(event);
-    setPending(false);
-
-    notifications.show({
-      title: result.title,
-      message: result.message,
-      color:
-        result.status === 0 ? 'green' : result.status === 1 ? 'yellow' : 'red',
-      withBorder: true,
-      withCloseButton: true,
-      autoClose: 8000,
+        date_ending: (value, values) =>
+          value && value < values.date_starting! // end date is disabled if start date is empty anyway
+            ? 'Must be after the set start date.'
+            : null,
+      },
     });
 
-    resetState();
-    close();
-  };
+    // reset end date if start date is null/cleared
+    useEffect(() => {
+      if (!form.getValues().date_starting) {
+        form.setFieldValue('date_ending', null);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [form.getValues().date_starting]);
 
-  // reset all state on cancel
-  const resetState = () => {
-    if (coverFile) {
-      setCoverFile([]);
-    }
+    // form handler & submission
+    const handleSubmit = async (eventForm: EventFormProps) => {
+      setPending(true);
+      const result = await submitEvent(eventForm);
+      setPending(false);
 
-    form.reset();
-    close();
-  };
+      notifications.show({
+        title: result.title,
+        message: result.message,
+        color:
+          result.status === 0
+            ? 'green'
+            : result.status === 1
+              ? 'yellow'
+              : 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
 
-  return (
-    <>
-      <Button
-        className="drop-shadow-sm"
-        leftSection={<IconCalendarPlus size={16} />}
-        onClick={open}
-      >
-        Schedule new event
-      </Button>
+      resetState();
+      close();
+    };
 
+    // reset all state on cancel
+    const resetState = () => {
+      if (coverFile) {
+        setCoverFile([]);
+      }
+
+      form.reset();
+      close();
+    };
+
+    return (
       <Modal onClose={close} opened={opened} size="68%" title="New Event">
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid grow>
@@ -142,13 +158,13 @@ export const EventFormModal = memo(() => {
                   style={{ pointerEvents: 'none' }}
                 >
                   {/* Selected image preview */}
-                  {coverFile.length ? (
+                  {coverFile.length || event?.image_url ? (
                     <Image
                       alt="Image preview of the uploaded image."
                       className="mx-auto block"
                       height={240}
-                      key={imagePreview as string}
-                      src={imagePreview as string}
+                      key={(imagePreview as string) ?? event?.title}
+                      src={(imagePreview as string) ?? event?.image_url}
                       width={240}
                     />
                   ) : (
@@ -241,17 +257,21 @@ export const EventFormModal = memo(() => {
 
               {/* Faculty Assignment */}
               <Checkbox.Group
+                defaultValue={event?.handled_by}
                 description="Faculty members assigned to this event. (can be set later)"
                 key={form.key('faculty')}
-                label="Delegate Faculty"
+                label="Assign Faculty"
                 mt="sm"
                 {...form.getInputProps('handled_by', { type: 'checkbox' })}
               >
-                {/*  Faculty Table Checkbox */}
-                <FacultyList
-                  endDate={form.getValues().date_ending}
-                  startDate={form.getValues().date_starting}
-                />
+                <Suspense fallback={<PageLoader />}>
+                  {/*  Faculty Table Checkbox */}
+                  <FacultyList
+                    defaultSelection={event?.handled_by}
+                    endDate={form.getValues().date_ending}
+                    startDate={form.getValues().date_starting}
+                  />
+                </Suspense>
               </Checkbox.Group>
             </Grid.Col>
           </Grid>
@@ -270,13 +290,12 @@ export const EventFormModal = memo(() => {
               type="submit"
               w={148}
             >
-              Create event
+              {event ? 'Save Edits' : 'Create Event'}
             </Button>
           </Group>
         </form>
       </Modal>
-    </>
-  );
-});
-
+    );
+  },
+);
 EventFormModal.displayName = 'NewEventModal';

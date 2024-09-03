@@ -1,33 +1,35 @@
 'use client';
 
-import { Suspense, memo, lazy, useState } from 'react';
+import { lazy, memo, Suspense, useState } from 'react';
+import NextImage from 'next/image';
 import {
   Avatar,
   Badge,
+  Button,
   Container,
   Grid,
   Group,
-  Text,
+  Image,
   Loader,
+  rem,
   Space,
   Stack,
-  Image,
+  Text,
   Title,
-  Button,
-  rem,
 } from '@mantine/core';
-import dayjs from '@/utils/dayjs';
-import NextImage from 'next/image';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconCalendarClock,
-  IconEdit,
   IconCalendarEvent,
+  IconEdit,
   IconPencilCheck,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
+import dayjs from '@/utils/dayjs';
 import type { EventDetailsProps } from '@/api/types';
+import { EventFormModal, EventFormProps } from '../Forms/EventFormModal';
 
-const RichEditor = lazy(() => import('@/components/RichTextEditor/RichEditor'));
+const RichEditor = lazy(() => import('@/components/RichTextEditor/RTEditor'));
 
 /**
  * Main event information such as title, scheduled date & time,
@@ -37,10 +39,12 @@ function EventDetailsHeader({
   event,
   editable,
   toggleEdit,
+  toggleModal,
 }: {
   event: EventDetailsProps;
   editable: boolean;
   toggleEdit: () => void;
+  toggleModal: () => void;
 }) {
   return (
     <Group justify="space-between">
@@ -71,6 +75,7 @@ function EventDetailsHeader({
             leftSection={
               <IconCalendarEvent style={{ width: rem(16), height: rem(16) }} />
             }
+            onClick={toggleModal}
             variant="default"
           >
             Adjust Details
@@ -93,6 +98,7 @@ function EventDetailsHeader({
 
       <Image
         alt=""
+        className="shadow-lg"
         component={NextImage}
         fallbackSrc="/assets/no-image.png"
         h="auto"
@@ -132,14 +138,14 @@ function EventInfoContent({
         <Text c="dimmed">Published by</Text>
         <Group my={16}>
           <Avatar
-            alt={event?.users?.name}
+            alt={event?.created_by ?? ''}
             color="initials"
             radius="xl"
-            src={event?.users?.avatar_url}
+            src={event?.creator_avatar}
           />
           <div>
             <Text lineClamp={1} size="sm">
-              {event?.users?.name}
+              {event?.created_by}
             </Text>
             <Text c="dimmed" size="xs">
               {dayjs(event?.created_at).fromNow()}
@@ -151,8 +157,19 @@ function EventInfoContent({
   );
 }
 
-export const EventInfo = memo((event: EventDetailsProps) => {
+export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
   const [editable, setEditable] = useState(false);
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const eventForm: EventFormProps = {
+    title: event.title ?? '',
+    series: event.series ?? '',
+    visibility: event.visibility ?? 'Everyone',
+    handled_by: event.users?.map((user) => user.faculty_id!) ?? [],
+    date_starting: dayjs(event.date_starting).toDate(),
+    date_ending: dayjs(event.date_ending).toDate(),
+    image_url: event.image_url ?? '',
+  };
 
   return (
     <Container fluid>
@@ -160,7 +177,12 @@ export const EventInfo = memo((event: EventDetailsProps) => {
         editable={editable}
         event={event}
         toggleEdit={() => setEditable(!editable)}
+        toggleModal={open}
       />
+
+      {/* Event Details Modal */}
+      <EventFormModal close={close} event={eventForm} opened={opened} />
+
       <Space h={12} />
       <EventInfoContent editable={editable} event={event} />
     </Container>

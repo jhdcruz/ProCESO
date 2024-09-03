@@ -71,7 +71,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html className={font.variable} lang="en">
+    <html className={font.variable} lang="en" suppressHydrationWarning>
       {/* IMPORTANT: don't use next/head here, destroys initial UI loading */}
       <head key="mantine-provider">
         <ColorSchemeScript defaultColorScheme="auto" />
