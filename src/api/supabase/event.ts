@@ -21,10 +21,12 @@ import { getAssignedFaculties } from './faculty-assignments';
  * @param supabase - Supabase client instance.
  */
 export async function getEvents({
+  search,
   filter,
   limit,
   supabase,
 }: {
+  search?: string;
   filter?: 'recent' | 'ongoing' | 'upcoming' | 'past';
   limit?: number;
   supabase?: SupabaseClient;
@@ -63,6 +65,7 @@ export async function getEvents({
     }
   }
 
+  if (search) query = query.ilike('title', `%${search}%`);
   if (limit) query = query.limit(limit);
   const { data: events, error } = await query.returns<Tables<'events'>[]>();
 

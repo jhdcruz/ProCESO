@@ -1,11 +1,9 @@
 'use client';
 
-import { lazy, memo, Suspense, useEffect, useState } from 'react';
+import { lazy, memo, Suspense, useState } from 'react';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
 import type { EventResponse } from '@/api/types';
-import { getEvents, getEventsCount } from '@/api/supabase/event';
-import type { Enums, Tables } from '@/utils/supabase/types';
+import type { Tables, Enums } from '@/utils/supabase/types';
 
 const EventCard = lazy(() =>
   import('./EventCard').then((mod) => ({ default: mod.EventCard })),
@@ -15,75 +13,17 @@ function EventAccordionShell({
   assigned,
   ongoing,
   upcoming,
+  past,
   role,
+  search,
 }: {
-  assigned: Readonly<EventResponse>;
-  ongoing: Readonly<EventResponse>;
-  upcoming: Readonly<EventResponse>;
+  assigned: EventResponse | undefined;
+  ongoing: EventResponse | undefined;
+  upcoming: EventResponse | undefined;
+  past: EventResponse | undefined;
   role: Enums<'user_roles'>;
-  recent?: Readonly<EventResponse>;
+  search?: string;
 }) {
-  const [value, setValue] = useState<string[]>([
-    'assigned',
-    'ongoing',
-    'upcoming',
-  ]);
-  const [past, setPast] = useState<EventResponse>();
-  const [pastCount, setPastCount] = useState<number>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // fetch past events only when past is selected/shown.
-  useEffect(() => {
-    const fetchPastEvents = async () => {
-      setIsLoading(true);
-
-      if (value.some((v) => v === 'past') && !past?.data?.length) {
-        const pastEvents = await getEvents({
-          filter: 'past',
-        });
-
-        setPast(pastEvents);
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchPastEvents().catch((e) => {
-      notifications.show({
-        title: "Couldn't fetch past events",
-        message: e.message + ', please refresh or try again later.',
-        color: 'red',
-        withBorder: true,
-        withCloseButton: true,
-        autoClose: 8000,
-      });
-    });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
-
-  // get the exact count of past events
-  useEffect(() => {
-    const fetchPastCount = async () => {
-      const count = await getEventsCount({
-        filter: 'past',
-      });
-
-      setPastCount(count?.data ?? 0);
-    };
-
-    fetchPastCount().catch((e) => {
-      notifications.show({
-        title: "Couldn't fetch past events count",
-        message: e.message + ', please refresh or try again later.',
-        color: 'red',
-        withBorder: true,
-        withCloseButton: true,
-        autoClose: 8000,
-      });
-    });
-  }, []);
-
   // Event Accordion Items Component
   const EventItems = ({
     type,
@@ -105,21 +45,26 @@ function EventAccordionShell({
             <Loader className="mx-auto my-5 block" size="md" type="dots" />
           }
         >
-          {events?.data?.length ? (
-            <Flex
-              align="flex-start"
-              direction="row"
-              gap="md"
-              justify="flex-start"
-              wrap="wrap"
-            >
-              {' '}
-              {events?.data?.map((event: Tables<'events'>) => {
-                return <EventCard key={event.id} {...event} />;
-              })}
-            </Flex>
+          {events?.data ? (
+            <>
+              {events?.data?.length ? (
+                <Flex
+                  align="flex-start"
+                  direction="row"
+                  gap="md"
+                  justify="flex-start"
+                  wrap="wrap"
+                >
+                  {events?.data?.map((event: Tables<'events'>) => {
+                    return <EventCard key={event.id} {...event} />;
+                  })}
+                </Flex>
+              ) : (
+                <Text c="dimmed">No {type} events found.</Text>
+              )}
+            </>
           ) : (
-            <Text c="dimmed">No {type} events found.</Text>
+            <Loader className="mx-auto" type="dots" />
           )}
         </Suspense>
       </Accordion.Panel>
@@ -127,10 +72,9 @@ function EventAccordionShell({
   );
   return (
     <Accordion
+      defaultValue={['assigned', 'ongoing', 'upcoming']}
       multiple={true}
-      onChange={setValue}
       transitionDuration={200}
-      value={value}
     >
       <EventItems
         events={assigned}
@@ -139,45 +83,7 @@ function EventAccordionShell({
 
       <EventItems events={ongoing} type="ongoing" />
       <EventItems events={upcoming} type="upcoming" />
-
-      {/* Past events, fetched on-demand */}
-      <Accordion.Item key="past" value="past">
-        <Accordion.Control>
-          <Group>
-            <Text tt="capitalize">Past Events</Text>
-            {pastCount ? (
-              <Badge variant="default">{pastCount}</Badge>
-            ) : (
-              <Loader size="xs" type="dots" />
-            )}
-          </Group>
-        </Accordion.Control>
-        <Accordion.Panel>
-          {isLoading ? (
-            <Loader className="mx-auto" size="md" type="dots" />
-          ) : past?.data?.length ? (
-            <Suspense
-              fallback={
-                <Loader className="mx-auto my-5 block" size="md" type="dots" />
-              }
-            >
-              <Flex
-                align="flex-start"
-                direction="row"
-                gap="md"
-                justify="flex-start"
-                wrap="wrap"
-              >
-                {past?.data?.map((event: Tables<'events'>) => {
-                  return <EventCard key={event.id} {...event} />;
-                })}
-              </Flex>
-            </Suspense>
-          ) : (
-            <Text c="dimmed">No past events found.</Text>
-          )}
-        </Accordion.Panel>
-      </Accordion.Item>
+      <EventItems events={past} type="past" />
     </Accordion>
   );
 }

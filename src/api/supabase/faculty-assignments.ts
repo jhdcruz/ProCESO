@@ -53,17 +53,27 @@ export async function getFacultyAssignments({
 
 export async function getFacultyAssignedEvents({
   userId,
+  search,
   supabase,
 }: {
   userId: string;
+  search?: string;
   supabase?: SupabaseClient;
 }): Promise<EventResponse> {
   if (!supabase) supabase = createBrowserClient();
 
-  const { data: events, error } = await supabase
-    .from('events')
-    .select()
-    .eq('faculty_assignments.user_id', userId);
+  let query = supabase
+    .from('faculty_assignments')
+    .select(
+      `
+      events (*)
+      `,
+    )
+    .eq('user_id', userId)
+    .order('date_starting', { referencedTable: 'events', ascending: false });
+
+  if (search) query = query.ilike('events.title', `%${search}%`);
+  const { data: events, error } = await query.returns<Tables<'events'>[]>();
 
   if (error) {
     return {
