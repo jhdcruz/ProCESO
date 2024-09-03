@@ -183,6 +183,7 @@ export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const eventForm: EventFormProps = {
+    id: event.id ?? '',
     title: event.title ?? '',
     series: event.series ?? '',
     visibility: event.visibility ?? 'Everyone',
@@ -230,7 +231,12 @@ export const EventInfo = memo((event: Readonly<EventDetailsProps>) => {
       />
 
       {/* Event Details Modal */}
-      <EventFormModal close={close} event={eventForm} opened={opened} />
+      <EventFormModal
+        close={close}
+        event={eventForm}
+        key={event.id}
+        opened={opened}
+      />
 
       <Space h={12} />
       <EventInfoContent

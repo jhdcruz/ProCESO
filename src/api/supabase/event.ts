@@ -238,6 +238,45 @@ export async function postEvent({
 }
 
 /**
+ * Update existing event.
+ *
+ * @param eventId - The event ID to update.
+ * @param event - The event data to update.
+ * @param supabase - The Supabase client to use.
+ */
+export async function updateEvent({
+  eventId,
+  event,
+  supabase,
+}: {
+  eventId: string;
+  event: TablesInsert<'events'>;
+  supabase?: SupabaseClient;
+}): Promise<EventResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data: updatedEvent, error } = await supabase
+    .from('events')
+    .update(event)
+    .eq('id', eventId)
+    .select();
+
+  if (error)
+    return {
+      status: 2,
+      title: 'Unable to update event',
+      message: error.message,
+    };
+
+  return {
+    status: 0,
+    title: 'Event updated',
+    message: 'The event has been successfully updated.',
+    data: updatedEvent,
+  };
+}
+
+/**
  * Update event description.
  *
  * @param eventId - The event ID to update description for.

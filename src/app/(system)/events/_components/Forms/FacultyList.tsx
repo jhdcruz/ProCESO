@@ -6,6 +6,7 @@ import {
   Suspense,
   useDeferredValue,
   type ChangeEvent,
+  memo,
 } from 'react';
 import {
   Table,
@@ -27,7 +28,7 @@ import { getFacultyConflicts } from '@/api/supabase/faculty-assignments';
 import classes from '@/styles/Table.module.css';
 import { notifications } from '@mantine/notifications';
 
-export const FacultyList = ({
+export function FacultyListComponent({
   startDate,
   endDate,
   defaultSelection,
@@ -35,7 +36,7 @@ export const FacultyList = ({
   startDate: DateValue | undefined;
   endDate: DateValue | undefined;
   defaultSelection?: string[];
-}) => {
+}) {
   const [selection, setSelection] = useState<string[]>(defaultSelection ?? []);
 
   // search
@@ -193,4 +194,6 @@ export const FacultyList = ({
       </Table>
     </ScrollArea>
   );
-};
+}
+
+export const FacultyList = memo(FacultyListComponent);
