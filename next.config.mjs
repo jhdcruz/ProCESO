@@ -3,6 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     instrumentationHook: true,
+    reactCompiler: true,
+    ppr: true,
   },
   images: {
     remotePatterns: [
