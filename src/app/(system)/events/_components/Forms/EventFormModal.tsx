@@ -1,6 +1,4 @@
-'use client';
-
-import { memo, lazy, Suspense, useState } from 'react';
+import { memo, lazy, Suspense, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
@@ -84,11 +82,11 @@ export function EventFormModalComponent({
     mode: 'uncontrolled',
 
     initialValues: {
-      title: event?.title ?? '',
-      visibility: event?.visibility ?? 'Everyone',
-      date_starting: event?.date_starting ?? null,
-      date_ending: event?.date_ending ?? null,
-      handled_by: event?.handled_by ?? [],
+      title: '',
+      visibility: 'Everyone',
+      date_starting: null,
+      date_ending: null,
+      handled_by: [],
     },
 
     validate: {
@@ -149,9 +147,25 @@ export function EventFormModalComponent({
       setCoverFile([]);
     }
 
-    form.reset();
+    form.resetDirty();
     close();
   };
+
+  useEffect(() => {
+    // We're setting this separately to avoid unnecessary
+    // remounting of the modal when changing existing
+    // values used with `initialValues`.
+    // https://github.com/orgs/mantinedev/discussions/4868
+    if (event) {
+      form.setInitialValues({
+        title: event.title,
+        visibility: event.visibility,
+        date_starting: event.date_starting,
+        date_ending: event.date_ending,
+        handled_by: event.handled_by,
+      });
+    }
+  }, [event, form]);
 
   return (
     <Modal onClose={resetState} opened={opened} size="68%" title="New Event">
@@ -233,13 +247,7 @@ export function EventFormModalComponent({
             />
 
             <Input.Wrapper
-              description={
-                form.getValues().visibility === 'Everyone'
-                  ? 'Everyone can participate in this event.'
-                  : form.getValues().visibility === 'Faculty'
-                    ? 'Only visible to faculty and staffs.'
-                    : 'Only visible to admin and staffs.'
-              }
+              description="Who can see and participate in this event?"
               label="Visibility"
               withAsterisk
             >
