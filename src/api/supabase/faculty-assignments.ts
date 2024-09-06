@@ -155,11 +155,15 @@ export async function postFacultyAssignment({
 
   const { data, error } = await supabase
     .from('faculty_assignments')
-    .insert(
+    .upsert(
       userId.map((user_id) => ({
         user_id,
         event_id: eventId,
       })),
+      {
+        onConflict: 'user_id, event_id',
+        ignoreDuplicates: true,
+      },
     )
     .select();
 
