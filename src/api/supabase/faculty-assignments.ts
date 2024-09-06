@@ -9,48 +9,6 @@ import type {
 import { createBrowserClient } from '@/utils/supabase/client';
 import type { Tables } from '@/utils/supabase/types';
 
-/**
- * Get list of faculty assignments.
- *
- * @param userId - The user ID of the faculty to filter.
- * @param eventId - The event ID to filter.
- * @param supabase - The Supabase client to use.
- */
-export async function getFacultyAssignments({
-  userId,
-  eventId,
-  supabase,
-}: {
-  userId?: string;
-  eventId?: string;
-  supabase?: SupabaseClient;
-}): Promise<FacultyAssignmentsResponse> {
-  if (!supabase) supabase = createBrowserClient();
-
-  let query = supabase.from('faculty_assignments').select();
-
-  if (userId) query = query.eq('user_id', userId);
-  if (eventId) query = query.eq('event_id', eventId);
-
-  const { data: assignments, error } =
-    await query.returns<Tables<'faculty_assignments'>[]>();
-
-  if (error) {
-    return {
-      status: 2,
-      title: 'Unable to get faculty users',
-      message: error.message,
-    };
-  }
-
-  return {
-    status: 0,
-    title: 'Faculty users fetched',
-    message: 'List of faculty users have been successfully fetched.',
-    data: assignments,
-  };
-}
-
 export async function getFacultyAssignedEvents({
   userId,
   search,

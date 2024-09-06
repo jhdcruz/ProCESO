@@ -11,10 +11,6 @@ export interface ApiResponse {
   data?: any;
 }
 
-export interface CountResponse extends ApiResponse {
-  data?: number | null;
-}
-
 export interface UserResponse extends ApiResponse {
   data?: Tables<'users'>;
 }
@@ -47,6 +43,7 @@ export interface SeriesResponse extends ApiResponse {
 export interface FacultyAssignmentsResponse extends ApiResponse {
   data?: Tables<'faculty_assignments'>[];
 }
+
 // Referenced tables
 export interface FacultyConflictsResponse extends ApiResponse {
   data?: {

@@ -1,9 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type {
-  CountResponse,
-  EventResponse,
-  EventDetailsResponse,
-} from '@/api/types';
+import type { EventResponse, EventDetailsResponse } from '@/api/types';
 import type { Tables, TablesInsert } from '@/utils/supabase/types';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { getAssignedFaculties } from './faculty-assignments';
@@ -139,63 +135,6 @@ export async function getEventsDetails({
       ...event.data[0],
       users: assigned?.data ?? null,
     },
-  };
-}
-
-/**
- *
- *
- * @param filter - Filter events based on 'recent' (recently created),
- *                 'ongoing', 'upcoming', or 'past'.
- * @param supabase - Supabase client instance.
- */
-export async function getEventsCount({
-  filter,
-  supabase,
-}: {
-  filter?: 'ongoing' | 'upcoming' | 'past';
-  supabase?: SupabaseClient;
-}): Promise<CountResponse> {
-  if (!supabase) supabase = createBrowserClient();
-
-  let query = supabase
-    .from('events')
-    .select('id', { count: 'exact', head: true });
-
-  // filters based on event dates
-  if (filter) {
-    const now = new Date().toISOString();
-
-    switch (filter) {
-      case 'ongoing':
-        query = query.lte('date_starting', now).gte('date_ending', now);
-        break;
-
-      case 'upcoming':
-        query = query.gte('date_starting', now);
-        break;
-
-      case 'past':
-        query = query.lte('date_ending', now);
-        break;
-    }
-  }
-
-  const { count, error } = await query;
-
-  if (error) {
-    return {
-      status: 2,
-      title: 'Unable to fetch event count',
-      message: error.message,
-    };
-  }
-
-  return {
-    status: 0,
-    title: 'Event count fetched',
-    message: `The exact count of ${count} events has been fetched.`,
-    data: count,
   };
 }
 
