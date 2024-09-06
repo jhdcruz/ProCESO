@@ -3,11 +3,9 @@ name: trigger.dev
 on:
   workflow_dispatch:
   push:
-    branches: [ 'main' ]
     paths:
       - 'src/trigger'
   pull_request:
-    branches: [ 'main' ]
     paths:
       - 'src/trigger'
 
