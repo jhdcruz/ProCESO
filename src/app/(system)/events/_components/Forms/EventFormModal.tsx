@@ -135,6 +135,15 @@ export function EventFormModalComponent({
         autoClose: 8000,
       });
     } else {
+      notifications.show({
+        title: result?.title,
+        message: result?.message,
+        color: 'green',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+
       await revalidate(pathname);
     }
 
