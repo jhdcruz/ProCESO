@@ -22,7 +22,8 @@ export const metadata: Metadata = {
 export default async function Login() {
   // skip login page for logged-in users
   const user = await getCurrentUser();
-  if (user.status === 0) {
+
+  if (user?.data) {
     redirect('/');
   }
 

@@ -19,12 +19,6 @@ export async function getCurrentUser(
     data: { user },
   } = await supabase.auth.getUser();
 
-  // treat no email as not logged in
-  if (!user?.email) {
-    redirect('/login');
-  }
-
-  // get user role
   const { data: current, error } = await supabase
     .from('users')
     .select()
