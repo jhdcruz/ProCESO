@@ -3,17 +3,6 @@ name: compliance
 on:
   push:
     branches: ['main']
-    paths:
-      - 'src'
-      - '.github'
-      - 'package.json'
-      - 'bun.lockb'
-      - 'tailwind.config.js'
-      - 'next.config.mjs'
-      - 'tsconfig.json'
-      - 'vercel.json'
-      - 'trigger.config.ts'
-      - 'postcss.config.mjs'
   workflow_dispatch:
 
 permissions:
