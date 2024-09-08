@@ -97,6 +97,8 @@
     "url": "https://github.com/jhdcruz/ProCESO/issues"
   },
   "trustedDependencies": [
+    "@depot/cli",
+    "esbuild",
     "msw",
     "protobufjs",
     "sharp",
