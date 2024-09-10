@@ -71,7 +71,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
         className="shadow-sm"
         component={Link}
         fullWidth
-        href={`events/${data.id}`}
+        href={`events/${data.id}/info`}
         prefetch={false}
       >
         Show details
@@ -91,7 +91,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
       <Tooltip label="View uploaded files" multiline withArrow>
         <ActionIcon
           component={Link}
-          href={`events/${data.id}/drive`}
+          href={`events/${data.id}/storage`}
           size="lg"
           variant="default"
         >
