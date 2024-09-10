@@ -162,7 +162,7 @@ export function EventFormModalComponent({
       setCoverFile([]);
     }
 
-    form.resetDirty();
+    form.reset();
     close();
   };
 
@@ -172,7 +172,7 @@ export function EventFormModalComponent({
     // values used with `initialValues`.
     // https://github.com/orgs/mantinedev/discussions/4868
     if (event) {
-      form.setInitialValues({
+      form.setValues({
         title: event.title,
         visibility: event.visibility,
         date_starting: event.date_starting,
@@ -180,7 +180,9 @@ export function EventFormModalComponent({
         handled_by: event.handled_by,
       });
     }
-  }, [event, form]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [event]);
 
   return (
     <Modal onClose={resetState} opened={opened} size="68%" title="New Event">
