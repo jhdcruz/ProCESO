@@ -1,15 +1,32 @@
 'use client';
 
 import { useDeferredValue, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getEvents } from '@/api/supabase/event';
 import { getFacultyAssignedEvents } from '@/api/supabase/faculty-assignments';
-import { EventFormModal } from './Forms/EventFormModal';
-import type { Tables } from '@/utils/supabase/types';
-import { EventAccordion } from './EventAccordion';
 import { EventResponse } from '@/api/types';
+import type { Tables } from '@/utils/supabase/types';
+import { PageLoader } from '@/components/Loader/PageLoader';
+
+const EventAccordion = dynamic(
+  () => import('./EventAccordion').then((mod) => mod.EventAccordion),
+  {
+    loading: () => <PageLoader />,
+  },
+);
+
+const EventFormModal = dynamic(
+  () =>
+    import('./Forms/EventFormModal').then((mod) => ({
+      default: mod.EventFormModal,
+    })),
+  {
+    ssr: false,
+  },
+);
 
 export default function EventsShell({
   user,
