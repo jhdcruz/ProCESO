@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@portal": ["./src/app/portal/*"]
     },
     "target": "ES2017"
   },
