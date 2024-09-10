@@ -1,5 +1,8 @@
 'use client';
 
+import { memo, startTransition } from 'react';
+import { useProgress } from 'react-transition-progress';
+import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { AppShell, Tabs, rem } from '@mantine/core';
 import {
@@ -7,6 +10,7 @@ import {
   IconInfoCircle,
   IconTimeline,
 } from '@tabler/icons-react';
+import { systemUrl } from '@/app/routes';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import type { EventDetailsProps } from '@/api/types';
 
@@ -30,11 +34,15 @@ const NotFound = dynamic(
   },
 );
 
-export default function EventPageShell({
+function EventDetailsComponent({
   event,
 }: Readonly<{
   event: EventDetailsProps | null;
 }>) {
+  const startProgress = useProgress();
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <>
       {!event ? (
@@ -42,7 +50,16 @@ export default function EventPageShell({
           <NotFound />
         </AppShell.Main>
       ) : (
-        <Tabs defaultValue="info" keepMounted={false}>
+        <Tabs
+          defaultValue="info"
+          onChange={(value) => {
+            startTransition(async () => {
+              startProgress();
+              router.push(`${systemUrl}/events/${event?.id}/${value}`);
+            });
+          }}
+          value={pathname.split('/').pop()}
+        >
           <AppShell.Header>
             <Tabs.List grow h="100%" justify="stretch">
               <Tabs.Tab
@@ -76,8 +93,9 @@ export default function EventPageShell({
             </Tabs.List>
           </AppShell.Header>
 
+          {/* Tabs Content */}
           <AppShell.Main>
-            <Tabs.Panel keepMounted={true} value="info">
+            <Tabs.Panel value="info">
               <EventInfo {...event} />
             </Tabs.Panel>
 
@@ -94,3 +112,5 @@ export default function EventPageShell({
     </>
   );
 }
+
+export const EventDetailsShell = memo(EventDetailsComponent);

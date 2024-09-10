@@ -8,8 +8,11 @@ import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/utils/supabase/server';
 import { getEventsDetails } from '@/api/supabase/event';
 
-const EventPageShell = dynamic(
-  () => import('../_components/EventDetails/EventPageShell'),
+const EventDetailsShell = dynamic(
+  () =>
+    import('../../_components/EventDetails/EventDetailsShell').then(
+      (mod) => mod.EventDetailsShell,
+    ),
   {
     loading: () => <PageLoader />,
   },
@@ -69,5 +72,5 @@ export default async function EventPage({
 }) {
   const event = await cacheEventDetails(params.id);
 
-  return <EventPageShell event={event?.data ?? null} />;
+  return <EventDetailsShell event={event?.data ?? null} />;
 }
