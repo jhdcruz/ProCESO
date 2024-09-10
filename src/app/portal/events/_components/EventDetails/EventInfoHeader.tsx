@@ -50,8 +50,6 @@ function EventDetailsHeader({
     image_url: event.image_url ?? '',
   };
 
-  console.log(eventForm);
-
   return (
     <>
       <EventFormModal
