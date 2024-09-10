@@ -1,4 +1,7 @@
+'use client';
+
 import { memo, type ComponentPropsWithoutRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { Link } from 'react-transition-progress/next';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
 import classes from './NotFound.module.css';
@@ -14,6 +17,8 @@ const NotFoundSvg = memo((props: ComponentPropsWithoutRef<'svg'>) => (
 NotFoundSvg.displayName = 'NotFoundSvg';
 
 function NotFoundComponent() {
+  const router = useRouter();
+
   return (
     <Container className={classes.root}>
       <div className={classes.inner}>
@@ -31,8 +36,8 @@ function NotFoundComponent() {
             this is an error contact support.
           </Text>
           <Group justify="center">
-            <Button component={Link} href="/" prefetch={false} size="md">
-              Take me back to home page
+            <Button onClick={() => router.back()} size="md">
+              Back to home page
             </Button>
           </Group>
         </div>
