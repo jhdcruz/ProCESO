@@ -9,6 +9,7 @@ import { postEventCover } from '@/api/supabase/storage';
 import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
 import type { ApiResponse, EventResponse } from '@/api/types';
 import { EventFormProps } from './_components/Forms/EventFormModal';
+import { emailAssigned } from '@/trigger/email';
 
 /**
  * Revalidate path.
@@ -119,8 +120,8 @@ export async function submitEvent(
       supabase,
     });
 
-    // TODO: trigger email notification to assigned faculty
-    // await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
+    // send email reminders to assign faculties
+    await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
 
     if (!assignResponse.data) return assignResponse;
   }

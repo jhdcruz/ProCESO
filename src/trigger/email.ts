@@ -1,8 +1,8 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
 
 import { Resend } from 'resend';
-import { createBrowserClient } from '@/utils/supabase/client';
 import { EmailTemplate } from '@/trigger/components/Email';
+import { createBrowserClient } from '@supabase/ssr';
 
 /**
  * Send notification email to assigned faculties that
@@ -14,33 +14,33 @@ import { EmailTemplate } from '@/trigger/components/Email';
 export const emailAssigned = task({
   id: 'email-assigned',
   run: async (payload: { event: string; ids: string[] }) => {
-    // supabase client
     const supaUrl = await envvars.retrieve('SUPABASE_URL');
     const supaKey = await envvars.retrieve('SUPABASE_ANON_KEY');
     const supabase = createBrowserClient(supaUrl.value, supaKey.value);
 
     // fetch faculty emails
-    const { data: users, error } = await supabase
+    const usersQuery = supabase
       .from('users')
       .select('email')
       .in('id', payload.ids);
 
-    if (error) {
-      logger.error('Error fetching faculty emails', error);
-      return;
-    }
-
     // get event id
-    const { data: eventId } = await supabase
+    const eventQuery = supabase
       .from('events')
       .select('id')
-      .eq('name', payload.event)
+      .eq('title', payload.event)
       .limit(1)
-      .single();
+      .maybeSingle();
 
-    if (!eventId) {
-      logger.error('Error fetching event id');
-      return;
+    const [usersRes, eventRes] = await Promise.all([usersQuery, eventQuery]);
+
+    if (usersRes.error) {
+      logger.error('Error:', usersRes.error);
+      throw new Error('Error fetching faculty emails');
+    }
+    if (eventRes.error) {
+      logger.error('Error:', eventRes.error);
+      throw new Error('Error fetching event ID');
     }
 
     // get resend env
@@ -50,21 +50,21 @@ export const emailAssigned = task({
     // send email to assigned faculties
     const { data: resendResponse, error: resendError } =
       await resend.batch.send(
-        users.map((faculty) => ({
+        usersRes.data.map((faculty) => ({
           from: 'ProCESO <noreply@mail.deuz.tech>',
           to: faculty.email,
           subject: 'You have been delegated for an event: ' + payload.event,
           react: EmailTemplate({
-            eventId: eventId.id,
+            eventId: eventRes?.data?.id,
             eventName: payload.event,
           }),
         })),
       );
 
     if (resendError) {
-      logger.error('Error sending email to assigned faculties');
       // logger wont accept custom types
       logger.error(resendError.name + ' - ' + resendError.message);
+      throw new Error('Error sending email to assigned faculties');
     }
 
     return resendResponse;
