@@ -1,6 +1,7 @@
-import { memo, lazy, Suspense, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { memo, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -32,10 +33,15 @@ import { PageLoader } from '@/components/Loader/PageLoader';
 import { Enums } from '@/utils/supabase/types';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
-const FacultyList = lazy(() =>
-  import('./FacultyList').then((mod) => ({
-    default: mod.FacultyList,
-  })),
+const FacultyList = dynamic(
+  () =>
+    import('./FacultyList').then((mod) => ({
+      default: mod.FacultyList,
+    })),
+  {
+    loading: () => <PageLoader />,
+    ssr: false,
+  },
 );
 
 export interface EventFormProps {
@@ -303,14 +309,12 @@ export function EventFormModalComponent({
               mt="sm"
               {...form.getInputProps('handled_by', { type: 'checkbox' })}
             >
-              <Suspense fallback={<PageLoader />}>
-                {/*  Faculty Table Checkbox */}
-                <FacultyList
-                  defaultSelection={event?.handled_by}
-                  endDate={form.getValues().date_ending}
-                  startDate={form.getValues().date_starting}
-                />
-              </Suspense>
+              {/*  Faculty Table Checkbox */}
+              <FacultyList
+                defaultSelection={event?.handled_by}
+                endDate={form.getValues().date_ending}
+                startDate={form.getValues().date_starting}
+              />
             </Checkbox.Group>
           </Grid.Col>
         </Grid>

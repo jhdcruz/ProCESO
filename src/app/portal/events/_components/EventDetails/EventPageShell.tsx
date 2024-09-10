@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, lazy } from 'react';
+import dynamic from 'next/dynamic';
 import { AppShell, Tabs, rem } from '@mantine/core';
 import {
   IconBrandGoogleDrive,
@@ -10,16 +10,24 @@ import {
 import { PageLoader } from '@/components/Loader/PageLoader';
 import type { EventDetailsProps } from '@/api/types';
 
-const EventInfo = lazy(() =>
-  import('@/app/(system)/events/_components/EventDetails/EventInfo').then(
-    (mod) => ({ default: mod.EventInfo }),
-  ),
+const EventInfo = dynamic(
+  () =>
+    import('./EventInfo').then((mod) => ({
+      default: mod.EventInfo,
+    })),
+  {
+    loading: () => <PageLoader />,
+  },
 );
 
-const NotFound = lazy(() =>
-  import('@/components/Fallbacks/NotFound').then((mod) => ({
-    default: mod.NotFound,
-  })),
+const NotFound = dynamic(
+  () =>
+    import('@/components/Fallbacks/NotFound').then((mod) => ({
+      default: mod.NotFound,
+    })),
+  {
+    loading: () => <PageLoader />,
+  },
 );
 
 export default function EventPageShell({
@@ -28,7 +36,7 @@ export default function EventPageShell({
   event: EventDetailsProps | null;
 }>) {
   return (
-    <Suspense fallback={<PageLoader />}>
+    <>
       {!event ? (
         <AppShell.Main>
           <NotFound />
@@ -70,25 +78,19 @@ export default function EventPageShell({
 
           <AppShell.Main>
             <Tabs.Panel keepMounted={true} value="info">
-              <Suspense fallback={<PageLoader />}>
-                <EventInfo {...event} />
-              </Suspense>
+              <EventInfo {...event} />
             </Tabs.Panel>
 
             <Tabs.Panel value="analytics">
-              <Suspense fallback={<PageLoader />}>
-                Analytics, Insights, and Feedback Panel
-              </Suspense>
+              <>Analytics, Insights, and Feedback Panel</>
             </Tabs.Panel>
 
             <Tabs.Panel value="storage">
-              <Suspense fallback={<PageLoader />}>
-                Storage and files panel
-              </Suspense>
+              <>Storage and files panel</>
             </Tabs.Panel>
           </AppShell.Main>
         </Tabs>
       )}
-    </Suspense>
+    </>
   );
 }

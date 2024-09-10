@@ -1,5 +1,6 @@
-import { cache, lazy, Suspense } from 'react';
+import { cache } from 'react';
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
 import { metadata as defaultMetadata } from '@/app/layout';
@@ -7,8 +8,11 @@ import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/utils/supabase/server';
 import { getEventsDetails } from '@/api/supabase/event';
 
-const EventPageShell = lazy(
+const EventPageShell = dynamic(
   () => import('../_components/EventDetails/EventPageShell'),
+  {
+    loading: () => <PageLoader />,
+  },
 );
 
 // cache the event details to avoid duplicated
@@ -65,9 +69,5 @@ export default async function EventPage({
 }) {
   const event = await cacheEventDetails(params.id);
 
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <EventPageShell event={event?.data ?? null} />
-    </Suspense>
-  );
+  return <EventPageShell event={event?.data ?? null} />;
 }

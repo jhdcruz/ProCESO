@@ -18,7 +18,7 @@ export async function onEmailLogin(formData: FormData) {
   });
 
   if (data) {
-    return redirect('/');
+    return redirect('/portal');
   }
 
   if (error) {

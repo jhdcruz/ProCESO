@@ -21,18 +21,23 @@ export type NestedRoutes = {
 };
 
 /**
+ * All routes after authentication are prefixed with this.
+ */
+export const systemUrl = '/portal';
+
+/**
  * This is the main app url route.
  * All routes after authentication are prefixed with this.
  */
 export const sidebarRoutes: Routes = [
-  { label: 'Dashboard', icon: IconGauge, link: '/' },
+  { label: 'Dashboard', icon: IconGauge, link: systemUrl },
   {
     label: 'Events',
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: 'All Events', link: '/events' },
-      { label: 'Event Series', link: '/events/series' },
+      { label: 'All Events', link: `${systemUrl}/events` },
+      { label: 'Event Series', link: `${systemUrl}/series` },
     ],
   },
   {

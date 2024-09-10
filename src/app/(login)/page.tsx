@@ -1,15 +1,15 @@
-import { lazy, Suspense } from 'react';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { redirect } from 'next/navigation';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { getCurrentUser } from '@/api/supabase/user';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 import loginBg from '@/components/_assets/img/login-bg.webp';
 import '@/styles/jitbit.css';
 
-const LoginForm = lazy(() =>
-  import('@/app/login/_components/LoginForm').then((mod) => ({
+const LoginForm = dynamic(() =>
+  import('@/app/(login)/_components/LoginForm').then((mod) => ({
     default: mod.LoginForm,
   })),
 );
@@ -24,14 +24,12 @@ export default async function Login() {
   const user = await getCurrentUser();
 
   if (user?.data) {
-    redirect('/');
+    redirect('/portal');
   }
 
   return (
     <div className="z-10 min-h-screen max-w-full md:flex">
-      <Suspense>
-        <LoginForm />
-      </Suspense>
+      <LoginForm />
 
       {/* Image Wall */}
       <Image

@@ -1,7 +1,8 @@
 'use client';
 
-import { lazy, memo, Suspense, useState } from 'react';
+import { memo, useState } from 'react';
 import NextImage from 'next/image';
+import dynamic from 'next/dynamic';
 import {
   Avatar,
   Badge,
@@ -29,13 +30,28 @@ import {
 import { formatDateRange } from 'little-date';
 import dayjs from '@/utils/dayjs';
 import type { EventDetailsProps } from '@/api/types';
-import { EventFormModal, EventFormProps } from '../Forms/EventFormModal';
+import { EventFormProps } from '../Forms/EventFormModal';
 import { updateEventDescription } from '@/api/supabase/event';
 
-const RTEditor = lazy(() =>
-  import('@/components/RichTextEditor/RTEditor').then((mod) => ({
-    default: mod.RTEditor,
-  })),
+const RTEditor = dynamic(
+  () =>
+    import('@/components/RichTextEditor/RTEditor').then((mod) => ({
+      default: mod.RTEditor,
+    })),
+  {
+    loading: () => <Loader className="mx-auto my-5" size="md" type="dots" />,
+    ssr: false,
+  },
+);
+
+const EventFormModal = dynamic(
+  () =>
+    import('../Forms/EventFormModal').then((mod) => ({
+      default: mod.EventFormModal,
+    })),
+  {
+    ssr: false,
+  },
 );
 
 /**
@@ -141,16 +157,12 @@ function EventInfoContent({
   return (
     <Grid gutter="xl">
       <Grid.Col span={{ base: 12, sm: 'auto' }}>
-        <Suspense
-          fallback={<Loader className="mx-auto my-5" size="md" type="dots" />}
-        >
-          <RTEditor
-            content={content}
-            editable={editable}
-            loading={loading}
-            onSubmit={onSave}
-          />
-        </Suspense>
+        <RTEditor
+          content={content}
+          editable={editable}
+          loading={loading}
+          onSubmit={onSave}
+        />
       </Grid.Col>
 
       <Grid.Col span={{ base: 12, sm: 3 }}>

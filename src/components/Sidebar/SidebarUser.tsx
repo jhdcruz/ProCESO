@@ -32,7 +32,7 @@ const MenuItems = () => {
     const { error } = await supabase.auth.signOut();
 
     if (!error) {
-      router.replace('/login');
+      router.replace('/');
     }
   };
 
