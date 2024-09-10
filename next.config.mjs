@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontet.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
