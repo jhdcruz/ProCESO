@@ -87,7 +87,7 @@ export default function RootLayout({
         >
           <DatesProvider settings={{ timezone: 'UTC' }}>
             <ProgressBarProvider>
-              <ProgressBar className="absolute top-0 z-[500] h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
+              <ProgressBar className="fixed left-0 top-0 z-[500] h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
               <ModalsProvider>
                 <Notifications limit={8} />
                 {/* Actual content */}
