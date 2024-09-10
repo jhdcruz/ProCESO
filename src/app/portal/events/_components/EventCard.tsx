@@ -23,27 +23,26 @@ import classes from '@/styles/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (
   <Card className={classes.card} p="sm" radius="md" withBorder>
-    {data?.image_url && (
-      <Card.Section>
-        <Image
-          alt=""
-          component={NextImage}
-          fit="contain"
-          h="auto"
-          height={120}
-          src={data.image_url}
-          w="320"
-          width={320}
-        />
-      </Card.Section>
-    )}
+    <Card.Section component={Link} href={`events/${data.id}/info`}>
+      <Image
+        alt=""
+        className="object-scale-down"
+        component={NextImage}
+        fallbackSrc="/assets/no-image.png"
+        h="180"
+        height={180}
+        src={data.image_url}
+        w="320"
+        width={320}
+      />
+    </Card.Section>
 
     <Card.Section
       className={classes.section}
       mt={data?.image_url ? 'md' : 'xs'}
     >
       <Stack align="stretch" gap={0} justify="flex-start">
-        <Text component={Link} fw={500} fz="lg" href={`/events/${data.id}`}>
+        <Text fw={500} fz="lg">
           {data.title}
         </Text>
         {/* Date range badge label */}
