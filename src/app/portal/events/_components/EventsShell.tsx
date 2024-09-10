@@ -6,7 +6,7 @@ import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getEvents } from '@/api/supabase/event';
-import { getFacultyAssignedEvents } from '@/api/supabase/faculty-assignments';
+import { getAssignedEvents } from '@/api/supabase/faculty-assignments';
 import { EventResponse } from '@/api/types';
 import type { Tables } from '@/utils/supabase/types';
 import { PageLoader } from '@/components/Loader/PageLoader';
@@ -44,7 +44,7 @@ export default function EventsShell({
   const [past, setPast] = useState<EventResponse>();
 
   useEffect(() => {
-    const eventsAssigned = getFacultyAssignedEvents({
+    const eventsAssigned = getAssignedEvents({
       userId: user?.id ?? '',
       search: searchQuery,
     });

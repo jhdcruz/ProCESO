@@ -23,7 +23,11 @@ import classes from '@/styles/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (
   <Card className={classes.card} p="sm" radius="md" withBorder>
-    <Card.Section component={Link} href={`events/${data.id}/info`}>
+    <Card.Section
+      component={Link}
+      href={`events/${data.id}/info`}
+      prefetch={false}
+    >
       <Image
         alt=""
         className="object-scale-down"
@@ -80,6 +84,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
         <ActionIcon
           component={Link}
           href={`events/${data.id}/analytics`}
+          prefetch={false}
           size="lg"
           variant="default"
         >
@@ -91,6 +96,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
         <ActionIcon
           component={Link}
           href={`events/${data.id}/storage`}
+          prefetch={false}
           size="lg"
           variant="default"
         >

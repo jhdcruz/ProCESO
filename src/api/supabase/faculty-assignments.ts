@@ -9,7 +9,15 @@ import type {
 import { createBrowserClient } from '@/utils/supabase/client';
 import type { Tables } from '@/utils/supabase/types';
 
-export async function getFacultyAssignedEvents({
+/**
+ * Get events that are assigned to a faculty
+ * with matching userId.
+ *
+ * @param userId - The faculty id to filter.
+ * @param search - Similar/matching event title.
+ * @param supabase - The Supabase client to use.
+ */
+export async function getAssignedEvents({
   userId,
   search,
   supabase,
