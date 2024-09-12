@@ -51,7 +51,7 @@ export async function getAssignedEvents({
 
   // flatten result similar to `.from('events')`
   const assignedEvents: Tables<'events'>[] = events.flatMap(
-    (event) => event.events,
+    (event) => event?.events || [],
   );
 
   return {
