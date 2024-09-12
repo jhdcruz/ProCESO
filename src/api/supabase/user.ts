@@ -45,14 +45,22 @@ export async function getCurrentUser(
 /**
  * Get users with the role of 'Faculty'
  */
-export async function getFacultyUsers(filter?: string): Promise<UsersResponse> {
+export async function getFacultyUsers(
+  filter?: string,
+  dept?: string[],
+  pos?: string[],
+): Promise<UsersResponse> {
   const supabase = createBrowserClient();
 
-  const { data: users, error } = await supabase
-    .from('users')
-    .select()
-    .eq('role', 'faculty')
-    .or(`name.ilike.%${filter}%, email.ilike.%${filter}%`);
+  let query = supabase.from('users').select();
+
+  if (filter) {
+    query = query.or(`name.ilike.%${filter}%,email.ilike.%${filter}%`);
+  }
+  if (dept && dept.length) query = query.in('department', dept);
+  if (pos && pos.length) query = query.contains('other_roles', pos);
+
+  const { data: users, error } = await query.eq('role', 'faculty');
 
   if (error) {
     return {

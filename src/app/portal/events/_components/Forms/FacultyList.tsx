@@ -17,16 +17,18 @@ import {
   Text,
   rem,
   Loader,
+  Stack,
   Badge,
+  MultiSelect,
   TextInput,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { IconSearch } from '@tabler/icons-react';
 import { type DateValue } from '@mantine/dates';
 import type { Tables } from '@/utils/supabase/types';
 import { getFacultyUsers } from '@/api/supabase/user';
 import { getFacultyConflicts } from '@/api/supabase/faculty-assignments';
 import classes from '@/styles/Table.module.css';
-import { notifications } from '@mantine/notifications';
 
 export function FacultyListComponent({
   startDate,
@@ -42,6 +44,8 @@ export function FacultyListComponent({
   // search
   const [search, setSearch] = useState<string>('');
   const searchQuery = useDeferredValue(search);
+  const [dept, setDept] = useState<string[]>([]);
+  const [pos, setPos] = useState<string[]>([]);
 
   // data
   const [loading, setLoading] = useState<boolean>(true);
@@ -67,7 +71,7 @@ export function FacultyListComponent({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const facultyRequest = getFacultyUsers(searchQuery);
+      const facultyRequest = getFacultyUsers(searchQuery, dept, pos);
       const assignmentsRequest = getFacultyConflicts(startDate, endDate);
 
       const [facReq, assignReq] = await Promise.all([
@@ -100,8 +104,9 @@ export function FacultyListComponent({
         color: 'yellow',
       });
     });
-  }, [searchQuery, startDate, endDate]);
+  }, [searchQuery, startDate, endDate, dept, pos]);
 
+  // individual rows component
   const rows = faculty.map((item) => {
     const selected = selection.includes(item.id);
 
@@ -116,13 +121,61 @@ export function FacultyListComponent({
         </Table.Td>
         <Table.Td>
           <Group gap="sm">
-            <Avatar radius={26} size={26} src={item.avatar_url} />
-            <Text fw={500} size="sm">
-              {item.name}
-            </Text>
+            <Avatar
+              alt={item.name}
+              color="initials"
+              radius={26}
+              size={32}
+              src={item.avatar_url}
+            />
+            <Stack gap={0}>
+              <Text fw={500} size="sm" tt="capitalize">
+                {item.name}
+              </Text>
+              <Text c="dimmed" size="xs">
+                {item.email}
+              </Text>
+            </Stack>
           </Group>
         </Table.Td>
-        <Table.Td>{item.email}</Table.Td>
+        <Table.Td>
+          <Group gap={4}>
+            {/* Color-coded department */}
+            <Badge
+              color={(() => {
+                switch (item.department?.toLowerCase()) {
+                  case 'ccs':
+                    return 'blue';
+                  case 'cea':
+                    return 'red';
+                  case 'coa':
+                    return 'green';
+                  case 'cbe':
+                    return 'violet';
+                  default:
+                    return 'gray';
+                }
+              })()}
+              tt="uppercase"
+              variant="light"
+            >
+              {item.department}
+            </Badge>
+
+            {/* Display other roles, such as head rep. */}
+            {item.other_roles?.map((role) => (
+              <Badge
+                className="uppercase"
+                color="gray"
+                key={role}
+                tt="uppercase"
+                variant="light"
+              >
+                {role}
+              </Badge>
+            ))}
+          </Group>
+        </Table.Td>
         <Table.Td>
           <Suspense fallback={<Loader size="sm" type="dots" />}>
             {assignments.includes(item.id) ? (
@@ -151,9 +204,32 @@ export function FacultyListComponent({
         }
         mt="sm"
         onChange={handleSearchChange}
-        placeholder="Search by name or email."
+        placeholder="Search by name, email, dept, or committee."
         value={search}
       />
+
+      <Group gap="xs" grow mt="sm">
+        <MultiSelect
+          data={[
+            { value: 'ccs', label: 'CCS' },
+            { value: 'cea', label: 'CEA' },
+            { value: 'cbe', label: 'CBE' },
+            { value: 'coa', label: 'COA' },
+          ]}
+          onChange={setDept}
+          placeholder="Filter by dept."
+          value={dept}
+        />
+        <MultiSelect
+          data={[
+            { value: 'head', label: 'Head' },
+            { value: 'dean', label: 'Dean' },
+          ]}
+          onChange={setPos}
+          placeholder="Filter by position."
+          value={pos}
+        />
+      </Group>
 
       <Table verticalSpacing="sm">
         <Table.Thead className={classes.header}>
@@ -162,7 +238,7 @@ export function FacultyListComponent({
               {loading && <Loader size="sm" type="dots" />}
             </Table.Th>
             <Table.Th>Name</Table.Th>
-            <Table.Th>Email</Table.Th>
+            <Table.Th>Department</Table.Th>
             <Table.Th>Availability</Table.Th>
           </Table.Tr>
         </Table.Thead>
