@@ -55,7 +55,8 @@ function EventAccordionShell({
                   wrap="wrap"
                 >
                   {events?.data?.map((event: Tables<'events'>) => {
-                    return <EventCard key={event.id} {...event} />;
+                    // `type` prevents error on duplicate card with assigned events
+                    return <EventCard key={event?.id + type} {...event} />;
                   })}
                 </Flex>
               ) : (
