@@ -168,9 +168,11 @@ export type Database = {
           active: boolean
           avatar_url: string | null
           created_at: string
+          department: Database["public"]["Enums"]["dept_roles"] | null
           email: string
           id: string
           name: string
+          other_roles: Database["public"]["Enums"]["other_roles"][] | null
           role: Database["public"]["Enums"]["user_roles"] | null
           updated_at: string
         }
@@ -178,9 +180,11 @@ export type Database = {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
+          department?: Database["public"]["Enums"]["dept_roles"] | null
           email: string
           id?: string
           name: string
+          other_roles?: Database["public"]["Enums"]["other_roles"][] | null
           role?: Database["public"]["Enums"]["user_roles"] | null
           updated_at?: string
         }
@@ -188,9 +192,11 @@ export type Database = {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
+          department?: Database["public"]["Enums"]["dept_roles"] | null
           email?: string
           id?: string
           name?: string
+          other_roles?: Database["public"]["Enums"]["other_roles"][] | null
           role?: Database["public"]["Enums"]["user_roles"] | null
           updated_at?: string
         }
@@ -231,7 +237,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      dept_roles: "ccs" | "cea" | "cbe" | "coa"
       event_visibility: "Everyone" | "Faculty" | "Internal"
+      other_roles: "head"
       user_roles: "admin" | "staff" | "faculty" | "officer" | "student"
     }
     CompositeTypes: {
