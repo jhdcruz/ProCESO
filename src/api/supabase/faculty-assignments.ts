@@ -39,7 +39,7 @@ export async function getAssignedEvents({
     .order('date_starting', { referencedTable: 'events', ascending: false });
 
   if (search) query = query.ilike('events.title', `%${search}%`);
-  const { data: events, error } = await query.returns<Tables<'events'>[]>();
+  const { data: events, error } = await query;
 
   if (error) {
     return {
@@ -49,11 +49,16 @@ export async function getAssignedEvents({
     };
   }
 
+  // flatten result similar to `.from('events')`
+  const assignedEvents: Tables<'events'>[] = events.flatMap(
+    (event) => event.events,
+  );
+
   return {
     status: 0,
     title: 'Faculty users fetched',
     message: 'List of faculty users have been successfully fetched.',
-    data: events,
+    data: assignedEvents,
   };
 }
 
