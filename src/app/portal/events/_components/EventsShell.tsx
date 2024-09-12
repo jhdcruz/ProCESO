@@ -115,7 +115,6 @@ export default function EventsShell({
           ongoing={ongoing}
           past={past}
           role={user?.role ?? 'student'}
-          search={query}
           upcoming={upcoming}
         />
       </AppShell.Main>

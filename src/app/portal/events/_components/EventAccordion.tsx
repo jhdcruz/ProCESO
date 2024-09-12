@@ -1,6 +1,6 @@
 'use client';
 
-import { lazy, memo, Suspense, useState } from 'react';
+import { lazy, memo, Suspense } from 'react';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
 import type { EventResponse } from '@/api/types';
 import type { Tables, Enums } from '@/utils/supabase/types';
@@ -15,14 +15,12 @@ function EventAccordionShell({
   upcoming,
   past,
   role,
-  search,
 }: {
   assigned: EventResponse | undefined;
   ongoing: EventResponse | undefined;
   upcoming: EventResponse | undefined;
   past: EventResponse | undefined;
   role: Enums<'user_roles'>;
-  search?: string;
 }) {
   // Event Accordion Items Component
   const EventItems = ({
@@ -53,6 +51,7 @@ function EventAccordionShell({
                   direction="row"
                   gap="md"
                   justify="flex-start"
+                  key={type}
                   wrap="wrap"
                 >
                   {events?.data?.map((event: Tables<'events'>) => {
