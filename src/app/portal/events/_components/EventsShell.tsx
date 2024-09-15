@@ -78,7 +78,7 @@ export default function EventsShell({
       setPast(past);
     };
 
-    fetchEvents();
+    void fetchEvents();
   }, [searchQuery, user?.id]);
 
   return (

@@ -57,8 +57,8 @@ export async function getFacultyUsers(
   if (filter) {
     query = query.or(`name.ilike.%${filter}%,email.ilike.%${filter}%`);
   }
-  if (dept && dept.length) query = query.in('department', dept);
-  if (pos && pos.length) query = query.contains('other_roles', pos);
+  if (dept?.length) query = query.in('department', dept);
+  if (pos?.length) query = query.contains('other_roles', pos);
 
   const { data: users, error } = await query.eq('role', 'faculty');
 

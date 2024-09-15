@@ -57,7 +57,7 @@ function EventDetailsBody({
       setFaculties(response);
     };
 
-    fetchFaculties();
+    void fetchFaculties();
   }, [event?.id]);
 
   return (

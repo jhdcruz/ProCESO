@@ -97,7 +97,7 @@ export function FacultyListComponent({
       setLoading(false);
     };
 
-    fetchData().catch((error) => {
+    fetchData().catch((error: Record<string, unknown>) => {
       notifications.show({
         title: 'Unable to fetch series',
         message: error.message + ', You can set it later.',
