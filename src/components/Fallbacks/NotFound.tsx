@@ -2,7 +2,6 @@
 
 import { memo, type ComponentPropsWithoutRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Link } from 'react-transition-progress/next';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
 import classes from './NotFound.module.css';
 

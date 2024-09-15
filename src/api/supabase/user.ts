@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import { createBrowserClient } from '@/utils/supabase/client';
 import { createServerClient } from '@/utils/supabase/server';

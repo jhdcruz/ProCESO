@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API);
 
   // send email to assigned faculties
-  const { data: resendResponse, error: resendError } = await resend.batch.send(
+  const { error } = await resend.batch.send(
     emails.map((faculty: string) => ({
       from: 'Community Extension Services Office <noreply@mail.deuz.tech>',
       to: faculty,
@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
     })),
   );
 
-  if (resendError) {
-    return new Response(resendError.message, {
+  if (error) {
+    return new Response(error.message, {
       status: 400,
     });
   }
