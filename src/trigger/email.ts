@@ -1,7 +1,4 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
-
-import { Resend } from 'resend';
-import { EmailTemplate } from '@/trigger/components/Email';
 import { createBrowserClient } from '@supabase/ssr';
 
 /**
@@ -18,6 +15,7 @@ export const emailAssigned = task({
     const supaKey = await envvars.retrieve('SUPABASE_ANON_KEY');
     const supabase = createBrowserClient(supaUrl.value, supaKey.value);
 
+    logger.info('Getting users and event information...');
     // fetch faculty emails
     const usersQuery = supabase
       .from('users')
@@ -27,10 +25,10 @@ export const emailAssigned = task({
     // get event id
     const eventQuery = supabase
       .from('events')
-      .select('id')
+      .select()
       .eq('title', payload.event)
       .limit(1)
-      .maybeSingle();
+      .single();
 
     const [usersRes, eventRes] = await Promise.all([usersQuery, eventQuery]);
 
@@ -43,30 +41,24 @@ export const emailAssigned = task({
       throw new Error('Error fetching event ID');
     }
 
-    // get resend env
-    const resendApi = await envvars.retrieve('RESEND_API');
-    const resend = new Resend(resendApi.value);
+    const appUrl = await envvars.retrieve('APP_URL');
 
-    // send email to assigned faculties
-    const { data: resendResponse, error: resendError } =
-      await resend.batch.send(
-        usersRes.data.map((faculty) => ({
-          from: 'ProCESO <noreply@mail.deuz.tech>',
-          to: faculty.email,
-          subject: 'You have been delegated for an event: ' + payload.event,
-          react: EmailTemplate({
-            eventId: eventRes?.data?.id,
-            eventName: payload.event,
-          }),
-        })),
-      );
+    // REFACTOR: Should send emails here instead of the backend
+    //           to avoid additional backend requests.
+    //           Currently, using resend API here with react as template
+    //           throws an error of `Objects are not valid as a React child`.
+    const response = await fetch(appUrl.value + '/api/email/assigned', {
+      method: 'POST',
+      body: JSON.stringify({
+        event: eventRes?.data,
+        emails: usersRes?.data?.map((faculty) => faculty.email) ?? [],
+      }),
+    });
 
-    if (resendError) {
-      // logger wont accept custom types
-      logger.error(resendError.name + ' - ' + resendError.message);
-      throw new Error('Error sending email to assigned faculties');
+    if (!response.ok) {
+      throw new Error(await response.json());
     }
 
-    return resendResponse;
+    return response;
   },
 });
