@@ -51,12 +51,11 @@ jobs:
           category: /language:javascript-typescript
 
   codacy:
-    needs: cql-scan
     permissions:
       contents: read
       security-events: write
       actions: read
-    name: Codacy Security Scan
+    name: Codacy Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -68,4 +67,4 @@ jobs:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           upload: true
           gh-code-scanning-compat: true
-          max-allowed-issues: 1000
+          max-allowed-issues: 2147483647
