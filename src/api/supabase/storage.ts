@@ -1,5 +1,7 @@
 import type { FileWithPath } from '@mantine/dropzone';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ApiResponse } from '../types';
+import { createBrowserClient } from '@/utils/supabase/client';
 
 /**
  * Upload file to storage and link public url to event.
@@ -17,8 +19,10 @@ export async function postEventCover({
 }: {
   file: FileWithPath;
   eventId: string;
-  supabase?: any;
+  supabase?: SupabaseClient;
 }): Promise<ApiResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
   // upload file
   const { error } = await supabase.storage
     .from('event_covers')

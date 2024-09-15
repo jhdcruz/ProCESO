@@ -1,15 +1,16 @@
+import type { FC } from 'react';
 import {
   IconCalendarStats,
   IconFileAnalytics,
   IconGauge,
   IconNotes,
   IconPresentationAnalytics,
+  type IconProps,
 } from '@tabler/icons-react';
-import type { FC } from 'react';
 
 export type Routes = {
   label: string;
-  icon: FC;
+  icon: FC<IconProps>;
   link?: string;
   initiallyOpened?: boolean;
   links?: NestedRoutes[];

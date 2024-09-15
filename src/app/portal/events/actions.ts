@@ -19,7 +19,7 @@ import { emailAssigned } from '@/trigger/email';
  * @params pathname - The path to revalidate.
  */
 export async function revalidate(pathname: string) {
-  return revalidatePath(pathname);
+  revalidatePath(pathname);
 }
 
 /**
@@ -38,7 +38,6 @@ export async function revalidate(pathname: string) {
 export async function submitEvent(
   event: EventFormProps,
   existingId?: string,
-  pathname?: string,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = createServerClient(cookieStore);

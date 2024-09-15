@@ -33,7 +33,8 @@ export async function onEmailLogin(formData: FormData) {
  * Query all the services and check if they are up.
  */
 export async function checkHealth() {
-  const url = process.env.SUPABASE_URL!!;
+  const url = process.env.SUPABASE_URL;
+  if (!url) throw new Error('SUPABASE_URL is not set');
 
   const db = await fetch(url, {
     method: 'HEAD',

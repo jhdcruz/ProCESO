@@ -3,11 +3,11 @@
 import { type FC, useState } from 'react';
 import { Link } from 'react-transition-progress/next';
 import { Box, Collapse, Group, ThemeIcon, rem } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, type IconProps } from '@tabler/icons-react';
 import classes from './LinksGroup.module.css';
 
 interface LinksGroupProps {
-  icon: FC<any>;
+  icon: FC<IconProps>;
   label: string;
   link?: string;
   initiallyOpened?: boolean;
@@ -22,7 +22,7 @@ export function LinksGroup({
   links,
 }: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
-  const [opened, setOpened] = useState(initiallyOpened || false);
+  const [opened, setOpened] = useState(initiallyOpened ?? false);
 
   // sub links component
   const items = (hasLinks ? links : []).map((link) => (

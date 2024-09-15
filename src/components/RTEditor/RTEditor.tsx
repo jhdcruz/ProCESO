@@ -49,7 +49,7 @@ function RichText({
         TextAlign.configure({ types: ['heading', 'paragraph'] }),
       ],
       content: bodyContent,
-      editable: editable ?? false,
+      editable: editable,
       immediatelyRender: false,
     },
     [content, editable],
