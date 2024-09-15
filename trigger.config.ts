@@ -13,4 +13,5 @@ export const config: TriggerConfig = {
       randomize: true,
     },
   },
+  additionalPackages: ['husky'],
 };
