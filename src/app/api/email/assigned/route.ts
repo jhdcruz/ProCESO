@@ -2,8 +2,6 @@ import AssignedEmail from '@/emails/AssignedEmail';
 import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API);
-
 /**
  * Email assigned faculties that they are assigned for an event.
  *
@@ -11,6 +9,7 @@ const resend = new Resend(process.env.RESEND_API);
  */
 export async function POST(req: NextRequest) {
   const { event, emails } = await req.json();
+  const resend = new Resend(process.env.RESEND_API);
 
   // send email to assigned faculties
   const { data: resendResponse, error: resendError } = await resend.batch.send(
