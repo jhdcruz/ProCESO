@@ -39,7 +39,7 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
     // prevents query on initial render
     if (seriesQuery) {
       // noinspection JSIgnoredPromiseFromCall
-      fetchSeries();
+      void fetchSeries();
     }
   }, [seriesQuery]);
 
