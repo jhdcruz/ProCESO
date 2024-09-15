@@ -5,6 +5,15 @@ const nextConfig = {
     instrumentationHook: true,
     reactCompiler: true,
     ppr: true,
+    optimizePackageImports: [
+      '@mantine/core',
+      '@mantine/hooks',
+      '@mantine/charts',
+      '@react-email/components',
+      'framer-motion',
+      'dayjs',
+      'recharts',
+    ],
   },
   images: {
     remotePatterns: [
