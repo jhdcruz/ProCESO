@@ -16,6 +16,7 @@
     "dev:tr": "bunx trigger.dev@beta dev",
     "build": "next build",
     "build:em": "email build -d ./src/emails -p bun",
+    "deploy:tr": "bunx trigger.dev@beta deploy",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
     "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/utils/supabase/types.ts",
