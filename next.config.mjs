@@ -10,6 +10,7 @@ const nextConfig = {
       '@mantine/hooks',
       '@mantine/charts',
       '@react-email/components',
+      '@tabler/icons-react',
       'framer-motion',
       'dayjs',
       'recharts',
@@ -25,7 +26,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.googleusercontet.com',
+        hostname: '*.googleusercontent.com',
         port: '',
         pathname: '/**',
       },
