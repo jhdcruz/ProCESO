@@ -69,7 +69,7 @@
     "autoprefixer": "10.4.20",
     "babel-plugin-react-compiler": "0.0.0-experimental-de2cfda-20240912",
     "eslint": "8.57.1",
-    "eslint-config-next": "14.2.11",
+    "eslint-config-next": "14.2.12",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
     "husky": "9.1.6",
