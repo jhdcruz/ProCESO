@@ -83,7 +83,7 @@ export default function EventsShell({
 
   return (
     <AppShell.Main>
-      <Group className="content-center" mb="md" px="md">
+      <Group className="content-center" mb="md">
         {/* New Event */}
         <Button
           className="drop-shadow-sm"
