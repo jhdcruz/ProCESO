@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@portal/": ["./src/app/portal/*"]
+      "@portal/*": ["./src/app/portal/*"]
     },
     "target": "ES2017"
   },
