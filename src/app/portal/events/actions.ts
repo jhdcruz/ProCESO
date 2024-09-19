@@ -10,7 +10,7 @@ import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import type ApiResponse from '@/utils/response';
 import { EventFormProps } from './_components/Forms/EventFormModal';
-import { emailAssigned } from '@/trigger/email';
+import { emailAssigned } from '@/trigger/email-assigned';
 
 /**
  * Revalidate path.
