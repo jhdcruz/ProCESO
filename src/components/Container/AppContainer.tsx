@@ -18,8 +18,6 @@ export function AppContainer({
 }>) {
   return (
     <AppShell
-      footer={{ height: 50 }}
-      header={{ height: 54 }}
       layout="alt"
       navbar={{
         width: 260,

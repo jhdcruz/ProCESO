@@ -82,42 +82,38 @@ export default function EventsShell({
   }, [searchQuery, user?.id]);
 
   return (
-    <>
-      <AppShell.Header>
-        <Group className="content-center" h="100%" px="md">
-          {/* New Event */}
-          <Button
-            className="drop-shadow-sm"
-            leftSection={<IconCalendarPlus size={16} />}
-            onClick={open}
-          >
-            Schedule new event
-          </Button>
-          <EventFormModal close={close} opened={opened} />
+    <AppShell.Main>
+      <Group className="content-center" mb="md" px="md">
+        {/* New Event */}
+        <Button
+          className="drop-shadow-sm"
+          leftSection={<IconCalendarPlus size={16} />}
+          onClick={open}
+        >
+          Schedule new event
+        </Button>
+        <EventFormModal close={close} opened={opened} />
 
-          {/*  Event search */}
-          <TextInput
-            leftSection={
-              <IconSearch
-                stroke={1.5}
-                style={{ width: rem(16), height: rem(16) }}
-              />
-            }
-            onChange={(e) => setQuery(e.currentTarget.value)}
-            placeholder="Search for events"
-          />
-        </Group>
-      </AppShell.Header>
-
-      <AppShell.Main>
-        <EventAccordion
-          assigned={assigned}
-          ongoing={ongoing}
-          past={past}
-          role={user?.role ?? 'student'}
-          upcoming={upcoming}
+        {/*  Event search */}
+        <TextInput
+          leftSection={
+            <IconSearch
+              stroke={1.5}
+              style={{ width: rem(16), height: rem(16) }}
+            />
+          }
+          onChange={(e) => setQuery(e.currentTarget.value)}
+          placeholder="Search for events"
         />
-      </AppShell.Main>
-    </>
+      </Group>
+
+      <EventAccordion
+        assigned={assigned}
+        ongoing={ongoing}
+        past={past}
+        role={user?.role ?? 'student'}
+        upcoming={upcoming}
+      />
+    </AppShell.Main>
   );
 }
