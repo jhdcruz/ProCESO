@@ -40,4 +40,4 @@ jobs:
         env:
           TRIGGER_ACCESS_TOKEN: ${{ secrets.TRIGGER_ACCESS_TOKEN }}
         run: |
-          bunx trigger.dev@beta deploy
+          bunx trigger.dev@latest deploy
