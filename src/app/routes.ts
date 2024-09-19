@@ -2,7 +2,6 @@ import type { FC } from 'react';
 import {
   IconCalendarStats,
   IconFileAnalytics,
-  IconGauge,
   IconNotes,
   IconPresentationAnalytics,
   type IconProps,
@@ -31,7 +30,7 @@ export const systemUrl = '/portal';
  * All routes after authentication are prefixed with this.
  */
 export const sidebarRoutes: Routes = [
-  { label: 'Dashboard', icon: IconGauge, link: systemUrl },
+  { label: 'Dashboard', icon: IconCalendarStats, link: systemUrl },
   {
     label: 'Events',
     icon: IconNotes,
@@ -40,11 +39,6 @@ export const sidebarRoutes: Routes = [
       { label: 'All Events', link: `${systemUrl}/events` },
       { label: 'Event Series', link: `${systemUrl}/series` },
     ],
-  },
-  {
-    label: 'Calendar',
-    icon: IconCalendarStats,
-    link: '/calendar',
   },
   {
     label: 'Analytics',
