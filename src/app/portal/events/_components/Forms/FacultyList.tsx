@@ -25,9 +25,9 @@ import {
 import { notifications } from '@mantine/notifications';
 import { IconSearch } from '@tabler/icons-react';
 import { type DateValue } from '@mantine/dates';
-import type { Tables } from '@/utils/supabase/types';
-import { getFacultyUsers } from '@/api/supabase/user';
-import { getFacultyConflicts } from '@/api/supabase/faculty-assignments';
+import type { Tables } from '@/libs/supabase/_database';
+import { getFacultyUsers } from '@/libs/supabase/api/user';
+import { getFacultyConflicts } from '@/libs/supabase/api/faculty-assignments';
 import classes from '@/styles/Table.module.css';
 
 export function FacultyListComponent({

@@ -1,8 +1,8 @@
 'use server';
 
-import { createServerClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { createServerClient } from '@/libs/supabase/server';
 
 /**
  * Login to supabase auth using email login.

@@ -1,8 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import type { EventResponse, EventDetailsResponse } from '@/api/types';
-import type { Tables, TablesInsert } from '@/utils/supabase/types';
-import { createBrowserClient } from '@/utils/supabase/client';
+import { createBrowserClient } from '../client';
+import type { Tables, TablesInsert } from '../_database';
 import { getAssignedFaculties } from './faculty-assignments';
+import type { EventResponse, EventDetailsResponse } from './_response';
 
 /**
  * Get events based on filters and/or limit, if provided.

@@ -1,7 +1,7 @@
 import { memo, Suspense } from 'react';
 import Image from 'next/image';
 import { Group, ScrollArea } from '@mantine/core';
-import type { Tables } from '@/utils/supabase/types';
+import type { Tables } from '@/libs/supabase/_database';
 
 import type { Routes } from '@/app/routes';
 import { SidebarUser } from '@/components/Sidebar/SidebarUser';

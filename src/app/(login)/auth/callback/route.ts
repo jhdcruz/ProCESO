@@ -1,6 +1,6 @@
-import { createServerClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { createServerClient } from '@/libs/supabase/server';
 
 // Reference: https://supabase.com/docs/guides/auth/social-login/auth-google
 export async function GET(request: Request) {

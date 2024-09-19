@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { metadata as defaultMetadata } from '@/app/layout';
 import EventsShell from './_components/EventsShell';
-import { getCurrentUser } from '@/api/supabase/user';
+import { getCurrentUser } from '@/libs/supabase/api/user';
 
 export const metadata: Metadata = {
   title: 'Events - ' + defaultMetadata.title,

@@ -1,15 +1,5 @@
-import { Tables } from '@/utils/supabase/types';
-
-/**
- * Response which can then be used to display notifications.
- */
-export interface ApiResponse {
-  // 0 for success, 1 for warning, 2 for error
-  status: 0 | 1 | 2;
-  title: string;
-  message: string;
-  data?: any;
-}
+import type ApiResponse from '@/utils/response';
+import type { Tables } from '../_database';
 
 export interface UserResponse extends ApiResponse {
   data?: Tables<'users'>;

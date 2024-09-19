@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import { PageLoader } from '@/components/Loader/PageLoader';
-import type { EventDetailsProps } from '@/api/types';
+import type { EventDetailsProps } from '@/libs/supabase/api/_response';
 
 const EventInfo = dynamic(
   () =>

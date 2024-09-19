@@ -5,9 +5,9 @@ import type {
   FacultyAssignmentsResponse,
   EventFacultiesResponse,
   FacultyConflictsResponse,
-} from '../types';
-import { createBrowserClient } from '@/utils/supabase/client';
-import type { Tables } from '@/utils/supabase/types';
+} from './_response';
+import { createBrowserClient } from '@/libs/supabase/client';
+import type { Tables } from '@/libs/supabase/_database';
 
 /**
  * Get events that are assigned to a faculty

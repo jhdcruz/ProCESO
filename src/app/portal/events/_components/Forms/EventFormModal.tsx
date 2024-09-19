@@ -28,9 +28,9 @@ import {
 
 import { revalidate, submitEvent } from '../../actions';
 import { SeriesInput } from './SeriesInput';
-import type { EventResponse } from '@/api/types';
+import type { EventResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
-import { Enums } from '@/utils/supabase/types';
+import { Enums } from '@/libs/supabase/_database';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
 const FacultyList = dynamic(

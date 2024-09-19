@@ -4,7 +4,7 @@ import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
 import { sidebarRoutes } from '@/app/routes';
 import Sidebar from '@/components/Sidebar/Sidebar';
-import type { Tables } from '@/utils/supabase/types';
+import type { Tables } from '@/libs/supabase/_database';
 
 /**
  * The main layout for the application.

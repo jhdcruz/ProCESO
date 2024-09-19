@@ -2,8 +2,8 @@
 
 import { lazy, memo, Suspense } from 'react';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
-import type { EventResponse } from '@/api/types';
-import type { Tables, Enums } from '@/utils/supabase/types';
+import type { EventResponse } from '@/libs/supabase/api/_response';
+import type { Tables, Enums } from '@/libs/supabase/_database';
 
 const EventCard = lazy(() =>
   import('./EventCard').then((mod) => ({ default: mod.EventCard })),

@@ -13,8 +13,8 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
-import { createBrowserClient } from '@/utils/supabase/client';
-import type { Tables } from '@/utils/supabase/types';
+import { createBrowserClient } from '@/libs/supabase/client';
+import type { Tables } from '@/libs/supabase/_database';
 import classes from './SidebarUser.module.css';
 
 // Item contents of the user button dropdown in sidebar menu

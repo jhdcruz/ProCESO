@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
-import { getEvents } from '@/api/supabase/event';
-import { getAssignedEvents } from '@/api/supabase/faculty-assignments';
-import { EventResponse } from '@/api/types';
-import type { Tables } from '@/utils/supabase/types';
+import { getEvents } from '@/libs/supabase/api/event';
+import { getAssignedEvents } from '@/libs/supabase/api/faculty-assignments';
+import { EventResponse } from '@/libs/supabase/api/_response';
+import type { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 
 const EventAccordion = dynamic(

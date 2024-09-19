@@ -5,8 +5,8 @@ import { cookies } from 'next/headers';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { PageLoader } from '@/components/Loader/PageLoader';
-import { createServerClient } from '@/utils/supabase/server';
-import { getEventsDetails } from '@/api/supabase/event';
+import { createServerClient } from '@/libs/supabase/server';
+import { getEventsDetails } from '@/libs/supabase/api/event';
 
 const EventDetailsShell = dynamic(
   () =>

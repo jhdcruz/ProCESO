@@ -10,8 +10,8 @@ import {
   IconEditOff,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
-import { EventDetailsProps } from '@/api/types';
-import dayjs from '@/utils/dayjs';
+import { EventDetailsProps } from '@/libs/supabase/api/_response';
+import dayjs from '@/libs/dayjs';
 import { EventFormProps } from '../Forms/EventFormModal';
 
 const EventFormModal = dynamic(

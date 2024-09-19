@@ -3,8 +3,8 @@
 import { memo, useState, useDeferredValue, useEffect } from 'react';
 import { Autocomplete, type AutocompleteProps, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { getFilteredSeries } from '@/api/supabase/series';
-import type { Tables } from '@/utils/supabase/types';
+import { getFilteredSeries } from '@/libs/supabase/api/series';
+import type { Tables } from '@/libs/supabase/_database';
 
 /**
  * Event series autocomplete input

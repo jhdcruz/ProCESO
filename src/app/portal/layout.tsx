@@ -4,7 +4,7 @@ import { redirect, RedirectType } from 'next/navigation';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { AppContainer } from '@/components/Container/AppContainer';
-import { getCurrentUser } from '@/api/supabase/user';
+import { getCurrentUser } from '@/libs/supabase/api/user';
 import '@mantine/dropzone/styles.css';
 
 export const metadata: Metadata = {

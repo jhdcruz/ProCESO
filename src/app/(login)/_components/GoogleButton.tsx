@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@mantine/core';
-import { createBrowserClient } from '@/utils/supabase/client';
+import { createBrowserClient } from '@/libs/supabase/client';
 import { siteUrl } from '@/utils/url';
 
 const GoogleIcon = () => (

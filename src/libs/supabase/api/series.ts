@@ -1,5 +1,5 @@
-import { createBrowserClient } from '@/utils/supabase/client';
-import type { SeriesResponse } from '@/api/types';
+import { createBrowserClient } from '@/libs/supabase/client';
+import type { SeriesResponse } from '@/libs/supabase/api/_response';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**

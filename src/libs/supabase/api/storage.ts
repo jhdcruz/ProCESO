@@ -1,7 +1,7 @@
+import { createBrowserClient } from '../client';
 import type { FileWithPath } from '@mantine/dropzone';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ApiResponse } from '../types';
-import { createBrowserClient } from '@/utils/supabase/client';
+import type ApiResponse from '@/utils/response';
 
 /**
  * Upload file to storage and link public url to event.

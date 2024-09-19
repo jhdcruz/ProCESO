@@ -1,7 +1,7 @@
 import { type SupabaseClient } from '@supabase/supabase-js';
-import { createBrowserClient } from '@/utils/supabase/client';
-import { createServerClient } from '@/utils/supabase/server';
-import type { UserResponse, UsersResponse } from '../types';
+import { createBrowserClient } from '@/libs/supabase/client';
+import { createServerClient } from '@/libs/supabase/server';
+import type { UserResponse, UsersResponse } from './_response';
 
 /**
  * Get currently logged-in user from session.

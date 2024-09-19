@@ -1,2 +1,1 @@
-/src/utils/supabase/types.ts
-
+./src/libs/supabase/_database.ts

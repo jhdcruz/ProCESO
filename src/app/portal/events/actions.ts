@@ -2,12 +2,13 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
-import { createServerClient } from '@/utils/supabase/server';
-import { postEvent, updateEvent } from '@/api/supabase/event';
-import { postSeries } from '@/api/supabase/series';
-import { postEventCover } from '@/api/supabase/storage';
-import { postFacultyAssignment } from '@/api/supabase/faculty-assignments';
-import type { ApiResponse, EventResponse } from '@/api/types';
+import { createServerClient } from '@/libs/supabase/server';
+import { postEvent, updateEvent } from '@/libs/supabase/api/event';
+import { postSeries } from '@/libs/supabase/api/series';
+import { postEventCover } from '@/libs/supabase/api/storage';
+import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
+import type { EventResponse } from '@/libs/supabase/api/_response';
+import type ApiResponse from '@/utils/response';
 import { EventFormProps } from './_components/Forms/EventFormModal';
 import { emailAssigned } from '@/trigger/email';
 

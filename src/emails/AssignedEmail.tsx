@@ -11,7 +11,7 @@ import {
   Html,
   Head,
 } from '@react-email/components';
-import type { Tables } from '@/utils/supabase/types';
+import type { Tables } from '@/libs/supabase/_database';
 import { formatDateRange } from 'little-date';
 import '@mantine/core/styles.css';
 import config from '../../tailwind.config';

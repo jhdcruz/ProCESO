@@ -4,8 +4,8 @@ import { memo, lazy, Suspense, useState } from 'react';
 import { Container, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconAlertTriangle } from '@tabler/icons-react';
-import type { EventDetailsProps } from '@/api/types';
-import { updateEventDescription } from '@/api/supabase/event';
+import type { EventDetailsProps } from '@/libs/supabase/api/_response';
+import { updateEventDescription } from '@/libs/supabase/api/event';
 import { PageLoader } from '@/components/Loader/PageLoader';
 
 const EventInfoHeader = lazy(() =>

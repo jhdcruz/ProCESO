@@ -3,7 +3,7 @@ import {
   type CookieOptions,
   createServerClient as supaServerClient,
 } from '@supabase/ssr';
-import { Database } from './types';
+import { Database } from './_database';
 
 export const createServerClient = (cookieStore: ReturnType<typeof cookies>) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {

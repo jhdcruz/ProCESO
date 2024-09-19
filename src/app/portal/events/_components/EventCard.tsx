@@ -18,7 +18,7 @@ import {
   IconTimeline,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
-import { Tables } from '@/utils/supabase/types';
+import { Tables } from '@/libs/supabase/_database';
 import classes from '@/styles/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (

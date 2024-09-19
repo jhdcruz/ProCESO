@@ -1,9 +1,12 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Grid, Group, Avatar, Text, Loader } from '@mantine/core';
-import { EventDetailsProps, EventFacultiesResponse } from '@/api/types';
-import dayjs from '@/utils/dayjs';
-import { getAssignedFaculties } from '@/api/supabase/faculty-assignments';
+import {
+  EventDetailsProps,
+  EventFacultiesResponse,
+} from '@/libs/supabase/api/_response';
+import dayjs from '@/libs/dayjs';
+import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { notifications } from '@mantine/notifications';
 
 const RTEditor = dynamic(
