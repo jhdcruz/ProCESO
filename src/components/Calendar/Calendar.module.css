@@ -1,0 +1,76 @@
+/*
+ * Some styles cannot be overriden using CSS variables,
+ * for specific classes, override in `@styles/full-calendar.css`.
+ */
+
+.root {
+  --fc-small-font-size: var(--mantine-font-size-sm);
+  --fc-page-bg-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  --fc-neutral-bg-color: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-8)
+  );
+  --fc-neutral-text-color: var(--mantine-color-bright);
+  --fc-border-color: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
+
+  /* Buttons */
+  --fc-button-text-color: light-dark('#000', var(--mantine-color-dark-0));
+  --fc-button-bg-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+  --fc-button-border-color: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
+  --fc-button-hover-bg-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-7)
+  );
+  --fc-button-hover-border-color: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
+  --fc-button-active-bg-color: light-dark(
+    var(--mantine-color-gray-2),
+    var(--mantine-color-dark-7)
+  );
+  --fc-button-active-border-color: light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
+
+  /* Events */
+  --fc-event-bg-color: light-dark(
+    rgba(243, 215, 133, 0.8),
+    rgba(179, 151, 67, 0.8)
+  );
+  --fc-event-border-color: #ffe69b;
+  --fc-event-text-color: var(--mantine-color-bright);
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+  --fc-bg-event-opacity: 0.4;
+
+  /* Event List */
+  --fc-list-event-hover-bg-color: light-dark(
+    var(--mantine-color-gray-0),
+    var(--mantine-color-dark-8)
+  );
+
+  --fc-more-link-bg-color: rgba(199, 180, 123, 0.8);
+  --fc-more-link-text-color: var(--mantine-color-bright);
+
+  --fc-event-resizer-thickness: 8px;
+  --fc-event-resizer-dot-total-width: 8px;
+  --fc-event-resizer-dot-border-width: 1px;
+
+  --fc-non-business-color: rgba(215, 215, 215, 0.3);
+  --fc-highlight-color: rgba(243, 224, 114, 0.5);
+  --fc-today-bg-color: rgba(255, 220, 40, 0.15);
+  --fc-now-indicator-color: #ffc51c;
+}

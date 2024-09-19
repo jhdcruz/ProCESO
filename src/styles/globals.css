@@ -2,6 +2,7 @@
 @import url('@mantine/dates/styles.layer.css');
 @import url('@mantine/dropzone/styles.layer.css');
 @import url('@mantine/notifications/styles.layer.css');
+@import url('@mantine/charts/styles.layer.css');
 
 @layer base, mantine, tailwind;
 

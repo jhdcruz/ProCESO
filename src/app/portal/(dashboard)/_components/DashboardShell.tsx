@@ -1,15 +1,21 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import { AppShell } from '@mantine/core';
+import { PageLoader } from '@/components/Loader/PageLoader';
 
-export default function DashboardShell({
-  children,
-}: Readonly<{ children: ReactNode }>) {
+const Calendar = dynamic(
+  () => import('@/components/Calendar/Calendar').then((mod) => mod.Calendar),
+  {
+    loading: () => <PageLoader />,
+    ssr: false,
+  },
+);
+
+export default function DashboardShell() {
   return (
     <AppShell.Main>
-      Content
-      {children}
+      <Calendar />
     </AppShell.Main>
   );
 }

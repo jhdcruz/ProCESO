@@ -82,6 +82,46 @@ export async function getEvents({
 }
 
 /**
+ * Get events withing a specific date range.
+ *
+ * @param start - The starting date of the range.
+ * @param end - The ending date of the range.
+ * @param supabase - Supabase client instance.
+ */
+export async function getEventsInRange({
+  start,
+  end,
+  supabase,
+}: {
+  start: string;
+  end: string;
+  supabase?: SupabaseClient;
+}): Promise<EventResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data: events, error } = await supabase
+    .from('events')
+    .select()
+    .gte('date_starting', start)
+    .lte('date_ending', end);
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to fetch events within specified range',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Events within range fetched',
+    message: 'Events have been successfully fetched.',
+    data: events,
+  };
+}
+
+/**
  * Get event details based on the event ID.
  *
  * @param eventId - The event ID to fetch details for.

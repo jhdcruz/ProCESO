@@ -1,0 +1,7 @@
+/* only applies on daygrid, and not all day to avoid text contrast problems */
+.fc-daygrid-event > .fc-event-title:not(.fc-sticky) {
+  color: var(--mantine-color-text) !important;
+}
+.fc-daygrid-event > .fc-event-time:not(.fc-event-title.fc-sticky) {
+  color: var(--mantine-color-brand-text) !important;
+}
