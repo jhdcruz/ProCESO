@@ -204,7 +204,7 @@ export function FacultyListComponent({
         }
         mt="sm"
         onChange={handleSearchChange}
-        placeholder="Search by name, email, dept, or committee."
+        placeholder="Search by name or email"
         value={search}
       />
 
