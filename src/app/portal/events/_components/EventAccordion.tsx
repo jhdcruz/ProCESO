@@ -75,6 +75,7 @@ function EventAccordionShell({
       defaultValue={['assigned', 'ongoing', 'upcoming']}
       multiple={true}
       transitionDuration={200}
+      variant="separated"
     >
       <EventItems
         events={assigned}

@@ -22,7 +22,7 @@ import { Tables } from '@/libs/supabase/_database';
 import classes from '@/styles/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (
-  <Card className={classes.card} p="sm" radius="md" withBorder>
+  <Card className={classes.card} p="sm" radius="md" shadow="sm" withBorder>
     <Card.Section
       component={Link}
       href={`events/${data.id}/info`}

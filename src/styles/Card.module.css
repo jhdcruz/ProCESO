@@ -1,9 +1,5 @@
 .card {
   width: rem(320px);
-  background-color: light-dark(
-    var(--mantine-color-white),
-    var(--mantine-color-dark-7)
-  );
 }
 
 .section {
