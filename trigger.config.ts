@@ -1,4 +1,5 @@
 import type { TriggerConfig } from '@trigger.dev/sdk/v3';
+import { additionalPackages } from '@trigger.dev/build/extensions/core';
 
 export const config: TriggerConfig = {
   project: 'proj_gvzufybtsolqvrrqdcte',
@@ -13,5 +14,11 @@ export const config: TriggerConfig = {
       randomize: true,
     },
   },
-  additionalPackages: ['husky'],
+  build: {
+    extensions: [
+      additionalPackages({
+        packages: ['husky'],
+      }),
+    ],
+  },
 };
