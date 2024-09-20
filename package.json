@@ -114,6 +114,6 @@
     "protobufjs",
     "sharp",
     "supabase"
-  ],
-  "packageManager": "pnpm@9.11.0"
+  ]
 }
+
