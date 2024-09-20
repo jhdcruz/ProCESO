@@ -33,8 +33,8 @@ function CalendarComponent() {
         dayMaxEvents={true}
         events="/api/events/feed" // App API endpoint for fetching events
         headerToolbar={{
-          left: 'title',
-          center: 'timeGridWeek,dayGridMonth,multiMonthYear list',
+          left: 'timeGridWeek,dayGridMonth,multiMonthYear list',
+          center: 'title',
           right: 'timeGridDay,today prev,next',
         }}
         height="96vh"
