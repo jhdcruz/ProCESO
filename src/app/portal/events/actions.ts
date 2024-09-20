@@ -109,7 +109,11 @@ export async function submitEvent(
     });
 
     // send email reminders to assign faculties
-    await emailAssigned.trigger({ event: event.title, ids: event.handled_by });
+    await emailAssigned.trigger({
+      event: event.title,
+      ids: event.handled_by,
+      auth: () => cookieStore,
+    });
 
     if (!assignResponse.data) return assignResponse;
   }
