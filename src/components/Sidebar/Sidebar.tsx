@@ -1,6 +1,6 @@
 import { memo, Suspense } from 'react';
 import Image from 'next/image';
-import { Group, ScrollArea } from '@mantine/core';
+import { Group, ScrollArea, Text } from '@mantine/core';
 import type { Tables } from '@/libs/supabase/_database';
 
 import type { Routes } from '@/app/routes';
@@ -40,6 +40,10 @@ export function Sidebar({
       <ScrollArea className={classes.links}>
         <div className="py-1">{links}</div>
       </ScrollArea>
+
+      <Text c="dimmed" mx="auto" py="xs" size="xs">
+        Build ver. {process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'DEV'}
+      </Text>
 
       <Suspense>
         <div className={classes.footer}>
