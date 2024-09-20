@@ -26,8 +26,9 @@ import {
   type FileWithPath,
 } from '@mantine/dropzone';
 
-import { revalidate, submitEvent } from '../../actions';
+import { submitEvent } from '../../actions';
 import { SeriesInput } from './SeriesInput';
+import { revalidate } from '@/app/actions';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { Enums } from '@/libs/supabase/_database';

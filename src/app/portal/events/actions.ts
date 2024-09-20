@@ -1,7 +1,6 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { revalidatePath } from 'next/cache';
 import { createServerClient } from '@/libs/supabase/server';
 import { postEvent, updateEvent } from '@/libs/supabase/api/event';
 import { postSeries } from '@/libs/supabase/api/series';
@@ -11,17 +10,6 @@ import type { EventResponse } from '@/libs/supabase/api/_response';
 import type ApiResponse from '@/utils/response';
 import { EventFormProps } from './_components/Forms/EventFormModal';
 import { emailAssigned } from '@/trigger/email-assigned';
-
-/**
- * Revalidate path.
- *
- * Use for every updating and inserting of data.
- *
- * @params pathname - The path to revalidate.
- */
-export async function revalidate(pathname: string) {
-  revalidatePath(pathname);
-}
 
 /**
  * Create and process new event.
