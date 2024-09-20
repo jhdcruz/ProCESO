@@ -1,15 +1,17 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
+import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
-import { postEvent, updateEvent } from '@/libs/supabase/api/event';
+import { deleteEvent, postEvent, updateEvent } from '@/libs/supabase/api/event';
 import { postSeries } from '@/libs/supabase/api/series';
 import { postEventCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
+import { emailAssigned } from '@/trigger/email-assigned';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import type ApiResponse from '@/utils/response';
-import { EventFormProps } from './_components/Forms/EventFormModal';
-import { emailAssigned } from '@/trigger/email-assigned';
+import type { EventFormProps } from './_components/Forms/EventFormModal';
 
 /**
  * Create and process new event.
@@ -131,4 +133,19 @@ export async function submitEvent(
       message: 'Event has been successfully created.',
     };
   }
+}
+
+/**
+ * Delete an event.
+ *
+ * @param eventId - The event id to delete.
+ */
+export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = createServerClient(cookieStore);
+
+  return await deleteEvent({
+    eventId: eventId,
+    supabase: supabase,
+  });
 }

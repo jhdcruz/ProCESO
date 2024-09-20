@@ -1,18 +1,37 @@
-import { memo } from 'react';
+import { memo, startTransition } from 'react';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useProgress } from 'react-transition-progress';
 import { useDisclosure } from '@mantine/hooks';
-import { Badge, Button, Group, Image, rem, Stack, Title } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import {
+  Badge,
+  Button,
+  Divider,
+  Group,
+  Image,
+  Text,
+  rem,
+  Stack,
+  Title,
+} from '@mantine/core';
+import {
+  IconAlertTriangle,
   IconCalendarClock,
   IconCalendarEvent,
+  IconCheck,
   IconEdit,
   IconEditOff,
+  IconTrash,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
-import dayjs from '@/libs/dayjs';
+import { systemUrl } from '@/app/routes';
 import { EventFormProps } from '../Forms/EventFormModal';
+import { deleteEventAction } from '@portal/events/actions';
+import dayjs from '@/libs/dayjs';
+import { notifications } from '@mantine/notifications';
 
 const EventFormModal = dynamic(
   () =>
@@ -38,6 +57,8 @@ function EventDetailsHeader({
   toggleEdit: () => void;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
+  const router = useRouter();
+  const startProgress = useProgress();
 
   const eventForm: EventFormProps = {
     id: event.id ?? '',
@@ -49,6 +70,42 @@ function EventDetailsHeader({
     date_ending: dayjs(event.date_ending).toDate(),
     image_url: event.image_url ?? '',
   };
+
+  // event deletion confimation modal
+  const deleteModal = () =>
+    modals.openConfirmModal({
+      centered: true,
+      title: 'This action is unrecoverable!',
+      children: (
+        <Text>
+          Are you sure you want to delete this event? This action is
+          irreversible. All data associated with this event will be lost.
+        </Text>
+      ),
+      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      onCancel: () => console.log('Cancel'),
+      onConfirm: async () => {
+        const response = await deleteEventAction(event?.id ?? '');
+
+        notifications.show({
+          title: response?.title,
+          message: response?.message,
+          icon: response?.status === 2 ? <IconAlertTriangle /> : <IconCheck />,
+          color: response?.status === 2 ? 'red' : 'green',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 4000,
+        });
+
+        // only redirect when successful
+        if (response?.status === 0) {
+          startTransition(async () => {
+            startProgress();
+            router.push(`${systemUrl}/events`);
+          });
+        }
+      },
+    });
 
   return (
     <>
@@ -107,6 +164,19 @@ function EventDetailsHeader({
               variant="default"
             >
               {editable ? 'Hide Toolbars' : 'Edit Description'}
+            </Button>
+
+            <Divider orientation="vertical" />
+
+            <Button
+              color="red"
+              leftSection={
+                <IconTrash style={{ width: rem(16), height: rem(16) }} />
+              }
+              onClick={deleteModal}
+              variant="filled"
+            >
+              Delete Event
             </Button>
           </Group>
         </Stack>
