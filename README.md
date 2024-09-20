@@ -38,7 +38,7 @@ Overview of current technologies and resources to be used in the system.
 
 ### Core Packages
 
-- [@toast-ui/calendar](https://github.com/nhn/tui.calendar/tree/main/apps/react-calendar)
+- [fullcalendar](https://www.npmjs.com/package/fullcalendar)
 - [@mantine/tiptap](https://mantine.dev/x/tiptap/)
 - [pdfkit](https://pdfkit.org/)
 - [jimp](https://www.npmjs.com/package/jimp)
@@ -68,14 +68,114 @@ Overview of current technologies and resources to be used in the system.
 
 - Vercel
 
-## Monitoring
+### Monitoring
 
 - OneUptime (Uptime Monitoring)
 - Baselime.io (Observability)
+- Snyk.io (Application Security)
+
+## Development
+
+### Prerequisites
+
+1. Download and setup [bun](https://bun.sh).
+
+2. Setup instances of the ff.
+
+   - [Supabase](https://database.new)
+   - Configs can be acvquired from `supabase/` directory.
+   - [Trigger.dev](https://cloud.trigger.dev/)
+   - [Resend](https://resend.com/login)
+   - [HuggingFace](https://huggingface.co/)
+
+3. Install dependencies using `bun install` or `bun i`.
+
+4. After setting up Supabase tables, generate types locally:
+
+   ```sh
+   SUPABASE_PROJECT=project-id bun gen:t
+   ```
+
+### Setup
+
+1. Setup acquired environment variables from services above in `.env` file.
+
+   > [!TIP]
+   > A copy of `.env` file can be found in `.env.sample` file.
+
+2. Configure Supabase Auth for [Google OAuth](https://supabase.com/docs/guides/auth/social-login/auth-google).
+
+3. Configure `trigger.config.ts`:
+
+   ```ts
+   export const config: TriggerConfig = {
+     project: '', // change to your trigger.dev project api
+     // ...
+   };
+   ```
+
+4. Run the application
+
+   ```sh
+   bun dev     # or dev:t to use turbo
+   bun dev:em  # to run email previews by react-email
+   ```
+
+### Doppler (Optional)
+
+This project used [Doppler](https://doppler.com) ([CLI](https://docs.doppler.com/docs/install-cli))
+for secrets management, therefore most scripts are
+tailored for such env variables to be available when
+running them using:
+
+```sh
+doppler run -- bun gen:t
+```
+
+Or you can do an alias to shorten it:
+
+```sh
+alias dp='doppler run --'
+
+# now you can run scripts using:
+dp bun gen:t
+# or
+dp bun dev
+```
+
+You can upload your existing `.env` file using:
+
+```sh
+doppler secret upload .env
+```
+
+> [!IMPORTANT]
+>
+> **You wouldn't need an `.env` file when using Doppler**.
+> _(You can delete it)_
+>
+> It acquires the necessary secrets from doppler's dashboard
+> using the CLI, and can be used across machines without manual transfers.
+
+## Deployment
+
+> [!NOTE]
+> This project was deployed using [Vercel](https://vercel.com).
+>
+> Deploying to other providers are not tested, and is up to you.
+
+After deploying the main application,
+Don't forget to deploy the `Trigger.dev` triggers:
+
+```sh
+bun deploy:tr
+# or
+bunx trigger.dev@latest deploy
+```
 
 ## License
 
-This work ("system") is distributed under [Apache License, Version 2.0](https://opensource.org/license/apache-2-0).
+This work is distributed under [Apache License, Version 2.0](https://opensource.org/license/apache-2-0).
 
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B26392%2Fgithub.com%2Fjhdcruz%2FProCESO.svg?type=large&issueType=license)](https://app.fossa.com/projects/custom%2B26392%2Fgithub.com%2Fjhdcruz%2FProCESO?ref=badge_large&issueType=license)
 
@@ -83,5 +183,11 @@ This work ("system") is distributed under [Apache License, Version 2.0](https://
 
 All trademarks, logos, and service marks displayed on this website are the property of their respective owners.
 
+> **Technological Institute of the Philippines (T.I.P)**
+>
 > T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
 > T.I.P) in the Philippines.
+
+> **Google, LLC.**
+>
+> Google and the Google logos are trademarks or registered trademarks of Google LLC in the United States and other countries.
