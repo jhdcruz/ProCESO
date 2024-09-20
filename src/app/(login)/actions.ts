@@ -23,7 +23,7 @@ export async function onEmailLogin(formData: FormData) {
 
   if (error) {
     const message = error.message;
-    return redirect(`/login?error=${message}`);
+    return redirect(`/?error=${message}`);
   }
 }
 
