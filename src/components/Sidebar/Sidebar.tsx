@@ -42,7 +42,7 @@ export function Sidebar({
       </ScrollArea>
 
       <Text c="dimmed" mx="auto" py="xs" size="xs">
-        Build ver.
+        Build ver.{' '}
         {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'DEV'}
       </Text>
 
