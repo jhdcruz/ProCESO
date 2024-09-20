@@ -1,5 +1,9 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
-import { createBrowserClient } from '@supabase/ssr';
+import { createServerClient } from '@/libs/supabase/server';
+import { createBrowserClient } from '@/libs/supabase/client';
+
+import type { cookies } from 'next/headers';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Send notification email to assigned faculties that
@@ -10,10 +14,24 @@ import { createBrowserClient } from '@supabase/ssr';
  */
 export const emailAssigned = task({
   id: 'email-assigned',
-  run: async (payload: { event: string; ids: string[] }) => {
-    const supaUrl = await envvars.retrieve('SUPABASE_URL');
-    const supaKey = await envvars.retrieve('SUPABASE_ANON_KEY');
-    const supabase = createBrowserClient(supaUrl.value, supaKey.value);
+  run: async (payload: {
+    event: string;
+    ids: string[];
+    auth?: typeof cookies;
+  }) => {
+    // HACK: for RLS policies, we are passing auth cookies,
+    // probably a bad thing, probably, I think.
+    await envvars.retrieve('NEXT_PUBLIC_SUPABASE_URL');
+    await envvars.retrieve('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    let supabase: SupabaseClient;
+
+    if (payload.auth) {
+      supabase = createServerClient(payload.auth());
+    } else {
+      // mostly for testing due to RLS policies in
+      // supabase tables
+      supabase = createBrowserClient();
+    }
 
     logger.info('Getting users and event information...');
     // fetch faculty emails
