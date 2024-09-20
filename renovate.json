@@ -12,5 +12,6 @@
     "automerge": true
   },
   "commitMessagePrefix": "chore(deps):",
+  "labels": ["dependencies"],
   "dependencyDashboard": false
 }
