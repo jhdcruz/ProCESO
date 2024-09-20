@@ -1,8 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 import { createBrowserClient } from '../client';
 import type { Tables, TablesInsert } from '../_database';
 import { getAssignedFaculties } from './faculty-assignments';
 import type { EventResponse, EventDetailsResponse } from './_response';
+import ApiResponse from '@/utils/response';
+import { systemUrl } from '@/app/routes';
 
 /**
  * Get events based on filters and/or limit, if provided.
@@ -204,6 +207,9 @@ export async function postEvent({
     })
     .select();
 
+  revalidatePath('/api/events/feed');
+  revalidatePath(`${systemUrl}/events`);
+
   if (error)
     return {
       status: 2,
@@ -242,6 +248,8 @@ export async function updateEvent({
     .update(event)
     .eq('id', eventId)
     .select();
+
+  revalidatePath(`${systemUrl}/events/${eventId}/info`);
 
   if (error)
     return {

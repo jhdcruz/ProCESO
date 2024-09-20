@@ -1,6 +1,8 @@
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { SeriesResponse } from '@/libs/supabase/api/_response';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { systemUrl } from '@/app/routes';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Get event series that are active.
@@ -53,6 +55,8 @@ export async function postSeries({
     .from('series')
     .insert({ title })
     .select();
+
+  revalidatePath(`${systemUrl}/events/series`);
 
   if (error) {
     return {

@@ -28,7 +28,6 @@ import {
 
 import { submitEvent } from '../../actions';
 import { SeriesInput } from './SeriesInput';
-import { revalidate } from '@/app/actions';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { Enums } from '@/libs/supabase/_database';
@@ -150,9 +149,6 @@ export function EventFormModalComponent({
         withCloseButton: true,
         autoClose: 4000,
       });
-
-      revalidate('/api/events/feed'); // no need to wait for this one
-      await revalidate(pathname);
     }
 
     resetState();
