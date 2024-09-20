@@ -54,7 +54,7 @@ export const EventInfo = memo((event: EventDetailsProps) => {
   };
 
   return (
-    <Container fluid>
+    <Container fluid key={event?.id}>
       <Suspense fallback={<PageLoader />}>
         <EventInfoHeader
           editable={editable}
