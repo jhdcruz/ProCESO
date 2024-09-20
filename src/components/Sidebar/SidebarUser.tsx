@@ -4,7 +4,9 @@ import { memo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Avatar,
+  Badge,
   Group,
+  Indicator,
   Menu,
   Text,
   UnstyledButton,
@@ -65,12 +67,33 @@ const MenuItems = () => {
 };
 
 export const SidebarUser = memo(
-  ({ avatar_url, email, name }: Partial<Tables<'users'>>) => (
+  ({ avatar_url, email, name, role }: Partial<Tables<'users'>>) => (
     <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
           <Group wrap="nowrap">
-            <Avatar color="initials" radius="xl" src={avatar_url} />
+            <Indicator
+              color={(() => {
+                switch (role) {
+                  case 'admin':
+                    return 'black';
+                  case 'staff':
+                    return 'red';
+                  case 'faculty':
+                    return 'green';
+                  default:
+                    return 'blue';
+                }
+              })()}
+              inline={true}
+              label={role}
+              offset={-1}
+              position="bottom-center"
+              size={14}
+              tt="capitalize"
+            >
+              <Avatar color="initials" radius="xl" src={avatar_url} />
+            </Indicator>
 
             <div className="flex-1">
               <Text fw={500} lineClamp={1} size="sm">
