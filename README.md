@@ -83,7 +83,7 @@ Overview of current technologies and resources to be used in the system.
 2. Setup instances of the ff.
 
    - [Supabase](https://database.new)
-   - Configs can be acvquired from `supabase/` directory.
+   - Configs can be acquired from `supabase/` directory.
    - [Trigger.dev](https://cloud.trigger.dev/)
    - [Resend](https://resend.com/login)
    - [HuggingFace](https://huggingface.co/)
@@ -93,15 +93,15 @@ Overview of current technologies and resources to be used in the system.
 4. After setting up Supabase tables, generate types locally:
 
    ```sh
-   SUPABASE_PROJECT=project-id bun gen:t
+   SUPABASE_PROJECT=your-project-id bun gen:t
    ```
 
 ### Setup
 
 1. Setup acquired environment variables from services above in `.env` file.
 
-   > [!TIP]
-   > A copy of `.env` file can be found in `.env.sample` file.
+> [!NOTE]
+> A copy of `.env` file can be found in `.env.sample` file.
 
 2. Configure Supabase Auth for [Google OAuth](https://supabase.com/docs/guides/auth/social-login/auth-google).
 
