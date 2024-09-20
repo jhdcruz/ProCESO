@@ -211,10 +211,13 @@ export function FacultyListComponent({
       <Group gap="xs" grow mt="sm">
         <MultiSelect
           data={[
-            { value: 'ccs', label: 'CCS' },
-            { value: 'cea', label: 'CEA' },
-            { value: 'cbe', label: 'CBE' },
-            { value: 'coa', label: 'COA' },
+            { value: 'ccs', label: 'College of Computer Studies (CCS)' },
+            {
+              value: 'cea',
+              label: 'College of Engineering & Architecture (CEA)',
+            },
+            { value: 'cbe', label: 'College of Business Education (CBE)' },
+            { value: 'coa', label: 'College of Arts (COA)' },
           ]}
           onChange={setDept}
           placeholder="Filter by dept."
@@ -222,8 +225,8 @@ export function FacultyListComponent({
         />
         <MultiSelect
           data={[
-            { value: 'head', label: 'Head' },
-            { value: 'dean', label: 'Dean' },
+            { value: 'head', label: 'Committee Head' },
+            { value: 'dean', label: 'Dept. Dean' },
           ]}
           onChange={setPos}
           placeholder="Filter by position."
