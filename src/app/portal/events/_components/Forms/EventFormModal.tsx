@@ -151,6 +151,7 @@ export function EventFormModalComponent({
         autoClose: 4000,
       });
 
+      revalidate('/api/events/feed'); // no need to wait for this one
       await revalidate(pathname);
     }
 
