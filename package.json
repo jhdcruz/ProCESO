@@ -13,10 +13,10 @@
     "dev": "next dev",
     "devt": "next dev --turbo",
     "dev:em": "email dev -p 3001 -d ./src/emails",
-    "dev:tr": "bunx trigger.dev@latest dev",
+    "dev:tr": "trigger dev",
     "build": "next build",
     "build:em": "email build -d ./src/emails -p bun",
-    "deploy:tr": "bunx trigger.dev@latest deploy",
+    "deploy:tr": "trigger deploy",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
     "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/utils/supabase/types.ts",
@@ -90,6 +90,7 @@
     "supabase": "1.200.3",
     "tailwindcss": "3.4.13",
     "tailwindcss-animate": "1.0.7",
+    "trigger.dev": "3.0.6",
     "turbo": "2.1.2",
     "typescript": "5.6.2"
   },
@@ -116,4 +117,3 @@
     "supabase"
   ]
 }
-
