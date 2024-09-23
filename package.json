@@ -88,7 +88,7 @@
     "prettier-plugin-tailwindcss": "0.6.6",
     "react-email": "3.0.1",
     "supabase": "1.192.5",
-    "tailwindcss": "3.4.12",
+    "tailwindcss": "3.4.13",
     "tailwindcss-animate": "1.0.7",
     "turbo": "2.1.2",
     "typescript": "5.6.2"
