@@ -1,22 +1,11 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
-import dynamic from 'next/dynamic';
 import { cookies } from 'next/headers';
 
 import { metadata as defaultMetadata } from '@/app/layout';
-import { PageLoader } from '@/components/Loader/PageLoader';
 import { createServerClient } from '@/libs/supabase/server';
 import { getEventsDetails } from '@/libs/supabase/api/event';
-
-const EventDetailsShell = dynamic(
-  () =>
-    import('../../_components/EventDetails/EventDetailsShell').then(
-      (mod) => mod.EventDetailsShell,
-    ),
-  {
-    loading: () => <PageLoader />,
-  },
-);
+import { EventDetailsShell } from '../../_components/EventDetails/EventDetailsShell';
 
 // cache the event details to avoid duplicated
 // requests for the page and metadata generation.

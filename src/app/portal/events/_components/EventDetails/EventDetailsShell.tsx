@@ -62,7 +62,7 @@ function EventDetailsComponent({
         >
           {/* Tabs Content */}
           <AppShell.Main>
-            <Tabs.List grow mb={16} justify="stretch">
+            <Tabs.List grow justify="stretch" mb={16}>
               <Tabs.Tab
                 leftSection={
                   <IconInfoCircle style={{ width: rem(16), height: rem(16) }} />
