@@ -11,7 +11,6 @@
   "scripts": {
     "start": "next start",
     "dev": "next dev",
-    "devt": "next dev --turbo",
     "dev:em": "email dev -p 3001 -d ./src/emails",
     "dev:tr": "trigger dev",
     "build": "next build",
@@ -91,7 +90,6 @@
     "tailwindcss": "3.4.13",
     "tailwindcss-animate": "1.0.7",
     "trigger.dev": "3.0.6",
-    "turbo": "2.1.2",
     "typescript": "5.6.2"
   },
   "lint-staged": {
