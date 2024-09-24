@@ -71,18 +71,23 @@ function EventDetailsHeader({
     image_url: event.image_url ?? '',
   };
 
-  // event deletion confimation modal
+  // event deletion confirmation modal
   const deleteModal = () =>
     modals.openConfirmModal({
       centered: true,
-      title: 'This action is unrecoverable!',
+      title: 'Delete event?',
       children: (
-        <Text>
-          Are you sure you want to delete this event? This action is
-          irreversible. All data associated with this event will be lost.
-        </Text>
+        <>
+          <Text>
+            Are you sure you want to delete this event? This action is
+            irreversible.
+          </Text>
+          <Text tw="bold">
+            All data associated with this event will be lost.
+          </Text>
+        </>
       ),
-      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
         const response = await deleteEventAction(event?.id ?? '');
