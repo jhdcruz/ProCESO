@@ -4,7 +4,6 @@ import { memo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Avatar,
-  Badge,
   Group,
   Indicator,
   Menu,
@@ -18,6 +17,7 @@ import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { Tables } from '@/libs/supabase/_database';
 import classes from './SidebarUser.module.css';
+import { getRoleColor } from '@/utils/colors';
 
 // Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
@@ -73,18 +73,7 @@ export const SidebarUser = memo(
         <UnstyledButton className={classes.user}>
           <Group wrap="nowrap">
             <Indicator
-              color={(() => {
-                switch (role) {
-                  case 'admin':
-                    return 'black';
-                  case 'staff':
-                    return 'red';
-                  case 'faculty':
-                    return 'green';
-                  default:
-                    return 'blue';
-                }
-              })()}
+              color={getRoleColor(role)}
               inline={true}
               label={role}
               offset={-1}
