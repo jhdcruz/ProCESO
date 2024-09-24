@@ -18,7 +18,7 @@
     "deploy:tr": "trigger deploy",
     "lint": "next lint",
     "fmt": "next lint --fix && prettier --write src",
-    "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/utils/supabase/types.ts",
+    "gen:t": "supabase gen types --lang=typescript --project-id \"$SUPABASE_PROJECT\" --schema public > ./src/libs/supabase/_database.ts",
     "prepare": "husky"
   },
   "dependencies": {
