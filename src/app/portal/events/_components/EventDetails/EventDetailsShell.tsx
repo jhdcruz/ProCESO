@@ -44,11 +44,9 @@ function EventDetailsComponent({
   const pathname = usePathname();
 
   return (
-    <>
+    <AppShell.Main>
       {!event ? (
-        <AppShell.Main>
-          <NotFound />
-        </AppShell.Main>
+        <NotFound />
       ) : (
         <Tabs
           defaultValue="info"
@@ -61,53 +59,51 @@ function EventDetailsComponent({
           value={pathname.split('/').pop()}
         >
           {/* Tabs Content */}
-          <AppShell.Main>
-            <Tabs.List grow justify="stretch" mb={16}>
-              <Tabs.Tab
-                leftSection={
-                  <IconInfoCircle style={{ width: rem(16), height: rem(16) }} />
-                }
-                value="info"
-              >
-                Information
-              </Tabs.Tab>
+          <Tabs.List grow justify="stretch" mb={16}>
+            <Tabs.Tab
+              leftSection={
+                <IconInfoCircle style={{ width: rem(16), height: rem(16) }} />
+              }
+              value="info"
+            >
+              Information
+            </Tabs.Tab>
 
-              <Tabs.Tab
-                leftSection={
-                  <IconTimeline style={{ width: rem(16), height: rem(16) }} />
-                }
-                value="analytics"
-              >
-                Analytics & Insights
-              </Tabs.Tab>
+            <Tabs.Tab
+              leftSection={
+                <IconTimeline style={{ width: rem(16), height: rem(16) }} />
+              }
+              value="analytics"
+            >
+              Analytics & Insights
+            </Tabs.Tab>
 
-              <Tabs.Tab
-                leftSection={
-                  <IconBrandGoogleDrive
-                    style={{ width: rem(16), height: rem(16) }}
-                  />
-                }
-                value="storage"
-              >
-                Files
-              </Tabs.Tab>
-            </Tabs.List>
+            <Tabs.Tab
+              leftSection={
+                <IconBrandGoogleDrive
+                  style={{ width: rem(16), height: rem(16) }}
+                />
+              }
+              value="storage"
+            >
+              Files
+            </Tabs.Tab>
+          </Tabs.List>
 
-            <Tabs.Panel value="info">
-              <EventInfo {...event} />
-            </Tabs.Panel>
+          <Tabs.Panel keepMounted={true} value="info">
+            <EventInfo {...event} />
+          </Tabs.Panel>
 
-            <Tabs.Panel value="analytics">
-              <>Analytics, Insights, and Feedback Panel</>
-            </Tabs.Panel>
+          <Tabs.Panel value="analytics">
+            <>Analytics, Insights, and Feedback Panel</>
+          </Tabs.Panel>
 
-            <Tabs.Panel value="storage">
-              <>Storage and files panel</>
-            </Tabs.Panel>
-          </AppShell.Main>
+          <Tabs.Panel value="storage">
+            <>Storage and files panel</>
+          </Tabs.Panel>
         </Tabs>
       )}
-    </>
+    </AppShell.Main>
   );
 }
 
