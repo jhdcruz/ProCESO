@@ -60,7 +60,7 @@ const theme = createTheme({
  * Site metadata
  */
 export const metadata: Metadata = {
-  title: 'ProCESO | Technological Institute of the Philippines',
+  title: 'ProCESO | T.I.P Community Extensions Services Office',
   description:
     'Community Outreach Management System for Technological Institute of the Philippines - CESO Department.',
 };

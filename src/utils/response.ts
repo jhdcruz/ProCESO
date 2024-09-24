@@ -8,4 +8,5 @@ export default interface ApiResponse {
   title: string;
   message: string;
   data?: any;
+  count?: number;
 }
