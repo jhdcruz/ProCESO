@@ -4,6 +4,7 @@ import {
   IconFileAnalytics,
   IconNotes,
   IconPresentationAnalytics,
+  IconUsersGroup,
   type IconProps,
 } from '@tabler/icons-react';
 
@@ -43,11 +44,16 @@ export const sidebarRoutes: Routes = [
   {
     label: 'Analytics',
     icon: IconPresentationAnalytics,
-    link: '/analytics',
+    link: `${systemUrl}/analytics`,
   },
   {
     label: 'Certificates',
     icon: IconFileAnalytics,
-    link: '/certs',
+    link: `${systemUrl}/certs`,
+  },
+  {
+    label: 'Users',
+    icon: IconUsersGroup,
+    link: `${systemUrl}/users`,
   },
 ];
