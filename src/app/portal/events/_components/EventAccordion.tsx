@@ -20,7 +20,7 @@ function EventAccordionShell({
   ongoing: EventResponse | undefined;
   upcoming: EventResponse | undefined;
   past: EventResponse | undefined;
-  role: Enums<'user_roles'>;
+  role: Enums<'roles_user'>;
 }) {
   // Event Accordion Items Component
   const EventItems = ({
