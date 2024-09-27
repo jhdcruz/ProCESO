@@ -75,6 +75,11 @@ export default function RootLayout({
       {/* IMPORTANT: don't use next/head here, destroys initial UI loading */}
       <head key="mantine-provider">
         <ColorSchemeScript defaultColorScheme="auto" />
+        <link
+          crossOrigin="use-credentials"
+          href="https://kcgvoeyhpkxzvanujxlt.supabase.co"
+          rel="preconnect"
+        />
       </head>
 
       <body>
