@@ -38,7 +38,10 @@ export async function generateMetadata({
 
   return {
     title: `${event.data.title} - ${defaultMetadata.title}`,
-    description: event.data.description,
+    description:
+      // strip HTML tags
+      event.data.description?.replace(/<[^>]+>/g, '') ??
+      'There currently no description for this event.',
     applicationName: 'ProCESO',
     creator: event.data.created_by,
     category: event.data.series,
