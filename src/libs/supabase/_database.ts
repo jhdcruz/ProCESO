@@ -145,18 +145,21 @@ export type Database = {
       series: {
         Row: {
           active: boolean
+          color: string | null
           created_at: string
           id: string
           title: string
         }
         Insert: {
           active?: boolean
+          color?: string | null
           created_at?: string
           id?: string
           title: string
         }
         Update: {
           active?: boolean
+          color?: string | null
           created_at?: string
           id?: string
           title?: string
@@ -239,7 +242,7 @@ export type Database = {
     Enums: {
       event_visibility: "Everyone" | "Faculty" | "Internal"
       roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso"
-      roles_pos: "head" | "dean"
+      roles_pos: "head" | "dean" | "chair"
       roles_user: "admin" | "staff" | "faculty" | "officer" | "student"
     }
     CompositeTypes: {
