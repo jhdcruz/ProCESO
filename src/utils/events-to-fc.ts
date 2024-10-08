@@ -1,5 +1,6 @@
 import { EventSourceInput } from '@fullcalendar/core';
 import type { Tables } from '@/libs/supabase/_database';
+import sanitizeHtml from 'sanitize-html';
 
 /**
  * Transforms events list from events schema to FullCalendar schema.
@@ -14,9 +15,7 @@ export function eventsToFc(events?: Tables<'events'>[]): EventSourceInput[] {
     title: event.title,
     start: new Date(event.date_starting as string),
     end: new Date(event.date_ending as string),
-    description:
-      event.description?.replace(/<[^>]+>/g, '') ??
-      'There currently no description for this event.',
+    description: sanitizeHtml(event.description!),
     url: `/portal/events/${event.id}/info`,
     allDay:
       // TODO: Improve allDay check logic, this is unreliable.

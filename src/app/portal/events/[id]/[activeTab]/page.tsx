@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import sanitizeHtml from 'sanitize-html';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { createServerClient } from '@/libs/supabase/server';
@@ -38,10 +39,7 @@ export async function generateMetadata({
 
   return {
     title: `${event.data.title} - ${defaultMetadata.title}`,
-    description:
-      // strip HTML tags
-      event.data.description?.replace(/<[^>]+>/g, '') ??
-      'There currently no description for this event.',
+    description: sanitizeHtml(event.data.description!),
     applicationName: 'ProCESO',
     creator: event.data.created_by,
     category: event.data.series,
@@ -50,9 +48,9 @@ export async function generateMetadata({
         ? 'index, follow'
         : 'noindex, nofollow',
     openGraph: {
-      images: [{ url: event.data.image_url ?? '' }],
-      publishedTime: event.data.created_at ?? '',
-      expirationTime: event.data.date_ending ?? '',
+      images: [{ url: event.data.image_url! }],
+      publishedTime: event.data.created_at!,
+      expirationTime: event.data.date_ending!,
     },
   };
 }

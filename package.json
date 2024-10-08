@@ -66,12 +66,14 @@
     "react-transition-progress": "0.0.4",
     "recharts": "2.12.7",
     "resend": "4.0.0",
+    "sanitize-html": "2.13.1",
     "sharp": "0.33.5"
   },
   "devDependencies": {
     "@types/node": "22.7.5",
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.0",
+    "@types/sanitize-html": "^2.13.0",
     "autoprefixer": "10.4.20",
     "babel-plugin-react-compiler": "0.0.0-experimental-b4db8c3-20241001",
     "eslint": "8.57.1",
