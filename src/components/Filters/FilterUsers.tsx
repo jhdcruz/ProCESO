@@ -9,6 +9,7 @@ import {
 import {
   listDepts,
   listOffices,
+  listOthers,
   listPos,
   listUserRoles,
 } from '@/utils/user-types';
@@ -79,6 +80,27 @@ export const FilterDepartments = memo(
       </Menu.Item>
     ));
 
+    // menu items for other departments
+    const otherItems = listOthers.map((other) => (
+      <Menu.Item
+        key={other.value}
+        leftSection={dept.includes(other.value) && <IconCheck size={16} />}
+        onClick={() => {
+          // toggle based on current state, add or remove
+          if (dept.includes(other.value)) {
+            setDept(dept.filter((d) => d !== other.value));
+          } else {
+            setDept([...dept, other.value]);
+          }
+        }}
+      >
+        {other.label}
+        <Badge color={getDeptColor(other.value)} ml={8} variant="light">
+          {other.value.toUpperCase()}
+        </Badge>
+      </Menu.Item>
+    ));
+
     return (
       <Menu closeDelay={99} openDelay={100} trigger="click-hover">
         <Menu.Target>
@@ -99,6 +121,11 @@ export const FilterDepartments = memo(
 
           <Menu.Label>Offices</Menu.Label>
           {officeItems}
+
+          <Menu.Divider />
+
+          <Menu.Label>Others</Menu.Label>
+          {otherItems}
         </Menu.Dropdown>
       </Menu>
     );

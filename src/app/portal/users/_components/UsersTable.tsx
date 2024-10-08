@@ -109,12 +109,12 @@ function UsersTableComponent({
             </Badge>
           </Text>
         </Table.Td>
-        <Table.Td align="center">
+        <Table.Td>
           <Badge color={getDeptColor(item.department)} variant="light">
             {item.department}
           </Badge>
         </Table.Td>
-        <Table.Td align="center">
+        <Table.Td>
           <Badge color={getRoleColor(item.role)} variant="outline">
             {item.role}
           </Badge>
@@ -152,8 +152,8 @@ function UsersTableComponent({
             </Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th>Email</Table.Th>
-            <Table.Th className="text-center">Department</Table.Th>
-            <Table.Th className="text-center">Role</Table.Th>
+            <Table.Th>Department</Table.Th>
+            <Table.Th>Role</Table.Th>
             <Table.Th>{/* Button Actions */}</Table.Th>
           </Table.Tr>
         </Table.Thead>

@@ -47,7 +47,7 @@ export default function AssignedEmail({ event }: { event: Tables<'events'> }) {
                 You have been assigned for an event: <br />
                 <Link
                   className="font-bold text-yellow-500 underline"
-                  href={`https://deuz.tech/events/${event?.id ?? ''}`}
+                  href={`https://deuz.tech/events/${event?.id!}`}
                 >
                   {event?.title ?? 'Untitled Event'}
                 </Link>

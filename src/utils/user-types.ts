@@ -49,6 +49,11 @@ export const listOffices: RolesDept[] = [
   { value: 'ceso', label: 'Community Extensions Services' },
 ];
 
+/** List of other offices or departments. */
+export const listOthers: RolesDept[] = [
+  { value: 'none', label: 'Not Assigned' },
+];
+
 /** List of user positions.  */
 export const listPos: RolesPos[] = [
   { value: 'head', label: 'Committee Head' },

@@ -241,7 +241,7 @@ export type Database = {
     }
     Enums: {
       event_visibility: "Everyone" | "Faculty" | "Internal"
-      roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso"
+      roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso" | "none"
       roles_pos: "head" | "dean" | "chair"
       roles_user: "admin" | "staff" | "faculty" | "officer" | "student"
     }
