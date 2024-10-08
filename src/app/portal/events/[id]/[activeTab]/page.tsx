@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import * as sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from 'sanitize-html';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { createServerClient } from '@/libs/supabase/server';
@@ -39,7 +39,7 @@ export async function generateMetadata({
 
   return {
     title: `${event.data.title} - ${defaultMetadata.title}`,
-    description: sanitizeHtml(event.data.description!),
+    description: sanitizeHtml(event.data.description!, { allowedTags: [] }),
     applicationName: 'ProCESO',
     creator: event.data.created_by,
     category: event.data.series,
