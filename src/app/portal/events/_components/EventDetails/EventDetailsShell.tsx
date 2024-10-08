@@ -13,16 +13,7 @@ import {
 import { systemUrl } from '@/app/routes';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
-
-const EventInfo = dynamic(
-  () =>
-    import('./EventInfo').then((mod) => ({
-      default: mod.EventInfo,
-    })),
-  {
-    loading: () => <PageLoader />,
-  },
-);
+import { EventInfo } from './EventInfo';
 
 const NotFound = dynamic(
   () =>
