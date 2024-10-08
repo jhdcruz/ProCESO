@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import sanitizeHtml from 'sanitize-html';
+import * as sanitizeHtml from 'sanitize-html';
 
 import { metadata as defaultMetadata } from '@/app/layout';
 import { createServerClient } from '@/libs/supabase/server';

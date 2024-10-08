@@ -1,6 +1,6 @@
 import { EventSourceInput } from '@fullcalendar/core';
 import type { Tables } from '@/libs/supabase/_database';
-import sanitizeHtml from 'sanitize-html';
+import * as sanitizeHtml from 'sanitize-html';
 
 /**
  * Transforms events list from events schema to FullCalendar schema.
