@@ -43,7 +43,7 @@ function EventDetailsBody({
   useEffect(() => {
     const fetchFaculties = async () => {
       const response = await getAssignedFaculties({
-        eventId: event?.id ?? '',
+        eventId: event?.id!,
       });
 
       if (response?.status !== 0) {
@@ -81,7 +81,7 @@ function EventDetailsBody({
           </Text>
           <Group my={16}>
             <Avatar
-              alt={event?.created_by ?? ''}
+              alt={event?.created_by!}
               color="initials"
               radius="xl"
               src={event?.creator_avatar}
@@ -108,7 +108,7 @@ function EventDetailsBody({
                   {faculties?.data?.map((faculty) => (
                     <Group key={faculty?.faculty_email} my={16}>
                       <Avatar
-                        alt={faculty?.faculty_name ?? ''}
+                        alt={faculty?.faculty_name!}
                         color="initials"
                         radius="xl"
                         src={faculty?.faculty_avatar}

@@ -61,14 +61,14 @@ function EventDetailsHeader({
   const startProgress = useProgress();
 
   const eventForm: EventFormProps = {
-    id: event.id ?? '',
-    title: event.title ?? '',
-    series: event.series ?? '',
+    id: event.id!,
+    title: event.title!,
+    series: event.series!,
     visibility: event.visibility ?? 'Everyone',
     handled_by: event.users?.map((user) => user.faculty_id!) ?? [],
     date_starting: dayjs(event.date_starting).toDate(),
     date_ending: dayjs(event.date_ending).toDate(),
-    image_url: event.image_url ?? '',
+    image_url: event.image_url!,
   };
 
   // event deletion confirmation modal
@@ -90,7 +90,7 @@ function EventDetailsHeader({
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
-        const response = await deleteEventAction(event?.id ?? '');
+        const response = await deleteEventAction(event?.id!);
 
         notifications.show({
           title: response?.title,

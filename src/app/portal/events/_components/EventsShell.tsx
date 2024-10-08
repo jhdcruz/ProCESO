@@ -45,7 +45,7 @@ export default function EventsShell({
 
   useEffect(() => {
     const eventsAssigned = getAssignedEvents({
-      userId: user?.id ?? '',
+      userId: user?.id!,
       search: searchQuery,
     });
 
