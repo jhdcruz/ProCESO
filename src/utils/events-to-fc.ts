@@ -14,7 +14,9 @@ export function eventsToFc(events?: Tables<'events'>[]): EventSourceInput[] {
     title: event.title,
     start: new Date(event.date_starting as string),
     end: new Date(event.date_ending as string),
-    description: event.description,
+    description:
+      event.description?.replace(/<[^>]+>/g, '') ??
+      'There currently no description for this event.',
     url: `/portal/events/${event.id}/info`,
     allDay:
       // TODO: Improve allDay check logic, this is unreliable.
