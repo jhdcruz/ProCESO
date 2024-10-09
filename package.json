@@ -55,7 +55,7 @@
     "@tiptap/pm": "2.8.0",
     "@tiptap/react": "2.8.0",
     "@tiptap/starter-kit": "2.8.0",
-    "@trigger.dev/build": "3.0.11",
+    "@trigger.dev/build": "3.0.12",
     "@trigger.dev/sdk": "3.0.11",
     "dayjs": "1.11.13",
     "framer-motion": "11.11.5",
