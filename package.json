@@ -58,7 +58,7 @@
     "@trigger.dev/build": "3.0.11",
     "@trigger.dev/sdk": "3.0.11",
     "dayjs": "1.11.13",
-    "framer-motion": "11.11.4",
+    "framer-motion": "11.11.5",
     "little-date": "1.0.0",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-fb9a90fa48-20240614",
