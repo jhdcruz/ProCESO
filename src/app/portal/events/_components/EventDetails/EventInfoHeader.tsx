@@ -88,6 +88,7 @@ function EventDetailsHeader({
         </>
       ),
       labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
         const response = await deleteEventAction(event?.id!);
