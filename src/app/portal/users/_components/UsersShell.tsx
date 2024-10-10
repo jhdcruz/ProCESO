@@ -8,17 +8,16 @@ import {
   Button,
   Divider,
   Group,
-  Loader,
-  Menu,
   rem,
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconMailSpark, IconSearch, IconX } from '@tabler/icons-react';
+import { IconSearch, IconX } from '@tabler/icons-react';
 import type { Enums, Tables } from '@/libs/supabase/_database';
 import { getUsers } from '@/libs/supabase/api/user';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { FilterUsers } from '@/components/Filters/FilterUsers';
+import { UserInvite } from './UserInvite';
 
 const UsersTable = dynamic(
   () =>
@@ -65,6 +64,14 @@ export default function UsersShell() {
     }
   };
 
+  // reset range when changing filters
+  useEffect(() => {
+    if (searchParams.get('range')) {
+      router.push(pathname);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dept, roles, pos]);
+
   // reset filters to default state
   const resetFilters = () => {
     setQuery('');
@@ -109,9 +116,8 @@ export default function UsersShell() {
       {/* Table controls  */}
       <Group className="content-center" mb="md">
         {/* Invite user by email */}
-        <Button className="shadow-md" leftSection={<IconMailSpark size={16} />}>
-          Invite user
-        </Button>
+        <UserInvite />
+
         {/*  Event search */}
         <TextInput
           leftSection={<IconSearch size={16} stroke={1.5} />}
