@@ -88,7 +88,7 @@
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.6.8",
     "react-email": "3.0.1",
-    "supabase": "1.203.0",
+    "supabase": "1.204.3",
     "tailwindcss": "3.4.13",
     "tailwindcss-animate": "1.0.7",
     "trigger.dev": "3.0.12",
