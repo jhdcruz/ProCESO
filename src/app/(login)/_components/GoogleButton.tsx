@@ -3,6 +3,7 @@
 import { Button } from '@mantine/core';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { siteUrl } from '@/utils/url';
+import { systemUrl } from '../../routes';
 
 const GoogleIcon = () => (
   <svg
@@ -43,7 +44,7 @@ export function GoogleButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${siteUrl()}/auth/callback?next=/portal`,
+        redirectTo: `${siteUrl()}/auth/callback?next=${systemUrl}`,
       },
     });
 

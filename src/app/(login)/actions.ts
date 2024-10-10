@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@/libs/supabase/server';
+import { systemUrl } from '../routes';
 
 /**
  * Login to supabase auth using email login.
@@ -18,7 +19,7 @@ export async function onEmailLogin(formData: FormData) {
   });
 
   if (data) {
-    return redirect('/portal');
+    return redirect(systemUrl);
   }
 
   if (error) {
