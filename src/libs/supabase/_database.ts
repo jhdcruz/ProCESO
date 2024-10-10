@@ -171,7 +171,7 @@ export type Database = {
           active: boolean
           avatar_url: string | null
           created_at: string
-          department: Database["public"]["Enums"]["roles_dept"] | null
+          department: Database["public"]["Enums"]["roles_dept"]
           email: string
           id: string
           name: string
@@ -183,7 +183,7 @@ export type Database = {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
-          department?: Database["public"]["Enums"]["roles_dept"] | null
+          department?: Database["public"]["Enums"]["roles_dept"]
           email: string
           id?: string
           name: string
@@ -195,7 +195,7 @@ export type Database = {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
-          department?: Database["public"]["Enums"]["roles_dept"] | null
+          department?: Database["public"]["Enums"]["roles_dept"]
           email?: string
           id?: string
           name?: string
@@ -241,7 +241,7 @@ export type Database = {
     }
     Enums: {
       event_visibility: "Everyone" | "Faculty" | "Internal"
-      roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso" | "none"
+      roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso" | "na"
       roles_pos: "head" | "dean" | "chair"
       roles_user: "admin" | "staff" | "faculty" | "officer" | "student"
     }

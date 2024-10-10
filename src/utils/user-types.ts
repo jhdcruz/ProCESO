@@ -50,9 +50,7 @@ export const listOffices: RolesDept[] = [
 ];
 
 /** List of other offices or departments. */
-export const listOthers: RolesDept[] = [
-  { value: 'none', label: 'Not Assigned' },
-];
+export const listOthers: RolesDept[] = [{ value: 'na', label: 'Not Assigned' }];
 
 /** List of user positions.  */
 export const listPos: RolesPos[] = [
