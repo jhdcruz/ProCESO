@@ -11,6 +11,6 @@ import { revalidatePath } from 'next/cache';
  *
  * @params pathname - The path to revalidate
  */
-export async function revalidate(pathname: string) {
+export function revalidate(pathname: string) {
   revalidatePath(pathname);
 }

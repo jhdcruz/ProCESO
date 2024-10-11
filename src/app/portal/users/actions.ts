@@ -8,7 +8,7 @@ import { createServerClient as createAdminClient } from '@/libs/supabase/admin';
 import { siteUrl } from '@/utils/url';
 
 /**
- * Invite user to the system.
+ * Invite a user to the system.
  *
  * @param email Email address of the user to invite
  * @param metadata Metadata to be attached to the user
