@@ -18,9 +18,10 @@
         "name": "next"
       }
     ],
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./src/*"],
-      "@portal/*": ["./src/app/portal/*"]
+      "@/*": ["./*"],
+      "@portal/*": ["./app/portal/*"]
     },
     "target": "ES2017"
   },
