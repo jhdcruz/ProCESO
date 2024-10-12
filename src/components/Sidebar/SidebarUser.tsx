@@ -14,10 +14,9 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
-import { createBrowserClient } from '@/libs/supabase/client';
-import type { Tables } from '@/libs/supabase/_database';
-import classes from './SidebarUser.module.css';
 import { getRoleColor } from '@/utils/colors';
+import { signOut } from '@/utils/sign-out';
+import classes from './SidebarUser.module.css';
 
 // Item contents of the user button dropdown in sidebar menu
 const MenuItems = () => {
@@ -27,16 +26,6 @@ const MenuItems = () => {
   const computedColorScheme = useComputedColorScheme('light', {
     getInitialValueInEffect: true,
   });
-
-  const onSignOut = async () => {
-    const supabase = createBrowserClient();
-
-    const { error } = await supabase.auth.signOut();
-
-    if (!error) {
-      router.replace('/');
-    }
-  };
 
   return (
     <Menu.Dropdown>
@@ -58,9 +47,9 @@ const MenuItems = () => {
         color="red"
         fw="semibold"
         leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-        onClick={onSignOut}
+        onClick={() => signOut(router)}
       >
-        Log out
+        Sign out
       </Menu.Item>
     </Menu.Dropdown>
   );
