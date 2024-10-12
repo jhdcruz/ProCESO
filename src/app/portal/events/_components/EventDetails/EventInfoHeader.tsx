@@ -82,7 +82,7 @@ function EventDetailsHeader({
             Are you sure you want to delete this event? This action is
             irreversible.
           </Text>
-          <Text mt="sm" tw="bold">
+          <Text mt="sm" fw="bold">
             All data associated with this event will be lost.
           </Text>
         </>
@@ -107,7 +107,7 @@ function EventDetailsHeader({
         if (response?.status === 0) {
           startTransition(async () => {
             startProgress();
-            router.push(`${systemUrl}/events`);
+            router.replace(`${systemUrl}/events`);
           });
         }
       },
