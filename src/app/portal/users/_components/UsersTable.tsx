@@ -1,33 +1,36 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import {
   Badge,
   Table,
-  Checkbox,
   ScrollArea,
   Group,
   Avatar,
   Text,
   rem,
   ActionIcon,
-  Loader,
+  Button,
 } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { useClipboard } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { Tables } from '@/libs/supabase/_database';
 import { getDeptColor, getPosColor, getRoleColor } from '@/utils/colors';
-import { IconEdit, IconPencil, IconTrash } from '@tabler/icons-react';
-import classes from '@/styles/Table.module.css';
+import {
+  IconEdit,
+  IconShieldCancel,
+  IconShieldCheck,
+} from '@tabler/icons-react';
+import { changeUserAccess } from '../actions';
 
 function UsersTableComponent({
   users,
-  loading,
+  setUsers,
 }: {
   users: Tables<'users'>[];
-  loading: boolean;
+  setUsers: (users: Tables<'users'>[]) => void;
 }) {
-  const [selection, setSelection] = useState<string[]>([]);
   const clipboard = useClipboard({ timeout: 500 });
 
   // show notification when email is copied to clipboard
@@ -44,34 +47,62 @@ function UsersTableComponent({
     }
   }, [clipboard.copied]);
 
-  const toggleRow = (id: string) =>
-    setSelection((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id],
-    );
+  const disableUserModal = (userId: string, enable: boolean) =>
+    modals.openConfirmModal({
+      centered: true,
+      title: `${enable ? 'Enable' : 'Disable'} User?`,
+      children: (
+        <>
+          {enable ? (
+            <>
+              <Text>This will allow the user to access the system again.</Text>
+            </>
+          ) : (
+            <>
+              <Text>
+                The user won&apos;t be able to access the system anymore.
+              </Text>
+              <Text fw="bold" mt="sm">
+                This will not delete the user from the database.
+              </Text>
+            </>
+          )}
+        </>
+      ),
+      labels: { confirm: enable ? 'Enable' : 'Disable', cancel: 'Cancel' },
+      confirmProps: {
+        color: enable ? 'green' : 'red',
+        leftSection: enable ? (
+          <IconShieldCheck size={20} stroke={1.6} />
+        ) : (
+          <IconShieldCancel size={20} stroke={1.6} />
+        ),
+      },
+      onCancel: () => console.log('Cancel'),
+      onConfirm: async () => {
+        const response = await changeUserAccess(userId, enable);
 
-  const toggleAll = () =>
-    setSelection((current) =>
-      current.length === users?.length
-        ? []
-        : (users?.map((item) => item.id) ?? []),
-    );
+        notifications.show({
+          title: response?.title,
+          message: response?.message,
+          color: response?.status === 2 ? 'red' : 'green',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 4000,
+        });
+
+        // update local data
+        setUsers(
+          users.map((user) =>
+            user.id === userId ? { ...user, active: enable } : user,
+          ),
+        );
+      },
+    });
 
   const rows = users?.map((item) => {
-    const selected = selection.includes(item.id);
-
     return (
-      <Table.Tr
-        className={selected ? classes.rowSelected : '' + ' cursor-context-menu'}
-        key={item.id}
-      >
-        <Table.Td>
-          <Checkbox
-            checked={selection.includes(item.id)}
-            onChange={() => toggleRow(item.id)}
-          />
-        </Table.Td>
+      <Table.Tr className="cursor-context-menu" key={item.id}>
         <Table.Td>
           <Group gap="sm">
             <Avatar
@@ -122,18 +153,25 @@ function UsersTableComponent({
 
         {/* Button Actions */}
         <Table.Td>
-          <Group gap={0} justify="flex-end">
-            <ActionIcon color="gray" size="md" variant="subtle">
-              <IconEdit
-                stroke={1.5}
-                style={{ width: rem(16), height: rem(16) }}
-              />
-            </ActionIcon>
-            <ActionIcon color="red" size="md" variant="subtle">
-              <IconTrash
-                stroke={1.5}
-                style={{ width: rem(16), height: rem(16) }}
-              />
+          <Group gap={8} justify="flex-end">
+            <Button
+              color={item.active ? 'green' : 'red'}
+              leftSection={
+                item.active ? (
+                  <IconShieldCheck size={rem(19)} stroke={1.6} />
+                ) : (
+                  <IconShieldCancel size={rem(19)} stroke={1.6} />
+                )
+              }
+              onClick={() => disableUserModal(item.id, !item.active)}
+              size="xs"
+              variant="light"
+            >
+              {item.active ? 'Enabled' : 'Disabled'}
+            </Button>
+
+            <ActionIcon color="gray" variant="default">
+              <IconEdit size={rem(18)} stroke={1.6} />
             </ActionIcon>
           </Group>
         </Table.Td>
@@ -146,10 +184,6 @@ function UsersTableComponent({
       <Table highlightOnHover miw={800} verticalSpacing="sm">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ width: rem(44) }}>
-              {/* Loading indicator */}
-              {loading && <Loader size="sm" type="dots" />}
-            </Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th>Email</Table.Th>
             <Table.Th>Department</Table.Th>

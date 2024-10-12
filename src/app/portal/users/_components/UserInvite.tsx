@@ -5,7 +5,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconMailSpark, IconSend } from '@tabler/icons-react';
 import type { Enums } from '@/libs/supabase/_database';
 import { FilterUsers } from '@/components/Filters/FilterUsers';
-import { inviteUserAction } from '../action';
+import { inviteUserAction } from '../actions';
 
 function UserInviteComponent() {
   const [opened, { open, close }] = useDisclosure(false);

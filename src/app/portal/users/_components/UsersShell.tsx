@@ -8,6 +8,7 @@ import {
   Button,
   Divider,
   Group,
+  Loader,
   rem,
   TextInput,
 } from '@mantine/core';
@@ -146,9 +147,12 @@ export default function UsersShell() {
             Clear filters
           </Button>
         )}
+
+        {/* Loading indicator */}
+        {loading && <Loader size="sm" type="dots" />}
       </Group>
 
-      <UsersTable loading={loading} users={data ?? []} />
+      <UsersTable setUsers={setData} users={data ?? []} />
 
       {/* Pagination Controls */}
       <Button.Group className="justify-center" mt="xl">

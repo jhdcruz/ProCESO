@@ -1,6 +1,18 @@
 .root {
-  padding-top: rem(80px);
-  padding-bottom: rem(80px);
+  padding-left: rem(180px);
+  padding-bottom: rem(100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96vh;
+}
+
+.fullscreen {
+  padding-bottom: rem(100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96vh;
 }
 
 .inner {
