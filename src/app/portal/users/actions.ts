@@ -43,3 +43,36 @@ export async function inviteUserAction(
     message: `'${email}' has been successfully invited.`,
   };
 }
+
+/**
+ * Disable/ban user to the system.
+ *
+ * @param uid User ID to disable
+ */
+export async function changeUserAccess(uid: string, active: boolean) {
+  const cookieStore = cookies();
+  const supabase: SupabaseClient = createAdminClient(cookieStore);
+
+  const { error } = await supabase
+    .from('users')
+    .update({ active: active })
+    .eq('id', uid);
+
+  const action = active ? 'enable' : 'disable';
+
+  if (error) {
+    return {
+      status: 2,
+      title: `Unable to ${action} user`,
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: `User has been ${action}d`,
+    message: action
+      ? 'User can now log-in or use the system.'
+      : "User won't be able to log-in anymore.",
+  };
+}
