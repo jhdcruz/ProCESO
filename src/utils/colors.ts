@@ -38,6 +38,8 @@ export function getDeptColor(dept?: Enums<'roles_dept'> | null): MantineColor {
       return 'violet';
     case 'ceso':
       return 'brand';
+    case 'itso':
+      return 'orange';
     default:
       return 'gray';
   }
