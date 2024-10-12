@@ -5,11 +5,7 @@ import { useProgress } from 'react-transition-progress';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { AppShell, Tabs, rem } from '@mantine/core';
-import {
-  IconBrandGoogleDrive,
-  IconInfoCircle,
-  IconTimeline,
-} from '@tabler/icons-react';
+import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
@@ -52,32 +48,17 @@ function EventDetailsComponent({
           {/* Tabs Content */}
           <Tabs.List grow justify="stretch" mb={16}>
             <Tabs.Tab
-              leftSection={
-                <IconInfoCircle style={{ width: rem(16), height: rem(16) }} />
-              }
+              leftSection={<IconInfoSquare size={rem(18)} />}
               value="info"
             >
               Information
             </Tabs.Tab>
 
             <Tabs.Tab
-              leftSection={
-                <IconTimeline style={{ width: rem(16), height: rem(16) }} />
-              }
+              leftSection={<IconTimeline size={rem(18)} />}
               value="analytics"
             >
               Analytics & Insights
-            </Tabs.Tab>
-
-            <Tabs.Tab
-              leftSection={
-                <IconBrandGoogleDrive
-                  style={{ width: rem(16), height: rem(16) }}
-                />
-              }
-              value="storage"
-            >
-              Files
             </Tabs.Tab>
           </Tabs.List>
 
@@ -87,10 +68,6 @@ function EventDetailsComponent({
 
           <Tabs.Panel value="analytics">
             <>Analytics, Insights, and Feedback Panel</>
-          </Tabs.Panel>
-
-          <Tabs.Panel value="storage">
-            <>Storage and files panel</>
           </Tabs.Panel>
         </Tabs>
       )}
