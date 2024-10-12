@@ -35,7 +35,7 @@ export async function getUsers({
     data: users,
     count,
     error,
-  } = await query.range(range?.[0] ?? 0, range?.[1] ?? 24);
+  } = await query.range(range?.[0] ?? 0, range?.[1] ?? 24).order('role');
 
   if (error) {
     return {
