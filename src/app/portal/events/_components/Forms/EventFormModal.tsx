@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -73,9 +72,6 @@ export function EventFormModalComponent({
   close: () => void;
 }) {
   const [pending, setPending] = useState(false);
-
-  // get current url path for revalidation
-  const pathname = usePathname();
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);

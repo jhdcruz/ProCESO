@@ -18,7 +18,10 @@ export default async function Layout({
   children: ReactNode;
 }>) {
   const user = await getCurrentUser().then((res) => res.data);
-  if (!user) redirect('/', RedirectType.replace);
+
+  if (!user) {
+    return null;
+  }
 
   return <AppContainer user={user}>{children}</AppContainer>;
 }

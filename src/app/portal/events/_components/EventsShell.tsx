@@ -1,6 +1,6 @@
 'use client';
 
-import { useDeferredValue, useEffect, useState } from 'react';
+import { memo, useDeferredValue, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -28,11 +28,7 @@ const EventFormModal = dynamic(
   },
 );
 
-export default function EventsShell({
-  user,
-}: {
-  user: Tables<'users'> | undefined;
-}) {
+function EventsShellComponent({ user }: { user: Tables<'users'> | undefined }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [query, setQuery] = useState<string>('');
   const searchQuery = useDeferredValue<string>(query);
@@ -117,3 +113,5 @@ export default function EventsShell({
     </AppShell.Main>
   );
 }
+
+export const EventsShell = memo(EventsShellComponent);
