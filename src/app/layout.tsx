@@ -77,7 +77,7 @@ export default function RootLayout({
         <ColorSchemeScript defaultColorScheme="auto" />
         <link
           crossOrigin="use-credentials"
-          href="https://kcgvoeyhpkxzvanujxlt.supabase.co"
+          href={process.env.NEXT_PUBLIC_SUPABASE_URL}
           rel="preconnect"
         />
       </head>
