@@ -14,6 +14,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
+import type { Tables } from '@/libs/supabase/_database';
 import { getRoleColor } from '@/utils/colors';
 import { signOut } from '@/utils/sign-out';
 import classes from './SidebarUser.module.css';
