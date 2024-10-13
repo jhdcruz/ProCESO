@@ -13,6 +13,12 @@ export interface EventResponse extends ApiResponse {
   data?: Tables<'events'>[];
 }
 
+export interface EventSeriesResponse extends ApiResponse {
+  data?: (Tables<'events'> & {
+    series_data: Tables<'series'>;
+  })[];
+}
+
 export interface EventDetailsProps
   extends Partial<Tables<'events_details_view'>> {
   users: Tables<'events_faculties_view'>[] | null;

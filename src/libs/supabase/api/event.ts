@@ -3,7 +3,11 @@ import { revalidatePath } from 'next/cache';
 import { createBrowserClient } from '../client';
 import type { Tables, TablesInsert } from '../_database';
 import { getAssignedFaculties } from './faculty-assignments';
-import type { EventResponse, EventDetailsResponse } from './_response';
+import type {
+  EventResponse,
+  EventDetailsResponse,
+  EventSeriesResponse,
+} from './_response';
 import ApiResponse from '@/utils/response';
 import { systemUrl } from '@/app/routes';
 
@@ -99,12 +103,17 @@ export async function getEventsInRange({
   start: string;
   end: string;
   supabase?: SupabaseClient;
-}): Promise<EventResponse> {
+}): Promise<EventSeriesResponse> {
   if (!supabase) supabase = createBrowserClient();
 
   const { data: events, error } = await supabase
     .from('events')
-    .select()
+    .select(
+      `
+       *,
+       series_data:series (*)
+       `,
+    )
     .gte('date_starting', start)
     .lte('date_ending', end);
 
