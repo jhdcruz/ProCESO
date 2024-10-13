@@ -4,6 +4,7 @@ import { lazy, memo, Suspense } from 'react';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
+import { PageLoader } from '@/components/Loader/PageLoader';
 
 const EventCard = lazy(() =>
   import('./EventCard').then((mod) => ({ default: mod.EventCard })),
@@ -64,7 +65,7 @@ function EventAccordionShell({
               )}
             </>
           ) : (
-            <Loader className="mx-auto" type="dots" />
+            <PageLoader />
           )}
         </Suspense>
       </Accordion.Panel>
