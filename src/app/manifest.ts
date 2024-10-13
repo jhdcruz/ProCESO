@@ -8,7 +8,6 @@ export default function manifest(): MetadataRoute.Manifest {
     description:
       "The official portal of the T.I.P's Community Extensions Service Office (CESO).",
     start_url: '/',
-    scope: '/',
     background_color: '#242424',
     display: 'standalone',
     theme_color: '#ffc30a',
@@ -17,13 +16,12 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/assets/tip-r.png',
         sizes: 'any',
         type: 'image/png',
-        purpose: 'any',
+        purpose: 'maskable',
       },
       {
         src: '/favicon.ico',
         sizes: 'any',
         type: 'image/x-icon',
-        purpose: 'badge',
       },
     ],
   };
