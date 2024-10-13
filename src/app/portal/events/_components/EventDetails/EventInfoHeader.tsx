@@ -82,7 +82,7 @@ function EventDetailsHeader({
             Are you sure you want to delete this event? This action is
             irreversible.
           </Text>
-          <Text mt="sm" fw="bold">
+          <Text fw="bold" mt="sm">
             All data associated with this event will be lost.
           </Text>
         </>
