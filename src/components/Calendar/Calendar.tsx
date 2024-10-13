@@ -38,7 +38,6 @@ function CalendarComponent() {
           right: 'timeGridDay,today prev,next',
         }}
         height="96vh"
-        hiddenDays={[0]}
         initialView="dayGridMonth"
         lazyFetching={true}
         nowIndicator={true}
