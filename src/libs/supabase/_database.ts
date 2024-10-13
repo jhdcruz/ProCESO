@@ -144,21 +144,18 @@ export type Database = {
       }
       series: {
         Row: {
-          active: boolean
           color: string | null
           created_at: string
           id: string
           title: string
         }
         Insert: {
-          active?: boolean
           color?: string | null
           created_at?: string
           id?: string
           title: string
         }
         Update: {
-          active?: boolean
           color?: string | null
           created_at?: string
           id?: string
