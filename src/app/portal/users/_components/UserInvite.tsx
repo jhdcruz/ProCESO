@@ -50,7 +50,6 @@ function UserInviteComponent() {
   return (
     <>
       <Modal
-        centered
         onClose={close}
         opened={opened}
         size={rem(450)}
