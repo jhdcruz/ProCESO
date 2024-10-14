@@ -99,6 +99,9 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
     });
 
   useEffect(() => {
+    // fixes erratic behavior when changing series
+    setEvents([]);
+
     const seriesEvents = async () => {
       setLoading(true);
 
