@@ -19,7 +19,7 @@ const SeriesAccordion = dynamic(
 );
 
 export const metadata: Metadata = {
-  title: 'Event Series | ' + defaultMetadata.title,
+  title: 'Event Series - ' + defaultMetadata.title,
 };
 
 export default async function Page() {
@@ -27,7 +27,7 @@ export default async function Page() {
 
   return (
     <SeriesShell>
-      <Group content="center" mb="md">
+      <Group content="center" mb="md" mt="sm">
         <IconPlus size={16} />
         <Text c="dimmed">
           To create a new series,{' '}
