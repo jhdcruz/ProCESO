@@ -11,6 +11,8 @@ import {
   Stack,
   ActionIcon,
   Tooltip,
+  Divider,
+  Fieldset,
 } from '@mantine/core';
 import {
   IconCalendarClock,
@@ -18,8 +20,9 @@ import {
   IconTimeline,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
+import sanitizeHtml from 'sanitize-html';
 import { Tables } from '@/libs/supabase/_database';
-import classes from '@/styles/Card.module.css';
+import classes from '@/components/Cards/Card.module.css';
 
 export const EventCard = memo((data: Tables<'events'>) => (
   <Card className={classes.card} p="sm" radius="md" shadow="sm" withBorder>
@@ -65,11 +68,16 @@ export const EventCard = memo((data: Tables<'events'>) => (
             )}
           </Badge>
         )}
-        {/* TODO: show other details, except description. */}
+
+        <Text fz="sm" lineClamp={4} mt="sm">
+          {data.description?.length
+            ? sanitizeHtml(data.description, { allowedTags: [] })
+            : 'No description provided for this event yet.'}
+        </Text>
       </Stack>
     </Card.Section>
 
-    <Group gap="xs" mt="xs" wrap="nowrap">
+    <Group className={classes.links} gap="xs" wrap="nowrap">
       <Button
         className="shadow-sm"
         component={Link}

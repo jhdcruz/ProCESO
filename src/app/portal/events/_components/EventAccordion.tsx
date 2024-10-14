@@ -1,13 +1,16 @@
 'use client';
 
-import { lazy, memo, Suspense } from 'react';
+import { memo, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 
-const EventCard = lazy(() =>
-  import('./EventCard').then((mod) => ({ default: mod.EventCard })),
+const EventCard = dynamic(() =>
+  import('@/components/Cards/EventCard').then((mod) => ({
+    default: mod.EventCard,
+  })),
 );
 
 function EventAccordionShell({
@@ -39,16 +42,12 @@ function EventAccordionShell({
         </Group>
       </Accordion.Control>
       <Accordion.Panel>
-        <Suspense
-          fallback={
-            <Loader className="mx-auto my-5 block" size="md" type="dots" />
-          }
-        >
+        <Suspense fallback={<PageLoader />}>
           {events?.data ? (
             <>
               {events?.data?.length ? (
                 <Flex
-                  align="flex-start"
+                  align="stretch"
                   direction="row"
                   gap="md"
                   justify="flex-start"

@@ -1,6 +1,7 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { memo, Suspense, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Accordion,
   type AccordionControlProps,
@@ -13,14 +14,22 @@ import {
   rem,
 } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { Tables } from '@/libs/supabase/_database';
-import { EventCard } from '@portal/events/_components/EventCard';
-import { deleteSeries, getSeriesEvents } from '../actions';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { SeriesEditModal } from './SeriesEditModal';
 import { useDisclosure } from '@mantine/hooks';
+import { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import { deleteSeries, getSeriesEvents } from '../actions';
+
+const SeriesEditModal = dynamic(
+  () => import('./SeriesEditModal').then((mod) => mod.SeriesEditModal),
+  { ssr: false },
+);
+
+const EventCard = dynamic(
+  () => import('@/components/Cards/EventCard').then((mod) => mod.EventCard),
+  { ssr: false },
+);
 
 interface AccordionProps extends AccordionControlProps {
   seriesId: string;
@@ -131,31 +140,33 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
         </Group>
       </AccordionControl>
       <Accordion.Panel>
-        {value === item.id && events?.length ? (
-          <>
-            <Flex
-              align="flex-start"
-              direction="row"
-              gap="md"
-              justify="flex-start"
-              key={value}
-              wrap="wrap"
-            >
-              {events?.map((event: Tables<'events'>) => {
-                // value prevents duplicate events
-                return <EventCard key={event?.id + value} {...event} />;
-              })}
-            </Flex>
-          </>
-        ) : (
-          <>
-            {loading ? (
-              <PageLoader />
-            ) : (
-              <Text c="dimmed">No events found under this series.</Text>
-            )}
-          </>
-        )}
+        <Suspense fallback={<PageLoader />}>
+          {value === item.id && events?.length ? (
+            <>
+              <Flex
+                align="flex-start"
+                direction="row"
+                gap="md"
+                justify="flex-start"
+                key={value}
+                wrap="wrap"
+              >
+                {events?.map((event: Tables<'events'>) => {
+                  // value prevents duplicate events
+                  return <EventCard key={event?.id + value} {...event} />;
+                })}
+              </Flex>
+            </>
+          ) : (
+            <>
+              {loading ? (
+                <PageLoader />
+              ) : (
+                <Text c="dimmed">No events found under this series.</Text>
+              )}
+            </>
+          )}
+        </Suspense>
       </Accordion.Panel>
     </Accordion.Item>
   ));
