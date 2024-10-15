@@ -69,7 +69,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
           </Badge>
         )}
 
-        <Text fz="sm" lineClamp={4} mt="sm">
+        <Text fz="sm" lineClamp={2} mt="sm">
           {data.description?.length
             ? sanitizeHtml(data.description, { allowedTags: [] })
             : 'No description provided for this event yet.'}
