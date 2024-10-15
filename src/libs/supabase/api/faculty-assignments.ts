@@ -101,7 +101,7 @@ export async function getAssignedFaculties({
 }
 
 /**
- * Check if the faculty of the given user ID
+ * Get list of faculty users that
  * has conflicts with the given date range.
  *
  * @param date_starting - The starting date of the range.
