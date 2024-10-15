@@ -3,7 +3,7 @@
 import { memo, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
-import type { EventResponse } from '@/libs/supabase/api/_response';
+import type { EventsViewResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 
@@ -20,10 +20,10 @@ function EventAccordionShell({
   past,
   role,
 }: {
-  assigned: EventResponse | undefined;
-  ongoing: EventResponse | undefined;
-  upcoming: EventResponse | undefined;
-  past: EventResponse | undefined;
+  assigned: EventsViewResponse | undefined;
+  ongoing: EventsViewResponse | undefined;
+  upcoming: EventsViewResponse | undefined;
+  past: EventsViewResponse | undefined;
   role: Enums<'roles_user'>;
 }) {
   // Event Accordion Items Component
@@ -32,7 +32,7 @@ function EventAccordionShell({
     events,
   }: {
     type: string;
-    events: Readonly<EventResponse> | undefined;
+    events: Readonly<EventsViewResponse> | undefined;
   }) => (
     <Accordion.Item key={type} value={type}>
       <Accordion.Control>
@@ -54,7 +54,7 @@ function EventAccordionShell({
                   key={type}
                   wrap="wrap"
                 >
-                  {events?.data?.map((event: Tables<'events'>) => {
+                  {events?.data?.map((event: Tables<'events_details_view'>) => {
                     // `type` prevents error on duplicate card with assigned events
                     return <EventCard key={event?.id + type} {...event} />;
                   })}
@@ -74,7 +74,6 @@ function EventAccordionShell({
     <Accordion
       defaultValue={['assigned', 'ongoing', 'upcoming']}
       multiple={true}
-      transitionDuration={200}
       variant="separated"
     >
       <EventItems
