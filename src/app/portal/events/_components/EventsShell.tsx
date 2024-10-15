@@ -7,7 +7,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getEvents } from '@/libs/supabase/api/event';
 import { getAssignedEvents } from '@/libs/supabase/api/faculty-assignments';
-import { EventResponse } from '@/libs/supabase/api/_response';
+import { EventsViewResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
 
@@ -36,14 +36,14 @@ function EventsShellComponent() {
   const searchQuery = useDeferredValue<string>(query);
 
   // data
-  const [assigned, setAssigned] = useState<EventResponse>();
-  const [ongoing, setOngoing] = useState<EventResponse>();
-  const [upcoming, setUpcoming] = useState<EventResponse>();
-  const [past, setPast] = useState<EventResponse>();
+  const [assigned, setAssigned] = useState<EventsViewResponse>();
+  const [ongoing, setOngoing] = useState<EventsViewResponse>();
+  const [upcoming, setUpcoming] = useState<EventsViewResponse>();
+  const [past, setPast] = useState<EventsViewResponse>();
 
   useEffect(() => {
     const eventsAssigned = getAssignedEvents({
-      userId: user?.id!,
+      userId: user.id,
       search: searchQuery,
     });
 
@@ -109,7 +109,7 @@ function EventsShellComponent() {
         assigned={assigned}
         ongoing={ongoing}
         past={past}
-        role={user?.role ?? 'student'}
+        role={user.role ?? 'student'}
         upcoming={upcoming}
       />
     </AppShell.Main>

@@ -33,9 +33,8 @@ export async function getEvents({
   filter?: 'recent' | 'ongoing' | 'upcoming' | 'past';
   limit?: number;
   supabase?: SupabaseClient;
-}): Promise<EventResponse> {
+}): Promise<EventsViewResponse> {
   if (!supabase) supabase = createBrowserClient();
-
   let query = supabase.from('events_details_view').select();
 
   // filters based on event dates
@@ -70,7 +69,9 @@ export async function getEvents({
 
   if (search) query = query.ilike('title', `%${search}%`);
   if (limit) query = query.limit(limit);
-  const { data: events, error } = await query.returns<Tables<'events'>[]>();
+
+  const { data: events, error } =
+    await query.returns<Tables<'events_details_view'>[]>();
 
   if (error) {
     return {

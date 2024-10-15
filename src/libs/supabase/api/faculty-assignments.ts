@@ -1,10 +1,10 @@
 import { type DateValue } from '@mantine/dates';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import type {
-  EventResponse,
   FacultyAssignmentsResponse,
   EventFacultiesResponse,
   FacultyConflictsResponse,
+  EventsViewResponse,
 } from './_response';
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { Tables } from '@/libs/supabase/_database';
@@ -25,7 +25,7 @@ export async function getAssignedEvents({
   userId: string;
   search?: string;
   supabase?: SupabaseClient;
-}): Promise<EventResponse> {
+}): Promise<EventsViewResponse> {
   if (!supabase) supabase = createBrowserClient();
   const now = new Date().toISOString();
 
@@ -33,12 +33,15 @@ export async function getAssignedEvents({
     .from('faculty_assignments')
     .select(
       `
-      events (*)
+      events:events_details_view (*)
       `,
     )
     .eq('user_id', userId)
     .gte('events.date_starting', now)
-    .order('date_starting', { referencedTable: 'events', ascending: false });
+    .order('date_starting', {
+      referencedTable: 'events_details_view',
+      ascending: false,
+    });
 
   if (search) query = query.ilike('events.title', `%${search}%`);
   const { data: events, error } = await query;
@@ -52,7 +55,7 @@ export async function getAssignedEvents({
   }
 
   // flatten result similar to `.from('events')`
-  const assignedEvents: Tables<'events'>[] = events.flatMap(
+  const assignedEvents: Tables<'events_details_view'>[] = events.flatMap(
     (event) => event?.events || [],
   );
 
