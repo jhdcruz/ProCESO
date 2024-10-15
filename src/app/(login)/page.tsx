@@ -3,9 +3,9 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { redirect } from 'next/navigation';
 import { metadata as defaultMetadata } from '@/app/layout';
-import { getCurrentUser } from '@/libs/supabase/api/user';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 import loginBg from '@/components/_assets/img/login-bg.webp';
+import { getCurrentUser } from '../actions';
 import '@/styles/jitbit.css';
 
 const LoginForm = dynamic(() =>

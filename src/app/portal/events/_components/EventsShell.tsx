@@ -8,8 +8,8 @@ import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getEvents } from '@/libs/supabase/api/event';
 import { getAssignedEvents } from '@/libs/supabase/api/faculty-assignments';
 import { EventResponse } from '@/libs/supabase/api/_response';
-import type { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import { useUser } from '@/components/Providers/UserProvider';
 
 const EventAccordion = dynamic(
   () => import('./EventAccordion').then((mod) => mod.EventAccordion),
@@ -28,7 +28,9 @@ const EventFormModal = dynamic(
   },
 );
 
-function EventsShellComponent({ user }: { user: Tables<'users'> | undefined }) {
+function EventsShellComponent() {
+  const user = useUser();
+
   const [opened, { open, close }] = useDisclosure(false);
   const [query, setQuery] = useState<string>('');
   const searchQuery = useDeferredValue<string>(query);
