@@ -144,8 +144,22 @@ export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = createServerClient(cookieStore);
 
-  return await deleteEvent({
-    eventId: eventId,
-    supabase: supabase,
-  });
+  const { error } = await supabase.from('events').delete().eq('id', eventId);
+
+  revalidatePath('/api/events/feed');
+  revalidatePath(`${systemUrl}/events`);
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to delete event',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Event deleted',
+    message: 'The event has been successfully deleted.',
+  };
 }

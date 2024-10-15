@@ -313,38 +313,3 @@ export async function updateEventDescription({
     data: updatedEvent,
   };
 }
-
-/**
- * Delete event.
- *
- * @param eventId - The event ID to update description for.
- * @param supabase - The Supabase client to use.
- */
-export async function deleteEvent({
-  eventId,
-  supabase,
-}: {
-  eventId: string;
-  supabase?: SupabaseClient;
-}): Promise<ApiResponse> {
-  if (!supabase) supabase = createBrowserClient();
-
-  const { error } = await supabase.from('events').delete().eq('id', eventId);
-
-  revalidatePath('/api/events/feed');
-  revalidatePath(`${systemUrl}/events`);
-
-  if (error) {
-    return {
-      status: 2,
-      title: 'Unable to delete event',
-      message: error.message,
-    };
-  }
-
-  return {
-    status: 0,
-    title: 'Event deleted',
-    message: 'The event has been successfully deleted.',
-  };
-}

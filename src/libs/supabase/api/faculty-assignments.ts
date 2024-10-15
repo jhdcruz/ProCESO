@@ -27,6 +27,7 @@ export async function getAssignedEvents({
   supabase?: SupabaseClient;
 }): Promise<EventResponse> {
   if (!supabase) supabase = createBrowserClient();
+  const now = new Date().toISOString();
 
   let query = supabase
     .from('faculty_assignments')
@@ -36,6 +37,7 @@ export async function getAssignedEvents({
       `,
     )
     .eq('user_id', userId)
+    .gte('events.date_starting', now)
     .order('date_starting', { referencedTable: 'events', ascending: false });
 
   if (search) query = query.ilike('events.title', `%${search}%`);
