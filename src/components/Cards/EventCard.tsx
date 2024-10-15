@@ -24,13 +24,28 @@ import sanitizeHtml from 'sanitize-html';
 import { Tables } from '@/libs/supabase/_database';
 import classes from '@/components/Cards/Card.module.css';
 
-export const EventCard = memo((data: Tables<'events'>) => (
+export const EventCard = memo((data: Tables<'events_details_view'>) => (
   <Card className={classes.card} p="sm" radius="md" shadow="sm" withBorder>
     <Card.Section
       component={Link}
       href={`events/${data.id}/info`}
       prefetch={false}
     >
+      {data.series && (
+        <Tooltip
+          label={`This event is part of "${data.series}" event group.`}
+          position="bottom"
+        >
+          <Badge
+            className="absolute left-2 top-2 shadow-md"
+            color={data.series_color!}
+            variant="dot"
+          >
+            {data.series}
+          </Badge>
+        </Tooltip>
+      )}
+
       <Image
         alt=""
         className="object-scale-down"
@@ -52,6 +67,7 @@ export const EventCard = memo((data: Tables<'events'>) => (
         <Text fw={500} fz="lg">
           {data.title}
         </Text>
+
         {/* Date range badge label */}
         {data.date_starting && data.date_ending && (
           <Badge

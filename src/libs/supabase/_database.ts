@@ -216,6 +216,7 @@ export type Database = {
           id: string | null
           image_url: string | null
           series: string | null
+          series_color: string | null
           title: string | null
           updated_at: string | null
           visibility: Database["public"]["Enums"]["event_visibility"] | null

@@ -6,7 +6,7 @@ import { getAssignedFaculties } from './faculty-assignments';
 import type {
   EventResponse,
   EventDetailsResponse,
-  EventSeriesResponse,
+  EventsViewResponse,
 } from './_response';
 import ApiResponse from '@/utils/response';
 import { systemUrl } from '@/app/routes';
@@ -36,7 +36,7 @@ export async function getEvents({
 }): Promise<EventResponse> {
   if (!supabase) supabase = createBrowserClient();
 
-  let query = supabase.from('events').select();
+  let query = supabase.from('events_details_view').select();
 
   // filters based on event dates
   if (filter) {
@@ -93,29 +93,32 @@ export async function getEvents({
  *
  * @param start - The starting date of the range.
  * @param end - The ending date of the range.
+ * @param exclude - List of event IDs to exclude from the results.
  * @param supabase - Supabase client instance.
  */
 export async function getEventsInRange({
   start,
   end,
+  exclude,
   supabase,
 }: {
   start: string;
   end: string;
+  exclude?: string;
   supabase?: SupabaseClient;
-}): Promise<EventSeriesResponse> {
+}): Promise<EventsViewResponse> {
   if (!supabase) supabase = createBrowserClient();
 
-  const { data: events, error } = await supabase
-    .from('events')
-    .select(
-      `
-       *,
-       series_data:series (*)
-       `,
-    )
+  let query = supabase
+    .from('events_details_view')
+    .select()
     .gte('date_starting', start)
     .lte('date_ending', end);
+
+  // exclude events with specified IDs
+  if (exclude) query = query.neq('id', exclude);
+
+  const { data: events, error } = await query;
 
   if (error) {
     return {

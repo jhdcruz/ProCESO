@@ -4,18 +4,18 @@ import { type ReactNode } from 'react';
 import { AppShell } from '@mantine/core';
 import { sidebarRoutes } from '@/app/routes';
 import Sidebar from '@/components/Sidebar/Sidebar';
-import type { Tables } from '@/libs/supabase/_database';
+import { useUser } from '@/components/Providers/UserProvider';
 
 /**
  * The main layout for the application.
  */
 export function AppContainer({
-  user,
   children,
 }: Readonly<{
-  user: Tables<'users'>;
   children: ReactNode;
 }>) {
+  const user = useUser();
+
   return (
     <AppShell
       layout="alt"

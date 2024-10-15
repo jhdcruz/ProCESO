@@ -66,9 +66,12 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [loading, setLoading] = useState(false);
 
+  // accordion control
   const [value, setValue] = useState<string | null>(null);
+
+  // data
   const [series, setSeries] = useState<Tables<'series'>[]>(data);
-  const [events, setEvents] = useState<Tables<'events'>[] | null>(null);
+  const [events, setEvents] = useState<Tables<'events_details_view'>[]>();
   const [seriesToEdit, setSeriesToEdit] = useState<Tables<'series'> | null>(
     null,
   );
@@ -126,7 +129,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
   }, [value]);
 
   const items = series.map((item) => (
-    <Accordion.Item key={item.id} value={item.id}>
+    <Accordion.Item key={item.id} value={item.title}>
       <AccordionControl
         onDelete={() => deleteSeriesModal(item.id)}
         onEdit={handleEdit}
@@ -141,7 +144,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
       </AccordionControl>
       <Accordion.Panel>
         <Suspense fallback={<PageLoader />}>
-          {value === item.id && events?.length ? (
+          {value === item.title && events?.length ? (
             <>
               <Flex
                 align="stretch"
@@ -151,7 +154,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
                 key={value}
                 wrap="wrap"
               >
-                {events?.map((event: Tables<'events'>) => {
+                {events?.map((event: Tables<'events_details_view'>) => {
                   // value prevents duplicate events
                   return <EventCard key={event?.id + value} {...event} />;
                 })}

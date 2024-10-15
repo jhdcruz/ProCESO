@@ -80,7 +80,7 @@ export function EventFormModalComponent({
   close: () => void;
 }) {
   const [pending, setPending] = useState(false);
-  const [events, setEvents] = useState<Tables<'events'>[]>([]);
+  const [events, setEvents] = useState<Tables<'events_details_view'>[]>([]);
   const [isInternal, setIsInternal] = useState(false);
 
   // image file preview state
@@ -133,6 +133,7 @@ export function EventFormModalComponent({
         const conflicts = await getEventsInRange({
           start: values.date_starting.toISOString(),
           end: values.date_ending.toISOString(),
+          exclude: event?.id,
         });
 
         // collect conflicting events for display in the modal

@@ -13,10 +13,8 @@ export interface EventResponse extends ApiResponse {
   data?: Tables<'events'>[];
 }
 
-export interface EventSeriesResponse extends ApiResponse {
-  data?: (Tables<'events'> & {
-    series_data: Tables<'series'>;
-  })[];
+export interface EventsViewResponse extends ApiResponse {
+  data?: Tables<'events_details_view'>[];
 }
 
 export interface EventDetailsProps

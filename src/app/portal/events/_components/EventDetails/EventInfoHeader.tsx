@@ -15,6 +15,7 @@ import {
   rem,
   Stack,
   Title,
+  Tooltip,
 } from '@mantine/core';
 import {
   IconAlertTriangle,
@@ -124,24 +125,42 @@ function EventDetailsHeader({
 
       <Group justify="space-between">
         <Stack gap={0}>
-          <Title order={2}>{event?.title}</Title>
+          <Title mb="lg" order={2}>
+            {event?.title}
+          </Title>
 
           {/* Event date and end */}
           {event?.date_starting && event?.date_ending && (
-            <Badge
-              leftSection={<IconCalendarClock size={16} />}
-              my="xs"
-              size="lg"
-              variant="light"
-            >
-              {formatDateRange(
-                new Date(event.date_starting),
-                new Date(event.date_ending),
-                {
-                  includeTime: true,
-                },
-              )}
-            </Badge>
+            <Group mb="xs">
+              <Text>When:</Text>
+              <Badge
+                leftSection={<IconCalendarClock size={16} />}
+                size="lg"
+                variant="light"
+              >
+                {formatDateRange(
+                  new Date(event.date_starting),
+                  new Date(event.date_ending),
+                  {
+                    includeTime: true,
+                  },
+                )}
+              </Badge>
+            </Group>
+          )}
+
+          {event?.series && (
+            <Group mb="xs">
+              <Text>Series:</Text>
+              <Tooltip
+                label={`This event is part of the "${event.series}" events.`}
+                position="bottom"
+              >
+                <Badge color={event.series_color!} variant="dot">
+                  {event.series}
+                </Badge>
+              </Tooltip>
+            </Group>
           )}
 
           {/* Event control buttons */}
