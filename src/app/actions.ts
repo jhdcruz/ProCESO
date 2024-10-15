@@ -31,7 +31,11 @@ export async function getCurrentUser(): Promise<UserResponse> {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/');
+    return {
+      status: 2,
+      title: 'No user found',
+      message: 'No user found in session',
+    };
   }
 
   const { data: current, error } = await supabase
