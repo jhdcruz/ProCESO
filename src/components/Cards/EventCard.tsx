@@ -39,8 +39,8 @@ export const EventCard = memo((data: Tables<'events'>) => (
         h="180"
         height={180}
         src={data.image_url}
-        w="320"
-        width={320}
+        w="326"
+        width={326}
       />
     </Card.Section>
 
@@ -97,18 +97,6 @@ export const EventCard = memo((data: Tables<'events'>) => (
           variant="default"
         >
           <IconTimeline size={16} />
-        </ActionIcon>
-      </Tooltip>
-
-      <Tooltip label="View uploaded files" multiline withArrow>
-        <ActionIcon
-          component={Link}
-          href={`events/${data.id}/storage`}
-          prefetch={false}
-          size="lg"
-          variant="default"
-        >
-          <IconFolders size={16} />
         </ActionIcon>
       </Tooltip>
     </Group>
