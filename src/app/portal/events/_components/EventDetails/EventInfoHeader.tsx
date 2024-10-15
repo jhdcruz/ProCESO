@@ -132,7 +132,7 @@ function EventDetailsHeader({
           {/* Event date and end */}
           {event?.date_starting && event?.date_ending && (
             <Group mb="xs">
-              <Text>When:</Text>
+              <Text c="dimmed">When:</Text>
               <Badge
                 leftSection={<IconCalendarClock size={16} />}
                 size="lg"
@@ -151,9 +151,9 @@ function EventDetailsHeader({
 
           {event?.series && (
             <Group mb="xs">
-              <Text>Series:</Text>
+              <Text c="dimmed">Series:</Text>
               <Tooltip
-                label={`This event is part of the "${event.series}" events.`}
+                label={`This event is part of the "${event.series}" event group.`}
                 position="bottom"
               >
                 <Badge color={event.series_color!} variant="dot">
