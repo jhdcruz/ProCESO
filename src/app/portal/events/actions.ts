@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
-import { deleteEvent, postEvent, updateEvent } from '@/libs/supabase/api/event';
+import { postEvent, updateEvent } from '@/libs/supabase/api/event';
 import { postSeries } from '@/libs/supabase/api/series';
 import { postEventCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
