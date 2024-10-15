@@ -1,13 +1,9 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { DateTimePicker, type DateValue } from '@mantine/dates';
-import { useForm } from '@mantine/form';
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconUpload, IconX } from '@tabler/icons-react';
-
-import { IconArrowRight } from '@tabler/icons-react';
 import {
+  Badge,
+  Blockquote,
   Button,
   Checkbox,
   Divider,
@@ -15,6 +11,7 @@ import {
   Group,
   Input,
   Modal,
+  rem,
   SegmentedControl,
   Text,
   TextInput,
@@ -24,12 +21,23 @@ import {
   IMAGE_MIME_TYPE,
   type FileWithPath,
 } from '@mantine/dropzone';
-
-import { submitEvent } from '../../actions';
-import { SeriesInput } from './SeriesInput';
+import { DateTimePicker, type DateValue } from '@mantine/dates';
+import { useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import {
+  IconCheck,
+  IconInfoCircle,
+  IconUpload,
+  IconArrowRight,
+  IconX,
+} from '@tabler/icons-react';
+import { formatDateRange } from 'little-date';
 import type { EventResponse } from '@/libs/supabase/api/_response';
+import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
-import { Enums } from '@/libs/supabase/_database';
+import { getEventsInRange } from '@/libs/supabase/api/event';
+import { submitEvent } from '@portal/events/actions';
+import { SeriesInput } from './SeriesInput';
 import classes from '@/styles/forms/ContainedInput.module.css';
 
 const FacultyList = dynamic(
@@ -72,6 +80,7 @@ export function EventFormModalComponent({
   close: () => void;
 }) {
   const [pending, setPending] = useState(false);
+  const [events, setEvents] = useState<Tables<'events'>[]>([]);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -105,10 +114,21 @@ export function EventFormModalComponent({
           : null,
     },
 
-    onValuesChange: (values) => {
+    onValuesChange: async (values) => {
       // clear end date if start date is empty
       if (!values.date_starting) {
         form.setFieldValue('date_ending', null);
+      }
+
+      // query for conflicting events on the set date range
+      if (values.date_starting && values.date_ending) {
+        const conflicts = await getEventsInRange({
+          start: values.date_starting.toISOString(),
+          end: values.date_ending.toISOString(),
+        });
+
+        // collect conflicting events for display in the modal
+        setEvents(conflicts?.data ?? []);
       }
     },
   });
@@ -293,6 +313,37 @@ export function EventFormModalComponent({
                 {...form.getInputProps('date_ending')}
               />
             </Group>
+
+            {/* events conflict notice */}
+            {events.length > 0 && (
+              <Blockquote
+                color="yellow"
+                icon={<IconInfoCircle size={rem(20)} />}
+                iconSize={36}
+                ml={8}
+                my={16}
+                p={24}
+                pb="xs"
+              >
+                There are currently {events.length} events scheduled on the
+                selected date range.
+                {events.length > 0 && (
+                  <ul>
+                    {events.map((event) => (
+                      <li key={event.id}>
+                        {event.title}{' '}
+                        <Badge variant="default">
+                          {formatDateRange(
+                            new Date(event.date_starting!),
+                            new Date(event.date_ending!),
+                          )}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Blockquote>
+            )}
 
             <Divider className="my-1" />
 
