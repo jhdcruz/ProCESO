@@ -81,6 +81,7 @@ export function EventFormModalComponent({
 }) {
   const [pending, setPending] = useState(false);
   const [events, setEvents] = useState<Tables<'events'>[]>([]);
+  const [isInternal, setIsInternal] = useState(false);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -115,6 +116,13 @@ export function EventFormModalComponent({
     },
 
     onValuesChange: async (values) => {
+      // check if visibility is set to internal
+      if (values.visibility === 'Internal') {
+        setIsInternal(true);
+      } else {
+        setIsInternal(false);
+      }
+
       // clear end date if start date is empty
       if (!values.date_starting) {
         form.setFieldValue('date_ending', null);
@@ -356,12 +364,21 @@ export function EventFormModalComponent({
               mt="sm"
               {...form.getInputProps('handled_by', { type: 'checkbox' })}
             >
-              {/*  Faculty Table Checkbox */}
-              <FacultyList
-                defaultSelection={event?.handled_by}
-                endDate={form.getValues().date_ending}
-                startDate={form.getValues().date_starting}
-              />
+              {isInternal ? (
+                <Text c="dimmed" mt={32} size="sm" ta="center">
+                  Assigning of faculty members is not available for internal
+                  events.
+                </Text>
+              ) : (
+                <>
+                  {/*  Faculty Table Checkbox */}
+                  <FacultyList
+                    defaultSelection={event?.handled_by}
+                    endDate={form.getValues().date_ending}
+                    startDate={form.getValues().date_starting}
+                  />
+                </>
+              )}
             </Checkbox.Group>
           </Grid.Col>
         </Grid>
