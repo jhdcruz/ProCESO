@@ -327,7 +327,7 @@ export function EventFormModalComponent({
             {events.length > 0 && (
               <Blockquote
                 color="yellow"
-                icon={<IconInfoCircle size={rem(20)} />}
+                icon={<IconInfoCircle size={20} />}
                 iconSize={36}
                 ml={8}
                 my={16}

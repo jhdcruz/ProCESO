@@ -66,7 +66,7 @@ function SeriesEdit({
   }, [opened, series]);
 
   return (
-    <Modal onClose={close} opened={opened} size={rem(300)} title="Edit Series">
+    <Modal onClose={close} opened={opened} size={300} title="Edit Series">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack>
           <TextInput

@@ -41,7 +41,7 @@ function Disabled() {
             <Title className={`${classes.title} drop-shadow-md`}>
               Your account were disabled.
             </Title>
-            <IconShieldLock color="#828282" size={rem(48)} />
+            <IconShieldLock color="#828282" size={48} />
           </Group>
           <Text
             c="dimmed"
@@ -55,7 +55,7 @@ function Disabled() {
           </Text>
           <Group justify="center">
             <Button
-              leftSection={<IconLogout size={rem(18)} />}
+              leftSection={<IconLogout size={18} />}
               onClick={() => signOut(router)}
               size="md"
               variant="default"
@@ -66,7 +66,7 @@ function Disabled() {
             <Button
               component="a"
               href="https://tip.jitbit.com/Tickets/New?ref=ProCESO"
-              leftSection={<IconTicket size={rem(18)} />}
+              leftSection={<IconTicket size={18} />}
               size="md"
               target="_blank"
             >

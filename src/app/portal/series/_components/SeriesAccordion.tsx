@@ -13,10 +13,10 @@ import {
   Group,
   rem,
 } from '@mantine/core';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { deleteSeries, getSeriesEvents } from '../actions';
@@ -30,33 +30,38 @@ const EventCard = dynamic(
   () => import('@/components/Cards/EventCard').then((mod) => mod.EventCard),
   { ssr: false },
 );
-
 interface AccordionProps extends AccordionControlProps {
   seriesId: string;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
-function AccordionControl(props: AccordionProps) {
+function AccordionControl({
+  seriesId,
+  onEdit,
+  onDelete,
+  ...rest
+}: AccordionProps) {
   return (
     <Center>
-      <Accordion.Control {...props} />
+      <Accordion.Control {...rest} />
       <ActionIcon
+        aria-label="Edit series"
         color="gray"
-        onClick={() => props.onEdit(props.seriesId)}
-        size="lg"
+        onClick={() => onEdit(seriesId)}
         variant="subtle"
       >
-        <IconEdit size={rem(18)} />
+        <IconEdit size={18} stroke={1.5} />
       </ActionIcon>
+
       <ActionIcon
+        aria-label="Delete series"
         color="gray"
         mr="sm"
-        onClick={() => props.onDelete(props.seriesId)}
-        size="lg"
+        onClick={() => onDelete(seriesId)}
         variant="subtle"
       >
-        <IconTrash size={rem(18)} />
+        <IconTrash size={18} stroke={1.5} />
       </ActionIcon>
     </Center>
   );

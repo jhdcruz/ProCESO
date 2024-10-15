@@ -158,9 +158,9 @@ function UsersTableComponent({
               color={item.active ? 'green' : 'red'}
               leftSection={
                 item.active ? (
-                  <IconShieldCheck size={rem(19)} stroke={1.6} />
+                  <IconShieldCheck size={18} />
                 ) : (
-                  <IconShieldCancel size={rem(19)} stroke={1.6} />
+                  <IconShieldCancel size={18} />
                 )
               }
               onClick={() => disableUserModal(item.id, !item.active)}
@@ -170,8 +170,8 @@ function UsersTableComponent({
               {item.active ? 'Enabled' : 'Disabled'}
             </Button>
 
-            <ActionIcon color="gray" variant="default">
-              <IconEdit size={rem(18)} stroke={1.6} />
+            <ActionIcon color="gray" variant="subtle">
+              <IconEdit size={18} stroke={1.5} />
             </ActionIcon>
           </Group>
         </Table.Td>

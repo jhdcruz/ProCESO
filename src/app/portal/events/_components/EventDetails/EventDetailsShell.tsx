@@ -4,7 +4,7 @@ import { memo, startTransition } from 'react';
 import { useProgress } from 'react-transition-progress';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { AppShell, Tabs, rem } from '@mantine/core';
+import { AppShell, Tabs } from '@mantine/core';
 import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import { PageLoader } from '@/components/Loader/PageLoader';
@@ -47,15 +47,12 @@ function EventDetailsComponent({
         >
           {/* Tabs Content */}
           <Tabs.List grow justify="stretch" mb={16}>
-            <Tabs.Tab
-              leftSection={<IconInfoSquare size={rem(18)} />}
-              value="info"
-            >
+            <Tabs.Tab leftSection={<IconInfoSquare size={18} />} value="info">
               Information
             </Tabs.Tab>
 
             <Tabs.Tab
-              leftSection={<IconTimeline size={rem(18)} />}
+              leftSection={<IconTimeline size={18} />}
               value="analytics"
             >
               Analytics & Insights
