@@ -144,7 +144,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
           {value === item.id && events?.length ? (
             <>
               <Flex
-                align="flex-start"
+                align="stretch"
                 direction="row"
                 gap="md"
                 justify="flex-start"
