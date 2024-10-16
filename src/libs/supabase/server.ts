@@ -1,8 +1,8 @@
-import type { cookies } from 'next/headers';
 import { createServerClient as supaServerClient } from '@supabase/ssr';
 import { Database } from './_database';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
-export const createServerClient = (cookieStore: ReturnType<typeof cookies>) => {
+export const createServerClient = (cookieStore: ReadonlyRequestCookies) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
     throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
   }

@@ -14,7 +14,6 @@ const SeriesAccordion = dynamic(
     import('./_components/SeriesAccordion').then((mod) => mod.SeriesAccordion),
   {
     loading: () => <PageLoader />,
-    ssr: false,
   },
 );
 

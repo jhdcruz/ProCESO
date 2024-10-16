@@ -6,7 +6,6 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { UserResponse } from '@/libs/supabase/api/_response';
 import { createServerClient } from '@/libs/supabase/server';
-import { redirect } from 'next/navigation';
 
 /**
  * Render a pathname stale, and in need of fresh data.
@@ -23,7 +22,7 @@ export async function revalidate(pathname: string) {
  * Get currently logged-in user from session.
  */
 export async function getCurrentUser(): Promise<UserResponse> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createServerClient(cookieStore);
 
   const {

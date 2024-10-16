@@ -1,18 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import { redirect } from 'next/navigation';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 import loginBg from '@/components/_assets/img/login-bg.webp';
+import { LoginForm } from './_components/LoginForm';
 import { getCurrentUser } from '../actions';
 import '@/styles/jitbit.css';
-
-const LoginForm = dynamic(() =>
-  import('@/app/(login)/_components/LoginForm').then((mod) => ({
-    default: mod.LoginForm,
-  })),
-);
 
 export const metadata: Metadata = {
   title: 'Login - ' + defaultMetadata.title,

@@ -1,9 +1,6 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
 import { createServerClient } from '@/libs/supabase/server';
-import { createBrowserClient } from '@/libs/supabase/client';
-
-import type { cookies } from 'next/headers';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 /**
  * Send notification email to assigned faculties that
@@ -11,27 +8,20 @@ import type { SupabaseClient } from '@supabase/supabase-js';
  *
  * @param event - event name.
  * @param id - array of faculty IDs.
+ * @param auth - auth cookies.
  */
 export const emailAssigned = task({
   id: 'email-assigned',
   run: async (payload: {
     event: string;
     ids: string[];
-    auth?: typeof cookies;
+    auth: ReadonlyRequestCookies;
   }) => {
     // HACK: for RLS policies, we are passing auth cookies,
     // probably a bad thing, probably, I think.
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_URL');
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    let supabase: SupabaseClient;
-
-    if (payload.auth) {
-      supabase = createServerClient(payload.auth());
-    } else {
-      // mostly for testing due to RLS policies in
-      // supabase tables
-      supabase = createBrowserClient();
-    }
+    const supabase = createServerClient(payload.auth);
 
     logger.info('Getting users and event information...');
     // fetch faculty emails

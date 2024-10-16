@@ -21,7 +21,7 @@ export async function inviteUserAction(
     role?: Enums<'roles_user'>;
   },
 ) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase: SupabaseClient = createAdminClient(cookieStore);
 
   const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
@@ -50,7 +50,7 @@ export async function inviteUserAction(
  * @param uid User ID to disable
  */
 export async function changeUserAccess(uid: string, active: boolean) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase: SupabaseClient = createAdminClient(cookieStore);
 
   const { error } = await supabase

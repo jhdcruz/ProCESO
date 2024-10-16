@@ -11,7 +11,7 @@ import { EventDetailsShell } from '../../_components/EventDetails/EventDetailsSh
 // cache the event details to avoid duplicated
 // requests for the page and metadata generation.
 const cacheEventDetails = cache(async (id: string) => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createServerClient(cookieStore);
 
   return await getEventsDetails({
@@ -26,9 +26,10 @@ const cacheEventDetails = cache(async (id: string) => {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const event = await cacheEventDetails(params.id);
+  const { id } = await params;
+  const event = await cacheEventDetails(id);
 
   if (!event.data) {
     return {

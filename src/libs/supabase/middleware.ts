@@ -38,29 +38,33 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && request.nextUrl.pathname.startsWith('/portal')) {
+  if (
+    !user &&
+    request.nextUrl.pathname.startsWith('/portal') &&
+    !request.nextUrl.pathname.match(/^\/portal\/events\/.*\/info$/) // allow /portal/events/**/info
+  ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);
-  }
+  } else {
+    // redirect if user is disabled
+    if (user && !user.app_metadata.active) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/disabled';
+      return NextResponse.rewrite(url);
+    }
 
-  // redirect if user is disabled
-  if (user && !user.app_metadata.active) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/disabled';
-    return NextResponse.rewrite(url);
-  }
-
-  // redirect enabled users from accessing the /disabled
-  if (
-    user &&
-    user.app_metadata.active &&
-    request.nextUrl.pathname.endsWith('disabled')
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/portal';
-    return NextResponse.redirect(url);
+    // redirect enabled users from accessing the /disabled
+    if (
+      user &&
+      user.app_metadata.active &&
+      request.nextUrl.pathname.endsWith('disabled')
+    ) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/portal';
+      return NextResponse.redirect(url);
+    }
   }
 
   // check if the user is d

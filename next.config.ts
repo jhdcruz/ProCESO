@@ -1,18 +1,17 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import type { NextConfig } from 'next';
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   experimental: {
-    instrumentationHook: true,
     reactCompiler: true,
-    ppr: true,
     optimizePackageImports: [
       '@mantine/core',
       '@mantine/hooks',
       '@mantine/charts',
       '@react-email/components',
-      '@tabler/icons-react',
       'framer-motion',
       'dayjs',
+      'little-date',
       'recharts',
     ],
   },
@@ -26,9 +25,9 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.googleusercontent.com',
+        hostname: '**.googleusercontent.com',
         port: '',
-        pathname: '/**',
+        search: '',
       },
     ],
   },

@@ -30,7 +30,7 @@ export async function submitEvent(
   event: EventFormProps,
   existingId?: string,
 ): Promise<ApiResponse> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createServerClient(cookieStore);
 
   // get current user id for created_by
@@ -114,7 +114,7 @@ export async function submitEvent(
     await emailAssigned.trigger({
       event: event.title,
       ids: event.handled_by,
-      auth: () => cookieStore,
+      auth: cookieStore,
     });
 
     if (!assignResponse.data) return assignResponse;
@@ -141,7 +141,7 @@ export async function submitEvent(
  * @param eventId - The event id to delete.
  */
 export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const supabase = createServerClient(cookieStore);
 
   const { error } = await supabase.from('events').delete().eq('id', eventId);
