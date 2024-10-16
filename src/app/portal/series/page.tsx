@@ -1,21 +1,12 @@
 import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
-import { metadata as defaultMetadata } from '@/app/layout';
 import { Divider, Group, Text } from '@mantine/core';
-import { PageLoader } from '@/components/Loader/PageLoader';
-import { SeriesShell } from './_components/SeriesShell';
-import { getSeries } from './actions';
-import { Link } from 'react-transition-progress/next';
-import { systemUrl } from '@/app/routes';
 import { IconPlus } from '@tabler/icons-react';
-
-const SeriesAccordion = dynamic(
-  () =>
-    import('./_components/SeriesAccordion').then((mod) => mod.SeriesAccordion),
-  {
-    loading: () => <PageLoader />,
-  },
-);
+import { Link } from 'react-transition-progress/next';
+import { metadata as defaultMetadata } from '@/app/layout';
+import { systemUrl } from '@/app/routes';
+import { SeriesShell } from './_components/SeriesShell';
+import { SeriesAccordion } from './_components/SeriesAccordion';
+import { getSeries } from './actions';
 
 export const metadata: Metadata = {
   title: 'Event Series - ' + defaultMetadata.title,

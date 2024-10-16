@@ -15,6 +15,7 @@ const EventAccordion = dynamic(
   () => import('./EventAccordion').then((mod) => mod.EventAccordion),
   {
     loading: () => <PageLoader />,
+    ssr: false,
   },
 );
 
