@@ -1,14 +1,11 @@
 import { cache } from 'react';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { createServerClient } from '@/libs/supabase/server';
 import { getEventsDetails } from '@/libs/supabase/api/event';
 import { EventDetailsShell } from '@portal/events/_components/EventDetails/EventDetailsShell';
-import { useUser } from '@/components/Providers/UserProvider';
-import { canAccessEvent } from '@/utils/access-control';
 
 // cache the event details to avoid duplicated
 // requests for the page and metadata generation.
@@ -33,7 +30,7 @@ export async function generateMetadata({
   const { id } = await params;
   const event = await cacheEventDetails(id);
 
-  if (!event.data) {
+  if (!event.data || event.data?.visibility !== 'Everyone') {
     return {
       title: '404 - Event not found ' + defaultMetadata.title,
       description: event?.message,
@@ -46,10 +43,7 @@ export async function generateMetadata({
     applicationName: 'ProCESO',
     creator: event.data.created_by,
     category: event.data.series,
-    robots:
-      event.data.visibility === 'Everyone'
-        ? 'index, follow'
-        : 'noindex, nofollow',
+    robots: 'index, follow',
     openGraph: {
       images: [{ url: event.data.image_url! }],
       publishedTime: event.data.created_at!,
@@ -63,13 +57,8 @@ export default async function EventPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const user = useUser();
   const { id } = await params;
   const event = await cacheEventDetails(id);
-
-  if (canAccessEvent(event.data?.visibility!, user.role!)) {
-    redirect('/not-found');
-  }
 
   return <EventDetailsShell event={event?.data ?? null} />;
 }

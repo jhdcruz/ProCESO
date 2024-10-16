@@ -7,8 +7,10 @@ import dynamic from 'next/dynamic';
 import { AppShell, Tabs } from '@mantine/core';
 import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
-import { PageLoader } from '@/components/Loader/PageLoader';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
+import { PageLoader } from '@/components/Loader/PageLoader';
+import { useUser } from '@/components/Providers/UserProvider';
+import { canAccessEvent } from '@/utils/access-control';
 import { EventInfo } from './EventInfo';
 
 const NotFound = dynamic(
@@ -26,13 +28,15 @@ function EventDetailsComponent({
 }: Readonly<{
   event: EventDetailsProps | null;
 }>) {
+  const user = useUser();
+
   const startProgress = useProgress();
   const router = useRouter();
   const pathname = usePathname();
 
   return (
     <AppShell.Main>
-      {!event ? (
+      {!event || !canAccessEvent(event?.visibility!, user.role!) ? (
         <NotFound />
       ) : (
         <Tabs
