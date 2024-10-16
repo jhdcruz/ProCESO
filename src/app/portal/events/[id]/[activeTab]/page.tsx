@@ -6,6 +6,8 @@ import { metadata as defaultMetadata } from '@/app/layout';
 import { createServerClient } from '@/libs/supabase/server';
 import { getEventsDetails } from '@/libs/supabase/api/event';
 import { EventDetailsShell } from '@portal/events/_components/EventDetails/EventDetailsShell';
+import { siteUrl } from '@/utils/url';
+import { systemUrl } from '@/app/routes';
 
 // cache the event details to avoid duplicated
 // requests for the page and metadata generation.
@@ -32,19 +34,21 @@ export async function generateMetadata({
 
   if (!event.data || event.data?.visibility !== 'Everyone') {
     return {
-      title: '404 - Event not found ' + defaultMetadata.title,
+      title: '404 – Event not found ' + defaultMetadata.title,
       description: event?.message,
     };
   }
 
   return {
-    title: `${event.data.title} - ${defaultMetadata.title}`,
+    title: `${event.data.title} | T.I.P Community Extension Services Office – Manila`,
     description: sanitizeHtml(event.data.description!, { allowedTags: [] }),
     applicationName: 'ProCESO',
-    creator: event.data.created_by,
+    publisher: event.data.created_by,
     category: event.data.series,
     robots: 'index, follow',
     openGraph: {
+      siteName: 'ProCESO',
+      url: `${siteUrl() + systemUrl}/events/${event.data.id}/info`,
       images: [{ url: event.data.image_url! }],
       publishedTime: event.data.created_at!,
       expirationTime: event.data.date_ending!,

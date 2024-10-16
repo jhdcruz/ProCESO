@@ -1,14 +1,14 @@
-/*
- * Get the current deployment url.
+/**
+ * Get the current deployment site url.
+ *
+ * @returns The current deployment site url with protocol (http/https).
  */
 export const siteUrl = () => {
-  let url =
+  const url =
     process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ??
     process.env.NEXT_PUBLIC_VERCEL_URL ??
     'http://localhost:3000';
 
   // Make sure to include `https://` when not localhost.
-  url = url.includes('http') ? url : `https://${url}/`;
-
-  return url;
+  return url.includes('http') ? url : `https://${url}/`;
 };
