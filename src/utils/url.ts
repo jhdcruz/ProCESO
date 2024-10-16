@@ -10,5 +10,6 @@ export const siteUrl = () => {
     'http://localhost:3000';
 
   // Make sure to include `https://` when not localhost.
-  return url.includes('http') ? url : `https://${url}/`;
+  const formattedUrl = url.includes('http') ? url : `https://${url}`;
+  return formattedUrl.replace(/\/$/, ''); // remove trailing slash
 };
