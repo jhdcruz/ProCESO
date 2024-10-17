@@ -144,18 +144,34 @@ export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
-  const { error } = await supabase.from('events').delete().eq('id', eventId);
+  // delete record from events table
+  const { error: tableError } = await supabase
+    .from('events')
+    .delete()
+    .eq('id', eventId);
 
-  revalidatePath('/api/events/feed');
-  revalidatePath(`${systemUrl}/events`);
-
-  if (error) {
+  if (tableError) {
     return {
       status: 2,
       title: 'Unable to delete event',
-      message: error.message,
+      message: tableError.message,
     };
   }
+  // delete storage usage
+  const { error: storageError } = await supabase.storage
+    .from('event_cover')
+    .remove([eventId]);
+
+  if (storageError) {
+    return {
+      status: 1,
+      title: 'Unable to delete event cover',
+      message: storageError.message,
+    };
+  }
+
+  revalidatePath('/api/events/feed');
+  revalidatePath(`${systemUrl}/events`);
 
   return {
     status: 0,
