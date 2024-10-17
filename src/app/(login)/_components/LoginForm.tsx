@@ -28,7 +28,7 @@ export function LoginFormComponent() {
         radius={0}
         shadow="xl"
       >
-        <main className="h-max w-[90%]">
+        <section className="h-max w-[90%]">
           <Stack align="stretch" gap="sm" justify="center" mb={20} mt={30}>
             <Image
               alt=""
@@ -41,30 +41,10 @@ export function LoginFormComponent() {
             />
           </Stack>
 
-          <TextInput
-            autoCapitalize="none"
-            autoComplete="email"
-            autoCorrect="off"
-            label="Email address"
-            name="email"
-            placeholder="admin@tip.edu.ph"
-          />
-          <PasswordInput
-            autoCapitalize="none"
-            autoCorrect="off"
-            label="Password"
-            mt="md"
-            name="password"
-            placeholder="Your password"
-          />
-          <Button fullWidth mt="xl" type="submit">
-            Login
-          </Button>
-
-          <Divider label="Or continue using" labelPosition="center" my="lg" />
+          <Divider label="Login using" labelPosition="center" my="lg" />
 
           <GoogleButton />
-        </main>
+        </section>
 
         <Group className="w-full" justify="space-around">
           <ThemeSwitcher />
