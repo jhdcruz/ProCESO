@@ -90,7 +90,7 @@ export function EventFormModalComponent({
   // form submission
   const form = useForm<EventFormProps>({
     mode: 'uncontrolled',
-    validateInputOnBlur: true,
+    validateInputOnChange: true,
 
     initialValues: {
       title: '',
@@ -301,7 +301,7 @@ export function EventFormModalComponent({
 
           {/* Right Column Grid */}
           <Grid.Col span={8}>
-            <Group grow>
+            <Group align="flex-start" grow>
               <DateTimePicker
                 classNames={classes}
                 clearable
