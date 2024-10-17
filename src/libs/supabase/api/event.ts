@@ -157,7 +157,9 @@ export async function getEventsDetails({
     .from('events_details_view')
     .select()
     .eq('id', eventId)
-    .returns<Tables<'events_details_view'>[]>();
+    .limit(1)
+    .returns<Tables<'events_details_view'>[]>()
+    .single();
 
   // get assigned faculties
   const faculties = getAssignedFaculties({
@@ -175,7 +177,7 @@ export async function getEventsDetails({
     };
   }
 
-  if (assigned.status !== 0) {
+  if (assigned.status !== 0 || !assigned.data) {
     return {
       status: assigned.status,
       title: assigned.title,
@@ -188,8 +190,8 @@ export async function getEventsDetails({
     title: 'Events fetched',
     message: 'Events have been successfully fetched.',
     data: {
-      ...event.data[0],
-      users: assigned?.data ?? null,
+      ...event.data,
+      users: assigned.data,
     },
   };
 }

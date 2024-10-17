@@ -61,8 +61,8 @@ function EventDetailsHeader({
   const startProgress = useProgress();
 
   const eventForm: EventFormProps = {
-    id: event.id,
-    title: event.title,
+    id: event.id!,
+    title: event.title as string,
     series: event.series,
     visibility: event.visibility ?? 'Everyone',
     handled_by: event.users?.map((user) => user.faculty_id!) ?? undefined,
@@ -91,7 +91,7 @@ function EventDetailsHeader({
       confirmProps: { color: 'red' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
-        const response = await deleteEventAction(event.id);
+        const response = await deleteEventAction(event.id!);
 
         notifications.show({
           title: response?.title,

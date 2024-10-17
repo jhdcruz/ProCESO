@@ -43,7 +43,7 @@ function EventDetailsBody({
   useEffect(() => {
     const fetchFaculties = async () => {
       const response = await getAssignedFaculties({
-        eventId: event.id,
+        eventId: event.id!,
       });
 
       if (response?.status !== 0) {

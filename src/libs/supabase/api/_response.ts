@@ -18,8 +18,6 @@ export interface EventsViewResponse extends ApiResponse {
 }
 
 export interface EventDetailsProps extends Tables<'events_details_view'> {
-  id: string;
-  title: string;
   users: Tables<'events_faculties_view'>[];
 }
 
