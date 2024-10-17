@@ -55,6 +55,7 @@ export const listOthers: RolesDept[] = [{ value: 'na', label: 'Not Assigned' }];
 
 /** List of user positions.  */
 export const listPos: RolesPos[] = [
-  { value: 'head', label: 'Committee Head' },
   { value: 'dean', label: 'Dept. Dean' },
+  { value: 'chair', label: 'Prog. Chair' },
+  { value: 'head', label: 'Comm. Head' },
 ];
