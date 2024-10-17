@@ -5,9 +5,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconMailSpark, IconSend } from '@tabler/icons-react';
 import type { Enums } from '@/libs/supabase/_database';
 import { FilterUsers } from '@/components/Filters/FilterUsers';
-import { inviteUserAction } from '../actions';
+import { inviteUserAction } from '@portal/users/actions';
 
-function UserInviteComponent() {
+function UserInvite() {
   const [opened, { open, close }] = useDisclosure(false);
   const [pending, setPending] = useState(false);
 
@@ -71,10 +71,11 @@ function UserInviteComponent() {
             setDept={setDept}
             setPos={setPos}
             setRoles={setRole}
+            single
           />
         </Stack>
 
-        <Group justify="flex-end" mt="md">
+        <Group gap="sm" justify="flex-end" mt="lg">
           <Button
             loaderProps={{ type: 'dots' }}
             loading={pending}
@@ -100,4 +101,4 @@ function UserInviteComponent() {
   );
 }
 
-export const UserInvite = memo(UserInviteComponent);
+export const UserInviteModal = memo(UserInvite);

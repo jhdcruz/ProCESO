@@ -18,7 +18,7 @@ import type { Enums, Tables } from '@/libs/supabase/_database';
 import { getUsers } from '@/libs/supabase/api/user';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { FilterUsers } from '@/components/Filters/FilterUsers';
-import { UserInvite } from './UserInvite';
+import { UserInviteModal } from './Modals/UserInviteModal';
 
 const UsersTable = dynamic(
   () =>
@@ -117,7 +117,7 @@ export default function UsersShell() {
       {/* Table controls  */}
       <Group className="content-center" mb="md">
         {/* Invite user by email */}
-        <UserInvite />
+        <UserInviteModal />
 
         {/*  Event search */}
         <TextInput
