@@ -100,6 +100,7 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => (
 
       <Tooltip label="View event analytics" multiline withArrow>
         <ActionIcon
+          aria-label="View event analytics"
           component={Link}
           href={`events/${data.id}/analytics`}
           prefetch={false}

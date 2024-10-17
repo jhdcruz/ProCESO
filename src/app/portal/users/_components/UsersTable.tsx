@@ -130,6 +130,7 @@ function UsersTableComponent({
             </Button>
 
             <ActionIcon
+              aria-label={`Edit user ${item.name.toLowerCase()}`}
               color="gray"
               onClick={() => {
                 setSelectedUser(item);
