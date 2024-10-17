@@ -7,31 +7,8 @@ on:
     branches: ['main']
 
 jobs:
-  snyk:
-    name: Snyk Security Scan
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run Snyk Security Scan
-        uses: snyk/actions/node@master
-        continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --sarif-file-output=snyk.sarif
-
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: snyk.sarif
-
-  cql-scan:
-    name: CodeQL Scans
+  scan:
+    name: CQL and Snyk Scans
     runs-on: ubuntu-latest
     timeout-minutes: 480
     permissions:
@@ -72,6 +49,19 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: /language:javascript-typescript
+
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif
+
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk.sarif
 
   codacy:
     permissions:
