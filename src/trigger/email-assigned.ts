@@ -1,6 +1,6 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
 import { createServerClient } from '@/libs/supabase/server';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import type { cookies as asyncCookies } from 'next/headers';
 
 /**
  * Send notification email to assigned faculties that
@@ -15,13 +15,13 @@ export const emailAssigned = task({
   run: async (payload: {
     event: string;
     ids: string[];
-    auth: ReadonlyRequestCookies;
+    cookies: ReturnType<typeof asyncCookies>;
   }) => {
     // HACK: for RLS policies, we are passing auth cookies,
     // probably a bad thing, probably, I think.
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_URL');
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    const supabase = createServerClient(payload.auth);
+    const supabase = await createServerClient(payload.cookies);
 
     logger.info('Getting users and event information...');
     // fetch faculty emails
@@ -55,7 +55,7 @@ export const emailAssigned = task({
     //           to avoid additional backend requests.
     //           Currently, using resend API here with react as template
     //           throws an error of `Objects are not valid as a React child`.
-    const response = await fetch(appUrl.value + '/api/email/assigned', {
+    const response = await fetch(appUrl.value + '/api/emails/assigned', {
       method: 'POST',
       body: JSON.stringify({
         event: eventRes?.data,

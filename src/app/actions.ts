@@ -22,8 +22,8 @@ export async function revalidate(pathname: string) {
  * Get currently logged-in user from session.
  */
 export async function getCurrentUser(): Promise<UserResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   const {
     data: { user },

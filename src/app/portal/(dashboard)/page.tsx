@@ -11,6 +11,6 @@ export const metadata: Metadata = {
  *
  * Auth checking is done in the middleware.
  */
-export default async function App() {
+export default function App() {
   return <DashboardShell />;
 }

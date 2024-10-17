@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { getEventsInRange } from '@/libs/supabase/api/event';
 import { eventsToFc } from '@/utils/events-to-fc';
+import { createServerClient } from '@/libs/supabase/server';
 
 /**
  * Get list of events in FullCalendar EventSourceInput format.
@@ -10,8 +11,8 @@ import { eventsToFc } from '@/utils/events-to-fc';
 export async function GET(req: NextRequest) {
   // get search params from request
   const params = req.nextUrl.searchParams;
-  const start = params.get('start') as string;
-  const end = params.get('end') as string;
+  const start = params.get('start')!;
+  const end = params.get('end')!;
 
   if (!start && !end) {
     return new Response('Invalid request', {
@@ -19,15 +20,19 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  const cookies = req.cookies;
+  const supabase = await createServerClient(cookies);
+
   // get events within range
   const response = await getEventsInRange({
     start,
     end,
+    supabase,
   });
 
-  if (response.status !== 0) {
+  if (response.status !== 0 || !response.data) {
     return new Response(JSON.stringify(response), {
-      status: 500,
+      status: 400,
       headers: { 'Content-Type': 'application/json' },
     });
   }

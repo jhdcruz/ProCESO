@@ -43,7 +43,7 @@ function EventDetailsBody({
   useEffect(() => {
     const fetchFaculties = async () => {
       const response = await getAssignedFaculties({
-        eventId: event?.id!,
+        eventId: event.id,
       });
 
       if (response?.status !== 0) {
@@ -61,7 +61,7 @@ function EventDetailsBody({
     };
 
     void fetchFaculties();
-  }, [event?.id]);
+  }, [event.id]);
 
   return (
     <Grid gutter="xl">
@@ -81,17 +81,17 @@ function EventDetailsBody({
           </Text>
           <Group my={16}>
             <Avatar
-              alt={event?.created_by!}
+              alt={event.created_by!}
               color="initials"
               radius="xl"
-              src={event?.creator_avatar}
+              src={event.creator_avatar}
             />
             <div>
               <Text lineClamp={1} size="sm">
-                {event?.created_by}
+                {event.created_by}
               </Text>
               <Text c="dimmed" size="xs">
-                {dayjs(event?.created_at).fromNow()}
+                {dayjs(event.created_at).fromNow()}
               </Text>
             </div>
           </Group>

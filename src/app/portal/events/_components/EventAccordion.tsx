@@ -2,7 +2,7 @@
 
 import { memo, Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import { Accordion, Text, Loader, Flex, Badge, Group } from '@mantine/core';
+import { Accordion, Text, Flex, Badge, Group } from '@mantine/core';
 import type { EventsViewResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';

@@ -17,9 +17,10 @@ export interface EventsViewResponse extends ApiResponse {
   data?: Tables<'events_details_view'>[];
 }
 
-export interface EventDetailsProps
-  extends Partial<Tables<'events_details_view'>> {
-  users: Tables<'events_faculties_view'>[] | null;
+export interface EventDetailsProps extends Tables<'events_details_view'> {
+  id: string;
+  title: string;
+  users: Tables<'events_faculties_view'>[];
 }
 
 export interface EventDetailsResponse extends ApiResponse {

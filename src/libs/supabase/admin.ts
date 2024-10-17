@@ -1,7 +1,10 @@
 import { createServerClient as supaServerClient } from '@supabase/ssr';
-import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import type { RequestCookies } from 'next/dist/compiled/@edge-runtime/cookies';
+import type { cookies as asyncCookies } from 'next/headers';
 
-export const createServerClient = (cookieStore: ReadonlyRequestCookies) => {
+export const createServerClient = async (
+  cookies: ReturnType<typeof asyncCookies> | RequestCookies,
+) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
     throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
   }
@@ -9,6 +12,8 @@ export const createServerClient = (cookieStore: ReadonlyRequestCookies) => {
   if (!process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY) {
     throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY');
   }
+
+  const cookieStore = await cookies;
 
   return supaServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

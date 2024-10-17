@@ -64,12 +64,9 @@ Overview of current technologies and resources to be used in the system.
 - Mend Renovate (Deps. Mgmt.)
 - Mend Bolt (Deps. Vulnerability Scanner)
 
-### Deployment
+### Deployment & Monitoring
 
 - Vercel
-
-### Monitoring
-
 - OneUptime (Uptime Monitoring)
 - Baselime.io (Observability)
 - Snyk.io (Application Security)
@@ -100,8 +97,8 @@ Overview of current technologies and resources to be used in the system.
 
 1. Setup acquired environment variables from services above in `.env` file.
 
-> [!NOTE]
-> A copy of `.env` file can be found in `.env.sample` file.
+   > [!NOTE]
+   > A copy of `.env` file can be found in `.env.sample` file.
 
 2. Configure Supabase Auth for [Google OAuth](https://supabase.com/docs/guides/auth/social-login/auth-google).
 
@@ -183,11 +180,11 @@ This work is distributed under [Apache License, Version 2.0](https://opensource.
 
 All trademarks, logos, and service marks displayed on this website are the property of their respective owners.
 
-> **Technological Institute of the Philippines (T.I.P)**
->
-> T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
-> T.I.P) in the Philippines.
+- **Technological Institute of the Philippines (T.I.P)**
 
-> **Google, LLC.**
->
-> Google and the Google logos are trademarks or registered trademarks of Google LLC in the United States and other countries.
+   T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
+   T.I.P) in the Philippines.
+
+- **Google, LLC.**
+
+   Google and the Google logos are trademarks or registered trademarks of Google LLC in the United States and other countries.

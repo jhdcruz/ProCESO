@@ -11,14 +11,8 @@ import {
   Stack,
   ActionIcon,
   Tooltip,
-  Divider,
-  Fieldset,
 } from '@mantine/core';
-import {
-  IconCalendarClock,
-  IconFolders,
-  IconTimeline,
-} from '@tabler/icons-react';
+import { IconCalendarClock, IconTimeline } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
 import sanitizeHtml from 'sanitize-html';
 import { Tables } from '@/libs/supabase/_database';
@@ -38,7 +32,7 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => (
         >
           <Badge
             className="absolute left-2 top-2 shadow-md"
-            color={data.series_color!}
+            color={data.series_color as string}
             variant="dot"
           >
             {data.series}

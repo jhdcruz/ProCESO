@@ -8,10 +8,10 @@ import { postEvent, updateEvent } from '@/libs/supabase/api/event';
 import { postSeries } from '@/libs/supabase/api/series';
 import { postEventCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
-import { emailAssigned } from '@/trigger/email-assigned';
 import type { EventResponse } from '@/libs/supabase/api/_response';
-import type ApiResponse from '@/utils/response';
+import { emailAssigned } from '@/trigger/email-assigned';
 import type { EventFormProps } from './_components/Forms/EventFormModal';
+import type ApiResponse from '@/utils/response';
 
 /**
  * Create and process new event.
@@ -30,8 +30,8 @@ export async function submitEvent(
   event: EventFormProps,
   existingId?: string,
 ): Promise<ApiResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   // get current user id for created_by
   const {
@@ -114,7 +114,7 @@ export async function submitEvent(
     await emailAssigned.trigger({
       event: event.title,
       ids: event.handled_by,
-      auth: cookieStore,
+      cookies: cookieStore,
     });
 
     if (!assignResponse.data) return assignResponse;
@@ -141,8 +141,8 @@ export async function submitEvent(
  * @param eventId - The event id to delete.
  */
 export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   const { error } = await supabase.from('events').delete().eq('id', eventId);
 

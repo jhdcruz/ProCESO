@@ -11,7 +11,6 @@ import {
   ColorSwatch,
   Flex,
   Group,
-  rem,
 } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
@@ -159,7 +158,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
                 key={value}
                 wrap="wrap"
               >
-                {events?.map((event: Tables<'events_details_view'>) => {
+                {events.map((event: Tables<'events_details_view'>) => {
                   // value prevents duplicate events
                   return <EventCard key={event?.id + value} {...event} />;
                 })}

@@ -1,6 +1,6 @@
 import { EventSourceInput } from '@fullcalendar/core';
 import sanitizeHtml from 'sanitize-html';
-import type { EventsViewResponse } from '@/libs/supabase/api/_response';
+import type { Tables } from '@/libs/supabase/_database';
 
 /**
  * Transforms events list from events schema to FullCalendar schema.
@@ -8,17 +8,15 @@ import type { EventsViewResponse } from '@/libs/supabase/api/_response';
  * @param events - The events list to transform.
  */
 export function eventsToFc(
-  events?: EventsViewResponse['data'],
+  events: Tables<'events_details_view'>[],
 ): EventSourceInput[] {
-  if (!events) return [];
-
   return events.map((event) => ({
     id: event.id!,
-    color: event.series_color ?? undefined,
+    color: event.series_color as string,
     title: event.title,
     start: new Date(event.date_starting as string),
     end: new Date(event.date_ending as string),
-    description: sanitizeHtml(event.description!, { allowedTags: [] }),
+    description: sanitizeHtml(event.description as string, { allowedTags: [] }),
     url: `/portal/events/${event.id}/info`,
     allDay:
       // TODO: Improve allDay check logic, this is unreliable.

@@ -12,7 +12,7 @@ export async function onEmailLogin(formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
-  const supabase = createServerClient(await cookies());
+  const supabase = createServerClient(cookies());
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,

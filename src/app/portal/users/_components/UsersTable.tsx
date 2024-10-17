@@ -8,7 +8,6 @@ import {
   Group,
   Avatar,
   Text,
-  rem,
   ActionIcon,
   Button,
 } from '@mantine/core';
@@ -83,9 +82,9 @@ function UsersTableComponent({
         const response = await changeUserAccess(userId, enable);
 
         notifications.show({
-          title: response?.title,
-          message: response?.message,
-          color: response?.status === 2 ? 'red' : 'green',
+          title: response.title,
+          message: response.message,
+          color: response.status === 2 ? 'red' : 'green',
           withBorder: true,
           withCloseButton: true,
           autoClose: 4000,
@@ -100,7 +99,7 @@ function UsersTableComponent({
       },
     });
 
-  const rows = users?.map((item) => {
+  const rows = users.map((item) => {
     return (
       <Table.Tr className="cursor-context-menu" key={item.id}>
         <Table.Td>

@@ -12,10 +12,9 @@ export function SystemHealth() {
 
   useEffect(() => {
     // check every 15 minutes
-    const interval = setInterval(() => {
-      checkHealth().then((health) => {
-        setHealth(health);
-      });
+    const interval = setInterval(async () => {
+      const health = await checkHealth();
+      setHealth(health);
     }, 900000);
 
     return () => clearInterval(interval);

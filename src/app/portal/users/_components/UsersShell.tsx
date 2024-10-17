@@ -26,8 +26,8 @@ const UsersTable = dynamic(
       (mod) => mod.UsersTable,
     ),
   {
-    ssr: false,
     loading: () => <PageLoader />,
+    ssr: false,
   },
 );
 
@@ -103,10 +103,10 @@ export default function UsersShell() {
       setLoading(false);
     };
 
-    void fetchUsers().catch((error: Record<string, unknown>) => {
+    void fetchUsers().catch((error: { message: string }) => {
       notifications.show({
         title: 'Unable to get users list',
-        message: error?.message as string,
+        message: error.message,
         color: 'red',
       });
     });
@@ -152,7 +152,7 @@ export default function UsersShell() {
         {loading && <Loader size="sm" type="dots" />}
       </Group>
 
-      <UsersTable setUsers={setData} users={data ?? []} />
+      <UsersTable setUsers={setData} users={data} />
 
       {/* Pagination Controls */}
       <Button.Group className="justify-center" mt="xl">

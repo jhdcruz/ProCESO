@@ -1,6 +1,6 @@
-import AssignedEmail from '@/emails/AssignedEmail';
-import { NextRequest } from 'next/server';
 import { Resend } from 'resend';
+import { NextRequest } from 'next/server';
+import AssignedEmail from '@/emails/AssignedEmail';
 
 /**
  * Email assigned faculties that they are assigned for an event.

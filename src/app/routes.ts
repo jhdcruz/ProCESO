@@ -16,10 +16,10 @@ export type Routes = {
   links?: NestedRoutes[];
 }[];
 
-export type NestedRoutes = {
+export interface NestedRoutes {
   label: string;
   link: string;
-};
+}
 
 /**
  * All routes after authentication are prefixed with this.

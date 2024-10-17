@@ -2,9 +2,6 @@ import { memo, startTransition } from 'react';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useProgress } from 'react-transition-progress';
-import { useDisclosure } from '@mantine/hooks';
-import { modals } from '@mantine/modals';
 import {
   Badge,
   Button,
@@ -17,6 +14,9 @@ import {
   Title,
   Tooltip,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { useDisclosure } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import {
   IconAlertTriangle,
   IconCalendarClock,
@@ -26,13 +26,12 @@ import {
   IconEditOff,
   IconTrash,
 } from '@tabler/icons-react';
+import { useProgress } from 'react-transition-progress';
 import { formatDateRange } from 'little-date';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { systemUrl } from '@/app/routes';
-import { EventFormProps } from '../Forms/EventFormModal';
 import { deleteEventAction } from '@portal/events/actions';
-import dayjs from '@/libs/dayjs';
-import { notifications } from '@mantine/notifications';
+import { EventFormProps } from '../Forms/EventFormModal';
 
 const EventFormModal = dynamic(
   () =>
@@ -62,14 +61,14 @@ function EventDetailsHeader({
   const startProgress = useProgress();
 
   const eventForm: EventFormProps = {
-    id: event.id!,
-    title: event.title!,
-    series: event.series!,
+    id: event.id,
+    title: event.title,
+    series: event.series,
     visibility: event.visibility ?? 'Everyone',
-    handled_by: event.users?.map((user) => user.faculty_id!) ?? [],
-    date_starting: dayjs(event.date_starting).toDate(),
-    date_ending: dayjs(event.date_ending).toDate(),
-    image_url: event.image_url!,
+    handled_by: event.users?.map((user) => user.faculty_id!) ?? undefined,
+    date_starting: new Date(event.date_starting!),
+    date_ending: new Date(event.date_ending!),
+    image_url: event.image_url ?? undefined,
   };
 
   // event deletion confirmation modal
@@ -92,7 +91,7 @@ function EventDetailsHeader({
       confirmProps: { color: 'red' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
-        const response = await deleteEventAction(event?.id!);
+        const response = await deleteEventAction(event.id);
 
         notifications.show({
           title: response?.title,
@@ -106,7 +105,7 @@ function EventDetailsHeader({
 
         // only redirect when successful
         if (response?.status === 0) {
-          startTransition(async () => {
+          startTransition(() => {
             startProgress();
             router.replace(`${systemUrl}/events`);
           });
@@ -156,7 +155,7 @@ function EventDetailsHeader({
                 label={`This event is part of the "${event.series}" event group.`}
                 position="bottom"
               >
-                <Badge color={event.series_color!} variant="dot">
+                <Badge color={event.series_color as string} variant="dot">
                   {event.series}
                 </Badge>
               </Tooltip>

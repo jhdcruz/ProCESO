@@ -2,15 +2,7 @@
 
 import { memo } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  rem,
-  Container,
-  Title,
-  Text,
-  Button,
-  Group,
-  AspectRatio,
-} from '@mantine/core';
+import { Container, Title, Text, Button, Group } from '@mantine/core';
 import { IconShieldLock, IconLogout, IconTicket } from '@tabler/icons-react';
 import { signOut } from '@/utils/sign-out';
 import classes from './NotFound.module.css';

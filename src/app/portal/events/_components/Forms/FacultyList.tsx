@@ -19,10 +19,8 @@ import {
   Loader,
   Stack,
   Badge,
-  MultiSelect,
   TextInput,
   Button,
-  ButtonGroup,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconSearch } from '@tabler/icons-react';
@@ -32,7 +30,6 @@ import { getFacultyUsers } from '@/libs/supabase/api/user';
 import { getFacultyConflicts } from '@/libs/supabase/api/faculty-assignments';
 import classes from '@/styles/Table.module.css';
 import { getDeptColor, getPosColor } from '@/utils/colors';
-import { listDepts, listPos } from '@/utils/user-types';
 import {
   FilterDepartments,
   FilterPositions,
@@ -43,8 +40,8 @@ export function FacultyListComponent({
   endDate,
   defaultSelection,
 }: {
-  startDate: DateValue | undefined;
-  endDate: DateValue | undefined;
+  startDate: DateValue;
+  endDate: DateValue;
   defaultSelection?: string[];
 }) {
   const [selection, setSelection] = useState<string[]>(defaultSelection ?? []);
@@ -107,10 +104,10 @@ export function FacultyListComponent({
       setLoading(false);
     };
 
-    fetchData().catch((error: Record<string, unknown>) => {
+    void fetchData().catch((error: { message: string }) => {
       notifications.show({
         title: 'Unable to fetch series',
-        message: error.message + ', You can set it later.',
+        message: `${error.message}, you can set it later.`,
         color: 'yellow',
       });
     });

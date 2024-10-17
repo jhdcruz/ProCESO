@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { AppContainer } from '@/components/Container/AppContainer';
 import { UserProvider } from '@/components/Providers/UserProvider';
@@ -14,8 +15,12 @@ export const metadata: Metadata = {
 export default async function Layout({ children }: { children: ReactNode }) {
   const user = await getCurrentUser();
 
+  if (!user.data) {
+    redirect('/');
+  }
+
   return (
-    <UserProvider user={user.data!}>
+    <UserProvider user={user.data}>
       <AppContainer>{children}</AppContainer>
     </UserProvider>
   );

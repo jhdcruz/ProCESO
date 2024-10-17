@@ -10,8 +10,8 @@ export async function GET(request: Request) {
   const next = searchParams.get('next') ?? '/';
 
   if (code) {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(cookieStore);
+    const cookieStore = cookies();
+    const supabase = await createServerClient(cookieStore);
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {

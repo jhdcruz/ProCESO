@@ -18,7 +18,7 @@ export const isInternal = (role: Enums<'roles_user'> | null): boolean => {
  *
  * @param role - The user's role.
  */
-export const isElevated = (role: Enums<'roles_user'>): boolean => {
+export const isElevated = (role: Enums<'roles_user'> | null): boolean => {
   if (!role) {
     return false;
   }
@@ -31,7 +31,7 @@ export const isElevated = (role: Enums<'roles_user'>): boolean => {
  *
  * @param role - The user's role.
  */
-export const isAdmin = (role: Enums<'roles_user'>): boolean => {
+export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
   if (!role) {
     return false;
   }
@@ -48,7 +48,7 @@ export const isAdmin = (role: Enums<'roles_user'>): boolean => {
  */
 export const canAccessEvent = (
   visibility: Enums<'event_visibility'>,
-  role: Enums<'roles_user'>,
+  role: Enums<'roles_user'> | null,
 ): boolean => {
   switch (visibility) {
     case 'Internal':

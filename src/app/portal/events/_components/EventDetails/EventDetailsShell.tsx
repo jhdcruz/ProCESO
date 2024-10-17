@@ -26,7 +26,7 @@ const NotFound = dynamic(
 function EventDetailsComponent({
   event,
 }: Readonly<{
-  event: EventDetailsProps | null;
+  event: EventDetailsProps;
 }>) {
   const user = useUser();
 
@@ -36,13 +36,13 @@ function EventDetailsComponent({
 
   return (
     <AppShell.Main>
-      {!event || !canAccessEvent(event?.visibility!, user.role!) ? (
+      {!canAccessEvent(event.visibility!, user.role) ? (
         <NotFound />
       ) : (
         <Tabs
           defaultValue="info"
           onChange={(value) => {
-            startTransition(async () => {
+            startTransition(() => {
               startProgress();
               router.push(`${systemUrl}/events/${event?.id}/${value}`);
             });

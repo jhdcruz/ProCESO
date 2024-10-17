@@ -10,8 +10,8 @@ import ApiResponse from '@/utils/response';
 import { Tables } from '@/libs/supabase/_database';
 
 export async function getSeries(): Promise<SeriesResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   const { data, error } = await supabase
     .from('series')
@@ -37,8 +37,8 @@ export async function getSeries(): Promise<SeriesResponse> {
 export async function getSeriesEvents(
   series: string,
 ): Promise<EventsViewResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   const { data, error } = await supabase
     .from('events_details_view')
@@ -62,8 +62,8 @@ export async function getSeriesEvents(
 }
 
 export async function deleteSeries(seriesId: string): Promise<ApiResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
   const { error } = await supabase.from('series').delete().eq('id', seriesId);
 
@@ -89,10 +89,10 @@ export async function updateSeries({
   seriesId: string;
   series: Partial<Tables<'series'>>;
 }): Promise<ApiResponse> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(cookieStore);
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('series')
     .update(series)
     .eq('id', seriesId);

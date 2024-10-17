@@ -1,15 +1,7 @@
 import { memo, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { notifications } from '@mantine/notifications';
-import {
-  Modal,
-  Stack,
-  TextInput,
-  ColorPicker,
-  Button,
-  Group,
-  rem,
-} from '@mantine/core';
+import { Modal, Stack, TextInput, ColorPicker, Button } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconArrowRight } from '@tabler/icons-react';
 import { Tables } from '@/libs/supabase/_database';

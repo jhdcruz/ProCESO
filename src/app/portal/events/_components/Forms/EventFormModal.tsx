@@ -11,7 +11,6 @@ import {
   Group,
   Input,
   Modal,
-  rem,
   SegmentedControl,
   Text,
   TextInput,
@@ -31,7 +30,6 @@ import {
   IconArrowRight,
   IconX,
 } from '@tabler/icons-react';
-import { formatDateRange } from 'little-date';
 import type { EventResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
@@ -57,8 +55,8 @@ export interface EventFormProps {
   visibility: Enums<'event_visibility'>;
   image_url?: FileWithPath | string;
   series?: string | null;
-  date_starting?: DateValue;
-  date_ending?: DateValue;
+  date_starting: DateValue;
+  date_ending: DateValue;
   created_by?: string;
   handled_by?: string[];
 }
@@ -85,13 +83,14 @@ export function EventFormModalComponent({
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
-  const imagePreview = coverFile.length
+  const imagePreview: string | null = coverFile.length
     ? URL.createObjectURL(coverFile[0])
     : null;
 
   // form submission
   const form = useForm<EventFormProps>({
     mode: 'uncontrolled',
+    validateInputOnBlur: true,
 
     initialValues: {
       title: '',
@@ -110,7 +109,7 @@ export function EventFormModalComponent({
           : null,
 
       date_ending: (value, values) =>
-        value && value < values.date_starting! // end date is disabled if start date is empty anyway
+        value && value < (values.date_starting as Date) // end date is disabled if start date is empty anyway
           ? 'Must be after the set start date.'
           : null,
     },
@@ -181,7 +180,7 @@ export function EventFormModalComponent({
 
   // reset all state on cancel
   const resetState = () => {
-    if (coverFile) {
+    if (coverFile.length) {
       setCoverFile([]);
     }
 
@@ -233,8 +232,8 @@ export function EventFormModalComponent({
                     alt="Image preview of the uploaded image."
                     className="mx-auto block"
                     height={240}
-                    key={imagePreview! ?? event?.title}
-                    src={imagePreview! ?? event?.image_url}
+                    key={imagePreview ?? event?.title}
+                    src={imagePreview ?? (event?.image_url as string)}
                     width={240}
                   />
                 ) : (
@@ -338,13 +337,17 @@ export function EventFormModalComponent({
                 selected date range.
                 {events.length > 0 && (
                   <ul>
-                    {events.map((event) => (
+                    {events.map(async (event) => (
                       <li key={event.id}>
                         {event.title}{' '}
                         <Badge variant="default">
-                          {formatDateRange(
-                            new Date(event.date_starting!),
-                            new Date(event.date_ending!),
+                          {await import('little-date').then(
+                            ({ formatDateRange }) => {
+                              return formatDateRange(
+                                new Date(event.date_starting!),
+                                new Date(event.date_ending!),
+                              );
+                            },
                           )}
                         </Badge>
                       </li>

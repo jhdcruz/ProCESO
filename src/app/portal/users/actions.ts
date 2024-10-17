@@ -21,7 +21,7 @@ export async function inviteUserAction(
     role?: Enums<'roles_user'>;
   },
 ) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const supabase: SupabaseClient = createAdminClient(cookieStore);
 
   const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
@@ -50,7 +50,7 @@ export async function inviteUserAction(
  * @param uid User ID to disable
  */
 export async function changeUserAccess(uid: string, active: boolean) {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   const supabase: SupabaseClient = createAdminClient(cookieStore);
 
   const { error } = await supabase
@@ -71,7 +71,7 @@ export async function changeUserAccess(uid: string, active: boolean) {
   return {
     status: 0,
     title: `User has been ${action}d`,
-    message: action
+    message: active
       ? 'User can now log-in or use the system.'
       : "User won't be able to log-in anymore.",
   };
