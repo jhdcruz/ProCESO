@@ -16,20 +16,26 @@ import {
 import { getDeptColor, getPosColor, getRoleColor } from '@/utils/colors';
 import { Enums } from '@/libs/supabase/_database';
 
-interface FilterUserRolesProps {
+interface FilterUsers {
+  // single selection
+  single?: boolean;
+}
+
+interface FilterUserRolesProps extends FilterUsers {
   roles: Enums<'roles_user'>[];
   setRoles: (dept: Enums<'roles_user'>[]) => void;
 }
-interface FilterDepartmentsProps {
+interface FilterDepartmentsProps extends FilterUsers {
   dept: Enums<'roles_dept'>[];
   setDept: (dept: Enums<'roles_dept'>[]) => void;
 }
-interface FilterPosProps {
+interface FilterPosProps extends FilterUsers {
   pos: Enums<'roles_pos'>[];
   setPos: (pos: Enums<'roles_pos'>[]) => void;
 }
 interface UsersFiltersProps
-  extends FilterDepartmentsProps,
+  extends FilterUsers,
+    FilterDepartmentsProps,
     FilterUserRolesProps,
     FilterPosProps {}
 
@@ -37,18 +43,22 @@ interface UsersFiltersProps
  * Menu items to filter by departments.
  */
 export const FilterDepartments = memo(
-  ({ dept, setDept }: FilterDepartmentsProps) => {
+  ({ dept, setDept, single }: FilterDepartmentsProps) => {
     // menu items for college departments
     const deptItems = listDepts.map((cDept) => (
       <Menu.Item
         key={cDept.value}
         leftSection={dept.includes(cDept.value) && <IconCheck size={16} />}
         onClick={() => {
-          // toggle based on current state, add or remove
-          if (dept.includes(cDept.value)) {
-            setDept(dept.filter((d) => d !== cDept.value));
+          if (single) {
+            setDept([cDept.value]);
           } else {
-            setDept([...dept, cDept.value]);
+            // toggle based on current state, add or remove
+            if (dept.includes(cDept.value)) {
+              setDept(dept.filter((d) => d !== cDept.value));
+            } else {
+              setDept([...dept, cDept.value]);
+            }
           }
         }}
       >
@@ -65,11 +75,15 @@ export const FilterDepartments = memo(
         key={office.value}
         leftSection={dept.includes(office.value) && <IconCheck size={16} />}
         onClick={() => {
-          // toggle based on current state, add or remove
-          if (dept.includes(office.value)) {
-            setDept(dept.filter((d) => d !== office.value));
+          if (single) {
+            setDept([office.value]);
           } else {
-            setDept([...dept, office.value]);
+            // toggle based on current state, add or remove
+            if (dept.includes(office.value)) {
+              setDept(dept.filter((d) => d !== office.value));
+            } else {
+              setDept([...dept, office.value]);
+            }
           }
         }}
       >
@@ -86,11 +100,15 @@ export const FilterDepartments = memo(
         key={other.value}
         leftSection={dept.includes(other.value) && <IconCheck size={16} />}
         onClick={() => {
-          // toggle based on current state, add or remove
-          if (dept.includes(other.value)) {
-            setDept(dept.filter((d) => d !== other.value));
+          if (single) {
+            setDept([other.value]);
           } else {
-            setDept([...dept, other.value]);
+            // toggle based on current state, add or remove
+            if (dept.includes(other.value)) {
+              setDept(dept.filter((d) => d !== other.value));
+            } else {
+              setDept([...dept, other.value]);
+            }
           }
         }}
       >
@@ -137,61 +155,70 @@ FilterDepartments.displayName = 'FilterDepartments';
  * Menu items to filter by user positions (head, dean);
  * does not include student roles
  */
-export const FilterPositions = memo(({ pos, setPos }: FilterPosProps) => {
-  const posItems = listPos.map((userPos) => (
-    <Menu.Item
-      key={userPos.value}
-      leftSection={pos.includes(userPos.value) && <IconCheck size={16} />}
-      onClick={() => {
-        // toggle based on current state, add or remove
-        if (pos.includes(userPos.value)) {
-          setPos(pos.filter((p) => p !== userPos.value));
-        } else {
-          setPos([...pos, userPos.value]);
-        }
-      }}
-    >
-      {userPos.label}
+export const FilterPositions = memo(
+  ({ pos, setPos, single }: FilterPosProps) => {
+    const posItems = listPos.map((userPos) => (
+      <Menu.Item
+        key={userPos.value}
+        leftSection={pos.includes(userPos.value) && <IconCheck size={16} />}
+        onClick={() => {
+          if (single) {
+            setPos([userPos.value]);
+          } else {
+            if (pos.includes(userPos.value)) {
+              setPos(pos.filter((p) => p !== userPos.value));
+            } else {
+              setPos([...pos, userPos.value]);
+            }
+          }
+        }}
+      >
+        {userPos.label}
 
-      <Badge color={getPosColor(userPos.value)} ml={8} variant="dot">
-        {userPos.value.toUpperCase()}
-      </Badge>
-    </Menu.Item>
-  ));
+        <Badge color={getPosColor(userPos.value)} ml={8} variant="dot">
+          {userPos.value.toUpperCase()}
+        </Badge>
+      </Menu.Item>
+    ));
 
-  return (
-    <Menu closeDelay={99} openDelay={100} trigger="click-hover">
-      <Menu.Target>
-        <Button
-          leftSection={<IconUserStar size={15} />}
-          rightSection={<IconChevronDown size={15} />}
-          variant="default"
-        >
-          Positions
-        </Button>
-      </Menu.Target>
+    return (
+      <Menu trigger="click-hover">
+        <Menu.Target>
+          <Button
+            leftSection={<IconUserStar size={15} />}
+            rightSection={<IconChevronDown size={15} />}
+            variant="default"
+          >
+            Positions
+          </Button>
+        </Menu.Target>
 
-      <Menu.Dropdown>{posItems}</Menu.Dropdown>
-    </Menu>
-  );
-});
+        <Menu.Dropdown>{posItems}</Menu.Dropdown>
+      </Menu>
+    );
+  },
+);
 FilterPositions.displayName = 'FilterPositions';
 
 /**
  * Menu items to filter by user's role
  */
 export const FilterUserRoles = memo(
-  ({ roles, setRoles }: FilterUserRolesProps) => {
+  ({ roles, setRoles, single }: FilterUserRolesProps) => {
     const rolesItems = listUserRoles.map((role) => (
       <Menu.Item
         key={role.value}
         leftSection={roles.includes(role.value) && <IconCheck size={16} />}
         onClick={() => {
-          // toggle based on current state, add or remove
-          if (roles.includes(role.value)) {
-            setRoles(roles.filter((r) => r !== role.value));
+          if (single) {
+            setRoles([role.value]);
           } else {
-            setRoles([...roles, role.value]);
+            // toggle based on current state, add or remove
+            if (roles.includes(role.value)) {
+              setRoles(roles.filter((r) => r !== role.value));
+            } else {
+              setRoles([...roles, role.value]);
+            }
           }
         }}
       >
@@ -234,9 +261,21 @@ export const FilterUsers = memo((filters: UsersFiltersProps) => {
     <>
       {/* Table Filters */}
       <Button.Group>
-        <FilterDepartments dept={filters.dept} setDept={filters.setDept} />
-        <FilterUserRoles roles={filters.roles} setRoles={filters.setRoles} />
-        <FilterPositions pos={filters.pos} setPos={filters.setPos} />
+        <FilterDepartments
+          dept={filters.dept}
+          setDept={filters.setDept}
+          single={filters.single}
+        />
+        <FilterUserRoles
+          roles={filters.roles}
+          setRoles={filters.setRoles}
+          single={filters.single}
+        />
+        <FilterPositions
+          pos={filters.pos}
+          setPos={filters.setPos}
+          single={filters.single}
+        />
       </Button.Group>
     </>
   );
