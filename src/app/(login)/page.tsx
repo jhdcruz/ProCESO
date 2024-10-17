@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { JitbitScript } from '@/components/Integrations/JitbitScript';
 import loginBg from '@/components/_assets/img/login-bg.webp';
+import { LoginForm } from './_components/LoginForm';
 import { getCurrentUser } from '../actions';
 import '@/styles/jitbit.css';
 
@@ -22,6 +23,8 @@ export default async function Login() {
 
   return (
     <div className="z-10 min-h-screen max-w-full md:flex">
+      <LoginForm />
+
       {/* Image Wall */}
       <Image
         alt=""
