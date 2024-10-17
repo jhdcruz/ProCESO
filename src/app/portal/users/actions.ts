@@ -1,7 +1,6 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { SupabaseClient } from '@supabase/supabase-js';
 import { systemUrl } from '@/app/routes';
 import type { Enums } from '@/libs/supabase/_database';
 import { createServerClient as createAdminClient } from '@/libs/supabase/admin';
@@ -22,7 +21,7 @@ export async function inviteUserAction(
   },
 ) {
   const cookieStore = cookies();
-  const supabase: SupabaseClient = createAdminClient(cookieStore);
+  const supabase = await createAdminClient(cookieStore);
 
   const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
     data: metadata,
@@ -51,7 +50,7 @@ export async function inviteUserAction(
  */
 export async function changeUserAccess(uid: string, active: boolean) {
   const cookieStore = cookies();
-  const supabase: SupabaseClient = createAdminClient(cookieStore);
+  const supabase = await createAdminClient(cookieStore);
 
   const { error } = await supabase
     .from('users')
