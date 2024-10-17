@@ -33,9 +33,12 @@ export async function generateMetadata({
   const { id } = await params;
   const event = await cacheEventDetails(id);
 
-  if (!event.data || event.data.visibility !== 'Everyone') {
+  if (
+    !event.data ||
+    (event.data.visibility !== 'Everyone' && typeof window !== 'undefined')
+  ) {
     return {
-      title: '404 – Event not found ' + defaultMetadata.title,
+      title: 'Event not found – ' + defaultMetadata.title,
       description: event.message,
     };
   }
