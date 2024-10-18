@@ -71,7 +71,12 @@ export const SidebarUser = memo(
               size={14}
               tt="capitalize"
             >
-              <Avatar color="initials" radius="xl" src={avatar_url} />
+              <Avatar
+                color="initials"
+                name={name}
+                radius="xl"
+                src={avatar_url}
+              />
             </Indicator>
 
             <div className="flex-1">
