@@ -230,7 +230,7 @@ export function EventFormModalComponent({
                 {coverFile.length || event?.image_url ? (
                   <Image
                     alt="Image preview of the uploaded image."
-                    className="mx-auto block"
+                    className="mx-auto block object-contain"
                     height={240}
                     key={imagePreview ?? event?.title}
                     src={imagePreview ?? (event?.image_url as string)}
