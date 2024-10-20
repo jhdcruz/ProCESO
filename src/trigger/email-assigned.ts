@@ -41,12 +41,18 @@ export const emailAssigned = task({
     const [usersRes, eventRes] = await Promise.all([usersQuery, eventQuery]);
 
     if (usersRes.error) {
-      logger.error('Error:', usersRes.error);
-      throw new Error('Error fetching faculty emails');
+      logger.error(
+        usersRes?.error?.message,
+        usersRes?.error as unknown as Record<string, unknown>,
+      );
+      throw new Error(usersRes?.error?.message);
     }
     if (eventRes.error) {
-      logger.error('Error:', eventRes.error);
-      throw new Error('Error fetching event ID');
+      logger.error(
+        eventRes?.error?.message,
+        eventRes?.error as unknown as Record<string, unknown>,
+      );
+      throw new Error(eventRes?.error?.message);
     }
 
     const appUrl = await envvars.retrieve('APP_URL');
