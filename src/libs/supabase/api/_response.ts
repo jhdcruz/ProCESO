@@ -1,6 +1,9 @@
 import type ApiResponse from '@/utils/response';
 import type { Tables } from '../_database';
 
+export interface StorageResponse extends ApiResponse {
+  data?: Blob | Blob[];
+}
 export interface UserResponse extends ApiResponse {
   data?: Tables<'users'>;
 }
@@ -27,6 +30,10 @@ export interface EventDetailsResponse extends ApiResponse {
 
 export interface EventFacultiesResponse extends ApiResponse {
   data?: Tables<'events_faculties_view'>[];
+}
+
+export interface EventFilesResponse extends ApiResponse {
+  data?: Tables<'event_files'>[];
 }
 
 export interface SeriesResponse extends ApiResponse {

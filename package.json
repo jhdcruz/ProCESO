@@ -40,6 +40,8 @@
     "@mantine/spotlight": "7.13.3",
     "@mantine/tiptap": "7.13.3",
     "@next/bundle-analyzer": "14.2.15",
+    "@noble/ciphers": "1.0.0",
+    "@noble/hashes": "1.5.0",
     "@opentelemetry/api": "1.9.0",
     "@react-email/components": "0.0.25",
     "@supabase/ssr": "0.5.1",

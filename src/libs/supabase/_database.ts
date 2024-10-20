@@ -21,6 +21,55 @@ export type Database = {
         }
         Relationships: []
       }
+      event_files: {
+        Row: {
+          checksum: string
+          event: string
+          id: string
+          name: string
+          type: string
+          uploaded_at: string
+        }
+        Insert: {
+          checksum?: string
+          event?: string
+          id?: string
+          name?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Update: {
+          checksum?: string
+          event?: string
+          id?: string
+          name?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["event_id"]
+          },
+        ]
+      }
       events: {
         Row: {
           created_at: string
@@ -33,6 +82,7 @@ export type Database = {
           series: string | null
           title: string
           updated_at: string | null
+          venue: unknown | null
           visibility: Database["public"]["Enums"]["event_visibility"]
         }
         Insert: {
@@ -46,6 +96,7 @@ export type Database = {
           series?: string | null
           title: string
           updated_at?: string | null
+          venue?: unknown | null
           visibility?: Database["public"]["Enums"]["event_visibility"]
         }
         Update: {
@@ -59,6 +110,7 @@ export type Database = {
           series?: string | null
           title?: string
           updated_at?: string | null
+          venue?: unknown | null
           visibility?: Database["public"]["Enums"]["event_visibility"]
         }
         Relationships: [

@@ -67,6 +67,17 @@ create table public.users (
     constraint users_id_key unique (id)
 ) tablespace pg_default;
 
+create table public.event_files (
+    id uuid not null default gen_random_uuid (),
+    name text not null default '' :: text,
+    checksum text not null default '' :: text,
+    event uuid not null default gen_random_uuid (),
+    uploaded_at timestamp with time zone not null default (now() at time zone 'utc' :: text),
+    type text not null default '???' :: text,
+    constraint event_files_pkey primary key (id),
+    constraint event_files_event_fkey foreign key (event) references events (id) on update cascade on delete cascade
+) tablespace pg_default;
+
 create trigger update_raw_app_meta_data_trigger
 after
 update

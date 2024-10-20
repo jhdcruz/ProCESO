@@ -179,3 +179,36 @@ export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
     message: 'The event has been successfully deleted.',
   };
 }
+
+/**
+ * Download event file based on its checksum.
+ *
+ * @param eventId - The event id to download.
+ * @param checksum - The checksum of the file.
+ */
+export async function downloadEventFile(
+  eventId: string,
+  checksum: string,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+
+  const { data, error } = await supabase.storage
+    .from('events')
+    .download(`${eventId}/${checksum}`);
+
+  if (error) {
+    return {
+      status: 1,
+      title: 'Unable to download file',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'File downloaded',
+    message: 'File has been successfully downloaded.',
+    data: data,
+  };
+}

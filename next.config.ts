@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
       '@mantine/hooks',
       '@mantine/charts',
       '@react-email/components',
+      '@noble/hashes',
+      '@noble/ciphers',
       'framer-motion',
       'dayjs',
       'little-date',

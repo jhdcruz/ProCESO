@@ -1,13 +1,25 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Grid, Group, Avatar, Text, Loader } from '@mantine/core';
 import {
-  EventDetailsProps,
-  EventFacultiesResponse,
-} from '@/libs/supabase/api/_response';
-import dayjs from '@/libs/dayjs';
-import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
+  Grid,
+  Group,
+  Avatar,
+  Divider,
+  Text,
+  Loader,
+  Badge,
+  Anchor,
+  Tooltip,
+} from '@mantine/core';
 import { notifications } from '@mantine/notifications';
+import { useClipboard } from '@mantine/hooks';
+import type { Tables } from '@/libs/supabase/_database';
+import { EventDetailsProps } from '@/libs/supabase/api/_response';
+import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
+import { getEventReports } from '@/libs/supabase/api/storage';
+import { IconRosetteDiscountCheck } from '@tabler/icons-react';
+import { downloadEventFile } from '@portal/events/actions';
+import dayjs from '@/libs/dayjs';
 
 const RTEditor = dynamic(
   () =>
@@ -37,19 +49,74 @@ function EventDetailsBody({
   loading: boolean;
   onSave: (content: string) => void;
 }) {
-  const [faculties, setFaculties] = useState<EventFacultiesResponse>();
+  const clipboard = useClipboard({ timeout: 1000 });
 
-  // get assigned faculties for the event
+  const [faculties, setFaculties] = useState<
+    Tables<'events_faculties_view'>[] | null
+  >();
+  const [files, setFiles] = useState<Tables<'event_files'>[] | null>();
+
+  const saveFile = async (fileName: string, checksum: string) => {
+    notifications.show({
+      id: checksum,
+      loading: true,
+      title: `Downloading ${fileName}`,
+      message: 'It may open in a new tab instead of downloading.',
+      color: 'gray',
+      withBorder: true,
+    });
+
+    const blob = await downloadEventFile(event.id!, checksum);
+
+    notifications.show({
+      id: checksum,
+      loading: false,
+      title: blob.title,
+      message: blob.message,
+      color: blob.status === 0 ? 'green' : 'red',
+      withBorder: true,
+      withCloseButton: true,
+      autoClose: 4000,
+    });
+
+    if (blob?.data) {
+      const url = URL.createObjectURL(blob.data);
+      window.open(url, '_blank');
+    }
+  };
+
+  // show notification when email is copied to clipboard
   useEffect(() => {
-    const fetchFaculties = async () => {
-      const response = await getAssignedFaculties({
+    // fixes notification appearing twice
+    if (clipboard.copied) {
+      notifications.show({
+        message: 'Checksum copied to clipboard',
+        color: 'green',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 1400,
+      });
+    }
+  }, [clipboard.copied]);
+
+  // fetch additional event details
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      const getAssigned = getAssignedFaculties({
         eventId: event.id!,
       });
 
-      if (response?.status !== 0) {
+      const getFiles = getEventReports(event.id!);
+
+      const [eventFiles, eventFaculties] = await Promise.all([
+        getFiles,
+        getAssigned,
+      ]);
+
+      if (eventFaculties?.status !== 0) {
         notifications.show({
           title: 'Cannot get assigned faculties',
-          message: response.message,
+          message: eventFaculties.message,
           color: 'yellow',
           withBorder: true,
           withCloseButton: true,
@@ -57,10 +124,22 @@ function EventDetailsBody({
         });
       }
 
-      setFaculties(response);
+      if (eventFiles?.status !== 0) {
+        notifications.show({
+          title: 'Cannot get event files',
+          message: eventFiles.message,
+          color: 'yellow',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 4000,
+        });
+      }
+
+      setFaculties(eventFaculties?.data);
+      setFiles(eventFiles?.data);
     };
 
-    void fetchFaculties();
+    void fetchEventDetails();
   }, [event.id]);
 
   return (
@@ -101,11 +180,11 @@ function EventDetailsBody({
           <Text c="dimmed" size="sm">
             Handled by
           </Text>
-          {faculties?.data ? (
+          {faculties ? (
             <>
-              {faculties?.data?.length ? (
+              {faculties?.length ? (
                 <>
-                  {faculties?.data?.map((faculty) => (
+                  {faculties?.map((faculty) => (
                     <Group key={faculty?.faculty_email} my={16}>
                       <Avatar
                         alt={faculty?.faculty_name!}
@@ -132,6 +211,54 @@ function EventDetailsBody({
             <Loader className="mx-auto my-5" size="sm" type="dots" />
           )}
         </>
+
+        {files && (
+          <>
+            <Divider my="md" />
+
+            <Text c="dimmed" size="sm">
+              Reports:
+            </Text>
+            {files?.map((file) => (
+              <>
+                <Group align="flex-start" gap={8} key={file?.checksum} my={16}>
+                  <Badge mr={4} size="sm" variant="default">
+                    {file?.type.split('/')[1]}
+                  </Badge>
+
+                  <div>
+                    <Anchor
+                      component="button"
+                      lineClamp={1}
+                      onClick={() => saveFile(file.name, file?.checksum)}
+                      size="sm"
+                    >
+                      {file?.name}
+                    </Anchor>
+                    <Group gap={2} mt={4}>
+                      <Text c="dimmed" size="xs">
+                        {dayjs(file?.uploaded_at).fromNow()}
+                      </Text>
+
+                      <Tooltip label="Verified checksum of the uploaded file, should match the downloaded file.">
+                        <Badge
+                          className="cursor-pointer"
+                          color="gray"
+                          leftSection={<IconRosetteDiscountCheck size={16} />}
+                          onClick={() => clipboard.copy(file?.checksum)}
+                          size="xs"
+                          variant="transparent"
+                        >
+                          {file?.checksum.slice(0, 8)}
+                        </Badge>
+                      </Tooltip>
+                    </Group>
+                  </div>
+                </Group>
+              </>
+            ))}
+          </>
+        )}
       </Grid.Col>
     </Grid>
   );

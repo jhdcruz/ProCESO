@@ -1,4 +1,6 @@
-import { memo, startTransition } from 'react';
+'use client';
+
+import { memo, startTransition, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -9,10 +11,10 @@ import {
   Group,
   Image,
   Text,
-  rem,
   Stack,
   Title,
   Tooltip,
+  FileButton,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -25,10 +27,12 @@ import {
   IconEdit,
   IconEditOff,
   IconTrash,
+  IconUpload,
 } from '@tabler/icons-react';
 import { useProgress } from 'react-transition-progress';
 import { formatDateRange } from 'little-date';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
+import { uploadEventFiles } from '@/libs/supabase/api/storage';
 import { systemUrl } from '@/app/routes';
 import { deleteEventAction } from '@portal/events/actions';
 import { EventFormProps } from '../Forms/EventFormModal';
@@ -57,6 +61,8 @@ function EventDetailsHeader({
   toggleEdit: () => void;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
+  const [localFiles, setLocalFiles] = useState<File[]>();
+
   const router = useRouter();
   const startProgress = useProgress();
 
@@ -113,6 +119,20 @@ function EventDetailsHeader({
       },
     });
 
+  useEffect(() => {
+    if (localFiles?.length && event.id) {
+      // upload files to storage
+      const uploadFiles = async () => {
+        await uploadEventFiles(event.id!, {
+          files: localFiles,
+          notify: notifications,
+        });
+      };
+
+      void uploadFiles();
+    }
+  }, [event.id, localFiles]);
+
   return (
     <>
       <EventFormModal
@@ -164,39 +184,49 @@ function EventDetailsHeader({
 
           {/* Event control buttons */}
           <Group gap="xs" mt={16}>
-            <Button
-              leftSection={
-                <IconCalendarEvent
-                  style={{ width: rem(16), height: rem(16) }}
-                />
-              }
-              onClick={open}
-              variant="default"
-            >
-              Adjust Details
-            </Button>
+            <Button.Group>
+              <Button
+                leftSection={<IconCalendarEvent size={16} />}
+                onClick={open}
+                variant="default"
+              >
+                Adjust Details
+              </Button>
 
-            <Button
-              leftSection={
-                editable ? (
-                  <IconEditOff style={{ width: rem(16), height: rem(16) }} />
-                ) : (
-                  <IconEdit style={{ width: rem(16), height: rem(16) }} />
-                )
-              }
-              onClick={toggleEdit}
-              variant="default"
-            >
-              {editable ? 'Hide Toolbars' : 'Edit Description'}
-            </Button>
+              <Button
+                leftSection={
+                  editable ? <IconEditOff size={16} /> : <IconEdit size={16} />
+                }
+                onClick={toggleEdit}
+                variant="default"
+              >
+                {editable ? 'Hide Toolbars' : 'Edit Description'}
+              </Button>
+            </Button.Group>
 
             <Divider orientation="vertical" />
 
+            <FileButton
+              accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
+              multiple
+              onChange={setLocalFiles}
+            >
+              {(props) => (
+                <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
+                  <Button
+                    leftSection={<IconUpload size={16} />}
+                    variant="default"
+                    {...props}
+                  >
+                    Upload Reports
+                  </Button>
+                </Tooltip>
+              )}
+            </FileButton>
+
             <Button
               color="red"
-              leftSection={
-                <IconTrash style={{ width: rem(16), height: rem(16) }} />
-              }
+              leftSection={<IconTrash size={16} />}
               onClick={deleteModal}
               variant="filled"
             >
@@ -207,7 +237,7 @@ function EventDetailsHeader({
 
         <Image
           alt=""
-          className="shadow-lg"
+          className="object-contain shadow-md"
           component={NextImage}
           fallbackSrc="/assets/no-image.png"
           h="auto"
