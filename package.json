@@ -43,7 +43,7 @@
     "@opentelemetry/api": "1.9.0",
     "@react-email/components": "0.0.25",
     "@supabase/ssr": "0.5.1",
-    "@supabase/supabase-js": "2.45.5",
+    "@supabase/supabase-js": "2.45.6",
     "@tabler/icons-react": "3.19.0",
     "@tiptap/extension-color": "2.8.0",
     "@tiptap/extension-highlight": "2.8.0",
@@ -118,4 +118,3 @@
     "supabase"
   ]
 }
-
