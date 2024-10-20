@@ -17,7 +17,12 @@ import type { Tables } from '@/libs/supabase/_database';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getEventReports } from '@/libs/supabase/api/storage';
-import { IconRosetteDiscountCheck } from '@tabler/icons-react';
+import {
+  IconFileText,
+  IconRosetteDiscountCheck,
+  IconScanEye,
+  IconUsersGroup,
+} from '@tabler/icons-react';
 import { downloadEventFile } from '@portal/events/actions';
 import dayjs from '@/libs/dayjs';
 
@@ -155,9 +160,18 @@ function EventDetailsBody({
 
       <Grid.Col span={{ base: 12, sm: 3 }}>
         <>
-          <Text c="dimmed" size="sm">
-            Published by
-          </Text>
+          <Divider
+            label={
+              <Group gap={0} preventGrowOverflow wrap="nowrap">
+                <IconScanEye className="mr-2" size={16} />
+                Published by
+              </Group>
+            }
+            labelPosition="left"
+            mt="xs"
+            my="md"
+          />
+
           <Group my={16}>
             <Avatar
               alt={event.created_by!}
@@ -177,9 +191,18 @@ function EventDetailsBody({
         </>
 
         <>
-          <Text c="dimmed" size="sm">
-            Handled by
-          </Text>
+          <Divider
+            label={
+              <Group gap={0} preventGrowOverflow wrap="nowrap">
+                <IconUsersGroup className="mr-2" size={16} />
+                Faculty
+              </Group>
+            }
+            labelPosition="left"
+            mt="xs"
+            my="md"
+          />
+
           {faculties ? (
             <>
               {faculties?.length ? (
@@ -214,11 +237,18 @@ function EventDetailsBody({
 
         {files && (
           <>
-            <Divider my="md" />
+            <Divider
+              label={
+                <Group gap={0} preventGrowOverflow wrap="nowrap">
+                  <IconFileText className="mr-2" size={16} />
+                  Reports
+                </Group>
+              }
+              labelPosition="left"
+              mt="xs"
+              my="md"
+            />
 
-            <Text c="dimmed" size="sm">
-              Reports:
-            </Text>
             {files?.map((file) => (
               <>
                 <Group align="flex-start" gap={8} key={file?.checksum} my={16}>
