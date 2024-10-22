@@ -73,13 +73,15 @@
     "sharp": "0.33.5"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "3.1.0",
+    "@eslint/js": "9.13.0",
     "@types/node": "22.7.8",
     "@types/react": "18.3.11",
     "@types/react-dom": "18.3.1",
     "@types/sanitize-html": "^2.13.0",
     "autoprefixer": "10.4.20",
     "babel-plugin-react-compiler": "0.0.0-experimental-fe484b5-20240912",
-    "eslint": "8.57.1",
+    "eslint": "9.13.0",
     "eslint-config-next": "15.0.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
@@ -118,5 +120,6 @@
     "protobufjs",
     "sharp",
     "supabase"
-  ]
+  ],
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
