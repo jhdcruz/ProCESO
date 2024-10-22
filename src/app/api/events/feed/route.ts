@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=86400',
+      'Cache-Control': 'public, s-maxage=10800, stale-while-revalidate=86400',
     },
   });
 }
