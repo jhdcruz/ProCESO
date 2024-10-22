@@ -102,22 +102,39 @@ export async function submitEvent(
     if (!uploadResponse.data) return uploadResponse;
   }
 
-  // save assigned faculty
-  if (event.handled_by?.length) {
-    const assignResponse = await postFacultyAssignment({
-      userId: event.handled_by,
-      eventId,
-      supabase,
-    });
+  // if event is internal
+  if (event.visibility === 'Internal' && existingId) {
+    // remove any existing faculty assignment
+    const { error: removeFacultyError } = await supabase
+      .from('faculty_assignments')
+      .delete()
+      .eq('event_id', eventId);
 
-    // send email reminders to assign faculties
-    await emailAssigned.trigger({
-      event: event.title,
-      ids: event.handled_by,
-      cookies: cookieStore,
-    });
+    if (removeFacultyError) {
+      return {
+        status: 2,
+        title: 'Unable to remove faculty assignment',
+        message: removeFacultyError.message,
+      };
+    }
+  } else {
+    // save assigned faculty
+    if (event.handled_by?.length) {
+      const assignResponse = await postFacultyAssignment({
+        userId: event.handled_by,
+        eventId,
+        supabase,
+      });
 
-    if (!assignResponse.data) return assignResponse;
+      // send email reminders to assign faculties
+      await emailAssigned.trigger({
+        event: event.title,
+        ids: event.handled_by,
+        cookies: cookieStore,
+      });
+
+      if (!assignResponse.data) return assignResponse;
+    }
   }
 
   if (existingId) {
