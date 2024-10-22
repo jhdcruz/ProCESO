@@ -22,13 +22,15 @@ import type ApiResponse from '@/utils/response';
  * 4. Save uploaded image to storage and update url of event
  *
  * @param event - The event data to create.
+ * @param original - The original event data for comparisons.
  * @param existingId - If provided, update the event instead of creating.
  *
  * @returns {ApiResponse} which can be used for displaying notifications.
  */
 export async function submitEvent(
   event: EventFormProps,
-  existingId?: string,
+  original: Readonly<EventFormProps>,
+  existingId?: Readonly<string>,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
@@ -126,10 +128,19 @@ export async function submitEvent(
         supabase,
       });
 
+      let ids = event.handled_by;
+
+      // only email new assignees when updating
+      if (existingId) {
+        ids = event.handled_by.filter(
+          (id) => !original.handled_by?.includes(id),
+        );
+      }
+
       // send email reminders to assign faculties
       await emailAssigned.trigger({
         event: event.title,
-        ids: event.handled_by,
+        ids: ids,
         cookies: cookieStore,
       });
 

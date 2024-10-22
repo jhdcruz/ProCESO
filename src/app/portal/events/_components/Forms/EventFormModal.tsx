@@ -78,7 +78,10 @@ export function EventFormModalComponent({
   close: () => void;
 }) {
   const [pending, setPending] = useState(false);
-  const [events, setEvents] = useState<Tables<'events_details_view'>[]>([]);
+  const [conflicts, setConflicts] = useState<Tables<'events_details_view'>[]>(
+    [],
+  );
+  const [original, setOriginal] = useState<EventFormProps>();
   const [isInternal, setIsInternal] = useState(false);
 
   // image file preview state
@@ -136,7 +139,7 @@ export function EventFormModalComponent({
         });
 
         // collect conflicting events for display in the modal
-        setEvents(conflicts?.data ?? []);
+        setConflicts(conflicts?.data ?? []);
       }
     },
   });
@@ -144,14 +147,7 @@ export function EventFormModalComponent({
   // form handler & submission
   const handleSubmit = async (eventForm: EventFormProps) => {
     setPending(true);
-    let result: EventResponse;
-
-    if (!event) {
-      result = await submitEvent(eventForm);
-    } else {
-      result = await submitEvent(eventForm, event.id);
-    }
-
+    const result = await submitEvent(eventForm, original, event?.id);
     setPending(false);
 
     // only show error notification, if any
@@ -189,11 +185,14 @@ export function EventFormModalComponent({
   };
 
   useEffect(() => {
-    // We're setting this separately to avoid unnecessary
-    // remounting of the modal when changing existing
-    // values used with `initialValues`.
-    // https://github.com/orgs/mantinedev/discussions/4868
     if (event) {
+      // keep record of the original event data
+      setOriginal(event);
+
+      // We're setting this separately to avoid unnecessary
+      // remounting of the modal when changing existing
+      // values used with `initialValues`.
+      // https://github.com/orgs/mantinedev/discussions/4868
       form.setValues({
         title: event.title,
         visibility: event.visibility,
@@ -323,7 +322,7 @@ export function EventFormModalComponent({
             </Group>
 
             {/* events conflict notice */}
-            {events.length > 0 && (
+            {conflicts.length > 0 && (
               <Blockquote
                 color="yellow"
                 icon={<IconInfoCircle size={20} />}
@@ -333,11 +332,11 @@ export function EventFormModalComponent({
                 p={24}
                 pb="xs"
               >
-                There are currently {events.length} events scheduled on the
+                There are currently {conflicts.length} events scheduled on the
                 selected date range.
-                {events.length > 0 && (
+                {conflicts.length > 0 && (
                   <ul>
-                    {events.map(async (event) => (
+                    {conflicts.map(async (event) => (
                       <li key={event.id}>
                         {event.title}{' '}
                         <Badge variant="default">
