@@ -71,7 +71,7 @@ function EventDetailsBody({
       withBorder: true,
     });
 
-    const blob = await downloadEventFile(event.id!, checksum);
+    const blob = await downloadEventFile(event.id as string, checksum);
 
     notifications.show({
       id: checksum,
@@ -108,10 +108,10 @@ function EventDetailsBody({
   useEffect(() => {
     const fetchEventDetails = async () => {
       const getAssigned = getAssignedFaculties({
-        eventId: event.id!,
+        eventId: event.id as string,
       });
 
-      const getFiles = getEventReports(event.id!);
+      const getFiles = getEventReports(event.id as string);
 
       const [eventFiles, eventFaculties] = await Promise.all([
         getFiles,
@@ -174,7 +174,7 @@ function EventDetailsBody({
 
           <Group my={16}>
             <Avatar
-              alt={event.created_by!}
+              alt={event.created_by as string}
               color="initials"
               radius="xl"
               src={event.creator_avatar}
@@ -205,9 +205,9 @@ function EventDetailsBody({
 
           {faculties ? (
             <>
-              {faculties?.length ? (
+              {faculties.length ? (
                 <>
-                  {faculties?.map((faculty) => (
+                  {faculties.map((faculty) => (
                     <Group key={faculty?.faculty_email} my={16}>
                       <Avatar
                         alt={faculty?.faculty_name as string}
@@ -249,11 +249,11 @@ function EventDetailsBody({
               my="md"
             />
 
-            {files?.map((file) => (
+            {files.map((file) => (
               <>
-                <Group align="flex-start" gap={8} key={file?.checksum} my={16}>
+                <Group align="flex-start" gap={8} key={file.checksum} my={16}>
                   <Badge mr={4} size="sm" variant="default">
-                    {file?.type.split('/')[1]}
+                    {file.type.split('/')[1]}
                   </Badge>
 
                   <div>
@@ -261,14 +261,14 @@ function EventDetailsBody({
                       component="button"
                       fw={500}
                       lineClamp={1}
-                      onClick={() => saveFile(file.name, file?.checksum)}
+                      onClick={() => saveFile(file.name, file.checksum)}
                       size="sm"
                     >
-                      {file?.name}
+                      {file.name}
                     </Anchor>
                     <Group gap={2} mt={4}>
                       <Text c="dimmed" size="xs">
-                        {dayjs(file?.uploaded_at).fromNow()}
+                        {dayjs(file.uploaded_at).fromNow()}
                       </Text>
 
                       <Tooltip label="Verified checksum of the uploaded file, should match the downloaded file.">
@@ -276,11 +276,11 @@ function EventDetailsBody({
                           className="cursor-pointer"
                           color="gray"
                           leftSection={<IconRosetteDiscountCheck size={16} />}
-                          onClick={() => clipboard.copy(file?.checksum)}
+                          onClick={() => clipboard.copy(file.checksum)}
                           size="xs"
                           variant="transparent"
                         >
-                          {file?.checksum.slice(0, 8)}
+                          {file.checksum.slice(0, 8)}
                         </Badge>
                       </Tooltip>
                     </Group>

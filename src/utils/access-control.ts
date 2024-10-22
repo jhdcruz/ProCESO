@@ -47,7 +47,7 @@ export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
  * @param visibility - The event's visibility.
  */
 export const canAccessEvent = (
-  visibility: Enums<'event_visibility'>,
+  visibility: Enums<'event_visibility'> | null,
   role: Enums<'roles_user'> | null,
 ): boolean => {
   switch (visibility) {

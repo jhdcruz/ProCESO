@@ -55,9 +55,9 @@ export async function generateMetadata({
     openGraph: {
       siteName: 'ProCESO',
       url: `${siteUrl() + systemUrl}/events/${event.data.id}/info`,
-      images: [{ url: event.data.image_url! }],
-      publishedTime: event.data.created_at!,
-      expirationTime: event.data.date_ending!,
+      images: [{ url: event.data.image_url as string }],
+      publishedTime: event.data.created_at as string,
+      expirationTime: event.data.date_ending as string,
     },
   };
 }

@@ -42,8 +42,7 @@ export const emailReminders = task({
     // add faculty emails to the emails array
     if (!usersRes.error) {
       emails = usersRes.data.map(
-        (user: { faculty_email: string | null }) =>
-          user.faculty_email as string,
+        (user: { faculty_email: string | null }) => user.faculty_email!,
       );
     } else {
       logger.error(

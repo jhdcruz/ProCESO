@@ -176,7 +176,7 @@ function UsersTableComponent({
         </Table.Thead>
 
         <Table.Tbody>
-          {users?.length ? (
+          {users.length ? (
             <>{rows}</>
           ) : (
             <Table.Tr>

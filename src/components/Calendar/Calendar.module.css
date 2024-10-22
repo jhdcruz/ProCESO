@@ -48,12 +48,12 @@
 
   /* Events */
   --fc-event-bg-color: light-dark(
-    rgba(243, 215, 133, 0.8),
-    rgba(179, 151, 67, 0.8)
+    rgba(243, 215, 133 / 80%),
+    rgba(179, 151, 67 / 80%)
   );
   --fc-event-border-color: #ffe69b;
   --fc-event-text-color: var(--mantine-color-bright);
-  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+  --fc-event-selected-overlay-color: rgba(0, 0, 0 / 25%);
   --fc-bg-event-opacity: 0.4;
 
   /* Event List */
@@ -62,15 +62,15 @@
     var(--mantine-color-dark-7)
   );
 
-  --fc-more-link-bg-color: rgba(199, 180, 123, 0.8);
+  --fc-more-link-bg-color: rgba(199, 180, 123 / 80%);
   --fc-more-link-text-color: var(--mantine-color-bright);
 
   --fc-event-resizer-thickness: 8px;
   --fc-event-resizer-dot-total-width: 8px;
   --fc-event-resizer-dot-border-width: 1px;
 
-  --fc-non-business-color: rgba(215, 215, 215, 0.3);
-  --fc-highlight-color: rgba(243, 224, 114, 0.5);
-  --fc-today-bg-color: rgba(255, 220, 40, 0.15);
+  --fc-non-business-color: rgba(215, 215, 215 / 30%);
+  --fc-highlight-color: rgba(243, 224, 114 / 50%);
+  --fc-today-bg-color: rgba(255, 220, 40 / 15%);
   --fc-now-indicator-color: #ffc51c;
 }

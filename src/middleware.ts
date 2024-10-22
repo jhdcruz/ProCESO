@@ -8,8 +8,8 @@ export async function middleware(request: NextRequest) {
   });
 
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string,
     {
       cookies: {
         getAll() {
@@ -49,7 +49,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   } else {
     // redirect if user is disabled
-    if (user && !user.app_metadata.active) {
+    if (!user?.app_metadata?.active) {
       const url = request.nextUrl.clone();
       url.pathname = '/disabled';
       return NextResponse.rewrite(url);
@@ -57,8 +57,7 @@ export async function middleware(request: NextRequest) {
 
     // redirect enabled users from accessing the /disabled
     if (
-      user &&
-      user.app_metadata.active &&
+      user?.app_metadata?.active &&
       request.nextUrl.pathname.endsWith('disabled')
     ) {
       const url = request.nextUrl.clone();

@@ -36,7 +36,7 @@ function EventDetailsComponent({
 
   return (
     <>
-      {!canAccessEvent(event.visibility!, user.role) ? (
+      {!canAccessEvent(event.visibility, user.role) ? (
         <NotFound />
       ) : (
         <Tabs

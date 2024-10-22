@@ -11,7 +11,7 @@ export function eventsToFc(
   events: Tables<'events_details_view'>[],
 ): EventSourceInput[] {
   return events.map((event) => ({
-    id: event.id!,
+    id: event.id as string,
     color: event.series_color as string,
     title: event.title,
     start: new Date(event.date_starting as string),
