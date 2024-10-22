@@ -9,8 +9,8 @@ import { systemUrl } from '../routes';
  * Login to supabase auth using email login.
  */
 export async function onEmailLogin(formData: FormData) {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const email = formData.get('email')!;
+  const password = formData.get('password')!;
 
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);

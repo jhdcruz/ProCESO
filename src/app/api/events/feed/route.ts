@@ -11,8 +11,8 @@ import { createServerClient } from '@/libs/supabase/server';
 export async function GET(req: NextRequest) {
   // get search params from request
   const params = req.nextUrl.searchParams;
-  const start = params.get('start') as string;
-  const end = params.get('end') as string;
+  const start = params.get('start')!;
+  const end = params.get('end')!;
 
   if (!start && !end) {
     return new Response('Invalid request', {

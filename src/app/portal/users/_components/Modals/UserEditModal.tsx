@@ -40,7 +40,7 @@ function UserEdit({
   );
 
   const handleSubmit = async () => {
-    const response = await updateUser(selected?.id as string, {
+    const response = await updateUser(selected?.id!, {
       dept: dept[0],
       role: role[0],
       pos: pos,

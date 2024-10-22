@@ -71,7 +71,7 @@ function EventDetailsBody({
       withBorder: true,
     });
 
-    const blob = await downloadEventFile(event.id as string, checksum);
+    const blob = await downloadEventFile(event.id!, checksum);
 
     notifications.show({
       id: checksum,
@@ -108,10 +108,10 @@ function EventDetailsBody({
   useEffect(() => {
     const fetchEventDetails = async () => {
       const getAssigned = getAssignedFaculties({
-        eventId: event.id as string,
+        eventId: event.id!,
       });
 
-      const getFiles = getEventReports(event.id as string);
+      const getFiles = getEventReports(event.id!);
 
       const [eventFiles, eventFaculties] = await Promise.all([
         getFiles,
@@ -174,7 +174,7 @@ function EventDetailsBody({
 
           <Group my={16}>
             <Avatar
-              alt={event.created_by as string}
+              alt={event.created_by!}
               color="initials"
               radius="xl"
               src={event.creator_avatar}
@@ -210,7 +210,7 @@ function EventDetailsBody({
                   {faculties.map((faculty) => (
                     <Group key={faculty?.faculty_email} my={16}>
                       <Avatar
-                        alt={faculty?.faculty_name as string}
+                        alt={faculty?.faculty_name!}
                         color="initials"
                         radius="xl"
                         src={faculty?.faculty_avatar}

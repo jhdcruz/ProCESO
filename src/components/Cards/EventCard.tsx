@@ -32,7 +32,7 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => (
         >
           <Badge
             className="absolute left-2 top-2 shadow-md"
-            color={data.series_color as string}
+            color={data.series_color!}
             variant="dot"
           >
             {data.series}

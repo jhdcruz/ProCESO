@@ -67,14 +67,13 @@ function EventDetailsHeader({
   const startProgress = useProgress();
 
   const eventForm: EventFormProps = {
-    id: event.id as string,
-    title: event.title as string,
+    id: event.id!,
+    title: event.title!,
     series: event.series,
     visibility: event.visibility ?? 'Everyone',
-    handled_by:
-      event.users?.map((user) => user.faculty_id as string) ?? undefined,
-    date_starting: new Date(event.date_starting as string),
-    date_ending: new Date(event.date_ending as string),
+    handled_by: event.users?.map((user) => user.faculty_id!) ?? undefined,
+    date_starting: new Date(event.date_starting!),
+    date_ending: new Date(event.date_ending!),
     image_url: event.image_url ?? undefined,
   };
 
@@ -98,7 +97,7 @@ function EventDetailsHeader({
       confirmProps: { color: 'red' },
       onCancel: () => console.log('Cancel'),
       onConfirm: async () => {
-        const response = await deleteEventAction(event.id as string);
+        const response = await deleteEventAction(event.id!);
 
         notifications.show({
           title: response?.title,
@@ -124,7 +123,7 @@ function EventDetailsHeader({
     if (localFiles?.length && event.id) {
       // upload files to storage
       const uploadFiles = async () => {
-        await uploadEventFiles(event.id as string, {
+        await uploadEventFiles(event.id!, {
           files: localFiles,
           notify: notifications,
         });
@@ -176,7 +175,7 @@ function EventDetailsHeader({
                 label={`This event is part of the "${event.series}" event group.`}
                 position="bottom"
               >
-                <Badge color={event.series_color as string} variant="dot">
+                <Badge color={event.series_color!} variant="dot">
                   {event.series}
                 </Badge>
               </Tooltip>

@@ -230,15 +230,13 @@ export function FacultyListComponent({
                 <>
                   {/* Sort by selection (selected at top) */}
                   {rows.sort((a) =>
-                    defaultSelection.includes(a.key as string) ? -1 : 1,
+                    defaultSelection.includes(a.key!) ? -1 : 1,
                   )}
                 </>
               ) : (
                 <>
                   {/* Sort by availability (available at top) */}
-                  {rows.sort((a) =>
-                    assignments.includes(a.key as string) ? 1 : -1,
-                  )}
+                  {rows.sort((a) => (assignments.includes(a.key!) ? 1 : -1))}
                 </>
               )}
             </>

@@ -11,12 +11,12 @@ export function eventsToFc(
   events: Tables<'events_details_view'>[],
 ): EventSourceInput[] {
   return events.map((event) => ({
-    id: event.id as string,
-    color: event.series_color as string,
+    id: event.id!,
+    color: event.series_color!,
     title: event.title,
-    start: new Date(event.date_starting as string),
-    end: new Date(event.date_ending as string),
-    description: sanitizeHtml(event.description as string, { allowedTags: [] }),
+    start: new Date(event.date_starting!),
+    end: new Date(event.date_ending!),
+    description: sanitizeHtml(event.description!, { allowedTags: [] }),
     url: `/portal/events/${event.id}/info`,
     allDay:
       // TODO: Improve allDay check logic, this is unreliable.
