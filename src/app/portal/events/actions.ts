@@ -157,6 +157,7 @@ export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
       message: tableError.message,
     };
   }
+
   // delete storage usage
   const { error: storageError } = await supabase.storage
     .from('event_cover')
@@ -167,6 +168,20 @@ export async function deleteEventAction(eventId: string): Promise<ApiResponse> {
       status: 1,
       title: 'Unable to delete event cover',
       message: storageError.message,
+    };
+  }
+
+  // delete storage record
+  const { error: metadataError } = await supabase
+    .from('event_files')
+    .delete()
+    .eq('event', eventId);
+
+  if (metadataError) {
+    return {
+      status: 1,
+      title: 'Unable to delete event files metadata',
+      message: metadataError.message,
     };
   }
 
