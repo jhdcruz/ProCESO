@@ -9,9 +9,10 @@ import { postSeries } from '@/libs/supabase/api/series';
 import { postEventCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
 import type { EventResponse } from '@/libs/supabase/api/_response';
-import { emailAssigned } from '@/trigger/email-assigned';
 import type { EventFormProps } from './_components/Forms/EventFormModal';
 import type ApiResponse from '@/utils/response';
+import { emailAssigned } from '@/trigger/email-assigned';
+import { rescheduleReminders } from '@/libs/triggerdev/reminders';
 
 /**
  * Create and process new event.
@@ -29,7 +30,7 @@ import type ApiResponse from '@/utils/response';
  */
 export async function submitEvent(
   event: EventFormProps,
-  original: Readonly<EventFormProps>,
+  original?: Readonly<EventFormProps>,
   existingId?: Readonly<string>,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
@@ -131,7 +132,7 @@ export async function submitEvent(
       let ids = event.handled_by;
 
       // only email new assignees when updating
-      if (existingId) {
+      if (existingId && original) {
         ids = event.handled_by.filter(
           (id) => !original.handled_by?.includes(id),
         );
@@ -146,6 +147,15 @@ export async function submitEvent(
 
       if (!assignResponse.data) return assignResponse;
     }
+  }
+
+  // schedule (delay) email reminders
+  if (event.date_starting) {
+    rescheduleReminders({
+      eventId: eventId,
+      eventTitle: event.title,
+      eventStartingDate: event.date_starting,
+    });
   }
 
   if (existingId) {
