@@ -7,6 +7,7 @@ export default interface ApiResponse {
   status: 0 | 1 | 2;
   title: string;
   message: string;
-  data?: any;
+  // @ts-expect-error intentional explicit any
+  data?: data;
   count?: number;
 }

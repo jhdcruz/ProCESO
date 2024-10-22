@@ -3,15 +3,7 @@
 import { useState, useDeferredValue, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  AppShell,
-  Button,
-  Divider,
-  Group,
-  Loader,
-  rem,
-  TextInput,
-} from '@mantine/core';
+import { Button, Divider, Group, Loader, rem, TextInput } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import type { Enums, Tables } from '@/libs/supabase/_database';

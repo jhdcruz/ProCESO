@@ -30,7 +30,6 @@ import {
   IconArrowRight,
   IconX,
 } from '@tabler/icons-react';
-import type { EventResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { getEventsInRange } from '@/libs/supabase/api/event';

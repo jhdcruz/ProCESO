@@ -8,7 +8,6 @@ import type {
   EventDetailsResponse,
   EventsViewResponse,
 } from './_response';
-import ApiResponse from '@/utils/response';
 import { systemUrl } from '@/app/routes';
 
 /**

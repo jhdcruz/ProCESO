@@ -30,15 +30,17 @@ function UserEdit({
   close: () => void;
 }) {
   const [dept, setDept] = useState<Enums<'roles_dept'>[]>([
-    selected?.department!,
+    selected?.department ?? 'na',
   ]);
-  const [role, setRole] = useState<Enums<'roles_user'>[]>([selected?.role!]);
+  const [role, setRole] = useState<Enums<'roles_user'>[]>([
+    selected?.role ?? 'student',
+  ]);
   const [pos, setPos] = useState<Enums<'roles_pos'>[]>(
     selected?.other_roles ?? [],
   );
 
   const handleSubmit = async () => {
-    const response = await updateUser(selected?.id!, {
+    const response = await updateUser(selected?.id as string, {
       dept: dept[0],
       role: role[0],
       pos: pos,
@@ -74,8 +76,8 @@ function UserEdit({
 
   // reflect changes on selected user
   useEffect(() => {
-    setDept([selected?.department!]);
-    setRole([selected?.role!]);
+    setDept([selected?.department ?? 'na']);
+    setRole([selected?.role ?? 'student']);
     setPos(selected?.other_roles ?? []);
   }, [selected]);
 

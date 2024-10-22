@@ -19,6 +19,7 @@ export default [
       'react/jsx-sort-props': 'warn',
       'react/sort-default-props': 'warn',
     },
+    ignores: ['src/libs/supabase/_database.ts'],
   },
   eslintPluginPrettierRecommended,
 ];

@@ -1,7 +1,5 @@
-import { type SupabaseClient } from '@supabase/supabase-js';
 import { createBrowserClient } from '@/libs/supabase/client';
-import { createServerClient } from '@/libs/supabase/server';
-import type { UserResponse, UsersResponse } from './_response';
+import type { UsersResponse } from './_response';
 import type { Enums } from '../_database';
 
 /**

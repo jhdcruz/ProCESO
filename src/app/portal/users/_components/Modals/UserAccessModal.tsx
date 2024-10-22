@@ -20,8 +20,8 @@ function UserAccess({
   opened: boolean;
   close: () => void;
 }) {
-  const [id, setId] = useState<string>(selected?.id!);
-  const [active, setActive] = useState<boolean>(selected?.active!);
+  const [id, setId] = useState<string>(selected?.id as string);
+  const [active, setActive] = useState<boolean>(selected?.active ?? false);
   const onAccessChange = async () => {
     const response = await changeUserAccess(id, !active);
 
@@ -48,8 +48,8 @@ function UserAccess({
 
   // reflect changes in selected user
   useEffect(() => {
-    setId(selected?.id!);
-    setActive(selected?.active!);
+    setId(selected?.id as string);
+    setActive(selected?.active ?? false);
   }, [selected]);
 
   return (

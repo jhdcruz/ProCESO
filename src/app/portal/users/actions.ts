@@ -96,7 +96,7 @@ export async function updateUser(
   const cookieStore = cookies();
   const supabase = await createAdminClient(cookieStore);
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('users')
     .update({ department: body.dept, role: body.role, other_roles: body.pos })
     .eq('id', id);

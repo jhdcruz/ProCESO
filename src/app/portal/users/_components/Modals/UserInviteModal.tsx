@@ -25,23 +25,14 @@ function UserInvite() {
       role: role[0],
     });
 
-    response.status === 0
-      ? notifications.show({
-          title: response.title,
-          message: response.message,
-          color: 'green',
-          withBorder: true,
-          withCloseButton: true,
-          autoClose: 4000,
-        })
-      : notifications.show({
-          title: response.title,
-          message: response.message,
-          color: 'red',
-          withBorder: true,
-          withCloseButton: true,
-          autoClose: 4000,
-        });
+    notifications.show({
+      title: response.title,
+      message: response.message,
+      color: response.status === 0 ? 'green' : 'red',
+      withBorder: true,
+      withCloseButton: true,
+      autoClose: 4000,
+    });
 
     setPending(false);
     close();

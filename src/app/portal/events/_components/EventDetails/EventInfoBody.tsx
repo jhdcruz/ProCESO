@@ -210,7 +210,7 @@ function EventDetailsBody({
                   {faculties?.map((faculty) => (
                     <Group key={faculty?.faculty_email} my={16}>
                       <Avatar
-                        alt={faculty?.faculty_name!}
+                        alt={faculty?.faculty_name as string}
                         color="initials"
                         radius="xl"
                         src={faculty?.faculty_avatar}

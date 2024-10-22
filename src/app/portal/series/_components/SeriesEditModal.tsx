@@ -44,7 +44,7 @@ function SeriesEdit({
     });
 
     await revalidate(pathname);
-    response.status === 0 && close();
+    close();
   };
 
   useEffect(() => {
