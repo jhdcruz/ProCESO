@@ -4,7 +4,6 @@ import { IconPlus } from '@tabler/icons-react';
 import { Link } from 'react-transition-progress/next';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { systemUrl } from '@/app/routes';
-import { SeriesShell } from './_components/SeriesShell';
 import { SeriesAccordion } from './_components/SeriesAccordion';
 import { getSeries } from './actions';
 
@@ -16,7 +15,7 @@ export default async function Page() {
   const series = await getSeries();
 
   return (
-    <SeriesShell>
+    <>
       <Group content="center" mb="md" mt="sm">
         <IconPlus size={16} />
         <Text c="dimmed">
@@ -34,6 +33,6 @@ export default async function Page() {
       <Divider my={20} />
 
       <SeriesAccordion data={series?.data ?? []} />
-    </SeriesShell>
+    </>
   );
 }

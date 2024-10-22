@@ -2,7 +2,7 @@
 
 import { memo, useDeferredValue, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { AppShell, Button, Group, TextInput, rem } from '@mantine/core';
+import { Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getEvents } from '@/libs/supabase/api/event';
@@ -81,7 +81,7 @@ function EventsShellComponent() {
   }, [searchQuery, user?.id]);
 
   return (
-    <AppShell.Main>
+    <>
       <Group className="content-center" mb="md">
         {/* New Event */}
         <Button
@@ -113,7 +113,7 @@ function EventsShellComponent() {
         role={user.role ?? 'student'}
         upcoming={upcoming}
       />
-    </AppShell.Main>
+    </>
   );
 }
 

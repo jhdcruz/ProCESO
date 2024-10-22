@@ -4,7 +4,7 @@ import { memo, startTransition } from 'react';
 import { useProgress } from 'react-transition-progress';
 import { usePathname, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { AppShell, Tabs } from '@mantine/core';
+import { Tabs } from '@mantine/core';
 import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
@@ -35,7 +35,7 @@ function EventDetailsComponent({
   const pathname = usePathname();
 
   return (
-    <AppShell.Main>
+    <>
       {!canAccessEvent(event.visibility!, user.role) ? (
         <NotFound />
       ) : (
@@ -72,7 +72,7 @@ function EventDetailsComponent({
           </Tabs.Panel>
         </Tabs>
       )}
-    </AppShell.Main>
+    </>
   );
 }
 

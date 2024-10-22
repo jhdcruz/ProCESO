@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { metadata as defaultMetadata } from '@/app/layout';
-import DashboardShell from '@portal/(dashboard)/_components/DashboardShell';
+import { Calendar } from '@/components/Calendar/Calendar';
 
 export const metadata: Metadata = {
   title: 'Dashboard - ' + defaultMetadata.title,
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
  * Auth checking is done in the middleware.
  */
 export default function App() {
-  return <DashboardShell />;
+  return <Calendar />;
 }

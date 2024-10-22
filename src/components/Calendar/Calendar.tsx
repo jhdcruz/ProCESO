@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import listPlugin from '@fullcalendar/list';
@@ -37,7 +39,7 @@ function CalendarComponent() {
           center: 'title',
           right: 'timeGridDay,today prev,next',
         }}
-        height="96vh"
+        height="92vh"
         initialView="dayGridMonth"
         lazyFetching={true}
         nowIndicator={true}

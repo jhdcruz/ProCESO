@@ -2,6 +2,7 @@
 
 import { type FC, useState } from 'react';
 import { Link } from 'react-transition-progress/next';
+import { usePathname } from 'next/navigation';
 import { Box, Collapse, Group, ThemeIcon, rem } from '@mantine/core';
 import { IconChevronRight, type IconProps } from '@tabler/icons-react';
 import classes from './LinksGroup.module.css';
@@ -24,9 +25,16 @@ export function LinksGroup({
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened ?? false);
 
+  const pathname = usePathname();
+
   // sub links component
   const items = (hasLinks ? links : []).map((link) => (
-    <Link className={classes.link} href={link.link} key={link.link}>
+    <Link
+      aria-selected={pathname === link.link}
+      className={`${classes.link} ${pathname === link.link ? classes.selected + ' shadow-sm' : ''}`}
+      href={link.link}
+      key={link.link}
+    >
       {link.label}
     </Link>
   ));
@@ -34,7 +42,8 @@ export function LinksGroup({
   return (
     <>
       <Link
-        className={classes.control}
+        aria-selected={pathname === link}
+        className={`${classes.control} ${pathname === link ? classes.selected + ' shadow-sm' : ''}`}
         href={link ?? '#'}
         onClick={() => setOpened((o) => !o)}
       >

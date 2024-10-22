@@ -259,6 +259,7 @@ function EventDetailsBody({
                   <div>
                     <Anchor
                       component="button"
+                      fw={500}
                       lineClamp={1}
                       onClick={() => saveFile(file.name, file?.checksum)}
                       size="sm"

@@ -14,3 +14,10 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+body {
+  background-color: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-8)
+  );
+}

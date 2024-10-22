@@ -113,7 +113,7 @@ export default function UsersShell() {
   }, [searchQuery, searchParams, dept, roles, pos]);
 
   return (
-    <AppShell.Main>
+    <>
       {/* Table controls  */}
       <Group className="content-center" mb="md">
         {/* Invite user by email */}
@@ -179,6 +179,6 @@ export default function UsersShell() {
           Next
         </Button>
       </Button.Group>
-    </AppShell.Main>
+    </>
   );
 }

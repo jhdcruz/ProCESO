@@ -5,6 +5,7 @@ import { AppShell } from '@mantine/core';
 import { sidebarRoutes } from '@/app/routes';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import { useUser } from '@/components/Providers/UserProvider';
+import styles from './AppContainer.module.css';
 
 /**
  * The main layout for the application.
@@ -20,18 +21,19 @@ export function AppContainer({
     <AppShell
       layout="alt"
       navbar={{
-        width: 260,
+        width: 240,
         breakpoint: 'sm',
       }}
       padding="md"
       transitionDuration={350}
       transitionTimingFunction="ease-out"
+      withBorder={false}
     >
-      <AppShell.Navbar zIndex={100}>
+      <AppShell.Navbar className={styles.bg} pl="xs" zIndex={100}>
         <Sidebar routes={sidebarRoutes} user={user} />
       </AppShell.Navbar>
 
-      <>{children}</>
+      <AppShell.Main className={styles.main}>{children}</AppShell.Main>
     </AppShell>
   );
 }

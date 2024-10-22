@@ -24,7 +24,7 @@ export function Sidebar({
   return (
     <div className={classes.navbar}>
       <div className={classes.header}>
-        <Group justify="space-between">
+        <Group justify="center">
           <Image
             alt=""
             className="rounded-md bg-contain"
@@ -32,8 +32,6 @@ export function Sidebar({
             src="/assets/ceso-manila.webp"
             width={160}
           />
-
-          <Group gap={2}>{/* TODO */}</Group>
         </Group>
       </div>
 

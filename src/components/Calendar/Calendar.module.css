@@ -59,7 +59,7 @@
   /* Event List */
   --fc-list-event-hover-bg-color: light-dark(
     var(--mantine-color-gray-0),
-    var(--mantine-color-dark-8)
+    var(--mantine-color-dark-7)
   );
 
   --fc-more-link-bg-color: rgba(199, 180, 123, 0.8);
