@@ -46,7 +46,7 @@ export default function EventReminder({ event }: { event: Tables<'events'> }) {
               <br />
               <Link
                 className="font-bold text-yellow-500 underline"
-                href={`https://deuz.tech/events/${event?.id!}`}
+                href={`https://deuz.tech/events/${event?.id as string}`}
               >
                 {event?.title ?? 'Untitled Event'}
               </Link>

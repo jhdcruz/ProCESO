@@ -45,7 +45,7 @@ export async function generateMetadata({
 
   return {
     title: `${event.data.title} | T.I.P Community Extension Services Office – Manila`,
-    description: sanitizeHtml(event.data.description!, {
+    description: sanitizeHtml(event.data.description as string, {
       allowedTags: [],
     }),
     applicationName: 'ProCESO',
@@ -55,9 +55,9 @@ export async function generateMetadata({
     openGraph: {
       siteName: 'ProCESO',
       url: `${siteUrl() + systemUrl}/events/${event.data.id}/info`,
-      images: [{ url: event.data.image_url! }],
-      publishedTime: event.data.created_at!,
-      expirationTime: event.data.date_ending!,
+      images: [{ url: event.data.image_url as string }],
+      publishedTime: event.data.created_at as string,
+      expirationTime: event.data.date_ending as string,
     },
   };
 }

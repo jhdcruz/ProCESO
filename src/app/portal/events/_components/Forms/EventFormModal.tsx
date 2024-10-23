@@ -231,7 +231,7 @@ export function EventFormModalComponent({
                     className="mx-auto block object-contain"
                     height={240}
                     key={imagePreview ?? event?.title}
-                    src={imagePreview ?? event?.image_url!}
+                    src={imagePreview ?? (event?.image_url as string)}
                     width={240}
                   />
                 ) : (
@@ -342,8 +342,8 @@ export function EventFormModalComponent({
                           {await import('little-date').then(
                             ({ formatDateRange }) => {
                               return formatDateRange(
-                                new Date(event.date_starting!),
-                                new Date(event.date_ending!),
+                                new Date(event.date_starting as string),
+                                new Date(event.date_ending as string),
                               );
                             },
                           )}
