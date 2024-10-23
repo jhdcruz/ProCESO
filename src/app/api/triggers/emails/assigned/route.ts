@@ -1,5 +1,6 @@
 import { Resend } from 'resend';
 import { NextRequest } from 'next/server';
+import { runs } from '@trigger.dev/sdk/v3';
 import AssignedEmail from '@/emails/AssignedEmail';
 
 /**
@@ -8,8 +9,13 @@ import AssignedEmail from '@/emails/AssignedEmail';
  * @param req - { event: Tables<'events'>; emails: string[] }
  */
 export async function POST(req: NextRequest) {
-  const { event, emails } = await req.json();
+  const { runId, event, emails } = await req.json();
   const resend = new Resend(process.env.RESEND_API);
+
+  const run = await runs.retrieve(runId);
+  if (!run || !run.isExecuting) {
+    return new Response('Invalid request', { status: 400 });
+  }
 
   // send email to assigned faculties
   const { error } = await resend.batch.send(

@@ -142,7 +142,6 @@ export async function submitEvent(
       await emailAssigned.trigger({
         event: event.title,
         ids: ids,
-        cookies: cookieStore,
       });
 
       if (!assignResponse.data) return assignResponse;

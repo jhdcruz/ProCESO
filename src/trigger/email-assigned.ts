@@ -1,6 +1,5 @@
 import { logger, task, envvars } from '@trigger.dev/sdk/v3';
-import { createServerClient } from '@/libs/supabase/server';
-import type { cookies as asyncCookies } from 'next/headers';
+import { createAdminClient } from '@/libs/supabase/admin-client';
 
 /**
  * Send notification email to assigned faculties that
@@ -12,16 +11,18 @@ import type { cookies as asyncCookies } from 'next/headers';
  */
 export const emailAssigned = task({
   id: 'email-assigned',
-  run: async (payload: {
-    event: string;
-    ids: string[];
-    cookies: ReturnType<typeof asyncCookies>;
-  }) => {
+  run: async (
+    payload: {
+      event: string;
+      ids: string[];
+    },
+    { ctx },
+  ) => {
     // HACK: for RLS policies, we are passing auth cookies,
     // probably a bad thing, probably, I think.
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_URL');
     await envvars.retrieve('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    const supabase = await createServerClient(payload.cookies);
+    const supabase = createAdminClient();
 
     logger.info('Getting users and event information...');
     // fetch faculty emails
@@ -64,6 +65,7 @@ export const emailAssigned = task({
     const response = await fetch(appUrl.value + '/api/emails/assigned', {
       method: 'POST',
       body: JSON.stringify({
+        runId: ctx.run.id,
         event: eventRes?.data,
         emails: usersRes?.data?.map((faculty) => faculty.email) ?? [],
       }),

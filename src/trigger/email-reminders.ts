@@ -11,12 +11,12 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
  */
 export const emailReminders = task({
   id: 'email-reminders',
-  run: async (payload: { eventId: string; eventTitle: string }) => {
+  run: async (payload: { eventId: string; eventTitle: string }, { ctx }) => {
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
 
     // HACK: for RLS policies, we are passing auth cookies,
-    // probably a bad thing, emphasis on the 'prbobably'.
+    // probably a bad thing, emphasis on the 'probably'.
     const supabase = createAdminClient();
     let emails: string[] = [];
 
@@ -69,6 +69,7 @@ export const emailReminders = task({
     const response = await fetch(appUrl.value + '/api/emails/reminders', {
       method: 'POST',
       body: JSON.stringify({
+        runId: ctx.run.id,
         event: eventRes?.data,
         emails: emails,
       }),
