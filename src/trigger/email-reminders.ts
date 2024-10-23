@@ -29,6 +29,13 @@ export const emailReminders = task({
       .eq('event_id', payload.eventId)
       .not('faculty_email', 'is', null);
 
+    // get subscriber emails
+    const subscribersQuery = supabase
+      .from('events_subscriptions_view')
+      .select('subscriber_email')
+      .eq('event_id', payload.eventId)
+      .not('subscriber_email', 'is', null);
+
     // get event data
     const eventQuery = supabase
       .from('events')
@@ -37,7 +44,11 @@ export const emailReminders = task({
       .limit(1)
       .single();
 
-    const [usersRes, eventRes] = await Promise.all([usersQuery, eventQuery]);
+    const [usersRes, subscribersRes, eventRes] = await Promise.all([
+      usersQuery,
+      subscribersQuery,
+      eventQuery,
+    ]);
 
     // add faculty emails to the emails array
     if (!usersRes.error) {
@@ -50,6 +61,23 @@ export const emailReminders = task({
         usersRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(usersRes?.error?.message);
+    }
+
+    // add subscriber emails to the emails array
+    if (!subscribersRes.error) {
+      emails = [
+        ...emails,
+        ...subscribersRes.data.map(
+          (subscriber: { subscriber_email: string | null }) =>
+            subscriber.subscriber_email!,
+        ),
+      ];
+    } else {
+      logger.error(
+        subscribersRes?.error?.message,
+        subscribersRes?.error as unknown as Record<string, unknown>,
+      );
+      throw new Error(subscribersRes?.error?.message);
     }
 
     if (eventRes.error) {

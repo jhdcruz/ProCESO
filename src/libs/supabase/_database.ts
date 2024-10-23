@@ -68,6 +68,84 @@ export type Database = {
             referencedRelation: "events_faculties_view"
             referencedColumns: ["event_id"]
           },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["event_id"]
+          },
+        ]
+      }
+      event_subscriptions: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["event_id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["event_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "events_faculties_view"
+            referencedColumns: ["faculty_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
         ]
       }
       events: {
@@ -120,6 +198,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "events_faculties_view"
             referencedColumns: ["faculty_id"]
+          },
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
@@ -179,11 +264,25 @@ export type Database = {
             referencedColumns: ["event_id"]
           },
           {
+            foreignKeyName: "event_handlers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["event_id"]
+          },
+          {
             foreignKeyName: "event_handlers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "events_faculties_view"
             referencedColumns: ["faculty_id"]
+          },
+          {
+            foreignKeyName: "event_handlers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "events_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -282,6 +381,16 @@ export type Database = {
           faculty_email: string | null
           faculty_id: string | null
           faculty_name: string | null
+        }
+        Relationships: []
+      }
+      events_subscriptions_view: {
+        Row: {
+          event_id: string | null
+          subscriber_avatar: string | null
+          subscriber_email: string | null
+          subscriber_id: string | null
+          subscriber_name: string | null
         }
         Relationships: []
       }

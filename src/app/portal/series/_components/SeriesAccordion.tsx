@@ -19,6 +19,7 @@ import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { deleteSeries, getSeriesEvents } from '../actions';
+import { useUser } from '@/components/Providers/UserProvider';
 
 const SeriesEditModal = dynamic(
   () => import('./SeriesEditModal').then((mod) => mod.SeriesEditModal),
@@ -67,6 +68,8 @@ function AccordionControl({
 }
 
 function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
+  const { role } = useUser();
+
   const [opened, { open, close }] = useDisclosure(false);
   const [loading, setLoading] = useState(false);
 
@@ -134,18 +137,20 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
 
   const items = series.map((item) => (
     <Accordion.Item key={item.id} value={item.title}>
-      <AccordionControl
-        onDelete={() => deleteSeriesModal(item.id)}
-        onEdit={handleEdit}
-        seriesId={item.id}
-      >
-        <Group>
-          {item.color && (
-            <ColorSwatch color={item.color} size={20} withShadow={false} />
-          )}
-          {item.title}
-        </Group>
-      </AccordionControl>
+      {role !== 'student' && (
+        <AccordionControl
+          onDelete={() => deleteSeriesModal(item.id)}
+          onEdit={handleEdit}
+          seriesId={item.id}
+        >
+          <Group>
+            {item.color && (
+              <ColorSwatch color={item.color} size={20} withShadow={false} />
+            )}
+            {item.title}
+          </Group>
+        </AccordionControl>
+      )}
       <Accordion.Panel>
         <Suspense fallback={<PageLoader />}>
           {value === item.title && events?.length ? (
@@ -185,7 +190,9 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
       value={value}
       variant="separated"
     >
-      <SeriesEditModal close={close} opened={opened} series={seriesToEdit} />
+      {role !== 'student' && (
+        <SeriesEditModal close={close} opened={opened} series={seriesToEdit} />
+      )}
       {items}
     </Accordion>
   );

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import type { Database } from '@/libs/supabase/_database';
+import { sidebarRoutes, systemUrl } from '@/app/routes';
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -40,8 +41,8 @@ export async function middleware(request: NextRequest) {
 
   if (
     !user &&
-    request.nextUrl.pathname.startsWith('/portal') &&
-    !request.nextUrl.pathname.match(/^\/portal\/events\/.*\/info$/) // allow /portal/events/**/info
+    request.nextUrl.pathname.startsWith(systemUrl) &&
+    !request.nextUrl.pathname.match(systemUrl + /\/events\/.*\/info$/) // allow /portal/events/**/info
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
@@ -49,7 +50,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   } else {
     // redirect if user is disabled
-    if (!user?.app_metadata?.active) {
+    if (user?.app_metadata?.active === 'false') {
       const url = request.nextUrl.clone();
       url.pathname = '/disabled';
       return NextResponse.rewrite(url);
@@ -64,6 +65,19 @@ export async function middleware(request: NextRequest) {
       url.pathname = '/portal';
       return NextResponse.redirect(url);
     }
+
+    // RBAC access control
+    const userRole = user?.app_metadata?.role ?? 'student';
+    sidebarRoutes.forEach((route) => {
+      if (
+        request.nextUrl.pathname.startsWith(systemUrl + route.link) &&
+        !route.access.includes(userRole)
+      ) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/not-found';
+        return NextResponse.rewrite(url);
+      }
+    });
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're

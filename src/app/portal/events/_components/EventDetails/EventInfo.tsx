@@ -7,6 +7,7 @@ import { IconAlertTriangle } from '@tabler/icons-react';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { updateEventDescription } from '@/libs/supabase/api/event';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import { Enums } from '@/libs/supabase/_database';
 
 const EventInfoHeader = lazy(() =>
   import('./EventInfoHeader').then((mod) => ({
@@ -20,58 +21,68 @@ const EventInfoBody = lazy(() =>
   })),
 );
 
-export const EventInfo = memo((event: EventDetailsProps) => {
-  const [editable, setEditable] = useState(false);
-  const [content, setContent] = useState(event?.description ?? null);
-  const [loading, setLoading] = useState(false);
+export const EventInfo = memo(
+  ({
+    event,
+    role,
+  }: {
+    event: EventDetailsProps;
+    role: Enums<'roles_user'>;
+  }) => {
+    const [editable, setEditable] = useState(false);
+    const [content, setContent] = useState(event?.description ?? null);
+    const [loading, setLoading] = useState(false);
 
-  const saveDescription = async (content: string) => {
-    if (!event?.id || !editable) return;
-    setLoading(true);
+    const saveDescription = async (content: string) => {
+      if (!event?.id || !editable) return;
+      setLoading(true);
 
-    const result = await updateEventDescription({
-      eventId: event.id,
-      description: content,
-    });
-
-    if (result.status !== 0) {
-      notifications.show({
-        title: 'Cannot update event description',
-        message: result.message,
-        icon: <IconAlertTriangle />,
-        color: result.status === 1 ? 'yellow' : 'red',
-        withBorder: true,
-        withCloseButton: true,
-        autoClose: 8000,
+      const result = await updateEventDescription({
+        eventId: event.id,
+        description: content,
       });
-    } else {
-      // reflect changes locally
-      setContent(content);
-      setEditable(false);
-    }
 
-    setLoading(false);
-  };
+      if (result.status !== 0) {
+        notifications.show({
+          title: 'Cannot update event description',
+          message: result.message,
+          icon: <IconAlertTriangle />,
+          color: result.status === 1 ? 'yellow' : 'red',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 8000,
+        });
+      } else {
+        // reflect changes locally
+        setContent(content);
+        setEditable(false);
+      }
 
-  return (
-    <Container fluid key={event?.id}>
-      <Suspense fallback={<PageLoader />}>
-        <EventInfoHeader
-          editable={editable}
-          event={event}
-          toggleEdit={() => setEditable(!editable)}
-        />
+      setLoading(false);
+    };
 
-        <Space h={12} />
-        <EventInfoBody
-          content={content}
-          editable={editable}
-          event={event}
-          loading={loading}
-          onSave={saveDescription}
-        />
-      </Suspense>
-    </Container>
-  );
-});
+    return (
+      <Container fluid key={event?.id}>
+        <Suspense fallback={<PageLoader />}>
+          <EventInfoHeader
+            editable={editable}
+            event={event}
+            role={role}
+            toggleEdit={() => setEditable(!editable)}
+          />
+
+          <Space h={12} />
+          <EventInfoBody
+            content={content}
+            editable={editable}
+            event={event}
+            loading={loading}
+            onSave={saveDescription}
+            role={role}
+          />
+        </Suspense>
+      </Container>
+    );
+  },
+);
 EventInfo.displayName = 'EventInfo';

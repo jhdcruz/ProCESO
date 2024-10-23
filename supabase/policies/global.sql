@@ -8,3 +8,6 @@ using (
    FROM users
   WHERE (users.id = ( SELECT auth.uid() AS uid))) = ANY (ARRAY['admin'::user_roles, 'staff'::user_roles]))
 );
+
+CREATE UNIQUE INDEX faculty_assignments_event_id_user_id_idx ON public.faculty_assignments USING btree (event_id, user_id)
+CREATE UNIQUE INDEX event_subscription_event_id_user_id_idx ON public.event_subscriptions USING btree (event_id, user_id)

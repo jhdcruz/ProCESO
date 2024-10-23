@@ -10,7 +10,7 @@ import { systemUrl } from '@/app/routes';
 import type { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
-import { canAccessEvent } from '@/utils/access-control';
+import { canAccessEvent, isInternal } from '@/utils/access-control';
 import { EventInfo } from './EventInfo';
 
 const NotFound = dynamic(
@@ -28,7 +28,7 @@ function EventDetailsComponent({
 }: Readonly<{
   event: EventDetailsProps;
 }>) {
-  const user = useUser();
+  const { role } = useUser();
 
   const startProgress = useProgress();
   const router = useRouter();
@@ -36,7 +36,7 @@ function EventDetailsComponent({
 
   return (
     <>
-      {!canAccessEvent(event.visibility, user.role) ? (
+      {!canAccessEvent(event.visibility, role) ? (
         <NotFound />
       ) : (
         <Tabs
@@ -55,21 +55,25 @@ function EventDetailsComponent({
               Information
             </Tabs.Tab>
 
-            <Tabs.Tab
-              leftSection={<IconTimeline size={18} />}
-              value="analytics"
-            >
-              Analytics & Insights
-            </Tabs.Tab>
+            {isInternal(role!) && (
+              <Tabs.Tab
+                leftSection={<IconTimeline size={18} />}
+                value="analytics"
+              >
+                Analytics & Insights
+              </Tabs.Tab>
+            )}
           </Tabs.List>
 
           <Tabs.Panel keepMounted={true} value="info">
-            <EventInfo {...event} />
+            <EventInfo event={event} role={role!} />
           </Tabs.Panel>
 
-          <Tabs.Panel value="analytics">
-            <>Analytics, Insights, and Feedback Panel</>
-          </Tabs.Panel>
+          {isInternal(role!) && (
+            <Tabs.Panel value="analytics">
+              <>Analytics, Insights, and Feedback Panel</>
+            </Tabs.Panel>
+          )}
         </Tabs>
       )}
     </>

@@ -7,6 +7,7 @@ import type { Routes } from '@/app/routes';
 import { SidebarUser } from '@/components/Sidebar/SidebarUser';
 import { LinksGroup } from '@/components/Sidebar/LinksGroup';
 import classes from './Sidebar.module.css';
+import { useUser } from '@/components/Providers/UserProvider';
 
 /**
  * Main sidebar component
@@ -19,7 +20,14 @@ export function Sidebar({
   user: Tables<'users'>;
   routes: Routes;
 }) {
-  const links = routes.map((item) => <LinksGroup {...item} key={item.label} />);
+  const { role } = useUser();
+
+  // filter displayed links based on user role
+  const links = routes.map((item) =>
+    !item.access.includes(role!) ? null : (
+      <LinksGroup {...item} key={item.label} />
+    ),
+  );
 
   return (
     <div className={classes.navbar}>

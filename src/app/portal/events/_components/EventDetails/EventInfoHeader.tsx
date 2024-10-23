@@ -20,12 +20,11 @@ import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import {
-  IconAlertTriangle,
   IconCalendarClock,
   IconCalendarEvent,
-  IconCheck,
   IconEdit,
   IconEditOff,
+  IconRss,
   IconTrash,
   IconUpload,
 } from '@tabler/icons-react';
@@ -34,8 +33,15 @@ import { formatDateRange } from 'little-date';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { uploadEventFiles } from '@/libs/supabase/api/storage';
 import { systemUrl } from '@/app/routes';
-import { deleteEventAction } from '@portal/events/actions';
+import {
+  deleteEventAction,
+  isSubscribed,
+  subscribeToEvent,
+} from '@portal/events/actions';
 import { EventFormProps } from '../Forms/EventFormModal';
+import type { Enums } from '@/libs/supabase/_database';
+import { isInternal } from '@/utils/access-control';
+import { useUser } from '@/components/Providers/UserProvider';
 
 const EventFormModal = dynamic(
   () =>
@@ -47,21 +53,94 @@ const EventFormModal = dynamic(
   },
 );
 
+// subscribe student user to event
+const onUserSubscribe = async (
+  eventId: string,
+  userId: string,
+  subscribe: boolean,
+  setSubscribed: (value: boolean) => void,
+) => {
+  const response = await subscribeToEvent(eventId, userId, subscribe);
+
+  notifications.show({
+    title: response?.title,
+    message: response?.message,
+    color: response?.status === 0 ? 'green' : 'red',
+    withBorder: true,
+    withCloseButton: true,
+    autoClose: 4000,
+  });
+
+  if (response?.status === 0) {
+    setSubscribed(subscribe);
+  }
+};
+
+// event deletion confirmation modal
+const deleteModal = (
+  id: string,
+  router: ReturnType<typeof useRouter>,
+  startProgress: ReturnType<typeof useProgress>,
+) =>
+  modals.openConfirmModal({
+    centered: true,
+    title: 'Delete event?',
+    children: (
+      <>
+        <Text>
+          Are you sure you want to delete this event? This action is
+          irreversible.
+        </Text>
+        <Text fw="bold" mt="sm">
+          All data associated with this event will be lost.
+        </Text>
+      </>
+    ),
+    labels: { confirm: 'Delete', cancel: 'Cancel' },
+    confirmProps: { color: 'red' },
+    onCancel: () => console.log('Cancel'),
+    onConfirm: async () => {
+      const response = await deleteEventAction(id);
+
+      notifications.show({
+        title: response?.title,
+        message: response?.message,
+        color: response?.status === 2 ? 'red' : 'green',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+
+      // only redirect when successful
+      if (response?.status === 0) {
+        startTransition(() => {
+          startProgress();
+          router.replace(`${systemUrl}/events`);
+        });
+      }
+    },
+  });
+
 /**
  * Main event information such as title, scheduled date & time,
  * Event cover image and edit button.
  */
 function EventDetailsHeader({
+  role,
   editable,
   event,
   toggleEdit,
 }: {
+  role: Enums<'roles_user'>;
   editable: boolean;
   event: EventDetailsProps;
   toggleEdit: () => void;
 }) {
+  const { id: userId } = useUser();
+
   const [opened, { open, close }] = useDisclosure(false);
   const [localFiles, setLocalFiles] = useState<File[]>();
+  const [subscribed, setSubscribed] = useState(false);
 
   const router = useRouter();
   const startProgress = useProgress();
@@ -78,50 +157,8 @@ function EventDetailsHeader({
     image_url: event.image_url ?? undefined,
   };
 
-  // event deletion confirmation modal
-  const deleteModal = () =>
-    modals.openConfirmModal({
-      centered: true,
-      title: 'Delete event?',
-      children: (
-        <>
-          <Text>
-            Are you sure you want to delete this event? This action is
-            irreversible.
-          </Text>
-          <Text fw="bold" mt="sm">
-            All data associated with this event will be lost.
-          </Text>
-        </>
-      ),
-      labels: { confirm: 'Delete', cancel: 'Cancel' },
-      confirmProps: { color: 'red' },
-      onCancel: () => console.log('Cancel'),
-      onConfirm: async () => {
-        const response = await deleteEventAction(event.id as string);
-
-        notifications.show({
-          title: response?.title,
-          message: response?.message,
-          icon: response?.status === 2 ? <IconAlertTriangle /> : <IconCheck />,
-          color: response?.status === 2 ? 'red' : 'green',
-          withBorder: true,
-          withCloseButton: true,
-          autoClose: 4000,
-        });
-
-        // only redirect when successful
-        if (response?.status === 0) {
-          startTransition(() => {
-            startProgress();
-            router.replace(`${systemUrl}/events`);
-          });
-        }
-      },
-    });
-
   useEffect(() => {
-    if (localFiles?.length && event.id) {
+    if (role !== 'student' && localFiles?.length && event.id) {
       // upload files to storage
       const uploadFiles = async () => {
         await uploadEventFiles(event.id as string, {
@@ -132,7 +169,20 @@ function EventDetailsHeader({
 
       void uploadFiles();
     }
-  }, [event.id, localFiles]);
+  }, [event.id, localFiles, role]);
+
+  // check if student is subscribed to event
+  useEffect(() => {
+    if (role === 'student' && event.id) {
+      const checkSubscription = async () => {
+        const response = await isSubscribed(event.id!, userId);
+
+        setSubscribed(response?.status === 0);
+      };
+
+      void checkSubscription();
+    }
+  }, [subscribed, role, event.id, userId]);
 
   return (
     <>
@@ -185,57 +235,83 @@ function EventDetailsHeader({
 
           {/* Event control buttons */}
           <Group gap="xs" mt={16}>
-            <Button.Group>
-              <Button
-                leftSection={<IconCalendarEvent size={16} />}
-                onClick={open}
-                variant="default"
-              >
-                Adjust Details
-              </Button>
-
-              <Button
-                leftSection={
-                  editable ? <IconEditOff size={16} /> : <IconEdit size={16} />
-                }
-                onClick={toggleEdit}
-                variant="default"
-              >
-                {editable ? 'Hide Toolbars' : 'Edit Description'}
-              </Button>
-            </Button.Group>
-
-            <Divider orientation="vertical" />
-
-            <FileButton
-              accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
-              multiple
-              onChange={setLocalFiles}
-            >
-              {(props) => (
-                <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
+            {isInternal(role) ? (
+              <>
+                <Button.Group>
                   <Button
-                    leftSection={<IconUpload size={16} />}
+                    leftSection={<IconCalendarEvent size={16} />}
+                    onClick={open}
                     variant="default"
-                    {...props}
                   >
-                    Upload Reports
+                    Adjust Details
                   </Button>
-                </Tooltip>
-              )}
-            </FileButton>
 
-            <Button
-              color="red"
-              leftSection={<IconTrash size={16} />}
-              onClick={deleteModal}
-              variant="filled"
-            >
-              Delete Event
-            </Button>
+                  <Button
+                    leftSection={
+                      editable ? (
+                        <IconEditOff size={16} />
+                      ) : (
+                        <IconEdit size={16} />
+                      )
+                    }
+                    onClick={toggleEdit}
+                    variant="default"
+                  >
+                    {editable ? 'Hide Toolbars' : 'Edit Description'}
+                  </Button>
+                </Button.Group>
+
+                <Divider orientation="vertical" />
+
+                <FileButton
+                  accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
+                  multiple
+                  onChange={setLocalFiles}
+                >
+                  {(props) => (
+                    <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
+                      <Button
+                        leftSection={<IconUpload size={16} />}
+                        variant="default"
+                        {...props}
+                      >
+                        Upload Reports
+                      </Button>
+                    </Tooltip>
+                  )}
+                </FileButton>
+
+                <Button
+                  color="red"
+                  leftSection={<IconTrash size={16} />}
+                  onClick={() =>
+                    deleteModal(event.id as string, router, startProgress)
+                  }
+                  variant="filled"
+                >
+                  Delete Event
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  leftSection={<IconRss size={16} />}
+                  onClick={() =>
+                    onUserSubscribe(
+                      event.id as string,
+                      userId,
+                      subscribed ? !subscribed : true,
+                      setSubscribed,
+                    )
+                  }
+                  variant={subscribed ? 'default' : 'filled'}
+                >
+                  {subscribed ? 'Unsubscribe' : 'Subscribe'}
+                </Button>
+              </>
+            )}
           </Group>
         </Stack>
-
         <Image
           alt=""
           className="object-contain shadow-md"

@@ -114,7 +114,9 @@ from
     left join users on events.created_by = users.id
     left join series on events.series = series.id;
 
-create view public.events_faculties_view as
+create view public.events_faculties_view
+with (security_invoker = on)
+as
 select
     events.id as event_id,
     users.id as faculty_id,
@@ -125,3 +127,18 @@ from
     faculty_assignments
     left join events on events.id = faculty_assignments.event_id
     left join users on users.id = faculty_assignments.user_id;
+
+create view
+    public.events_subscriptions_view
+    with (security_invoker = on)
+    as
+select
+    events.id as event_id,
+    users.id as subscriber_id,
+    users.name as subscriber_name,
+    users.email as subscriber_email,
+    users.avatar_url as subscriber_avatar
+from
+    event_subscriptions
+    left join events on events.id = event_subscriptions.event_id
+    left join users on users.id = event_subscriptions.user_id;

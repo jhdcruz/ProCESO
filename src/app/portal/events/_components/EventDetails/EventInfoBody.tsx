@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
-import type { Tables } from '@/libs/supabase/_database';
+import type { Enums, Tables } from '@/libs/supabase/_database';
 import { EventDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getEventReports } from '@/libs/supabase/api/storage';
@@ -25,6 +25,7 @@ import {
 } from '@tabler/icons-react';
 import { downloadEventFile } from '@portal/events/actions';
 import dayjs from '@/libs/dayjs';
+import { isElevated, isInternal } from '@/utils/access-control';
 
 const RTEditor = dynamic(
   () =>
@@ -42,12 +43,14 @@ const RTEditor = dynamic(
  * for published by, date created and updated, etc.
  */
 function EventDetailsBody({
+  role,
   content,
   event,
   editable,
   loading,
   onSave,
 }: {
+  role: Enums<'roles_user'>;
   content: string | null;
   event: EventDetailsProps;
   editable: boolean;
@@ -111,7 +114,10 @@ function EventDetailsBody({
         eventId: event.id as string,
       });
 
-      const getFiles = getEventReports(event.id as string);
+      let getFiles;
+      if (isInternal(role)) {
+        getFiles = getEventReports(event.id as string);
+      }
 
       const [eventFiles, eventFaculties] = await Promise.all([
         getFiles,
@@ -129,10 +135,10 @@ function EventDetailsBody({
         });
       }
 
-      if (eventFiles?.status !== 0) {
+      if (getFiles && eventFiles?.status !== 0) {
         notifications.show({
           title: 'Cannot get event files',
-          message: eventFiles.message,
+          message: eventFiles?.message,
           color: 'yellow',
           withBorder: true,
           withCloseButton: true,
@@ -141,15 +147,15 @@ function EventDetailsBody({
       }
 
       setFaculties(eventFaculties?.data);
-      setFiles(eventFiles?.data);
+      setFiles(eventFiles?.data ?? null);
     };
 
     void fetchEventDetails();
-  }, [event.id]);
+  }, [event.id, role]);
 
   return (
-    <Grid gutter="xl">
-      <Grid.Col span={{ base: 12, sm: 'auto' }}>
+    <Grid grow gutter="xl">
+      <Grid.Col span={{ base: 12, xs: 9 }}>
         <RTEditor
           content={content}
           editable={editable}
@@ -158,36 +164,40 @@ function EventDetailsBody({
         />
       </Grid.Col>
 
-      <Grid.Col span={{ base: 12, sm: 3 }}>
+      <Grid.Col span={{ base: 12, xs: 3 }}>
         <>
-          <Divider
-            label={
-              <Group gap={0} preventGrowOverflow wrap="nowrap">
-                <IconScanEye className="mr-2" size={16} />
-                Published by
-              </Group>
-            }
-            labelPosition="left"
-            mt="xs"
-            my="md"
-          />
+          {isElevated(role) && (
+            <>
+              <Divider
+                label={
+                  <Group gap={0} preventGrowOverflow wrap="nowrap">
+                    <IconScanEye className="mr-2" size={16} />
+                    Published by
+                  </Group>
+                }
+                labelPosition="left"
+                mt="xs"
+                my="md"
+              />
 
-          <Group my={16}>
-            <Avatar
-              alt={event.created_by as string}
-              color="initials"
-              radius="xl"
-              src={event.creator_avatar}
-            />
-            <div>
-              <Text lineClamp={1} size="sm">
-                {event.created_by}
-              </Text>
-              <Text c="dimmed" size="xs">
-                {dayjs(event.created_at).fromNow()}
-              </Text>
-            </div>
-          </Group>
+              <Group my={16}>
+                <Avatar
+                  alt={event.created_by as string}
+                  color="initials"
+                  radius="xl"
+                  src={event.creator_avatar}
+                />
+                <div>
+                  <Text lineClamp={1} size="sm">
+                    {event.created_by}
+                  </Text>
+                  <Text c="dimmed" size="xs">
+                    {dayjs(event.created_at).fromNow()}
+                  </Text>
+                </div>
+              </Group>
+            </>
+          )}
         </>
 
         <>
@@ -235,7 +245,7 @@ function EventDetailsBody({
           )}
         </>
 
-        {files && (
+        {isElevated(role) && files && (
           <>
             <Divider
               label={

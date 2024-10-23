@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
 import { IconShieldLock, IconLogout, IconTicket } from '@tabler/icons-react';
 import { signOut } from '@/utils/sign-out';
-import classes from './NotFound.module.css';
+import classes from './Fallbacks.module.css';
 import Image from 'next/image';
 
 function Disabled() {
@@ -33,7 +33,7 @@ function Disabled() {
             <Title className={`${classes.title} drop-shadow-md`}>
               Your account were disabled.
             </Title>
-            <IconShieldLock color="#828282" size={48} />
+            <IconShieldLock className="ml-2" color="#828282" size={48} />
           </Group>
           <Text
             c="dimmed"

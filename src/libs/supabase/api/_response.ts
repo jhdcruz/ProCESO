@@ -44,6 +44,10 @@ export interface FacultyAssignmentsResponse extends ApiResponse {
   data?: Tables<'faculty_assignments'>[];
 }
 
+export interface SubscriptionsViewResponse extends ApiResponse {
+  data?: Tables<'events_subscriptions_view'>[];
+}
+
 // Referenced tables
 export interface FacultyConflictsResponse extends ApiResponse {
   data?: {

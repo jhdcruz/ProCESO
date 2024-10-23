@@ -264,3 +264,89 @@ export async function downloadEventFile(
     data: data,
   };
 }
+
+/**
+ * Check if user is subscribed to the event
+ *
+ * @param eventId - The event id to check.
+ * @param userId - The user id to check.
+ */
+export async function isSubscribed(
+  eventId: string,
+  userId: string,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+
+  const { data, error } = await supabase
+    .from('event_subscriptions')
+    .select('id')
+    .eq('event_id', eventId)
+    .eq('user_id', userId);
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to check subscription',
+      message: error.message,
+    };
+  }
+
+  if (!data.length) {
+    return {
+      status: 1,
+      title: 'Subscription not found',
+      message: 'Subscription not found.',
+    };
+  } else {
+    return {
+      status: 0,
+      title: 'Subscription found',
+      message: 'Subscription has been successfully found.',
+    };
+  }
+}
+
+/**
+ * Subscribe user for email reminders
+ *
+ * @param eventId - The event id to subscribe.
+ */
+export async function subscribeToEvent(
+  eventId: string,
+  userId: string,
+  subscribe: boolean,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+  let error;
+
+  if (subscribe) {
+    error = await supabase.from('event_subscriptions').upsert({
+      event_id: eventId,
+      user_id: userId,
+    });
+  } else {
+    error = await supabase
+      .from('event_subscriptions')
+      .delete()
+      .eq('event_id', eventId)
+      .eq('user_id', userId);
+  }
+
+  if (error?.error) {
+    return {
+      status: 1,
+      title: subscribe ? 'Unable to subscribe' : 'Unable to unsubscribe',
+      message: subscribe ? error?.error?.message! : error?.error?.message!,
+    };
+  }
+
+  return {
+    status: 0,
+    title: `${subscribe ? 'Subscribed' : 'Unsubscribed'} from the event`,
+    message: subscribe
+      ? 'You will receive email reminders for the event.'
+      : 'You will no longer receive email reminders for the event.',
+  };
+}
