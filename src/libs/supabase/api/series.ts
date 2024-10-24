@@ -17,7 +17,6 @@ export async function getFilteredSeries(
   const { data: series, error } = await supabase
     .from('series')
     .select()
-    .eq('active', true)
     .ilike('title', `%${filter}%`);
 
   if (error) {
