@@ -36,6 +36,13 @@ export const emailReminders = task({
       .eq('event_id', payload.eventId)
       .not('subscriber_email', 'is', null);
 
+    // fetch admin/staff emails
+    const staffsQuery = supabase
+      .from('users')
+      .select('email')
+      .in('role', ['admin', 'staff'])
+      .not('email', 'is', null);
+
     // get event data
     const eventQuery = supabase
       .from('events')
@@ -44,42 +51,35 @@ export const emailReminders = task({
       .limit(1)
       .single();
 
-    const [usersRes, subscribersRes, eventRes] = await Promise.all([
+    const [usersRes, staffsRes, subscribersRes, eventRes] = await Promise.all([
       usersQuery,
+      staffsQuery,
       subscribersQuery,
       eventQuery,
     ]);
 
     // add faculty emails to the emails array
-    if (!usersRes.error) {
-      emails = usersRes.data.map(
-        (user: { faculty_email: string | null }) => user.faculty_email!,
-      );
-    } else {
+    if (usersRes.error) {
       logger.error(
         usersRes?.error?.message,
         usersRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(usersRes?.error?.message);
     }
-
-    // add subscriber emails to the emails array
-    if (!subscribersRes.error) {
-      emails = [
-        ...emails,
-        ...subscribersRes.data.map(
-          (subscriber: { subscriber_email: string | null }) =>
-            subscriber.subscriber_email!,
-        ),
-      ];
-    } else {
+    if (staffsRes.error) {
+      logger.error(
+        staffsRes?.error?.message,
+        staffsRes?.error as unknown as Record<string, unknown>,
+      );
+      throw new Error(staffsRes?.error?.message);
+    }
+    if (subscribersRes.error) {
       logger.error(
         subscribersRes?.error?.message,
         subscribersRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(subscribersRes?.error?.message);
     }
-
     if (eventRes.error) {
       logger.error(
         eventRes?.error?.message,
@@ -87,6 +87,18 @@ export const emailReminders = task({
       );
       throw new Error(eventRes?.error?.message);
     }
+
+    // add emails to the emails array
+    emails = [
+      ...usersRes.data.map(
+        (user: { faculty_email: string | null }) => user.faculty_email!,
+      ),
+      ...staffsRes.data.map((staff: { email: string }) => staff.email),
+      ...subscribersRes.data.map(
+        (subscriber: { subscriber_email: string | null }) =>
+          subscriber.subscriber_email!,
+      ),
+    ];
 
     const appUrl = await envvars.retrieve('APP_URL');
 
