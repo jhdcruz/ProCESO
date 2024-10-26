@@ -13,6 +13,7 @@ import type { EventFormProps } from './_components/Forms/EventFormModal';
 import type ApiResponse from '@/utils/response';
 import { emailAssigned } from '@/trigger/email-assigned';
 import { rescheduleReminders } from '@/libs/triggerdev/reminders';
+import { emailUnassigned } from '@/trigger/email-unassigned';
 
 /**
  * Create and process new event.
@@ -129,21 +130,29 @@ export async function submitEvent(
         supabase,
       });
 
-      let ids = event.handled_by;
-
-      // only email new assignees when updating
-      if (existingId && original) {
-        ids = event.handled_by.filter(
-          (id) => !original.handled_by?.includes(id),
-        );
+      // check if there are changes in assignments
+      if (existingId && original?.handled_by !== event.handled_by) {
+        // send email notice to unassigned faculties
+        emailUnassigned.trigger({
+          event: event.title,
+          ids: event.handled_by.filter(
+            (id) => !original?.handled_by?.includes(id),
+          ),
+        });
+        // send email notice to newly assigned faculties
+        emailAssigned.trigger({
+          event: event.title,
+          ids: event.handled_by.filter(
+            (id) => !original?.handled_by?.includes(id),
+          ),
+        });
+      } else {
+        // send email notice to assign faculties
+        emailAssigned.trigger({
+          event: event.title,
+          ids: event?.handled_by,
+        });
       }
-
-      // send email reminders to assign faculties
-      await emailAssigned.trigger({
-        event: event.title,
-        ids: ids,
-      });
-
       if (!assignResponse.data) return assignResponse;
     }
   }
