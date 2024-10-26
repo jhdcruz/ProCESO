@@ -159,7 +159,7 @@ export async function submitActivity(
         // send email notice to assign faculties
         emailAssigned.trigger({
           activity: activity.title,
-          ids: activity?.handled_by,
+          ids: activity.handled_by,
         });
       }
       if (!assignResponse.data) return assignResponse;

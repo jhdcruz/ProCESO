@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API);
 
   const run = await runs.retrieve(runId);
-  if (!run || !run.isExecuting) {
+  if (!run.isExecuting) {
     return new Response('Invalid request', { status: 400 });
   }
 
