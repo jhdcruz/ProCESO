@@ -5,11 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
 import { postActivity, updateActivity } from '@/libs/supabase/api/activity';
-import {
-  getFilteredSeries,
-  getSeriesByTitle,
-  postSeries,
-} from '@/libs/supabase/api/series';
+import { getSeriesByTitle, postSeries } from '@/libs/supabase/api/series';
 import { postActivityCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
 import type { ActivityResponse } from '@/libs/supabase/api/_response';
