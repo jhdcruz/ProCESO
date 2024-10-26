@@ -399,9 +399,8 @@ export function ActivityFormModalComponent({
             rightSection={!pending && <IconArrowRight size={16} />}
             type="submit"
             variant={pending ? 'default' : 'filled'}
-            w={148}
           >
-            {activity ? 'Save Edits' : 'Create activity'}
+            {activity ? 'Save Edits' : 'Create Activity'}
           </Button>
         </Group>
       </form>
