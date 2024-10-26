@@ -69,8 +69,8 @@ export function FacultyListComponent({
     });
   };
 
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
+  const handleSearchChange = (activity: ChangeEvent<HTMLInputElement>) => {
+    const { value } = activity.currentTarget;
     setSearch(value);
   };
 

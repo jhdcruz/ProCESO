@@ -4,61 +4,61 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { type notifications } from '@mantine/notifications';
 import { IconAlertTriangle, IconCheck } from '@tabler/icons-react';
 import type ApiResponse from '@/utils/response';
-import type { EventFilesResponse } from './_response';
+import type { ActivityFilesResponse } from './_response';
 import { createBrowserClient } from '../client';
 
 /**
- * Upload file to storage and link public url to event.
+ * Upload file to storage and link public url to activity.
  *
  * @param file - The file to upload.
- * @param eventId - The event ID to link the image to.
+ * @param activityId - The activity ID to link the image to.
  * @param supabase - The Supabase client to use.
  *
  * @returns {ApiResponse} which can be used for displaying notifications.
  */
-export async function postEventCover({
+export async function postActivityCover({
   file,
-  eventId,
+  activityId,
   supabase,
 }: {
   file: FileWithPath;
-  eventId: string;
+  activityId: string;
   supabase?: SupabaseClient;
 }): Promise<ApiResponse> {
   if (!supabase) supabase = createBrowserClient();
 
   // upload file
   const { error } = await supabase.storage
-    .from('event_covers')
-    .upload(eventId, file, {
+    .from('activity_covers')
+    .upload(activityId, file, {
       upsert: true,
     });
 
   if (error)
     return {
       status: 1,
-      title: 'Event created with problems',
-      message: 'Image could not be uploaded, edit event: ' + error.message,
+      title: 'Activity created with problems',
+      message: 'Image could not be uploaded, edit activity: ' + error.message,
     };
 
   // get the public url
   const {
     data: { publicUrl },
-  } = supabase.storage.from('event_covers').getPublicUrl(eventId);
+  } = supabase.storage.from('activity_covers').getPublicUrl(activityId);
 
-  // save the image url to the event
+  // save the image url to the activity
   const { error: linkError } = await supabase
-    .from('events')
+    .from('activities')
     .update({ image_url: publicUrl })
-    .eq('id', eventId);
+    .eq('id', activityId);
 
   // remove the uploaded image if there's an error in linking the url
   // to avoid duplicated image on reupload
   if (linkError) {
-    await supabase.storage.from('event_covers').remove([eventId]);
+    await supabase.storage.from('activity_covers').remove([activityId]);
     return {
       status: 1,
-      title: 'Event created with problems',
+      title: 'Activity created with problems',
       message: "Image couldn't be linked, upload again: " + linkError.message,
     };
   }
@@ -72,19 +72,19 @@ export async function postEventCover({
 }
 
 /**
- * Fetch uploaded files for the event.
+ * Fetch uploaded files for the activity.
  *
- * @param eventId - The event id to get files.
+ * @param activityId - The activity id to get files.
  */
-export async function getEventReports(
-  eventId: string,
-): Promise<EventFilesResponse> {
+export async function getActivityReports(
+  activityId: string,
+): Promise<ActivityFilesResponse> {
   const supabase = createBrowserClient();
 
   const { data, error } = await supabase
-    .from('event_files')
+    .from('activity_files')
     .select()
-    .eq('event', eventId);
+    .eq('activity', activityId);
 
   if (error) {
     return {
@@ -103,13 +103,13 @@ export async function getEventReports(
 }
 
 /**
- * Upload files to supabase storage /events/[id]/file_hash
+ * Upload files to supabase storage /activities/[id]/file_hash
  *
  * @param files - The files array o upload.
- * @param eventId - The event id to associate the file with.
+ * @param activityId - The activity id to associate the file with.
  */
-export async function uploadEventFiles(
-  eventId: string,
+export async function uploadActivityFiles(
+  activityId: string,
   {
     files,
     notify,
@@ -143,8 +143,8 @@ export async function uploadEventFiles(
 
     // upload file to storage
     const { error: storageError } = await supabase.storage
-      .from(`events`)
-      .upload(`${eventId}/${hash}`, file, {
+      .from(`activities`)
+      .upload(`${activityId}/${hash}`, file, {
         upsert: true,
       });
 
@@ -160,9 +160,9 @@ export async function uploadEventFiles(
         autoClose: 4000,
       });
     } else {
-      // store metadata to 'event_files' table
-      await supabase.from('event_files').insert({
-        event: eventId,
+      // store metadata to 'activity_files' table
+      await supabase.from('activity_files').insert({
+        activity: activityId,
         name: file.name,
         checksum: hash,
         type: file.type,

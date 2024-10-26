@@ -4,7 +4,7 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: ['/portal/events/**/info', '/feedback/*', '/certs/*'],
+      allow: ['/portal/activities/**/info', '/feedback/*', '/certs/*'],
       disallow: '/*',
     },
   };

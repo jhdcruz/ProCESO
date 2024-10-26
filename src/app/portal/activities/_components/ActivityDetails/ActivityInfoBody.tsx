@@ -14,16 +14,16 @@ import {
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
 import type { Enums, Tables } from '@/libs/supabase/_database';
-import { EventDetailsProps } from '@/libs/supabase/api/_response';
+import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
-import { getEventReports } from '@/libs/supabase/api/storage';
+import { getActivityReports } from '@/libs/supabase/api/storage';
 import {
   IconFileText,
   IconRosetteDiscountCheck,
   IconScanEye,
   IconUsersGroup,
 } from '@tabler/icons-react';
-import { downloadEventFile } from '@portal/events/actions';
+import { downloadActivityFile } from '@portal/activities/actions';
 import dayjs from '@/libs/dayjs';
 import { isElevated, isInternal } from '@/utils/access-control';
 
@@ -39,20 +39,20 @@ const RTEditor = dynamic(
 );
 
 /**
- * Description of the event with aside information
+ * Description of the activity with aside information
  * for published by, date created and updated, etc.
  */
-function EventDetailsBody({
+function ActivityDetailsBody({
   role,
   content,
-  event,
+  activity,
   editable,
   loading,
   onSave,
 }: {
   role: Enums<'roles_user'>;
   content: string | null;
-  event: EventDetailsProps;
+  activity: ActivityDetailsProps;
   editable: boolean;
   loading: boolean;
   onSave: (content: string) => void;
@@ -60,9 +60,9 @@ function EventDetailsBody({
   const clipboard = useClipboard({ timeout: 1000 });
 
   const [faculties, setFaculties] = useState<
-    Tables<'events_faculties_view'>[] | null
+    Tables<'activities_faculties_view'>[] | null
   >();
-  const [files, setFiles] = useState<Tables<'event_files'>[] | null>();
+  const [files, setFiles] = useState<Tables<'activity_files'>[] | null>();
 
   const saveFile = async (fileName: string, checksum: string) => {
     notifications.show({
@@ -74,7 +74,7 @@ function EventDetailsBody({
       withBorder: true,
     });
 
-    const blob = await downloadEventFile(event.id as string, checksum);
+    const blob = await downloadActivityFile(activity.id as string, checksum);
 
     notifications.show({
       id: checksum,
@@ -107,27 +107,27 @@ function EventDetailsBody({
     }
   }, [clipboard.copied]);
 
-  // fetch additional event details
+  // fetch additional activity details
   useEffect(() => {
-    const fetchEventDetails = async () => {
+    const fetchActivityDetails = async () => {
       const getAssigned = getAssignedFaculties({
-        eventId: event.id as string,
+        activityId: activity.id as string,
       });
 
       let getFiles;
       if (isInternal(role)) {
-        getFiles = getEventReports(event.id as string);
+        getFiles = getActivityReports(activity.id as string);
       }
 
-      const [eventFiles, eventFaculties] = await Promise.all([
+      const [activityFiles, activityFaculties] = await Promise.all([
         getFiles,
         getAssigned,
       ]);
 
-      if (eventFaculties?.status !== 0) {
+      if (activityFaculties?.status !== 0) {
         notifications.show({
           title: 'Cannot get assigned faculties',
-          message: eventFaculties.message,
+          message: activityFaculties.message,
           color: 'yellow',
           withBorder: true,
           withCloseButton: true,
@@ -135,10 +135,10 @@ function EventDetailsBody({
         });
       }
 
-      if (getFiles && eventFiles?.status !== 0) {
+      if (getFiles && activityFiles?.status !== 0) {
         notifications.show({
-          title: 'Cannot get event files',
-          message: eventFiles?.message,
+          title: 'Cannot get activity files',
+          message: activityFiles?.message,
           color: 'yellow',
           withBorder: true,
           withCloseButton: true,
@@ -146,12 +146,12 @@ function EventDetailsBody({
         });
       }
 
-      setFaculties(eventFaculties?.data);
-      setFiles(eventFiles?.data ?? null);
+      setFaculties(activityFaculties?.data);
+      setFiles(activityFiles?.data ?? null);
     };
 
-    void fetchEventDetails();
-  }, [event.id, role]);
+    void fetchActivityDetails();
+  }, [activity.id, role]);
 
   return (
     <Grid grow gutter="xl">
@@ -182,17 +182,17 @@ function EventDetailsBody({
 
               <Group my={16}>
                 <Avatar
-                  alt={event.created_by as string}
+                  alt={activity.created_by as string}
                   color="initials"
                   radius="xl"
-                  src={event.creator_avatar}
+                  src={activity.creator_avatar}
                 />
                 <div>
                   <Text lineClamp={1} size="sm">
-                    {event.created_by}
+                    {activity.created_by}
                   </Text>
                   <Text c="dimmed" size="xs">
-                    {dayjs(event.created_at).fromNow()}
+                    {dayjs(activity.created_at).fromNow()}
                   </Text>
                 </div>
               </Group>
@@ -259,45 +259,60 @@ function EventDetailsBody({
               my="md"
             />
 
-            {files.map((file) => (
+            {files.length > 0 ? (
               <>
-                <Group align="flex-start" gap={8} key={file.checksum} my={16}>
-                  <Badge mr={4} size="sm" variant="default">
-                    {file.type.split('/')[1]}
-                  </Badge>
-
-                  <div>
-                    <Anchor
-                      component="button"
-                      fw={500}
-                      lineClamp={1}
-                      onClick={() => saveFile(file.name, file.checksum)}
-                      size="sm"
+                {files.map((file) => (
+                  <>
+                    <Group
+                      align="flex-start"
+                      gap={8}
+                      key={file.checksum}
+                      my={16}
                     >
-                      {file.name}
-                    </Anchor>
-                    <Group gap={2} mt={4}>
-                      <Text c="dimmed" size="xs">
-                        {dayjs(file.uploaded_at).fromNow()}
-                      </Text>
+                      <Badge mr={4} size="sm" variant="default">
+                        {file.type.split('/')[1]}
+                      </Badge>
 
-                      <Tooltip label="Verified checksum of the uploaded file, should match the downloaded file.">
-                        <Badge
-                          className="cursor-pointer"
-                          color="gray"
-                          leftSection={<IconRosetteDiscountCheck size={16} />}
-                          onClick={() => clipboard.copy(file.checksum)}
-                          size="xs"
-                          variant="transparent"
+                      <div>
+                        <Anchor
+                          component="button"
+                          fw={500}
+                          lineClamp={1}
+                          onClick={() => saveFile(file.name, file.checksum)}
+                          size="sm"
                         >
-                          {file.checksum.slice(0, 8)}
-                        </Badge>
-                      </Tooltip>
+                          {file.name}
+                        </Anchor>
+                        <Group gap={2} mt={4}>
+                          <Text c="dimmed" size="xs">
+                            {dayjs(file.uploaded_at).fromNow()}
+                          </Text>
+
+                          <Tooltip label="Verified checksum of the uploaded file, should match the downloaded file.">
+                            <Badge
+                              className="cursor-pointer"
+                              color="gray"
+                              leftSection={
+                                <IconRosetteDiscountCheck size={16} />
+                              }
+                              onClick={() => clipboard.copy(file.checksum)}
+                              size="xs"
+                              variant="transparent"
+                            >
+                              {file.checksum.slice(0, 8)}
+                            </Badge>
+                          </Tooltip>
+                        </Group>
+                      </div>
                     </Group>
-                  </div>
-                </Group>
+                  </>
+                ))}
               </>
-            ))}
+            ) : (
+              <Text c="dimmed" fs="italic" mt="xs" size="xs" ta="center">
+                No reports uploaded yet.
+              </Text>
+            )}
           </>
         )}
       </Grid.Col>
@@ -305,4 +320,4 @@ function EventDetailsBody({
   );
 }
 
-export const EventInfoBody = memo(EventDetailsBody);
+export const ActivityInfoBody = memo(ActivityDetailsBody);

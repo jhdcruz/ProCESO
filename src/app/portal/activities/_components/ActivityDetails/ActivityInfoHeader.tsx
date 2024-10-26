@@ -30,37 +30,37 @@ import {
 } from '@tabler/icons-react';
 import { useProgress } from 'react-transition-progress';
 import { formatDateRange } from 'little-date';
-import { EventDetailsProps } from '@/libs/supabase/api/_response';
-import { uploadEventFiles } from '@/libs/supabase/api/storage';
+import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
+import { uploadActivityFiles } from '@/libs/supabase/api/storage';
 import { systemUrl } from '@/app/routes';
 import {
-  deleteEventAction,
+  deleteActivityAction,
   isSubscribed,
-  subscribeToEvent,
-} from '@portal/events/actions';
-import { EventFormProps } from '../Forms/EventFormModal';
+  subscribeToActivity,
+} from '@portal/activities/actions';
+import { ActivityFormProps } from '../Forms/ActivityFormModal';
 import type { Enums } from '@/libs/supabase/_database';
 import { isInternal } from '@/utils/access-control';
 import { useUser } from '@/components/Providers/UserProvider';
 
-const EventFormModal = dynamic(
+const ActivityFormModal = dynamic(
   () =>
-    import('../Forms/EventFormModal').then((mod) => ({
-      default: mod.EventFormModal,
+    import('../Forms/ActivityFormModal').then((mod) => ({
+      default: mod.ActivityFormModal,
     })),
   {
     ssr: false,
   },
 );
 
-// subscribe student user to event
+// subscribe student user to activity
 const onUserSubscribe = async (
-  eventId: string,
+  activityId: string,
   userId: string,
   subscribe: boolean,
   setSubscribed: (value: boolean) => void,
 ) => {
-  const response = await subscribeToEvent(eventId, userId, subscribe);
+  const response = await subscribeToActivity(activityId, userId, subscribe);
 
   notifications.show({
     title: response?.title,
@@ -76,7 +76,7 @@ const onUserSubscribe = async (
   }
 };
 
-// event deletion confirmation modal
+// activity deletion confirmation modal
 const deleteModal = (
   id: string,
   router: ReturnType<typeof useRouter>,
@@ -84,15 +84,15 @@ const deleteModal = (
 ) =>
   modals.openConfirmModal({
     centered: true,
-    title: 'Delete event?',
+    title: 'Delete activity?',
     children: (
       <>
         <Text>
-          Are you sure you want to delete this event? This action is
+          Are you sure you want to delete this activity? This action is
           irreversible.
         </Text>
         <Text fw="bold" mt="sm">
-          All data associated with this event will be lost.
+          All data associated with this activity will be lost.
         </Text>
       </>
     ),
@@ -100,7 +100,7 @@ const deleteModal = (
     confirmProps: { color: 'red' },
     onCancel: () => console.log('Cancel'),
     onConfirm: async () => {
-      const response = await deleteEventAction(id);
+      const response = await deleteActivityAction(id);
 
       notifications.show({
         title: response?.title,
@@ -115,25 +115,25 @@ const deleteModal = (
       if (response?.status === 0) {
         startTransition(() => {
           startProgress();
-          router.replace(`${systemUrl}/events`);
+          router.replace(`${systemUrl}/activities`);
         });
       }
     },
   });
 
 /**
- * Main event information such as title, scheduled date & time,
- * Event cover image and edit button.
+ * Main activity information such as title, scheduled date & time,
+ * Activity cover image and edit button.
  */
-function EventDetailsHeader({
+function ActivityDetailsHeader({
   role,
   editable,
-  event,
+  activity,
   toggleEdit,
 }: {
   role: Enums<'roles_user'>;
   editable: boolean;
-  event: EventDetailsProps;
+  activity: ActivityDetailsProps;
   toggleEdit: () => void;
 }) {
   const { id: userId } = useUser();
@@ -145,23 +145,23 @@ function EventDetailsHeader({
   const router = useRouter();
   const startProgress = useProgress();
 
-  const eventForm: EventFormProps = {
-    id: event.id as string,
-    title: event.title as string,
-    series: event.series,
-    visibility: event.visibility ?? 'Everyone',
+  const activityForm: ActivityFormProps = {
+    id: activity.id as string,
+    title: activity.title as string,
+    series: activity.series,
+    visibility: activity.visibility ?? 'Everyone',
     handled_by:
-      event.users?.map((user) => user.faculty_id as string) ?? undefined,
-    date_starting: new Date(event.date_starting as string),
-    date_ending: new Date(event.date_ending as string),
-    image_url: event.image_url ?? undefined,
+      activity.users?.map((user) => user.faculty_id as string) ?? undefined,
+    date_starting: new Date(activity.date_starting as string),
+    date_ending: new Date(activity.date_ending as string),
+    image_url: activity.image_url ?? undefined,
   };
 
   useEffect(() => {
-    if (role !== 'student' && localFiles?.length && event.id) {
+    if (role !== 'student' && localFiles?.length && activity.id) {
       // upload files to storage
       const uploadFiles = async () => {
-        await uploadEventFiles(event.id as string, {
+        await uploadActivityFiles(activity.id as string, {
           files: localFiles,
           notify: notifications,
         });
@@ -169,38 +169,38 @@ function EventDetailsHeader({
 
       void uploadFiles();
     }
-  }, [event.id, localFiles, role]);
+  }, [activity.id, localFiles, role]);
 
-  // check if student is subscribed to event
+  // check if student is subscribed to activity
   useEffect(() => {
-    if (role === 'student' && event.id) {
+    if (role === 'student' && activity.id) {
       const checkSubscription = async () => {
-        const response = await isSubscribed(event.id!, userId);
+        const response = await isSubscribed(activity.id!, userId);
 
         setSubscribed(response?.status === 0);
       };
 
       void checkSubscription();
     }
-  }, [subscribed, role, event.id, userId]);
+  }, [subscribed, role, activity.id, userId]);
 
   return (
     <>
-      <EventFormModal
+      <ActivityFormModal
+        activity={activityForm}
         close={close}
-        event={eventForm}
-        key={event.id}
+        key={activity.id}
         opened={opened}
       />
 
       <Group justify="space-between">
         <Stack gap={0}>
           <Title mb="lg" order={2}>
-            {event?.title}
+            {activity?.title}
           </Title>
 
-          {/* Event date and end */}
-          {event?.date_starting && event?.date_ending && (
+          {/* Activity date and end */}
+          {activity?.date_starting && activity?.date_ending && (
             <Group mb="xs">
               <Text c="dimmed">When:</Text>
               <Badge
@@ -209,8 +209,8 @@ function EventDetailsHeader({
                 variant="light"
               >
                 {formatDateRange(
-                  new Date(event.date_starting),
-                  new Date(event.date_ending),
+                  new Date(activity.date_starting),
+                  new Date(activity.date_ending),
                   {
                     includeTime: true,
                   },
@@ -219,21 +219,21 @@ function EventDetailsHeader({
             </Group>
           )}
 
-          {event?.series && (
+          {activity?.series && (
             <Group mb="xs">
               <Text c="dimmed">Series:</Text>
               <Tooltip
-                label={`This event is part of the "${event.series}" event group.`}
+                label={`This activity is part of the "${activity.series}" activity group.`}
                 position="bottom"
               >
-                <Badge color={event.series_color as string} variant="dot">
-                  {event.series}
+                <Badge color={activity.series_color as string} variant="dot">
+                  {activity.series}
                 </Badge>
               </Tooltip>
             </Group>
           )}
 
-          {/* Event control buttons */}
+          {/* Activity control buttons */}
           <Group gap="xs" mt={16}>
             {isInternal(role) ? (
               <>
@@ -285,11 +285,11 @@ function EventDetailsHeader({
                   color="red"
                   leftSection={<IconTrash size={16} />}
                   onClick={() =>
-                    deleteModal(event.id as string, router, startProgress)
+                    deleteModal(activity.id as string, router, startProgress)
                   }
                   variant="filled"
                 >
-                  Delete Event
+                  Delete Activity
                 </Button>
               </>
             ) : (
@@ -298,7 +298,7 @@ function EventDetailsHeader({
                   leftSection={<IconRss size={16} />}
                   onClick={() =>
                     onUserSubscribe(
-                      event.id as string,
+                      activity.id as string,
                       userId,
                       subscribed ? !subscribed : true,
                       setSubscribed,
@@ -321,7 +321,7 @@ function EventDetailsHeader({
           height={340}
           mb={16}
           radius="md"
-          src={event.image_url}
+          src={activity.image_url}
           w="auto"
           width={340}
         />
@@ -330,4 +330,4 @@ function EventDetailsHeader({
   );
 }
 
-export const EventInfoHeader = memo(EventDetailsHeader);
+export const ActivityInfoHeader = memo(ActivityDetailsHeader);

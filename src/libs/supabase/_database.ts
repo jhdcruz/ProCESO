@@ -9,146 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      allowed_domains: {
-        Row: {
-          domain: string
-        }
-        Insert: {
-          domain: string
-        }
-        Update: {
-          domain?: string
-        }
-        Relationships: []
-      }
-      event_files: {
-        Row: {
-          checksum: string
-          event: string
-          id: string
-          name: string
-          type: string
-          uploaded_at: string
-        }
-        Insert: {
-          checksum?: string
-          event?: string
-          id?: string
-          name?: string
-          type?: string
-          uploaded_at?: string
-        }
-        Update: {
-          checksum?: string
-          event?: string
-          id?: string
-          name?: string
-          type?: string
-          uploaded_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_files_event_fkey"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_files_event_fkey"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events_details_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_files_event_fkey"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events_faculties_view"
-            referencedColumns: ["event_id"]
-          },
-          {
-            foreignKeyName: "event_files_event_fkey"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
-            referencedColumns: ["event_id"]
-          },
-        ]
-      }
-      event_subscriptions: {
-        Row: {
-          created_at: string
-          event_id: string
-          id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          event_id: string
-          id?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          event_id?: string
-          id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "participants_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "participants_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events_details_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "participants_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events_faculties_view"
-            referencedColumns: ["event_id"]
-          },
-          {
-            foreignKeyName: "participants_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
-            referencedColumns: ["event_id"]
-          },
-          {
-            foreignKeyName: "participants_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "events_faculties_view"
-            referencedColumns: ["faculty_id"]
-          },
-          {
-            foreignKeyName: "participants_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
-            referencedColumns: ["subscriber_id"]
-          },
-          {
-            foreignKeyName: "participants_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      events: {
+      activities: {
         Row: {
           created_at: string
           created_by: string
@@ -160,8 +21,7 @@ export type Database = {
           series: string | null
           title: string
           updated_at: string | null
-          venue: unknown | null
-          visibility: Database["public"]["Enums"]["event_visibility"]
+          visibility: Database["public"]["Enums"]["activity_visibility"]
         }
         Insert: {
           created_at?: string
@@ -174,8 +34,7 @@ export type Database = {
           series?: string | null
           title: string
           updated_at?: string | null
-          venue?: unknown | null
-          visibility?: Database["public"]["Enums"]["event_visibility"]
+          visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Update: {
           created_at?: string
@@ -188,22 +47,21 @@ export type Database = {
           series?: string | null
           title?: string
           updated_at?: string | null
-          venue?: unknown | null
-          visibility?: Database["public"]["Enums"]["event_visibility"]
+          visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Relationships: [
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "events_faculties_view"
+            referencedRelation: "activities_faculties_view"
             referencedColumns: ["faculty_id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
+            referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["subscriber_id"]
           },
           {
@@ -222,66 +80,205 @@ export type Database = {
           },
         ]
       }
+      activity_files: {
+        Row: {
+          activity: string
+          checksum: string
+          id: string
+          name: string
+          type: string
+          uploaded_at: string
+        }
+        Insert: {
+          activity?: string
+          checksum?: string
+          id?: string
+          name?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Update: {
+          activity?: string
+          checksum?: string
+          id?: string
+          name?: string
+          type?: string
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["activity"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["activity"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["activity"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["activity"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+        ]
+      }
+      activity_subscriptions: {
+        Row: {
+          activity_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["faculty_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
+          },
+          {
+            foreignKeyName: "participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      allowed_domains: {
+        Row: {
+          domain: string
+        }
+        Insert: {
+          domain: string
+        }
+        Update: {
+          domain?: string
+        }
+        Relationships: []
+      }
       faculty_assignments: {
         Row: {
+          activity_id: string | null
           created_at: string
-          event_id: string | null
           id: number
           user_id: string | null
         }
         Insert: {
+          activity_id?: string | null
           created_at?: string
-          event_id?: string | null
           id?: number
           user_id?: string | null
         }
         Update: {
+          activity_id?: string | null
           created_at?: string
-          event_id?: string | null
           id?: number
           user_id?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "event_handlers_event_id_fkey"
-            columns: ["event_id"]
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: "events"
+            referencedRelation: "activities"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_event_id_fkey"
-            columns: ["event_id"]
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: "events_details_view"
+            referencedRelation: "activities_details_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_event_id_fkey"
-            columns: ["event_id"]
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: "events_faculties_view"
-            referencedColumns: ["event_id"]
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
           },
           {
             foreignKeyName: "event_handlers_event_id_fkey"
-            columns: ["event_id"]
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
-            referencedColumns: ["event_id"]
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "events_faculties_view"
+            referencedRelation: "activities_faculties_view"
             referencedColumns: ["faculty_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "events_subscriptions_view"
+            referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["subscriber_id"]
           },
           {
@@ -355,7 +352,7 @@ export type Database = {
       }
     }
     Views: {
-      events_details_view: {
+      activities_details_view: {
         Row: {
           created_at: string | null
           created_by: string | null
@@ -370,13 +367,13 @@ export type Database = {
           series_color: string | null
           title: string | null
           updated_at: string | null
-          visibility: Database["public"]["Enums"]["event_visibility"] | null
+          visibility: Database["public"]["Enums"]["activity_visibility"] | null
         }
         Relationships: []
       }
-      events_faculties_view: {
+      activities_faculties_view: {
         Row: {
-          event_id: string | null
+          activity_id: string | null
           faculty_avatar: string | null
           faculty_email: string | null
           faculty_id: string | null
@@ -384,9 +381,9 @@ export type Database = {
         }
         Relationships: []
       }
-      events_subscriptions_view: {
+      activities_subscriptions_view: {
         Row: {
-          event_id: string | null
+          activity_id: string | null
           subscriber_avatar: string | null
           subscriber_email: string | null
           subscriber_id: string | null
@@ -399,7 +396,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      event_visibility: "Everyone" | "Faculty" | "Internal"
+      activity_visibility: "Everyone" | "Faculty" | "Internal"
       roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso" | "na" | "itso"
       roles_pos: "head" | "dean" | "chair"
       roles_user: "admin" | "staff" | "faculty" | "officer" | "student"

@@ -19,19 +19,19 @@ import { Tables } from '@/libs/supabase/_database';
 import classes from '@/components/Cards/Card.module.css';
 import { useUser } from '@/components/Providers/UserProvider';
 
-export const EventCard = memo((data: Tables<'events_details_view'>) => {
+export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
   const { role } = useUser();
 
   return (
     <Card className={classes.card} p="sm" radius="md" shadow="sm" withBorder>
       <Card.Section
         component={Link}
-        href={`events/${data.id}/info`}
+        href={`activities/${data.id}/info`}
         prefetch={false}
       >
         {data.series && (
           <Tooltip
-            label={`This event is part of "${data.series}" event group.`}
+            label={`This activity is part of "${data.series}" activity group.`}
             position="bottom"
           >
             <Badge
@@ -86,7 +86,7 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => {
           <Text fz="sm" lineClamp={2} mt="sm">
             {data.description?.length
               ? sanitizeHtml(data.description, { allowedTags: [] })
-              : 'No description provided for this event yet.'}
+              : 'No description provided for this activity yet.'}
           </Text>
         </Stack>
       </Card.Section>
@@ -96,18 +96,18 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => {
           className="shadow-sm"
           component={Link}
           fullWidth
-          href={`events/${data.id}/info`}
+          href={`activities/${data.id}/info`}
           prefetch={false}
         >
           Show details
         </Button>
 
         {['admin', 'staff'].includes(role!) && (
-          <Tooltip label="View event analytics" multiline withArrow>
+          <Tooltip label="View activity analytics" multiline withArrow>
             <ActionIcon
-              aria-label="View event analytics"
+              aria-label="View activity analytics"
               component={Link}
-              href={`events/${data.id}/analytics`}
+              href={`activities/${data.id}/analytics`}
               prefetch={false}
               size="lg"
               variant="default"
@@ -120,4 +120,4 @@ export const EventCard = memo((data: Tables<'events_details_view'>) => {
     </Card>
   );
 });
-EventCard.displayName = 'EventCard';
+ActivityCard.displayName = 'ActivityCard';

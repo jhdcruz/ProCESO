@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   title: 'Users Management - ' + defaultMetadata.title,
 };
 
-export default async function EventsPage() {
+export default async function UsersPage() {
   return <UsersShell />;
 }

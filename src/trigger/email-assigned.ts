@@ -3,9 +3,9 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
 
 /**
  * Send notification email to assigned faculties that
- * they are delegated for an event.
+ * they are delegated for an activity.
  *
- * @param event - event name.
+ * @param activity - activity name.
  * @param id - array of faculty IDs.
  * @param auth - auth cookies.
  */
@@ -13,7 +13,7 @@ export const emailAssigned = task({
   id: 'email-assigned',
   run: async (
     payload: {
-      event: string;
+      activity: string;
       ids: string[];
     },
     { ctx },
@@ -24,22 +24,25 @@ export const emailAssigned = task({
     await envvars.retrieve('SUPABASE_ANON_KEY');
     const supabase = createAdminClient();
 
-    logger.info('Getting users and event information...');
+    logger.info('Getting users and activity information...');
     // fetch faculty emails
     const usersQuery = supabase
       .from('users')
       .select('email')
       .in('id', payload.ids);
 
-    // get event id
-    const eventQuery = supabase
-      .from('events')
+    // get activity id
+    const activityQuery = supabase
+      .from('activities')
       .select()
-      .eq('title', payload.event)
+      .eq('title', payload.activity)
       .limit(1)
       .single();
 
-    const [usersRes, eventRes] = await Promise.all([usersQuery, eventQuery]);
+    const [usersRes, activityRes] = await Promise.all([
+      usersQuery,
+      activityQuery,
+    ]);
 
     if (usersRes.error) {
       logger.error(
@@ -48,12 +51,12 @@ export const emailAssigned = task({
       );
       throw new Error(usersRes?.error?.message);
     }
-    if (eventRes.error) {
+    if (activityRes.error) {
       logger.error(
-        eventRes?.error?.message,
-        eventRes?.error as unknown as Record<string, unknown>,
+        activityRes?.error?.message,
+        activityRes?.error as unknown as Record<string, unknown>,
       );
-      throw new Error(eventRes?.error?.message);
+      throw new Error(activityRes?.error?.message);
     }
 
     const appUrl = await envvars.retrieve('APP_URL');
@@ -66,7 +69,7 @@ export const emailAssigned = task({
       method: 'POST',
       body: JSON.stringify({
         runId: ctx.run.id,
-        event: eventRes?.data,
+        activity: activityRes?.data,
         emails: usersRes?.data?.map((faculty) => faculty.email) ?? [],
       }),
     });

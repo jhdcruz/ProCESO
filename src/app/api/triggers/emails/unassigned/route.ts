@@ -1,15 +1,15 @@
 import { Resend } from 'resend';
 import { NextRequest } from 'next/server';
 import { runs } from '@trigger.dev/sdk/v3';
-import UnassignedEmail from '@/emails/Unassigned';
+import Unassigned from '@/emails/Unassigned';
 
 /**
- * Email assigned faculties that they are assigned for an event.
+ * Email assigned faculties that they are assigned for an activity.
  *
- * @param req - { event: Tables<'events'>; emails: string[] }
+ * @param req - { activity: Tables<'activities'>; emails: string[] }
  */
 export async function POST(req: NextRequest) {
-  const { runId, event, emails } = await req.json();
+  const { runId, activity, emails } = await req.json();
   const resend = new Resend(process.env.RESEND_API);
 
   const run = await runs.retrieve(runId);
@@ -22,8 +22,8 @@ export async function POST(req: NextRequest) {
     emails.map((email: string) => ({
       from: 'Community Extension Services Office <noreply@mail.deuz.tech>',
       to: email,
-      subject: `You have been unassigned from ${event.title}.`,
-      react: UnassignedEmail({ event }),
+      subject: `You have been unassigned from ${activity.title}.`,
+      react: Unassigned({ activity }),
     })),
   );
 

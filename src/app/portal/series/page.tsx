@@ -8,10 +8,10 @@ import { SeriesAccordion } from './_components/SeriesAccordion';
 import { getSeries } from './actions';
 
 export const metadata: Metadata = {
-  title: 'Event Series - ' + defaultMetadata.title,
+  title: 'Activity Series - ' + defaultMetadata.title,
 };
 
-export default async function Page() {
+export default async function SeriesPage() {
   const series = await getSeries();
 
   return (
@@ -22,9 +22,9 @@ export default async function Page() {
           To create a new series,{' '}
           <Link
             className="text-[var(--mantine-color-brand-7)]"
-            href={`${systemUrl}/events`}
+            href={`${systemUrl}/activities`}
           >
-            create a new event
+            create a new activity
           </Link>
           .
         </Text>

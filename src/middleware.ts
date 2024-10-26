@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
   if (
     !user &&
     request.nextUrl.pathname.startsWith(systemUrl) &&
-    !request.nextUrl.pathname.match(systemUrl + /\/events\/.*\/info$/) // allow /portal/events/**/info
+    !request.nextUrl.pathname.match(systemUrl + /\/activities\/.*\/info$/) // allow /portal/activities/**/info
   ) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();

@@ -11,6 +11,6 @@ export const metadata: Metadata = {
  *
  * Auth checking is done in the middleware.
  */
-export default function App() {
+export default function DashboardPage() {
   return <Calendar />;
 }

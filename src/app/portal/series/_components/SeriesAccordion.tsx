@@ -18,7 +18,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Tables } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
-import { deleteSeries, getSeriesEvents } from '../actions';
+import { deleteSeries, getSeriesActivities } from '../actions';
 import { useUser } from '@/components/Providers/UserProvider';
 
 const SeriesEditModal = dynamic(
@@ -26,8 +26,9 @@ const SeriesEditModal = dynamic(
   { ssr: false },
 );
 
-const EventCard = dynamic(
-  () => import('@/components/Cards/EventCard').then((mod) => mod.EventCard),
+const ActivityCard = dynamic(
+  () =>
+    import('@/components/Cards/ActivityCard').then((mod) => mod.ActivityCard),
   { ssr: false },
 );
 interface AccordionProps extends AccordionControlProps {
@@ -78,7 +79,8 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
 
   // data
   const [series, setSeries] = useState<Tables<'series'>[]>(data);
-  const [events, setEvents] = useState<Tables<'events_details_view'>[]>();
+  const [activities, setActivities] =
+    useState<Tables<'activities_details_view'>[]>();
   const [seriesToEdit, setSeriesToEdit] = useState<Tables<'series'> | null>(
     null,
   );
@@ -93,7 +95,9 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
     modals.openConfirmModal({
       centered: true,
       title: `Delete Series?`,
-      children: <Text>This will not delete the events under this series.</Text>,
+      children: (
+        <Text>This will not delete the activities under this series.</Text>
+      ),
       labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: {
         color: 'red',
@@ -119,20 +123,20 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
 
   useEffect(() => {
     // fixes erratic behavior when changing series
-    setEvents([]);
+    setActivities([]);
 
-    const seriesEvents = async () => {
+    const seriesActivities = async () => {
       setLoading(true);
 
       if (!value) return;
-      const events = await getSeriesEvents(value);
+      const activities = await getSeriesActivities(value);
 
-      setEvents(events?.data ?? []);
+      setActivities(activities?.data ?? []);
 
       setLoading(false);
     };
 
-    void seriesEvents();
+    void seriesActivities();
   }, [value]);
 
   const items = series.map((item) => (
@@ -153,7 +157,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
       )}
       <Accordion.Panel>
         <Suspense fallback={<PageLoader />}>
-          {value === item.title && events?.length ? (
+          {value === item.title && activities?.length ? (
             <>
               <Flex
                 align="stretch"
@@ -163,10 +167,14 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
                 key={value}
                 wrap="wrap"
               >
-                {events.map((event: Tables<'events_details_view'>) => {
-                  // value prevents duplicate events
-                  return <EventCard key={event?.id + value} {...event} />;
-                })}
+                {activities.map(
+                  (activity: Tables<'activities_details_view'>) => {
+                    // value practivities duplicate activities
+                    return (
+                      <ActivityCard key={activity?.id + value} {...activity} />
+                    );
+                  },
+                )}
               </Flex>
             </>
           ) : (
@@ -174,7 +182,7 @@ function SeriesAccordionComponent({ data }: { data: Tables<'series'>[] }) {
               {loading ? (
                 <PageLoader />
               ) : (
-                <Text c="dimmed">No events found under this series.</Text>
+                <Text c="dimmed">No activities found under this series.</Text>
               )}
             </>
           )}

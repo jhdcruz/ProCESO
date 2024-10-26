@@ -14,7 +14,11 @@ import { formatDateRange } from 'little-date';
 import '@mantine/core/styles.css';
 import config from '../../tailwind.config';
 
-export default function AssignedEmail({ event }: { event: Tables<'events'> }) {
+export default function Assigned({
+  activity,
+}: {
+  activity: Tables<'activities'>;
+}) {
   return (
     <Html lang="en">
       <Tailwind config={config}>
@@ -41,23 +45,23 @@ export default function AssignedEmail({ event }: { event: Tables<'events'> }) {
 
           <Section className="mt-6">
             <Text className="mt-8">
-              You have been assigned for an event: <br />
+              You have been assigned for an activity: <br />
               <Link
                 className="font-bold text-yellow-500 underline"
-                href={`https://deuz.tech/events/${event?.id as string}`}
+                href={`https://deuz.tech/activities/${activity?.id as string}`}
               >
-                {event?.title ?? 'Untitled Event'}
+                {activity?.title ?? 'Untitled Activity'}
               </Link>
               .
             </Text>
 
-            {event?.date_starting && event?.date_ending ? (
+            {activity?.date_starting && activity?.date_ending ? (
               <Text>
-                The event is to be conducted at{' '}
+                The activity is to be conducted at{' '}
                 <span className="font-bold">
                   {formatDateRange(
-                    new Date(event.date_starting),
-                    new Date(event.date_ending),
+                    new Date(activity.date_starting),
+                    new Date(activity.date_ending),
                     {
                       includeTime: true,
                     },
@@ -66,7 +70,7 @@ export default function AssignedEmail({ event }: { event: Tables<'events'> }) {
                 .
               </Text>
             ) : (
-              <Text>The date of the event is yet to be decided.</Text>
+              <Text>The date of the activity is yet to be decided.</Text>
             )}
           </Section>
 

@@ -111,7 +111,7 @@ export default function UsersShell() {
         {/* Invite user by email */}
         <UserInviteModal />
 
-        {/*  Event search */}
+        {/*  Activity search */}
         <TextInput
           leftSection={<IconSearch size={16} stroke={1.5} />}
           onChange={(e) => setQuery(e.currentTarget.value)}

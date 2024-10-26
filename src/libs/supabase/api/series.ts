@@ -5,7 +5,7 @@ import { systemUrl } from '@/app/routes';
 import { revalidatePath } from 'next/cache';
 
 /**
- * Get event series that are active.
+ * Get activity series that are active.
  *
  * @param filter - Ilike filter to apply to the query (case-insensitive).
  */
@@ -55,7 +55,7 @@ export async function postSeries({
     .insert({ title })
     .select();
 
-  revalidatePath(`${systemUrl}/events/series`);
+  revalidatePath(`${systemUrl}/activities/series`);
 
   if (error) {
     return {

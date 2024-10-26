@@ -12,13 +12,13 @@ import styles from './Calendar.module.css';
 import '@/styles/full-calendar.css';
 
 /**
- * Calendar component for displaying events.
+ * Calendar component for displaying activities.
  *
  * For more information about FullCalendar:
  * @see https://fullcalendar.io/docs
  *
- * For more information about FullCalendar `events` JSON feed:
- * @see https://fullcalendar.io/docs/events-json-feed
+ * For more information about FullCalendar `activities` JSON feed:
+ * @see https://fullcalendar.io/docs/activities-json-feed
  */
 function CalendarComponent() {
   return (
@@ -33,7 +33,7 @@ function CalendarComponent() {
           multiMonthYear: 'Year',
         }}
         dayMaxEvents={true}
-        events="/api/events/feed" // App API endpoint for fetching events
+        events="/api/activities/feed" // App API endpoint for fetching activities
         headerToolbar={{
           left: 'timeGridWeek,dayGridMonth,multiMonthYear list',
           center: 'title',

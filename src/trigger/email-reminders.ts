@@ -3,15 +3,18 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
 
 /**
  * Send reminder email to subscribed users
- * that the event is coming up.
+ * that the activity is coming up.
  *
- * @param event - event name.
+ * @param activity - activity name.
  * @param id - array of faculty IDs.
  * @param auth - auth cookies.
  */
 export const emailReminders = task({
   id: 'email-reminders',
-  run: async (payload: { eventId: string; eventTitle: string }, { ctx }) => {
+  run: async (
+    payload: { activityId: string; activityTitle: string },
+    { ctx },
+  ) => {
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
 
@@ -20,20 +23,20 @@ export const emailReminders = task({
     const supabase = createAdminClient();
     let emails: string[] = [];
 
-    logger.info('Getting users and event information...');
+    logger.info('Getting users and activity information...');
 
     // get faculty emails from faculty_assignment
     const usersQuery = supabase
-      .from('events_faculties_view')
+      .from('activities_faculties_view')
       .select('faculty_email')
-      .eq('event_id', payload.eventId)
+      .eq('activity_id', payload.activityId)
       .not('faculty_email', 'is', null);
 
     // get subscriber emails
     const subscribersQuery = supabase
-      .from('events_subscriptions_view')
+      .from('activities_subscriptions_view')
       .select('subscriber_email')
-      .eq('event_id', payload.eventId)
+      .eq('activity_id', payload.activityId)
       .not('subscriber_email', 'is', null);
 
     // fetch admin/staff emails
@@ -43,20 +46,21 @@ export const emailReminders = task({
       .in('role', ['admin', 'staff'])
       .not('email', 'is', null);
 
-    // get event data
-    const eventQuery = supabase
-      .from('events')
+    // get activity data
+    const activityQuery = supabase
+      .from('activities')
       .select()
-      .eq('title', payload.eventTitle)
+      .eq('title', payload.activityTitle)
       .limit(1)
       .single();
 
-    const [usersRes, staffsRes, subscribersRes, eventRes] = await Promise.all([
-      usersQuery,
-      staffsQuery,
-      subscribersQuery,
-      eventQuery,
-    ]);
+    const [usersRes, staffsRes, subscribersRes, activityRes] =
+      await Promise.all([
+        usersQuery,
+        staffsQuery,
+        subscribersQuery,
+        activityQuery,
+      ]);
 
     // add faculty emails to the emails array
     if (usersRes.error) {
@@ -80,12 +84,12 @@ export const emailReminders = task({
       );
       throw new Error(subscribersRes?.error?.message);
     }
-    if (eventRes.error) {
+    if (activityRes.error) {
       logger.error(
-        eventRes?.error?.message,
-        eventRes?.error as unknown as Record<string, unknown>,
+        activityRes?.error?.message,
+        activityRes?.error as unknown as Record<string, unknown>,
       );
-      throw new Error(eventRes?.error?.message);
+      throw new Error(activityRes?.error?.message);
     }
 
     // add emails to the emails array
@@ -110,7 +114,7 @@ export const emailReminders = task({
       method: 'POST',
       body: JSON.stringify({
         runId: ctx.run.id,
-        event: eventRes?.data,
+        activity: activityRes?.data,
         emails: emails,
       }),
     });

@@ -5,31 +5,31 @@ import dynamic from 'next/dynamic';
 import { Button, Group, TextInput, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
-import { getEvents } from '@/libs/supabase/api/event';
-import { getAssignedEvents } from '@/libs/supabase/api/faculty-assignments';
-import { EventsViewResponse } from '@/libs/supabase/api/_response';
+import { getActivities } from '@/libs/supabase/api/activity';
+import { getAssignedActivities } from '@/libs/supabase/api/faculty-assignments';
+import { ActivitiesViewResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
 
-const EventAccordion = dynamic(
-  () => import('./EventAccordion').then((mod) => mod.EventAccordion),
+const ActivityAccordion = dynamic(
+  () => import('./ActivityAccordion').then((mod) => mod.ActivityAccordion),
   {
     loading: () => <PageLoader />,
     ssr: false,
   },
 );
 
-const EventFormModal = dynamic(
+const ActivityFormModal = dynamic(
   () =>
-    import('./Forms/EventFormModal').then((mod) => ({
-      default: mod.EventFormModal,
+    import('./Forms/ActivityFormModal').then((mod) => ({
+      default: mod.ActivityFormModal,
     })),
   {
     ssr: false,
   },
 );
 
-function EventsShellComponent() {
+function ActivitiesShellComponent() {
   const user = useUser();
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -37,38 +37,38 @@ function EventsShellComponent() {
   const searchQuery = useDeferredValue<string>(query);
 
   // data
-  const [assigned, setAssigned] = useState<EventsViewResponse>();
-  const [ongoing, setOngoing] = useState<EventsViewResponse>();
-  const [upcoming, setUpcoming] = useState<EventsViewResponse>();
-  const [past, setPast] = useState<EventsViewResponse>();
+  const [assigned, setAssigned] = useState<ActivitiesViewResponse>();
+  const [ongoing, setOngoing] = useState<ActivitiesViewResponse>();
+  const [upcoming, setUpcoming] = useState<ActivitiesViewResponse>();
+  const [past, setPast] = useState<ActivitiesViewResponse>();
 
   useEffect(() => {
-    const eventsAssigned = getAssignedEvents({
+    const activitiesAssigned = getAssignedActivities({
       userId: user.id,
       search: searchQuery,
     });
 
-    const eventsOngoing = getEvents({
+    const activitiesOngoing = getActivities({
       filter: 'ongoing',
       search: searchQuery,
     });
 
-    const eventsUpcoming = getEvents({
+    const activitiesUpcoming = getActivities({
       filter: 'upcoming',
       search: searchQuery,
     });
 
-    const eventsPast = getEvents({
+    const activitiesPast = getActivities({
       filter: 'past',
       search: searchQuery,
     });
 
-    const fetchEvents = async () => {
+    const fetchActivities = async () => {
       const [assigned, ongoing, upcoming, past] = await Promise.all([
-        eventsAssigned,
-        eventsOngoing,
-        eventsUpcoming,
-        eventsPast,
+        activitiesAssigned,
+        activitiesOngoing,
+        activitiesUpcoming,
+        activitiesPast,
       ]);
 
       setAssigned(assigned);
@@ -77,23 +77,23 @@ function EventsShellComponent() {
       setPast(past);
     };
 
-    void fetchEvents();
+    void fetchActivities();
   }, [searchQuery, user?.id]);
 
   return (
     <>
       <Group className="content-center" mb="md">
-        {/* New Event */}
+        {/* New activity */}
         <Button
           className="drop-shadow-sm"
           leftSection={<IconCalendarPlus size={16} />}
           onClick={open}
         >
-          Schedule new event
+          Schedule new activity
         </Button>
-        <EventFormModal close={close} opened={opened} />
+        <ActivityFormModal close={close} opened={opened} />
 
-        {/*  Event search */}
+        {/*  activity search */}
         <TextInput
           leftSection={
             <IconSearch
@@ -102,11 +102,11 @@ function EventsShellComponent() {
             />
           }
           onChange={(e) => setQuery(e.currentTarget.value)}
-          placeholder="Search for events"
+          placeholder="Search for activies"
         />
       </Group>
 
-      <EventAccordion
+      <ActivityAccordion
         assigned={assigned}
         ongoing={ongoing}
         past={past}
@@ -117,4 +117,4 @@ function EventsShellComponent() {
   );
 }
 
-export const EventsShell = memo(EventsShellComponent);
+export const ActivitiesShell = memo(ActivitiesShellComponent);

@@ -1,9 +1,9 @@
 -- Filter data returns based on user's role
--- Admin or staff can see all events
--- Faculty can see events with visibility 'Faculty' or 'Everyone'
--- Others and the rest can see events with visibility 'Everyone'
+-- Admin or staff can see all activitys
+-- Faculty can see activitys with visibility 'Faculty' or 'Everyone'
+-- Others and the rest can see activitys with visibility 'Everyone'
 create
-or alter policy "Return data based on user role" on "public"."events" to public using (
+or alter policy "Return data based on user role" on "public"."activitys" to public using (
     (
         (
             select
@@ -38,11 +38,11 @@ or alter policy "Return data based on user role" on "public"."events" to public 
         and (
             visibility = any (
                 array [
-          'Faculty'::event_visibility,
-          'Everyone'::event_visibility
+          'Faculty'::activity_visibility,
+          'Everyone'::activity_visibility
         ]
             )
         )
     )
-    or (visibility = 'Everyone' :: event_visibility)
+    or (visibility = 'Everyone' :: activity_visibility)
 );

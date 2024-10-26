@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import type {
-  EventsViewResponse,
+  ActivitiesViewResponse,
   SeriesResponse,
 } from '@/libs/supabase/api/_response';
 import { createServerClient } from '@/libs/supabase/server';
@@ -28,20 +28,20 @@ export async function getSeries(): Promise<SeriesResponse> {
 
   return {
     status: 0,
-    title: 'Event series fetched',
-    message: 'Event series fetched successfully',
+    title: 'Activity series fetched',
+    message: 'Activity series fetched successfully',
     data: data,
   };
 }
 
-export async function getSeriesEvents(
+export async function getSeriesActivities(
   series: string,
-): Promise<EventsViewResponse> {
+): Promise<ActivitiesViewResponse> {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
   const { data, error } = await supabase
-    .from('events_details_view')
+    .from('activities_details_view')
     .select()
     .eq('series', series);
 
@@ -55,8 +55,8 @@ export async function getSeriesEvents(
 
   return {
     status: 0,
-    title: 'Series events fetched',
-    message: 'Series events fetched successfully',
+    title: 'Series activities fetched',
+    message: 'Series activities fetched successfully',
     data: data,
   };
 }

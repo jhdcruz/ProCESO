@@ -2,22 +2,22 @@ import { type DateValue } from '@mantine/dates';
 import { type SupabaseClient } from '@supabase/supabase-js';
 import type {
   FacultyAssignmentsResponse,
-  EventFacultiesResponse,
+  ActivityFacultiesResponse,
   FacultyConflictsResponse,
-  EventsViewResponse,
+  ActivitiesViewResponse,
 } from './_response';
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { Tables } from '@/libs/supabase/_database';
 
 /**
- * Get events that are assigned to a faculty
+ * Get activities that are assigned to a faculty
  * with matching userId.
  *
  * @param userId - The faculty id to filter.
- * @param search - Similar/matching event title.
+ * @param search - Similar/matching activity title.
  * @param supabase - The Supabase client to use.
  */
-export async function getAssignedEvents({
+export async function getAssignedActivities({
   userId,
   search,
   supabase,
@@ -25,7 +25,7 @@ export async function getAssignedEvents({
   userId: string;
   search?: string;
   supabase?: SupabaseClient;
-}): Promise<EventsViewResponse> {
+}): Promise<ActivitiesViewResponse> {
   if (!supabase) supabase = createBrowserClient();
   const now = new Date().toISOString();
 
@@ -33,18 +33,18 @@ export async function getAssignedEvents({
     .from('faculty_assignments')
     .select(
       `
-      events:events_details_view (*)
+      activities:activities_details_view (*)
       `,
     )
     .eq('user_id', userId)
-    .gte('events.date_starting', now)
+    .gte('activities.date_starting', now)
     .order('date_starting', {
-      referencedTable: 'events_details_view',
+      referencedTable: 'activities_details_view',
       ascending: false,
     });
 
-  if (search) query = query.ilike('events.title', `%${search}%`);
-  const { data: events, error } = await query;
+  if (search) query = query.ilike('activities.title', `%${search}%`);
+  const { data: activities, error } = await query;
 
   if (error) {
     return {
@@ -54,38 +54,37 @@ export async function getAssignedEvents({
     };
   }
 
-  // flatten result similar to `.from('events')`
-  const assignedEvents: Tables<'events_details_view'>[] = events.flatMap(
-    (event) => event?.events || [],
-  );
+  // flatten result similar to `.from('activities')`
+  const assignedActivities: Tables<'activities_details_view'>[] =
+    activities.flatMap((activity) => activity?.activities || []);
 
   return {
     status: 0,
     title: 'Faculty users fetched',
     message: 'List of faculty users have been successfully fetched.',
-    data: assignedEvents,
+    data: assignedActivities,
   };
 }
 
 /**
- * Get list of assigned faculty for an event.
+ * Get list of assigned faculty for an activity.
  *
- * @param eventId - The event ID to filter.
+ * @param activityId - The activity ID to filter.
  * @param supabase - The Supabase client to use.
  */
 export async function getAssignedFaculties({
-  eventId,
+  activityId,
   supabase,
 }: {
-  eventId: string;
+  activityId: string;
   supabase?: SupabaseClient;
-}): Promise<EventFacultiesResponse> {
+}): Promise<ActivityFacultiesResponse> {
   if (!supabase) supabase = createBrowserClient();
 
-  const { data: events, error } = await supabase
-    .from('events_faculties_view')
+  const { data: activities, error } = await supabase
+    .from('activities_faculties_view')
     .select()
-    .eq('event_id', eventId);
+    .eq('activity_id', activityId);
 
   if (error) {
     return {
@@ -99,7 +98,7 @@ export async function getAssignedFaculties({
     status: 0,
     title: 'Faculty users fetched',
     message: 'List of faculty users have been successfully fetched.',
-    data: events,
+    data: activities,
   };
 }
 
@@ -126,7 +125,7 @@ export async function getFacultyConflicts(
   const supabase = createBrowserClient();
 
   const { data: assigned, error } = await supabase
-    .from('events')
+    .from('activities')
     .select(
       `
       faculty_assignments (
@@ -154,19 +153,19 @@ export async function getFacultyConflicts(
 }
 
 /**
- * Assign a faculty to an event.
+ * Assign a faculty to an activity.
  *
  * @param userId - The user ID of the faculty to assign.
- * @param eventId - The event ID to assign.
+ * @param activityId - The activity ID to assign.
  * @param supabase - The Supabase client to use.
  */
 export async function postFacultyAssignment({
   userId,
-  eventId,
+  activityId,
   supabase,
 }: {
   userId: string[];
-  eventId: string;
+  activityId: string;
   supabase: SupabaseClient;
 }): Promise<FacultyAssignmentsResponse> {
   if (!supabase) supabase = createBrowserClient();
@@ -176,10 +175,10 @@ export async function postFacultyAssignment({
     .upsert(
       userId.map((user_id) => ({
         user_id,
-        event_id: eventId,
+        activity_id: activityId,
       })),
       {
-        onConflict: 'user_id, event_id',
+        onConflict: 'user_id, activity_id',
         ignoreDuplicates: true,
       },
     )

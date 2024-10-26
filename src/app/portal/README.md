@@ -8,4 +8,4 @@ Main system portal for ProCESO project.
 ## Routes
 
 - `(dashboard)` - The root route. `/portal`.
-- `events` - All event related subroutes `/portal/events`.
+- `activities` - All activity related subroutes `/portal/activities`.

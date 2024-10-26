@@ -40,14 +40,14 @@ export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
 };
 
 /**
- * Check if the user is allowed to access or view the event,
- * based on the event's visibility and the user's role.
+ * Check if the user is allowed to access or view the activity,
+ * based on the activity's visibility and the user's role.
  *
  * @param role - The user's role.
- * @param visibility - The event's visibility.
+ * @param visibility - The activity's visibility.
  */
-export const canAccessEvent = (
-  visibility: Enums<'event_visibility'> | null,
+export const canAccessActivity = (
+  visibility: Enums<'activity_visibility'> | null,
   role: Enums<'roles_user'> | null,
 ): boolean => {
   switch (visibility) {

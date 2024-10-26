@@ -7,11 +7,11 @@ import dynamic from 'next/dynamic';
 import { Tabs } from '@mantine/core';
 import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
-import type { EventDetailsProps } from '@/libs/supabase/api/_response';
+import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
-import { canAccessEvent, isInternal } from '@/utils/access-control';
-import { EventInfo } from './EventInfo';
+import { canAccessActivity, isInternal } from '@/utils/access-control';
+import { ActivityInfo } from './ActivityInfo';
 
 const NotFound = dynamic(
   () =>
@@ -23,10 +23,10 @@ const NotFound = dynamic(
   },
 );
 
-function EventDetailsComponent({
-  event,
+function ActivityDetailsComponent({
+  activity,
 }: Readonly<{
-  event: EventDetailsProps;
+  activity: ActivityDetailsProps;
 }>) {
   const { role } = useUser();
 
@@ -36,7 +36,7 @@ function EventDetailsComponent({
 
   return (
     <>
-      {!canAccessEvent(event.visibility, role) ? (
+      {!canAccessActivity(activity.visibility, role) ? (
         <NotFound />
       ) : (
         <Tabs
@@ -44,7 +44,7 @@ function EventDetailsComponent({
           onChange={(value) => {
             startTransition(() => {
               startProgress();
-              router.push(`${systemUrl}/events/${event?.id}/${value}`);
+              router.push(`${systemUrl}/activities/${activity?.id}/${value}`);
             });
           }}
           value={pathname.split('/').pop()}
@@ -66,7 +66,7 @@ function EventDetailsComponent({
           </Tabs.List>
 
           <Tabs.Panel keepMounted={true} value="info">
-            <EventInfo event={event} role={role!} />
+            <ActivityInfo activity={activity} role={role!} />
           </Tabs.Panel>
 
           {isInternal(role!) && (
@@ -80,4 +80,4 @@ function EventDetailsComponent({
   );
 }
 
-export const EventDetailsShell = memo(EventDetailsComponent);
+export const ActivityDetailsShell = memo(ActivityDetailsComponent);

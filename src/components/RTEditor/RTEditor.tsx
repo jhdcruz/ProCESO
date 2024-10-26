@@ -33,7 +33,7 @@ function RichText({
 }) {
   const bodyContent =
     content ??
-    '<p>This event has no description yet. Come back again later.</p>';
+    '<p>This activity has no description yet. Come back again later.</p>';
 
   const editor = useEditor(
     {

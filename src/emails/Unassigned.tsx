@@ -10,14 +10,13 @@ import {
   Html,
 } from '@react-email/components';
 import type { Tables } from '@/libs/supabase/_database';
-import { formatDateRange } from 'little-date';
 import '@mantine/core/styles.css';
 import config from '../../tailwind.config';
 
-export default function UnassignedEmail({
-  event,
+export default function Unassigned({
+  activity,
 }: {
-  event: Tables<'events'>;
+  activity: Tables<'activities'>;
 }) {
   return (
     <Html lang="en">
@@ -47,12 +46,12 @@ export default function UnassignedEmail({
             <Text className="mt-8">
               You have been relieved and{' '}
               <span className="font-bold">are no longer assigned</span> for the
-              event: <br />
+              activity: <br />
               <Link
                 className="font-bold text-yellow-500 underline"
-                href={`https://deuz.tech/events/${event?.id as string}`}
+                href={`https://deuz.tech/activities/${activity?.id as string}`}
               >
-                {event?.title ?? 'Untitled Event'}
+                {activity?.title ?? 'Untitled Activity'}
               </Link>
               .
             </Text>

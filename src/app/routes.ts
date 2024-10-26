@@ -41,12 +41,12 @@ export const sidebarRoutes: Routes = [
     access: ['student', 'faculty', 'staff', 'admin'],
   },
   {
-    label: 'Events',
+    label: 'Activities',
     icon: IconNotes,
     initiallyOpened: true,
     links: [
-      { label: 'All Events', link: `${systemUrl}/events` },
-      { label: 'Event Series', link: `${systemUrl}/series` },
+      { label: 'All Activities', link: `${systemUrl}/activities` },
+      { label: 'Activity Series', link: `${systemUrl}/series` },
     ],
     access: ['student', 'faculty', 'staff', 'admin'],
   },

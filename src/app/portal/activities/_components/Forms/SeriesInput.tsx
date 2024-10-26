@@ -7,7 +7,7 @@ import { getFilteredSeries } from '@/libs/supabase/api/series';
 import type { Tables } from '@/libs/supabase/_database';
 
 /**
- * Event series autocomplete input
+ * Activity series autocomplete input
  */
 export const SeriesInput = memo((props: AutocompleteProps) => {
   const [query, setQuery] = useState('');
@@ -36,7 +36,7 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
       setLoading(false);
     };
 
-    // prevents query on initial render
+    // practivities query on initial render
     if (seriesQuery) {
       // noinspection JSIgnoredPromiseFromCall
       void fetchSeries();
@@ -46,7 +46,7 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
   return (
     <Autocomplete
       data={data}
-      label="Event Series"
+      label="Activity Series"
       limit={5}
       onChangeCapture={(e) => setQuery(e.currentTarget.value)}
       placeholder="Brigada Eskwela"

@@ -12,28 +12,29 @@ export interface UsersResponse extends ApiResponse {
   data?: Tables<'users'>[];
 }
 
-export interface EventResponse extends ApiResponse {
-  data?: Tables<'events'>[];
+export interface ActivityResponse extends ApiResponse {
+  data?: Tables<'activities'>[];
 }
 
-export interface EventsViewResponse extends ApiResponse {
-  data?: Tables<'events_details_view'>[];
+export interface ActivitiesViewResponse extends ApiResponse {
+  data?: Tables<'activities_details_view'>[];
 }
 
-export interface EventDetailsProps extends Tables<'events_details_view'> {
-  users: Tables<'events_faculties_view'>[];
+export interface ActivityDetailsProps
+  extends Tables<'activities_details_view'> {
+  users: Tables<'activities_faculties_view'>[];
 }
 
-export interface EventDetailsResponse extends ApiResponse {
-  data?: EventDetailsProps;
+export interface ActivityDetailsResponse extends ApiResponse {
+  data?: ActivityDetailsProps;
 }
 
-export interface EventFacultiesResponse extends ApiResponse {
-  data?: Tables<'events_faculties_view'>[];
+export interface ActivityFacultiesResponse extends ApiResponse {
+  data?: Tables<'activities_faculties_view'>[];
 }
 
-export interface EventFilesResponse extends ApiResponse {
-  data?: Tables<'event_files'>[];
+export interface ActivityFilesResponse extends ApiResponse {
+  data?: Tables<'activity_files'>[];
 }
 
 export interface SeriesResponse extends ApiResponse {
@@ -45,7 +46,7 @@ export interface FacultyAssignmentsResponse extends ApiResponse {
 }
 
 export interface SubscriptionsViewResponse extends ApiResponse {
-  data?: Tables<'events_subscriptions_view'>[];
+  data?: Tables<'activities_subscriptions_view'>[];
 }
 
 // Referenced tables
