@@ -194,6 +194,7 @@ export function EventFormModalComponent({
       // https://github.com/orgs/mantinedev/discussions/4868
       form.setValues({
         title: event.title,
+        series: event.series,
         visibility: event.visibility,
         date_starting: event.date_starting,
         date_ending: event.date_ending,
@@ -205,7 +206,7 @@ export function EventFormModalComponent({
   }, [event]);
 
   return (
-    <Modal onClose={resetState} opened={opened} size="68%" title="New Event">
+    <Modal onClose={close} opened={opened} size="68%" title="New Event">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Grid grow>
           {/* Left Column Grid */}
@@ -387,7 +388,7 @@ export function EventFormModalComponent({
 
         {/* Save Buttons */}
         <Group justify="flex-end">
-          <Button mt="md" onClick={resetState} variant="subtle">
+          <Button mt="md" onClick={close} variant="subtle">
             Cancel
           </Button>
 
