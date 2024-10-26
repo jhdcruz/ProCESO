@@ -79,13 +79,18 @@ export async function rescheduleReminders({
   eventStartingDate: Date;
 }) {
   // get the queued reminder task
+  const day1 = runs.list({
+    status: ['DELAYED'],
+    taskIdentifier: 'email-reminders',
+    tag: [`event_${eventId}`, 'action_reminders', 'in_1'],
+    limit: 1,
+  });
   const day3 = runs.list({
     status: ['DELAYED'],
     taskIdentifier: 'email-reminders',
     tag: [`event_${eventId}`, 'action_reminders', 'in_3'],
     limit: 1,
   });
-
   const day7 = runs.list({
     status: ['DELAYED'],
     taskIdentifier: 'email-reminders',
@@ -93,11 +98,17 @@ export async function rescheduleReminders({
     limit: 1,
   });
 
-  const [rday3, rday7] = await Promise.all([day3, day7]);
+  const [rday1, rday3, rday7] = await Promise.all([day1, day3, day7]);
 
-  if (rday3?.data[0].id || rday7?.data[0].id) {
+  // this all coincides, so we can just check one
+  if (rday1?.data[0].id || rday3?.data[0].id || rday7?.data[0].id) {
     // reschedule the reminder task
     // no need to await
+    runs.reschedule(rday1?.data[0].id, {
+      delay: new Date(
+        new Date(eventStartingDate).getTime() - 1 * 24 * 60 * 60 * 1000,
+      ),
+    });
     runs.reschedule(rday3?.data[0].id, {
       delay: new Date(
         new Date(eventStartingDate).getTime() - 3 * 24 * 60 * 60 * 1000,
