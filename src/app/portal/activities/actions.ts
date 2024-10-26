@@ -5,7 +5,11 @@ import { revalidatePath } from 'next/cache';
 import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
 import { postActivity, updateActivity } from '@/libs/supabase/api/activity';
-import { postSeries } from '@/libs/supabase/api/series';
+import {
+  getFilteredSeries,
+  getSeriesByTitle,
+  postSeries,
+} from '@/libs/supabase/api/series';
 import { postActivityCover } from '@/libs/supabase/api/storage';
 import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
 import type { ActivityResponse } from '@/libs/supabase/api/_response';
@@ -53,14 +57,23 @@ export async function submitActivity(
   // create activity series if it doesn't exist
   let seriesId = null;
   if (activity.series) {
-    const seriesResponse = await postSeries({
+    const seriesCheck = await getSeriesByTitle({
       title: activity.series,
       supabase,
     });
-    if (!seriesResponse.data) return seriesResponse;
 
-    // return the id for activity link
-    seriesId = seriesResponse.data[0].id;
+    if (seriesCheck.data?.id) {
+      seriesId = seriesCheck.data.id;
+    } else {
+      const seriesResponse = await postSeries({
+        title: activity.series,
+        supabase,
+      });
+      if (!seriesResponse.data) return seriesResponse;
+
+      // return the id for activity link
+      seriesId = seriesResponse.data[0].id;
+    }
   }
 
   // create or update the activity

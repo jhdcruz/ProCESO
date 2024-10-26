@@ -1,8 +1,48 @@
 import { createBrowserClient } from '@/libs/supabase/client';
-import type { SeriesResponse } from '@/libs/supabase/api/_response';
+import type {
+  SeriesResponse,
+  SingleSeriesResponse,
+} from '@/libs/supabase/api/_response';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { systemUrl } from '@/app/routes';
 import { revalidatePath } from 'next/cache';
+
+/**
+ * Get series based on title.
+ *
+ * @param title - The title of the series.
+ */
+export async function getSeriesByTitle({
+  title,
+  supabase,
+}: {
+  title: string;
+  supabase?: SupabaseClient;
+}): Promise<SingleSeriesResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data: series, error } = await supabase
+    .from('series')
+    .select()
+    .eq('title', title)
+    .limit(1)
+    .single();
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to fetch series',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Series fetched',
+    message: 'The series has been successfully fetched.',
+    data: series,
+  };
+}
 
 /**
  * Get activity series that are active.

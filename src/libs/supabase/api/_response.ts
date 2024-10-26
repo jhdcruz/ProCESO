@@ -37,6 +37,10 @@ export interface ActivityFilesResponse extends ApiResponse {
   data?: Tables<'activity_files'>[];
 }
 
+export interface SingleSeriesResponse extends ApiResponse {
+  data?: Tables<'series'>;
+}
+
 export interface SeriesResponse extends ApiResponse {
   data?: Tables<'series'>[];
 }
