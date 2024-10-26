@@ -3,7 +3,7 @@ import { metadata as defaultMetadata } from '@/app/layout';
 import { ActivitiesShell } from './_components/ActivitiesShell';
 
 export const metadata: Metadata = {
-  title: 'activities - ' + defaultMetadata.title,
+  title: 'Activities - ' + defaultMetadata.title,
 };
 
 export default function ActivitiesPage() {
