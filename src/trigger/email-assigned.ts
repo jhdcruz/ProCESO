@@ -20,8 +20,8 @@ export const emailAssigned = task({
   ) => {
     // HACK: for RLS policies, we are passing auth cookies,
     // probably a bad thing, probably, I think.
-    await envvars.retrieve('NEXT_PUBLIC_SUPABASE_URL');
-    await envvars.retrieve('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    await envvars.retrieve('SUPABASE_URL');
+    await envvars.retrieve('SUPABASE_ANON_KEY');
     const supabase = createAdminClient();
 
     logger.info('Getting users and event information...');
