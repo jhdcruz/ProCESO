@@ -15,9 +15,8 @@ This capstone project aims to develop an AI-integrated web-based community outre
 and centralizes administrative tasks to enhance the efficiency and impact of the institution’s community extension
 services in fostering sustainable community relationships.
 
-1. **To develop a system feature that facilitates the planning and coordination of community outreach activities**, such
-   as managing faculty delegation, event sorting and filtering, uploading of after-activity report, and student
-   participation;
+1. **To develop a system that facilitates the internal planning and coordination of community outreach activities**,
+   such as managing faculty assignment, and uploading of reports.
 2. **To implement automated processes for generating, distributing, and validating e-certificates** of participants,
    thereby reducing manual workload and improving operational efficiency;
 3. **To integrate AI models for analyzing and evaluating feedback**, such as sentiment analysis, alternative textual
@@ -182,9 +181,9 @@ All trademarks, logos, and service marks displayed on this website are the prope
 
 - **Technological Institute of the Philippines (T.I.P)**
 
-   T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
-   T.I.P) in the Philippines.
+  T.I.P and the T.I.P logos are trademarks or registered trademarks of Technological Institute of the Philippines (
+  T.I.P) in the Philippines.
 
 - **Google, LLC.**
 
-   Google and the Google logos are trademarks or registered trademarks of Google LLC in the United States and other countries.
+  Google and the Google logos are trademarks or registered trademarks of Google LLC in the United States and other countries.
