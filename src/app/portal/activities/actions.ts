@@ -12,7 +12,10 @@ import type { ActivityResponse } from '@/libs/supabase/api/_response';
 import type { ActivityFormProps } from './_components/Forms/ActivityFormModal';
 import type ApiResponse from '@/utils/response';
 import { emailAssigned } from '@/trigger/email-assigned';
-import { rescheduleReminders } from '@/libs/triggerdev/reminders';
+import {
+  rescheduleReminders,
+  scheduleReminders,
+} from '@/libs/triggerdev/reminders';
 import { emailUnassigned } from '@/trigger/email-unassigned';
 
 /**
@@ -140,7 +143,11 @@ export async function submitActivity(
       });
 
       // check if there are changes in assignments
-      if (existingId && original?.handled_by !== activity.handled_by) {
+      if (
+        existingId &&
+        (original?.handled_by !== activity.handled_by ||
+          activity.handled_by.length)
+      ) {
         // send email notice to unassigned faculties
         emailUnassigned.trigger({
           activity: activity.title,
@@ -167,11 +174,17 @@ export async function submitActivity(
   }
 
   // schedule (delay) email reminders
-  if (activity.date_starting) {
+  if (existingId && activity.date_starting) {
     rescheduleReminders({
       activityId: activityId,
       activityTitle: activity.title,
       activityStartingDate: activity.date_starting,
+    });
+  } else {
+    scheduleReminders({
+      activityId: activityId,
+      activityTitle: activity.title,
+      activityStartingDate: activity.date_starting!,
     });
   }
 

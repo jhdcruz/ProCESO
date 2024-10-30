@@ -10,7 +10,7 @@ import { emailReminders } from '@/trigger/email-reminders';
  * @param activityTitle - The activity title.
  * @param activityStartingDate - The activity starting date.
  */
-export function scheduleReminders({
+export async function scheduleReminders({
   activityId,
   activityTitle,
   activityStartingDate,
@@ -23,7 +23,7 @@ export function scheduleReminders({
   // no need to await
   if (activityStartingDate.getTime() - 1 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 1 day before the activity
-    emailReminders.trigger(
+    await emailReminders.trigger(
       {
         activityId: activityId,
         activityTitle: activityTitle,
@@ -42,7 +42,7 @@ export function scheduleReminders({
   // check if the activity starting date is not within 3 days from now
   if (activityStartingDate.getTime() - 3 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 3 and 7 days before the activity
-    emailReminders.trigger(
+    await emailReminders.trigger(
       {
         activityId: activityId,
         activityTitle: activityTitle,
@@ -61,7 +61,7 @@ export function scheduleReminders({
   // check if the activity starting date is not within 7 days from now
   if (activityStartingDate.getTime() - 7 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 7 days before the activity
-    emailReminders.trigger(
+    await emailReminders.trigger(
       {
         activityId: activityId,
         activityTitle: activityTitle,
@@ -119,27 +119,29 @@ export async function rescheduleReminders({
   const [rday1, rday3, rday7] = await Promise.all([day1, day3, day7]);
 
   // this all coincides, so we can just check one
-  if (rday1?.data[0].id || rday3?.data[0].id || rday7?.data[0].id) {
+  if (rday1?.data[0]?.id || rday3?.data[0]?.id || rday7?.data[0]?.id) {
     // reschedule the reminder task
     // no need to await
-    runs.reschedule(rday1?.data[0].id, {
+    const d1 = runs.reschedule(rday1?.data[0].id, {
       delay: new Date(
         new Date(activityStartingDate).getTime() - 1 * 24 * 60 * 60 * 1000,
       ),
     });
-    runs.reschedule(rday3?.data[0].id, {
+    const d2 = runs.reschedule(rday3?.data[0].id, {
       delay: new Date(
         new Date(activityStartingDate).getTime() - 3 * 24 * 60 * 60 * 1000,
       ),
     });
-    runs.reschedule(rday7?.data[0].id, {
+    const d3 = runs.reschedule(rday7?.data[0].id, {
       delay: new Date(
         new Date(activityStartingDate).getTime() - 7 * 24 * 60 * 60 * 1000,
       ),
     });
+
+    await Promise.all([d1, d2, d3]);
   } else {
     // schedule new reminder task
-    scheduleReminders({
+    await scheduleReminders({
       activityId: activityId,
       activityTitle: activityTitle,
       activityStartingDate: activityStartingDate,
