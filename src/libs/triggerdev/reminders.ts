@@ -19,10 +19,29 @@ export function scheduleReminders({
   activityTitle: string;
   activityStartingDate: Date;
 }) {
+  // check if the activity starting date is not within 1 day from now
+  // no need to await
+  if (activityStartingDate.getTime() - 1 * 24 * 60 * 60 * 1000 > Date.now()) {
+    // schedule new reminder task, 1 day before the activity
+    emailReminders.trigger(
+      {
+        activityId: activityId,
+        activityTitle: activityTitle,
+      },
+      {
+        idempotencyKey: activityId + '_1d',
+        tags: [`activity_${activityId}`, 'action_reminders', 'in_1'],
+        // trigger 1 day before the activity starting date, return Date object
+        delay: new Date(
+          new Date(activityStartingDate).getTime() - 1 * 24 * 60 * 60 * 1000,
+        ),
+      },
+    );
+  }
+
   // check if the activity starting date is not within 3 days from now
   if (activityStartingDate.getTime() - 3 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 3 and 7 days before the activity
-    // no need to await
     emailReminders.trigger(
       {
         activityId: activityId,
@@ -42,7 +61,6 @@ export function scheduleReminders({
   // check if the activity starting date is not within 7 days from now
   if (activityStartingDate.getTime() - 7 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 7 days before the activity
-    // no need to await
     emailReminders.trigger(
       {
         activityId: activityId,
