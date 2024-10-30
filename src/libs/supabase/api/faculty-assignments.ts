@@ -199,3 +199,44 @@ export async function postFacultyAssignment({
     data: data,
   };
 }
+
+/**
+ * Remove faculty from an activity assignment.
+ *
+ * @param userId - The user ID of the faculty to assign.
+ * @param activityId - The activity ID to assign.
+ * @param supabase - The Supabase client to use.
+ */
+export async function deleteFacultyAssignment({
+  userId,
+  activityId,
+  supabase,
+}: {
+  userId: string[];
+  activityId: string;
+  supabase: SupabaseClient;
+}): Promise<FacultyAssignmentsResponse> {
+  if (!supabase) supabase = createBrowserClient();
+
+  const { data, error } = await supabase
+    .from('faculty_assignments')
+    .delete()
+    .eq('activity_id', activityId)
+    .in('user_id', userId)
+    .select();
+
+  if (error) {
+    return {
+      status: 2,
+      title: 'Unable to remove faculty',
+      message: error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Faculty removed',
+    message: 'The faculty has been successfully removed.',
+    data: data,
+  };
+}

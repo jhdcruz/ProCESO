@@ -7,7 +7,10 @@ import { createServerClient } from '@/libs/supabase/server';
 import { postActivity, updateActivity } from '@/libs/supabase/api/activity';
 import { getSeriesByTitle, postSeries } from '@/libs/supabase/api/series';
 import { postActivityCover } from '@/libs/supabase/api/storage';
-import { postFacultyAssignment } from '@/libs/supabase/api/faculty-assignments';
+import {
+  deleteFacultyAssignment,
+  postFacultyAssignment,
+} from '@/libs/supabase/api/faculty-assignments';
 import type { ActivityResponse } from '@/libs/supabase/api/_response';
 import type { ActivityFormProps } from './_components/Forms/ActivityFormModal';
 import type ApiResponse from '@/utils/response';
@@ -148,6 +151,15 @@ export async function submitActivity(
         (original?.handled_by !== activity.handled_by ||
           activity.handled_by.length)
       ) {
+        // remove unassigned faculties
+        await deleteFacultyAssignment({
+          userId: activity.handled_by.filter(
+            (id) => !original?.handled_by?.includes(id),
+          ),
+          activityId,
+          supabase,
+        });
+
         // send email notice to unassigned faculties
         emailUnassigned.trigger({
           activity: activity.title,
@@ -355,10 +367,16 @@ export async function subscribeToActivity(
   let error;
 
   if (subscribe) {
-    error = await supabase.from('activity_subscriptions').upsert({
-      activity_id: activityId,
-      user_id: userId,
-    });
+    error = await supabase.from('activity_subscriptions').upsert(
+      {
+        activity_id: activityId,
+        user_id: userId,
+      },
+      {
+        onConflict: 'user_id, activity_id',
+        ignoreDuplicates: true,
+      },
+    );
   } else {
     error = await supabase
       .from('activity_subscriptions')
