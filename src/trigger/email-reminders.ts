@@ -110,14 +110,17 @@ export const emailReminders = task({
     //           to avoid additional backend requests.
     //           Currently, using resend API here with react as template
     //           throws an error of `Objects are not valid as a React child`.
-    const response = await fetch(appUrl.value + '/api/emails/reminders', {
-      method: 'POST',
-      body: JSON.stringify({
-        runId: ctx.run.id,
-        activity: activityRes?.data,
-        emails: emails,
-      }),
-    });
+    const response = await fetch(
+      appUrl.value + '/api/triggers/emails/reminders',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          runId: ctx.run.id,
+          activity: activityRes?.data,
+          emails: emails,
+        }),
+      },
+    );
 
     if (!response.ok) {
       throw new Error(await response.json());

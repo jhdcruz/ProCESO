@@ -65,14 +65,17 @@ export const emailAssigned = task({
     //           to avoid additional backend requests.
     //           Currently, using resend API here with react as template
     //           throws an error of `Objects are not valid as a React child`.
-    const response = await fetch(appUrl.value + '/api/emails/assigned', {
-      method: 'POST',
-      body: JSON.stringify({
-        runId: ctx.run.id,
-        activity: activityRes?.data,
-        emails: usersRes?.data?.map((faculty) => faculty.email) ?? [],
-      }),
-    });
+    const response = await fetch(
+      appUrl.value + '/api/triggers/emails/assigned',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          runId: ctx.run.id,
+          activity: activityRes?.data,
+          emails: usersRes?.data?.map((faculty) => faculty.email) ?? [],
+        }),
+      },
+    );
 
     if (!response.ok) {
       throw new Error(await response.json());
