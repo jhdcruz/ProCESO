@@ -1,14 +1,14 @@
-name: trigger.dev
+name: Deploy Triggers
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - './src/trigger/*'
+      - 'src/trigger/*'
       - 'trigger.config.ts'
   pull_request:
     paths:
-      - './src/trigger/*'
+      - 'src/trigger/*'
       - 'trigger.config.ts'
 
 jobs:
