@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -30,6 +32,7 @@ import {
   IconArrowRight,
   IconX,
 } from '@tabler/icons-react';
+import { formatDateRange } from 'little-date';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
@@ -206,7 +209,7 @@ export function ActivityFormModalComponent({
   }, [activity]);
 
   return (
-    <Modal onClose={close} opened={opened} size="68%" title="New activity">
+    <Modal onClose={close} opened={opened} size="auto" title="New Activity">
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Grid grow>
           {/* Left Column Grid */}
@@ -267,7 +270,7 @@ export function ActivityFormModalComponent({
               </Group>
             </Dropzone>
 
-            <Divider className="my-5" />
+            <Divider my="xs" />
 
             <TextInput
               classNames={classes}
@@ -328,7 +331,7 @@ export function ActivityFormModalComponent({
                 icon={<IconInfoCircle size={20} />}
                 iconSize={36}
                 ml={8}
-                my={16}
+                mt="lg"
                 p={24}
                 pb="xs"
               >
@@ -336,17 +339,13 @@ export function ActivityFormModalComponent({
                 the selected date range.
                 {conflicts.length > 0 && (
                   <ul>
-                    {conflicts.map(async (activity) => (
+                    {conflicts.map((activity) => (
                       <li key={activity.id}>
-                        {activity.title}{' '}
+                        {activity.title} -{' '}
                         <Badge variant="default">
-                          {await import('little-date').then(
-                            ({ formatDateRange }) => {
-                              return formatDateRange(
-                                new Date(activity.date_starting as string),
-                                new Date(activity.date_ending as string),
-                              );
-                            },
+                          {formatDateRange(
+                            new Date(activity.date_starting as string),
+                            new Date(activity.date_ending as string),
                           )}
                         </Badge>
                       </li>
@@ -356,7 +355,7 @@ export function ActivityFormModalComponent({
               </Blockquote>
             )}
 
-            <Divider className="my-1" />
+            <Divider my="xs" />
 
             {/* Faculty Assignment */}
             <Checkbox.Group
