@@ -26,6 +26,7 @@ import {
 import { downloadActivityFile } from '@portal/activities/actions';
 import dayjs from '@/libs/dayjs';
 import { isElevated, isInternal } from '@/utils/access-control';
+import { identifyFileType } from '@/utils/file-types';
 
 const RTEditor = dynamic(
   () =>
@@ -270,7 +271,7 @@ function ActivityDetailsBody({
                       my={16}
                     >
                       <Badge mr={4} size="sm" variant="default">
-                        {file.type.split('/')[1]}
+                        {identifyFileType(file.type)}
                       </Badge>
 
                       <div>
@@ -280,6 +281,7 @@ function ActivityDetailsBody({
                           lineClamp={1}
                           onClick={() => saveFile(file.name, file.checksum)}
                           size="sm"
+                          ta="left"
                         >
                           {file.name}
                         </Anchor>
