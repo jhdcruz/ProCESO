@@ -1,13 +1,11 @@
 'use client';
 
 import { memo, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import {
   Badge,
   Blockquote,
   Button,
-  Checkbox,
   Divider,
   Grid,
   Group,
@@ -34,22 +32,10 @@ import {
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
 import type { Tables, Enums } from '@/libs/supabase/_database';
-import { PageLoader } from '@/components/Loader/PageLoader';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
 import { submitActivity } from '@portal/activities/actions';
 import { SeriesInput } from './SeriesInput';
 import classes from '@/styles/forms/ContainedInput.module.css';
-
-const FacultyList = dynamic(
-  () =>
-    import('./FacultyList').then((mod) => ({
-      default: mod.FacultyList,
-    })),
-  {
-    loading: () => <PageLoader />,
-    ssr: false,
-  },
-);
 
 export interface ActivityFormProps {
   id?: string;
@@ -84,7 +70,6 @@ export function ActivityFormModalComponent({
     Tables<'activities_details_view'>[]
   >([]);
   const [original, setOriginal] = useState<ActivityFormProps>();
-  const [isInternal, setIsInternal] = useState(false);
 
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
@@ -120,13 +105,6 @@ export function ActivityFormModalComponent({
     },
 
     onValuesChange: async (values) => {
-      // check if visibility is set to internal
-      if (values.visibility === 'Internal') {
-        setIsInternal(true);
-      } else {
-        setIsInternal(false);
-      }
-
       // clear end date if start date is empty
       if (!values.date_starting) {
         form.setFieldValue('date_ending', null);
@@ -209,7 +187,13 @@ export function ActivityFormModalComponent({
   }, [activity]);
 
   return (
-    <Modal onClose={close} opened={opened} size="auto" title="New Activity">
+    <Modal
+      key={activity?.id}
+      onClose={close}
+      opened={opened}
+      size="auto"
+      title="New Activity"
+    >
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Grid grow>
           {/* Left Column Grid */}
@@ -331,12 +315,12 @@ export function ActivityFormModalComponent({
                 icon={<IconInfoCircle size={20} />}
                 iconSize={36}
                 ml={8}
-                mt="lg"
+                mt={20}
                 p={24}
                 pb="xs"
               >
-                There are currently {conflicts.length} activities scheduled on
-                the selected date range.
+                {conflicts.length} activities are scheduled within the date
+                range.
                 {conflicts.length > 0 && (
                   <ul>
                     {conflicts.map((activity) => (
@@ -357,31 +341,7 @@ export function ActivityFormModalComponent({
 
             <Divider my="xs" />
 
-            {/* Faculty Assignment */}
-            <Checkbox.Group
-              defaultValue={activity?.handled_by}
-              description="Faculty members assigned to this activity. (can be set later)"
-              key={form.key('faculty')}
-              label="Assign Faculty"
-              mt="sm"
-              {...form.getInputProps('handled_by', { type: 'checkbox' })}
-            >
-              {isInternal ? (
-                <Text c="dimmed" mt={32} size="sm" ta="center">
-                  Assigning of faculty members is not available for internal
-                  activities.
-                </Text>
-              ) : (
-                <>
-                  {/*  Faculty Table Checkbox */}
-                  <FacultyList
-                    defaultSelection={activity?.handled_by}
-                    endDate={form.getValues().date_ending}
-                    startDate={form.getValues().date_starting}
-                  />
-                </>
-              )}
-            </Checkbox.Group>
+            {/* TODO: Objectives and Outcomes */}
           </Grid.Col>
         </Grid>
 

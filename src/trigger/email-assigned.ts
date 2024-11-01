@@ -13,7 +13,7 @@ export const emailAssigned = task({
   id: 'email-assigned',
   run: async (
     payload: {
-      activity: string;
+      activityId: string;
       ids: string[];
     },
     { ctx },
@@ -35,7 +35,7 @@ export const emailAssigned = task({
     const activityQuery = supabase
       .from('activities')
       .select()
-      .eq('title', payload.activity)
+      .eq('id', payload.activityId)
       .limit(1)
       .single();
 

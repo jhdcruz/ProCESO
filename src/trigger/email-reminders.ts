@@ -11,10 +11,7 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
  */
 export const emailReminders = task({
   id: 'email-reminders',
-  run: async (
-    payload: { activityId: string; activityTitle: string },
-    { ctx },
-  ) => {
+  run: async (payload: { activityId: string }, { ctx }) => {
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
 
@@ -50,7 +47,7 @@ export const emailReminders = task({
     const activityQuery = supabase
       .from('activities')
       .select()
-      .eq('title', payload.activityTitle)
+      .eq('id', payload.activityId)
       .limit(1)
       .single();
 

@@ -12,11 +12,9 @@ import { emailReminders } from '@/trigger/email-reminders';
  */
 export async function scheduleReminders({
   activityId,
-  activityTitle,
   activityStartingDate,
 }: {
   activityId: string;
-  activityTitle: string;
   activityStartingDate: Date;
 }) {
   // check if the activity starting date is not within 1 day from now
@@ -24,10 +22,7 @@ export async function scheduleReminders({
   if (activityStartingDate.getTime() - 1 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 1 day before the activity
     await emailReminders.trigger(
-      {
-        activityId: activityId,
-        activityTitle: activityTitle,
-      },
+      { activityId: activityId },
       {
         idempotencyKey: activityId + '_1d',
         tags: [`activity_${activityId}`, 'action_reminders', 'in_1'],
@@ -43,10 +38,7 @@ export async function scheduleReminders({
   if (activityStartingDate.getTime() - 3 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 3 and 7 days before the activity
     await emailReminders.trigger(
-      {
-        activityId: activityId,
-        activityTitle: activityTitle,
-      },
+      { activityId: activityId },
       {
         idempotencyKey: activityId + '_3d',
         tags: [`activity_${activityId}`, 'action_reminders', 'in_3'],
@@ -62,10 +54,7 @@ export async function scheduleReminders({
   if (activityStartingDate.getTime() - 7 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 7 days before the activity
     await emailReminders.trigger(
-      {
-        activityId: activityId,
-        activityTitle: activityTitle,
-      },
+      { activityId: activityId },
       {
         idempotencyKey: activityId + '_7d',
         tags: [`activity_${activityId}`, 'action_reminders', 'in_7'],
@@ -89,11 +78,9 @@ export async function scheduleReminders({
  */
 export async function rescheduleReminders({
   activityId,
-  activityTitle,
   activityStartingDate,
 }: {
   activityId: string;
-  activityTitle: string;
   activityStartingDate: Date;
 }) {
   // get the queued reminder task
@@ -143,7 +130,6 @@ export async function rescheduleReminders({
     // schedule new reminder task
     await scheduleReminders({
       activityId: activityId,
-      activityTitle: activityTitle,
       activityStartingDate: activityStartingDate,
     });
   }

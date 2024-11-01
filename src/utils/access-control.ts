@@ -14,11 +14,27 @@ export const isInternal = (role: Enums<'roles_user'> | null): boolean => {
 };
 
 /**
+ * Check if the user is internal or faculty chair.
+ *
+ * @param role - The user's role.
+ */
+export const isElevated = (
+  role: Enums<'roles_user'> | null,
+  pos?: Enums<'roles_pos'> | null,
+): boolean => {
+  if (!role) {
+    return false;
+  }
+
+  return pos?.includes('chair') || isInternal(role);
+};
+
+/**
  * Check if the user is internal or faculty.
  *
  * @param role - The user's role.
  */
-export const isElevated = (role: Enums<'roles_user'> | null): boolean => {
+export const isPrivate = (role: Enums<'roles_user'> | null): boolean => {
   if (!role) {
     return false;
   }
@@ -40,6 +56,19 @@ export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
 };
 
 /**
+ * Check if the user is a student.
+ *
+ * @param role - The user's role.
+ */
+export const isStudent = (role: Enums<'roles_user'> | null): boolean => {
+  if (!role) {
+    return false;
+  }
+
+  return role === 'student';
+};
+
+/**
  * Check if the user is allowed to access or view the activity,
  * based on the activity's visibility and the user's role.
  *
@@ -54,7 +83,7 @@ export const canAccessActivity = (
     case 'Internal':
       return isInternal(role);
     case 'Faculty':
-      return isElevated(role);
+      return isPrivate(role);
     default:
       return true;
   }

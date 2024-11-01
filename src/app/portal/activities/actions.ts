@@ -137,67 +137,18 @@ export async function submitActivity(
       };
     }
   } else {
-    // save assigned faculty
-    if (activity.handled_by?.length) {
-      const assignResponse = await postFacultyAssignment({
-        userId: activity.handled_by,
-        activityId,
-        supabase,
+    // schedule (delay) email reminders
+    if (existingId && activity.date_starting) {
+      rescheduleReminders({
+        activityId: activityId,
+        activityStartingDate: activity.date_starting,
       });
-
-      // check if there are changes in assignments
-      if (
-        existingId &&
-        (original?.handled_by !== activity.handled_by ||
-          activity.handled_by.length)
-      ) {
-        // remove unassigned faculties
-        await deleteFacultyAssignment({
-          userId: activity.handled_by.filter(
-            (id) => !original?.handled_by?.includes(id),
-          ),
-          activityId,
-          supabase,
-        });
-
-        // send email notice to unassigned faculties
-        emailUnassigned.trigger({
-          activity: activity.title,
-          ids: activity.handled_by.filter(
-            (id) => !original?.handled_by?.includes(id),
-          ),
-        });
-        // send email notice to newly assigned faculties
-        emailAssigned.trigger({
-          activity: activity.title,
-          ids: activity.handled_by.filter(
-            (id) => !original?.handled_by?.includes(id),
-          ),
-        });
-      } else {
-        // send email notice to assign faculties
-        emailAssigned.trigger({
-          activity: activity.title,
-          ids: activity.handled_by,
-        });
-      }
-      if (!assignResponse.data) return assignResponse;
+    } else {
+      scheduleReminders({
+        activityId: activityId,
+        activityStartingDate: activity.date_starting!,
+      });
     }
-  }
-
-  // schedule (delay) email reminders
-  if (existingId && activity.date_starting) {
-    rescheduleReminders({
-      activityId: activityId,
-      activityTitle: activity.title,
-      activityStartingDate: activity.date_starting,
-    });
-  } else {
-    scheduleReminders({
-      activityId: activityId,
-      activityTitle: activity.title,
-      activityStartingDate: activity.date_starting!,
-    });
   }
 
   if (existingId) {
@@ -213,6 +164,62 @@ export async function submitActivity(
       message: 'Activity has been successfully created.',
     };
   }
+}
+
+/**
+ * Assign faculty to an activity.
+ *
+ * @param faculty - The faculty ids to assign.
+ * @param activityId - The activity id to assign.
+ */
+export async function assignFaculty(
+  activityId: string,
+  faculty: string[],
+  original?: string[] | null,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+
+  const assignResponse = await postFacultyAssignment({
+    userId: faculty,
+    activityId,
+    supabase,
+  });
+
+  // check if there are changes in assignments
+  if (original !== faculty || faculty.length) {
+    // remove unassigned faculties
+    await deleteFacultyAssignment({
+      userId: faculty.filter((id) => !original?.includes(id)),
+      activityId,
+      supabase,
+    });
+
+    // send email notice to unassigned faculties
+    emailUnassigned.trigger({
+      activityId: activityId,
+      ids: faculty.filter((id) => !original?.includes(id)),
+    });
+    // send email notice to newly assigned faculties
+    emailAssigned.trigger({
+      activityId: activityId,
+      ids: faculty.filter((id) => !original?.includes(id)),
+    });
+  } else {
+    // send email notice to assign faculties
+    emailAssigned.trigger({
+      activityId: activityId,
+      ids: faculty,
+    });
+  }
+
+  if (!assignResponse.data) return assignResponse;
+
+  return {
+    status: 0,
+    title: 'Faculty assigned',
+    message: 'Faculty has been successfully assigned.',
+  };
 }
 
 /**

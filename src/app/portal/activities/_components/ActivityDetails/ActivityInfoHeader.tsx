@@ -27,6 +27,7 @@ import {
   IconRss,
   IconTrash,
   IconUpload,
+  IconUsersGroup,
 } from '@tabler/icons-react';
 import { useProgress } from 'react-transition-progress';
 import { formatDateRange } from 'little-date';
@@ -40,8 +41,9 @@ import {
 } from '@portal/activities/actions';
 import { ActivityFormProps } from '../Forms/ActivityFormModal';
 import type { Enums } from '@/libs/supabase/_database';
-import { isInternal } from '@/utils/access-control';
+import { isElevated, isInternal, isStudent } from '@/utils/access-control';
 import { useUser } from '@/components/Providers/UserProvider';
+import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
 
 const ActivityFormModal = dynamic(
   () =>
@@ -138,7 +140,10 @@ function ActivityDetailsHeader({
 }) {
   const { id: userId } = useUser();
 
-  const [opened, { open, close }] = useDisclosure(false);
+  const [editOpened, { open: editOpen, close: editClose }] =
+    useDisclosure(false);
+  const [assignOpened, { open: assignOpen, close: assignClose }] =
+    useDisclosure(false);
   const [localFiles, setLocalFiles] = useState<File[]>();
   const [subscribed, setSubscribed] = useState(false);
 
@@ -188,12 +193,16 @@ function ActivityDetailsHeader({
     <>
       <ActivityFormModal
         activity={activityForm}
-        close={close}
-        key={activity.id}
-        opened={opened}
+        close={editClose}
+        opened={editOpened}
+      />
+      <FacultyAssignmentModal
+        activity={activityForm}
+        close={assignClose}
+        opened={assignOpened}
       />
 
-      <Group justify="space-between">
+      <Group justify="space-between" wrap="wrap-reverse">
         <Stack gap={0}>
           <Title mb="lg" order={2}>
             {activity?.title}
@@ -235,81 +244,94 @@ function ActivityDetailsHeader({
 
           {/* Activity control buttons */}
           <Group gap="xs" mt={16}>
-            {isInternal(role) ? (
-              <>
-                <Button.Group>
+            <>
+              <Button.Group>
+                {isStudent(role) && (
                   <Button
-                    leftSection={<IconCalendarEvent size={16} />}
-                    onClick={open}
-                    variant="default"
-                  >
-                    Adjust Details
-                  </Button>
-
-                  <Button
-                    leftSection={
-                      editable ? (
-                        <IconEditOff size={16} />
-                      ) : (
-                        <IconEdit size={16} />
+                    leftSection={<IconRss size={16} />}
+                    onClick={() =>
+                      onUserSubscribe(
+                        activity.id as string,
+                        userId,
+                        subscribed ? !subscribed : true,
+                        setSubscribed,
                       )
                     }
-                    onClick={toggleEdit}
+                    variant={subscribed ? 'default' : 'filled'}
+                  >
+                    {subscribed ? 'Unsubscribe' : 'Subscribe'}
+                  </Button>
+                )}
+                {/* Internal-only controls */}
+                {isInternal(role) && (
+                  <>
+                    <Button
+                      leftSection={<IconCalendarEvent size={16} />}
+                      onClick={editOpen}
+                      variant="default"
+                    >
+                      Adjust Details
+                    </Button>
+
+                    <Button
+                      leftSection={
+                        editable ? (
+                          <IconEditOff size={16} />
+                        ) : (
+                          <IconEdit size={16} />
+                        )
+                      }
+                      onClick={toggleEdit}
+                      variant="default"
+                    >
+                      {editable ? 'Hide Toolbars' : 'Edit Description'}
+                    </Button>
+                  </>
+                )}
+
+                {/* Faculty Assignment */}
+                {isElevated(role) && (
+                  <Button
+                    leftSection={<IconUsersGroup size={16} />}
+                    onClick={assignOpen}
                     variant="default"
                   >
-                    {editable ? 'Hide Toolbars' : 'Edit Description'}
+                    Assign Faculty
                   </Button>
-                </Button.Group>
+                )}
+              </Button.Group>
 
-                <Divider orientation="vertical" />
+              <Divider orientation="vertical" />
 
-                <FileButton
-                  accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
-                  multiple
-                  onChange={setLocalFiles}
-                >
-                  {(props) => (
-                    <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
-                      <Button
-                        leftSection={<IconUpload size={16} />}
-                        variant="default"
-                        {...props}
-                      >
-                        Upload Reports
-                      </Button>
-                    </Tooltip>
-                  )}
-                </FileButton>
+              <FileButton
+                accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
+                multiple
+                onChange={setLocalFiles}
+              >
+                {(props) => (
+                  <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
+                    <Button
+                      leftSection={<IconUpload size={16} />}
+                      variant="default"
+                      {...props}
+                    >
+                      Upload Reports
+                    </Button>
+                  </Tooltip>
+                )}
+              </FileButton>
 
-                <Button
-                  color="red"
-                  leftSection={<IconTrash size={16} />}
-                  onClick={() =>
-                    deleteModal(activity.id as string, router, startProgress)
-                  }
-                  variant="filled"
-                >
-                  Delete Activity
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  leftSection={<IconRss size={16} />}
-                  onClick={() =>
-                    onUserSubscribe(
-                      activity.id as string,
-                      userId,
-                      subscribed ? !subscribed : true,
-                      setSubscribed,
-                    )
-                  }
-                  variant={subscribed ? 'default' : 'filled'}
-                >
-                  {subscribed ? 'Unsubscribe' : 'Subscribe'}
-                </Button>
-              </>
-            )}
+              <Button
+                color="red"
+                leftSection={<IconTrash size={16} />}
+                onClick={() =>
+                  deleteModal(activity.id as string, router, startProgress)
+                }
+                variant="outline"
+              >
+                Delete Activity
+              </Button>
+            </>
           </Group>
         </Stack>
         <Image

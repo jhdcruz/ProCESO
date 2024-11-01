@@ -174,16 +174,14 @@ export function FacultyListComponent({
             {item.department}
           </Badge>
         </Table.Td>
-        <Table.Td>
+        <Table.Td align="center">
           <Suspense fallback={<Loader size="sm" type="dots" />}>
             {assignments.includes(item.id) ? (
-              <Badge color="gray" fullWidth variant="outline">
-                Busy
+              <Badge color="gray" variant="outline">
+                Assigned
               </Badge>
             ) : (
-              <Badge color="lime" fullWidth variant="outline">
-                Available
-              </Badge>
+              <Badge variant="outline">Unassigned</Badge>
             )}
           </Suspense>
         </Table.Td>
@@ -192,7 +190,7 @@ export function FacultyListComponent({
   });
 
   return (
-    <ScrollArea mah={460}>
+    <ScrollArea mah={600}>
       <Group gap="xs" grow mt="md">
         <TextInput
           leftSection={
@@ -220,7 +218,7 @@ export function FacultyListComponent({
             </Table.Th>
             <Table.Th>Name</Table.Th>
             <Table.Th className="text-center">Department</Table.Th>
-            <Table.Th className="text-center">Availability</Table.Th>
+            <Table.Th className="text-center">Assignment</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>

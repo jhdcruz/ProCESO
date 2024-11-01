@@ -18,14 +18,14 @@ import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getActivityReports } from '@/libs/supabase/api/storage';
 import {
-  IconFileText,
+  IconLibrary,
   IconRosetteDiscountCheck,
   IconScanEye,
   IconUsersGroup,
 } from '@tabler/icons-react';
 import { downloadActivityFile } from '@portal/activities/actions';
 import dayjs from '@/libs/dayjs';
-import { isElevated, isInternal } from '@/utils/access-control';
+import { isPrivate, isInternal } from '@/utils/access-control';
 import { identifyFileType } from '@/utils/file-types';
 
 const RTEditor = dynamic(
@@ -167,7 +167,7 @@ function ActivityDetailsBody({
 
       <Grid.Col span={{ base: 12, xs: 3 }}>
         <>
-          {isElevated(role) && (
+          {isPrivate(role) && (
             <>
               <Divider
                 label={
@@ -246,12 +246,12 @@ function ActivityDetailsBody({
           )}
         </>
 
-        {isElevated(role) && files && (
+        {isInternal(role) && files && (
           <>
             <Divider
               label={
                 <Group gap={0} preventGrowOverflow wrap="nowrap">
-                  <IconFileText className="mr-2" size={16} />
+                  <IconLibrary className="mr-2" size={16} />
                   Reports
                 </Group>
               }
@@ -263,51 +263,45 @@ function ActivityDetailsBody({
             {files.length > 0 ? (
               <>
                 {files.map((file) => (
-                  <>
-                    <Group
-                      align="flex-start"
-                      gap={8}
-                      key={file.checksum}
-                      my={16}
-                    >
-                      <Badge mr={4} size="sm" variant="default">
-                        {identifyFileType(file.type)}
-                      </Badge>
+                  <Group align="flex-start" gap={8} key={file.checksum} my={16}>
+                    <Badge mr={4} size="sm" variant="default">
+                      {identifyFileType(file.type)}
+                    </Badge>
 
-                      <div>
-                        <Anchor
-                          component="button"
-                          fw={500}
-                          lineClamp={1}
-                          onClick={() => saveFile(file.name, file.checksum)}
-                          size="sm"
-                          ta="left"
+                    <div>
+                      <Anchor
+                        component="button"
+                        fw={500}
+                        lineClamp={1}
+                        onClick={() => saveFile(file.name, file.checksum)}
+                        size="sm"
+                        ta="left"
+                      >
+                        {file.name}
+                      </Anchor>
+                      <Group gap={2} mt={4}>
+                        <Text c="dimmed" size="xs">
+                          {dayjs(file.uploaded_at).fromNow()}
+                        </Text>
+
+                        <Tooltip
+                          label="Verified checksum of the uploaded file, should match the downloaded file."
+                          position="bottom"
                         >
-                          {file.name}
-                        </Anchor>
-                        <Group gap={2} mt={4}>
-                          <Text c="dimmed" size="xs">
-                            {dayjs(file.uploaded_at).fromNow()}
-                          </Text>
-
-                          <Tooltip label="Verified checksum of the uploaded file, should match the downloaded file.">
-                            <Badge
-                              className="cursor-pointer"
-                              color="gray"
-                              leftSection={
-                                <IconRosetteDiscountCheck size={16} />
-                              }
-                              onClick={() => clipboard.copy(file.checksum)}
-                              size="xs"
-                              variant="transparent"
-                            >
-                              {file.checksum.slice(0, 8)}
-                            </Badge>
-                          </Tooltip>
-                        </Group>
-                      </div>
-                    </Group>
-                  </>
+                          <Badge
+                            className="cursor-pointer"
+                            color="gray"
+                            leftSection={<IconRosetteDiscountCheck size={16} />}
+                            onClick={() => clipboard.copy(file.checksum)}
+                            size="xs"
+                            variant="transparent"
+                          >
+                            {file.checksum.slice(0, 8)}
+                          </Badge>
+                        </Tooltip>
+                      </Group>
+                    </div>
+                  </Group>
                 ))}
               </>
             ) : (
