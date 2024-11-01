@@ -7,9 +7,9 @@ import type { Tables } from '@/libs/supabase/_database';
  *
  * @param activities - The activities list to transform.
  */
-export function activitiesToFc(
+export const activitiesToFc = (
   activities: Tables<'activities_details_view'>[],
-): EventSourceInput[] {
+): EventSourceInput[] => {
   return activities.map((activity) => ({
     id: activity.id as string,
     color: activity.series_color as string,
@@ -26,4 +26,4 @@ export function activitiesToFc(
       activity?.date_starting?.includes('00:00') &&
       activity?.date_ending?.includes('00:00'),
   }));
-}
+};

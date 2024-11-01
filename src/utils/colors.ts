@@ -7,7 +7,9 @@ import type { Enums } from '@/libs/supabase/_database';
  *
  * @param role - User's role in the system.
  */
-export function getRoleColor(role?: Enums<'roles_user'> | null): MantineColor {
+export const getRoleColor = (
+  role?: Enums<'roles_user'> | null,
+): MantineColor => {
   switch (role?.toLowerCase()) {
     case 'admin':
       return 'red';
@@ -18,7 +20,7 @@ export function getRoleColor(role?: Enums<'roles_user'> | null): MantineColor {
     default:
       return 'blue';
   }
-}
+};
 
 /**
  * Return department-specific colors
@@ -26,7 +28,9 @@ export function getRoleColor(role?: Enums<'roles_user'> | null): MantineColor {
  *
  * @param dept - Faculty's dept in the system.
  */
-export function getDeptColor(dept?: Enums<'roles_dept'> | null): MantineColor {
+export const getDeptColor = (
+  dept?: Enums<'roles_dept'> | null,
+): MantineColor => {
   switch (dept?.toLowerCase()) {
     case 'ccs':
       return 'blue';
@@ -43,7 +47,7 @@ export function getDeptColor(dept?: Enums<'roles_dept'> | null): MantineColor {
     default:
       return 'gray';
   }
-}
+};
 
 /**
  * Return position-specific colors
@@ -51,7 +55,7 @@ export function getDeptColor(dept?: Enums<'roles_dept'> | null): MantineColor {
  *
  * @param pos - Faculty's dept in the system.
  */
-export function getPosColor(pos?: Enums<'roles_pos'> | null): MantineColor {
+export const getPosColor = (pos?: Enums<'roles_pos'> | null): MantineColor => {
   switch (pos?.toLowerCase()) {
     case 'head':
       return 'blue';
@@ -60,4 +64,4 @@ export function getPosColor(pos?: Enums<'roles_pos'> | null): MantineColor {
     default:
       return 'brand';
   }
-}
+};
