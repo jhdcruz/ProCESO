@@ -57,7 +57,6 @@ export function FacultyAssignment({
   // form handler & submission
   const handleSubmit = async (values: Props) => {
     setPending(true);
-    // todo - submit faculty assignment
     const result = await assignFaculty(
       activity.id!,
       values.handled_by,
@@ -86,18 +85,18 @@ export function FacultyAssignment({
       });
     }
 
-    form.reset();
+    form.resetDirty();
     close();
   };
 
   useEffect(() => {
     if (activity) {
       // keep record of the original activity data
-      setOriginal(activity.handled_by ?? []);
+      const data = { handled_by: activity.handled_by ?? [] };
+      setOriginal(data.handled_by);
 
-      form.setValues({
-        handled_by: activity.handled_by,
-      });
+      form.setInitialValues(data);
+      form.setValues(data);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
-import { systemUrl } from '@/app/routes';
+import { sidebarRoutes, systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
 import { postActivity, updateActivity } from '@/libs/supabase/api/activity';
 import { getSeriesByTitle, postSeries } from '@/libs/supabase/api/series';
@@ -20,6 +20,7 @@ import {
   scheduleReminders,
 } from '@/libs/triggerdev/reminders';
 import { emailUnassigned } from '@/trigger/email-unassigned';
+import { revalidate } from '@/app/actions';
 
 /**
  * Create and process new activity.
@@ -124,18 +125,13 @@ export async function submitActivity(
   // if activity is internal
   if (activity.visibility === 'Internal' && existingId) {
     // remove any existing faculty assignment
-    const { error: removeFacultyError } = await supabase
-      .from('faculty_assignments')
-      .delete()
-      .eq('activity_id', activityId);
+    const delResponse = await deleteFacultyAssignment({
+      userId: [],
+      activityId,
+      supabase,
+    });
 
-    if (removeFacultyError) {
-      return {
-        status: 2,
-        title: 'Unable to remove faculty assignment',
-        message: removeFacultyError.message,
-      };
-    }
+    if (delResponse.status !== 0) return delResponse;
   } else {
     // schedule (delay) email reminders
     if (existingId && activity.date_starting) {
@@ -180,45 +176,53 @@ export async function assignFaculty(
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
-  const assignResponse = await postFacultyAssignment({
-    userId: faculty,
-    activityId,
-    supabase,
-  });
+  // determine faculties to add and remove
+  const facultiesToAdd = faculty.filter((id) => !original?.includes(id));
+  const facultiesToRemove =
+    original?.filter((id) => !faculty.includes(id)) ?? [];
 
-  // check if there are changes in assignments
-  if (original !== faculty || faculty.length) {
-    // remove unassigned faculties
-    await deleteFacultyAssignment({
-      userId: faculty.filter((id) => !original?.includes(id)),
+  // assign faculty to activity
+  if (facultiesToAdd.length) {
+    const assignResponse = await postFacultyAssignment({
+      userId: facultiesToAdd,
       activityId,
       supabase,
     });
+
+    if (assignResponse.status !== 0) return assignResponse!;
+
+    // send email notice to newly assigned faculties
+    emailAssigned.trigger({
+      activityId: activityId,
+      ids: faculty.filter((id) => !original?.includes(id)),
+    });
+  }
+
+  // remove unassigned faculties
+  if (facultiesToRemove.length) {
+    const delResponse = await deleteFacultyAssignment({
+      userId: facultiesToRemove,
+      activityId,
+      supabase,
+    });
+
+    if (delResponse.status !== 0) return delResponse;
 
     // send email notice to unassigned faculties
     emailUnassigned.trigger({
       activityId: activityId,
       ids: faculty.filter((id) => !original?.includes(id)),
     });
-    // send email notice to newly assigned faculties
-    emailAssigned.trigger({
-      activityId: activityId,
-      ids: faculty.filter((id) => !original?.includes(id)),
-    });
-  } else {
-    // send email notice to assign faculties
-    emailAssigned.trigger({
-      activityId: activityId,
-      ids: faculty,
-    });
   }
 
-  if (!assignResponse.data) return assignResponse;
+  revalidate(
+    `${sidebarRoutes.find((route) => route.label === 'Activities')?.links?.[0]?.link}/${activityId}/info`,
+  );
 
   return {
     status: 0,
-    title: 'Faculty assigned',
-    message: 'Faculty has been successfully assigned.',
+    title: 'Assigned faculty updated',
+    message: 'Changes in faculty assignment has been successfully updated.',
   };
 }
 

@@ -218,25 +218,40 @@ export async function deleteFacultyAssignment({
 }): Promise<FacultyAssignmentsResponse> {
   if (!supabase) supabase = createBrowserClient();
 
-  const { data, error } = await supabase
-    .from('faculty_assignments')
-    .delete()
-    .eq('activity_id', activityId)
-    .in('user_id', userId)
-    .select();
+  if (userId.length === 0) {
+    // remove all faculty assignments
+    const { error } = await supabase
+      .from('faculty_assignments')
+      .delete()
+      .eq('activity_id', activityId);
 
-  if (error) {
-    return {
-      status: 2,
-      title: 'Unable to remove faculty',
-      message: error.message,
-    };
+    if (error) {
+      return {
+        status: 2,
+        title: 'Unable to remove all faculty assignments',
+        message: error.message,
+      };
+    }
+  } else {
+    // remove selected faculty assignments
+    const { error } = await supabase
+      .from('faculty_assignments')
+      .delete()
+      .eq('activity_id', activityId)
+      .in('user_id', userId);
+
+    if (error) {
+      return {
+        status: 2,
+        title: 'Unable to unassign faculty members',
+        message: error.message,
+      };
+    }
   }
 
   return {
     status: 0,
     title: 'Faculty removed',
     message: 'The faculty has been successfully removed.',
-    data: data,
   };
 }
