@@ -61,14 +61,14 @@ function UserAccess({
     >
       {active ? (
         <>
-          <Text>This will allow the user to access the system again.</Text>
-        </>
-      ) : (
-        <>
           <Text>The user won&apos;t be able to access the system anymore.</Text>
           <Text fw="bold" mt="sm">
             This will not delete the user from the database.
           </Text>
+        </>
+      ) : (
+        <>
+          <Text>This will allow the user to access the system again.</Text>
         </>
       )}
 

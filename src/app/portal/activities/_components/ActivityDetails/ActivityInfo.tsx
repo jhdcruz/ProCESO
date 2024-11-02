@@ -1,6 +1,7 @@
 'use client';
 
-import { memo, lazy, Suspense, useState } from 'react';
+import { memo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Container, Space } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconAlertTriangle } from '@tabler/icons-react';
@@ -8,17 +9,16 @@ import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { updateActivityDescription } from '@/libs/supabase/api/activity';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { Enums } from '@/libs/supabase/_database';
+import { ActivityInfoHeader } from './ActivityInfoHeader';
 
-const ActivityInfoHeader = lazy(() =>
-  import('./ActivityInfoHeader').then((mod) => ({
-    default: mod.ActivityInfoHeader,
-  })),
-);
-
-const ActivityInfoBody = lazy(() =>
-  import('./ActivityInfoBody').then((mod) => ({
-    default: mod.ActivityInfoBody,
-  })),
+const ActivityInfoBody = dynamic(
+  () =>
+    import('./ActivityInfoBody').then((mod) => ({
+      default: mod.ActivityInfoBody,
+    })),
+  {
+    loading: () => <PageLoader />,
+  },
 );
 
 export const ActivityInfo = memo(
@@ -63,24 +63,22 @@ export const ActivityInfo = memo(
 
     return (
       <Container fluid key={activity?.id}>
-        <Suspense fallback={<PageLoader />}>
-          <ActivityInfoHeader
-            activity={activity}
-            editable={editable}
-            role={role}
-            toggleEdit={() => setEditable(!editable)}
-          />
+        <ActivityInfoHeader
+          activity={activity}
+          editable={editable}
+          role={role}
+          toggleEdit={() => setEditable(!editable)}
+        />
 
-          <Space h={12} />
-          <ActivityInfoBody
-            activity={activity}
-            content={content}
-            editable={editable}
-            loading={loading}
-            onSave={saveDescription}
-            role={role}
-          />
-        </Suspense>
+        <Space h={12} />
+        <ActivityInfoBody
+          activity={activity}
+          content={content}
+          editable={editable}
+          loading={loading}
+          onSave={saveDescription}
+          role={role}
+        />
       </Container>
     );
   },

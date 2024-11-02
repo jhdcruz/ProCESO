@@ -35,9 +35,9 @@ function CalendarComponent() {
         dayMaxEvents={true}
         events="/api/activities/feed" // App API endpoint for fetching activities
         headerToolbar={{
-          left: 'timeGridWeek,dayGridMonth,multiMonthYear list',
-          center: 'title',
-          right: 'timeGridDay,today prev,next',
+          center: 'timeGridDay,timeGridWeek,dayGridMonth,multiMonthYear list',
+          left: 'title',
+          right: 'today prev,next',
         }}
         height="92vh"
         initialView="dayGridMonth"

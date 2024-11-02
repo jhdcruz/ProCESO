@@ -6,6 +6,7 @@ import { Accordion, Text, Flex, Badge, Group } from '@mantine/core';
 import type { ActivitiesViewResponse } from '@/libs/supabase/api/_response';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import { isInternal } from '@/utils/access-control';
 
 const ActivityCard = dynamic(() =>
   import('@/components/Cards/ActivityCard').then((mod) => ({
@@ -80,10 +81,12 @@ function ActivityAccordionShell({
       multiple={true}
       variant="separated"
     >
-      <ActivityItems
-        activities={assigned}
-        type={role === 'admin' || role === 'staff' ? 'assigned' : 'joined'}
-      />
+      {!isInternal(role) && (
+        <ActivityItems
+          activities={assigned}
+          type={role === 'faculty' ? 'assigned' : 'joined'}
+        />
+      )}
 
       <ActivityItems activities={ongoing} type="ongoing" />
       <ActivityItems activities={upcoming} type="upcoming" />

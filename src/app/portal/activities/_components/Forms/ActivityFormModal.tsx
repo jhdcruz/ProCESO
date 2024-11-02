@@ -3,8 +3,8 @@
 import { memo, useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
+  Alert,
   Badge,
-  Blockquote,
   Button,
   Divider,
   Grid,
@@ -156,7 +156,7 @@ export function ActivityFormModalComponent({
 
   // reset all state on cancel
   const resetState = () => {
-    if (coverFile.length) {
+    if (!activity && coverFile.length) {
       setCoverFile([]);
     }
 
@@ -173,14 +173,9 @@ export function ActivityFormModalComponent({
       // remounting of the modal when changing existing
       // values used with `initialValues`.
       // https://github.com/orgs/mantinedev/discussions/4868
-      form.setValues({
-        title: activity.title,
-        series: activity.series,
-        visibility: activity.visibility,
-        date_starting: activity.date_starting,
-        date_ending: activity.date_ending,
-        handled_by: activity.handled_by,
-      });
+      // https://mantine.dev/form/values/#setinitialvalues-handler
+      form.setInitialValues(activity);
+      form.setValues(activity);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -189,9 +184,9 @@ export function ActivityFormModalComponent({
   return (
     <Modal
       key={activity?.id}
-      onClose={close}
+      onClose={resetState}
       opened={opened}
-      size="auto"
+      size="60rem"
       title="New Activity"
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -310,14 +305,12 @@ export function ActivityFormModalComponent({
 
             {/* activities conflict notice */}
             {conflicts.length > 0 && (
-              <Blockquote
-                color="yellow"
-                icon={<IconInfoCircle size={20} />}
-                iconSize={36}
-                ml={8}
-                mt={20}
-                p={24}
-                pb="xs"
+              <Alert
+                color="brand"
+                icon={<IconInfoCircle />}
+                mt="xs"
+                title="Overlapping activities schedules"
+                variant="light"
               >
                 {conflicts.length} activities are scheduled within the date
                 range.
@@ -336,7 +329,7 @@ export function ActivityFormModalComponent({
                     ))}
                   </ul>
                 )}
-              </Blockquote>
+              </Alert>
             )}
 
             <Divider my="xs" />
@@ -347,7 +340,7 @@ export function ActivityFormModalComponent({
 
         {/* Save Buttons */}
         <Group justify="flex-end">
-          <Button mt="md" onClick={close} variant="subtle">
+          <Button mt="md" onClick={resetState} variant="subtle">
             Cancel
           </Button>
 
