@@ -38,7 +38,6 @@ import { revalidate } from '@/app/actions';
  */
 export async function submitActivity(
   activity: ActivityFormProps,
-  original?: Readonly<ActivityFormProps>,
   existingId?: Readonly<string>,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
@@ -91,6 +90,11 @@ export async function submitActivity(
         date_ending: activity.date_ending?.toISOString(),
         date_starting: activity.date_starting?.toISOString(),
         created_by: session.user.id,
+        objectives: [
+          activity.objective_1 ?? '',
+          activity.objective_2 ?? '',
+          activity.objective_3 ?? '',
+        ],
       },
       supabase,
     });
@@ -103,6 +107,11 @@ export async function submitActivity(
         series: seriesId,
         date_ending: activity.date_ending?.toISOString(),
         date_starting: activity.date_starting?.toISOString(),
+        objectives: [
+          activity.objective_1 ?? '',
+          activity.objective_2 ?? '',
+          activity.objective_3 ?? '',
+        ],
       },
       supabase,
     });

@@ -25,10 +25,13 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
-  IconInfoCircle,
   IconUpload,
   IconArrowRight,
   IconX,
+  IconLaurelWreath1,
+  IconLaurelWreath2,
+  IconLaurelWreath3,
+  IconAlertTriangle,
 } from '@tabler/icons-react';
 import { formatDateRange } from 'little-date';
 import type { Tables, Enums } from '@/libs/supabase/_database';
@@ -46,6 +49,10 @@ export interface ActivityFormProps {
   date_starting: DateValue;
   date_ending: DateValue;
   created_by?: string;
+  objectives?: string[];
+  objective_1?: string;
+  objective_2?: string;
+  objective_3?: string;
   handled_by?: string[];
 }
 
@@ -69,8 +76,6 @@ export function ActivityFormModalComponent({
   const [conflicts, setConflicts] = useState<
     Tables<'activities_details_view'>[]
   >([]);
-  const [original, setOriginal] = useState<ActivityFormProps>();
-
   // image file preview state
   const [coverFile, setCoverFile] = useState<FileWithPath[]>([]);
   const imagePreview: string | null = coverFile.length
@@ -87,6 +92,9 @@ export function ActivityFormModalComponent({
       visibility: 'Everyone',
       date_starting: null,
       date_ending: null,
+      objective_1: '',
+      objective_2: '',
+      objective_3: '',
       handled_by: [],
     },
 
@@ -127,7 +135,7 @@ export function ActivityFormModalComponent({
   // form handler & submission
   const handleSubmit = async (activityForm: ActivityFormProps) => {
     setPending(true);
-    const result = await submitActivity(activityForm, original, activity?.id);
+    const result = await submitActivity(activityForm, activity?.id);
     setPending(false);
 
     // only show error notification, if any
@@ -166,16 +174,19 @@ export function ActivityFormModalComponent({
 
   useEffect(() => {
     if (activity) {
-      // keep record of the original activity data
-      setOriginal(activity);
-
+      const data = {
+        ...activity,
+        objective_1: activity.objectives?.[0] ?? '',
+        objective_2: activity.objectives?.[1] ?? '',
+        objective_3: activity.objectives?.[2] ?? '',
+      };
       // We're setting this separately to avoid unnecessary
       // remounting of the modal when changing existing
       // values used with `initialValues`.
       // https://github.com/orgs/mantinedev/discussions/4868
       // https://mantine.dev/form/values/#setinitialvalues-handler
-      form.setInitialValues(activity);
-      form.setValues(activity);
+      form.setInitialValues(data);
+      form.setValues(data);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -307,7 +318,7 @@ export function ActivityFormModalComponent({
             {conflicts.length > 0 && (
               <Alert
                 color="brand"
-                icon={<IconInfoCircle />}
+                icon={<IconAlertTriangle />}
                 mt="xs"
                 title="Overlapping activities schedules"
                 variant="light"
@@ -335,6 +346,32 @@ export function ActivityFormModalComponent({
             <Divider my="xs" />
 
             {/* TODO: Objectives and Outcomes */}
+            <Input.Wrapper
+              description="The activity's goals and objectives for its participants and partners."
+              label="Goals and Objectives"
+            >
+              <TextInput
+                key={form.key('objective_1')}
+                leftSection={<IconLaurelWreath1 />}
+                my="sm"
+                placeholder="To promote community service and volunteerism."
+                {...form.getInputProps('objective_1')}
+              />
+              <TextInput
+                key={form.key('objective_3')}
+                leftSection={<IconLaurelWreath2 />}
+                mb="sm"
+                placeholder="To foster a sense of community and camaraderie."
+                {...form.getInputProps('objective_3')}
+              />
+              <TextInput
+                key={form.key('objective_3')}
+                leftSection={<IconLaurelWreath3 />}
+                mb="sm"
+                placeholder="To provide a safe and fun learning environment."
+                {...form.getInputProps('objective_3')}
+              />
+            </Input.Wrapper>
           </Grid.Col>
         </Grid>
 

@@ -18,6 +18,7 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
+          objectives: string[]
           series: string | null
           title: string
           updated_at: string | null
@@ -31,6 +32,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          objectives?: string[]
           series?: string | null
           title: string
           updated_at?: string | null
@@ -44,6 +46,7 @@ export type Database = {
           description?: string | null
           id?: string
           image_url?: string | null
+          objectives?: string[]
           series?: string | null
           title?: string
           updated_at?: string | null
@@ -321,7 +324,7 @@ export type Database = {
           id: string
           name: string
           other_roles: Database["public"]["Enums"]["roles_pos"][] | null
-          role: Database["public"]["Enums"]["roles_user"] | null
+          role: Database["public"]["Enums"]["roles_user"]
           updated_at: string
         }
         Insert: {
@@ -333,7 +336,7 @@ export type Database = {
           id?: string
           name: string
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
-          role?: Database["public"]["Enums"]["roles_user"] | null
+          role?: Database["public"]["Enums"]["roles_user"]
           updated_at?: string
         }
         Update: {
@@ -345,7 +348,7 @@ export type Database = {
           id?: string
           name?: string
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
-          role?: Database["public"]["Enums"]["roles_user"] | null
+          role?: Database["public"]["Enums"]["roles_user"]
           updated_at?: string
         }
         Relationships: []
@@ -363,6 +366,7 @@ export type Database = {
           description: string | null
           id: string | null
           image_url: string | null
+          objectives: string[] | null
           series: string | null
           series_color: string | null
           title: string | null
