@@ -41,7 +41,7 @@ import {
 } from '@portal/activities/actions';
 import { ActivityFormProps } from '../Forms/ActivityFormModal';
 import type { Enums } from '@/libs/supabase/_database';
-import { isElevated, isInternal, isStudent } from '@/utils/access-control';
+import { isElevated, isInternal, isPublic } from '@/utils/access-control';
 import { useUser } from '@/components/Providers/UserProvider';
 import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
 
@@ -138,7 +138,7 @@ function ActivityDetailsHeader({
   activity: ActivityDetailsProps;
   toggleEdit: () => void;
 }) {
-  const { id: userId } = useUser();
+  const { id: userId, other_roles } = useUser();
 
   const [editOpened, { open: editOpen, close: editClose }] =
     useDisclosure(false);
@@ -245,23 +245,24 @@ function ActivityDetailsHeader({
           {/* Activity control buttons */}
           <Group gap="xs" mt={16}>
             <>
+              {isPublic(role) && (
+                <Button
+                  leftSection={<IconRss size={16} />}
+                  onClick={() =>
+                    onUserSubscribe(
+                      activity.id as string,
+                      userId,
+                      subscribed ? !subscribed : true,
+                      setSubscribed,
+                    )
+                  }
+                  variant={subscribed ? 'default' : 'filled'}
+                >
+                  {subscribed ? 'Unsubscribe' : 'Subscribe'}
+                </Button>
+              )}
+
               <Button.Group>
-                {isStudent(role) && (
-                  <Button
-                    leftSection={<IconRss size={16} />}
-                    onClick={() =>
-                      onUserSubscribe(
-                        activity.id as string,
-                        userId,
-                        subscribed ? !subscribed : true,
-                        setSubscribed,
-                      )
-                    }
-                    variant={subscribed ? 'default' : 'filled'}
-                  >
-                    {subscribed ? 'Unsubscribe' : 'Subscribe'}
-                  </Button>
-                )}
                 {/* Internal-only controls */}
                 {isInternal(role) && (
                   <>
@@ -290,7 +291,7 @@ function ActivityDetailsHeader({
                 )}
 
                 {/* Faculty Assignment */}
-                {isElevated(role) && (
+                {isElevated(role, other_roles) && (
                   <Button
                     leftSection={<IconUsersGroup size={16} />}
                     onClick={assignOpen}
@@ -301,36 +302,40 @@ function ActivityDetailsHeader({
                 )}
               </Button.Group>
 
-              <Divider orientation="vertical" />
+              {isInternal(role) && (
+                <>
+                  <Divider orientation="vertical" />
 
-              <FileButton
-                accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv"
-                multiple
-                onChange={setLocalFiles}
-              >
-                {(props) => (
-                  <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
-                    <Button
-                      leftSection={<IconUpload size={16} />}
-                      variant="default"
-                      {...props}
-                    >
-                      Upload Reports
-                    </Button>
-                  </Tooltip>
-                )}
-              </FileButton>
+                  <FileButton
+                    accept=".odt,.doc,.docx,.pdf,.pptx,.ppt,.xls,.xlsx,.csv,image/*"
+                    multiple
+                    onChange={setLocalFiles}
+                  >
+                    {(props) => (
+                      <Tooltip label="Only visible to admins/staffs. Max. 50mb per file">
+                        <Button
+                          leftSection={<IconUpload size={16} />}
+                          variant="default"
+                          {...props}
+                        >
+                          Upload Reports
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </FileButton>
 
-              <Button
-                color="red"
-                leftSection={<IconTrash size={16} />}
-                onClick={() =>
-                  deleteModal(activity.id as string, router, startProgress)
-                }
-                variant="outline"
-              >
-                Delete Activity
-              </Button>
+                  <Button
+                    color="red"
+                    leftSection={<IconTrash size={16} />}
+                    onClick={() =>
+                      deleteModal(activity.id as string, router, startProgress)
+                    }
+                    variant="outline"
+                  >
+                    Delete Activity
+                  </Button>
+                </>
+              )}
             </>
           </Group>
         </Stack>

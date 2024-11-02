@@ -20,7 +20,7 @@ export const isInternal = (role: Enums<'roles_user'> | null): boolean => {
  */
 export const isElevated = (
   role: Enums<'roles_user'> | null,
-  pos?: Enums<'roles_pos'> | null,
+  pos?: Enums<'roles_pos'>[] | null,
 ): boolean => {
   if (!role) {
     return false;
@@ -53,6 +53,20 @@ export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
   }
 
   return role === 'admin';
+};
+
+/**
+ * Check if the user is a student or faculty.
+ * Does not include admin or staff.
+ *
+ * @param role - The user's role.
+ */
+export const isPublic = (role: Enums<'roles_user'> | null): boolean => {
+  if (!role) {
+    return false;
+  }
+
+  return role === 'student' || role === 'faculty';
 };
 
 /**
