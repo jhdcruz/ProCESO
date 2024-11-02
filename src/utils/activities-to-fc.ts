@@ -23,7 +23,7 @@ export const activitiesToFc = (
     allDay:
       // TODO: Improve allDay check logic, this is unreliable.
       // check if activity is all day if start and end time is 00:00
-      activity?.date_starting?.includes('00:00') &&
-      activity?.date_ending?.includes('00:00'),
+      activity?.date_starting?.includes('00:00:00') &&
+      activity?.date_ending?.includes('00:00:00'),
   }));
 };
