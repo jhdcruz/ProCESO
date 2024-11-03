@@ -156,8 +156,7 @@ function ActivityDetailsHeader({
     title: activity.title as string,
     series: activity.series,
     visibility: activity.visibility ?? 'Everyone',
-    handled_by:
-      activity.users?.map((user) => user.faculty_id as string) ?? undefined,
+    handled_by: activity.users?.map((user) => user.id as string) ?? undefined,
     objectives: activity.objectives!,
     date_starting: new Date(activity.date_starting as string),
     date_ending: new Date(activity.date_ending as string),

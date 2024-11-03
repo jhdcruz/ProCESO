@@ -2,7 +2,6 @@ import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Group,
-  Avatar,
   Divider,
   Text,
   Loader,
@@ -28,6 +27,7 @@ import dayjs from '@/libs/dayjs';
 import { isPrivate, isInternal } from '@/utils/access-control';
 import { identifyFileType } from '@/utils/file-types';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import { UserDisplay } from '@/components/Display/UserDisplay';
 
 const RTEditor = dynamic(
   () =>
@@ -179,29 +179,23 @@ function ActivityDetailsBody({
               label={
                 <Group gap={0} wrap="nowrap">
                   <IconScanEye className="mr-2" size={16} />
-                  Published by
+                  Published {dayjs(activity.created_at).fromNow()} by
                 </Group>
               }
               labelPosition="left"
               mb="md"
             />
 
-            <Group my={16}>
-              <Avatar
-                alt={activity.created_by as string}
-                color="initials"
-                radius="xl"
-                src={activity.creator_avatar}
+            <Box mb="lg">
+              <UserDisplay
+                avatar_url={activity.creator_avatar}
+                department={activity.creator_department!}
+                email={activity.creator_email!}
+                name={activity.created_by!}
+                other_roles={activity.creator_other_roles}
+                role={activity.creator_role!}
               />
-              <div>
-                <Text lineClamp={1} size="sm">
-                  {activity.created_by}
-                </Text>
-                <Text c="dimmed" size="xs">
-                  {dayjs(activity.created_at).fromNow()}
-                </Text>
-              </div>
-            </Group>
+            </Box>
           </>
         )}
 
@@ -209,7 +203,7 @@ function ActivityDetailsBody({
           label={
             <Group gap={0} wrap="nowrap">
               <IconUsersGroup className="mr-2" size={16} />
-              Faculty
+              Delegation
             </Group>
           }
           labelPosition="left"
@@ -222,22 +216,16 @@ function ActivityDetailsBody({
             {faculties.length ? (
               <>
                 {faculties.map((faculty) => (
-                  <Group key={faculty?.faculty_email} my={16}>
-                    <Avatar
-                      alt={faculty?.faculty_name as string}
-                      color="initials"
-                      radius="xl"
-                      src={faculty?.faculty_avatar}
+                  <Box key={faculty.id} mb="lg">
+                    <UserDisplay
+                      avatar_url={faculty.avatar_url}
+                      department={faculty.department!}
+                      email={faculty.email!}
+                      name={faculty.name!}
+                      other_roles={faculty.other_roles}
+                      role={faculty.role!}
                     />
-                    <div>
-                      <Text lineClamp={1} size="sm">
-                        {faculty?.faculty_name}
-                      </Text>
-                      <Text c="dimmed" mt={2} size="xs">
-                        {faculty?.faculty_email}
-                      </Text>
-                    </div>
-                  </Group>
+                  </Box>
                 ))}
               </>
             ) : (

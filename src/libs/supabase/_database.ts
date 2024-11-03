@@ -58,7 +58,7 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["faculty_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
@@ -192,7 +192,7 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["faculty_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
@@ -275,7 +275,7 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["faculty_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -360,7 +360,10 @@ export type Database = {
           created_at: string | null
           created_by: string | null
           creator_avatar: string | null
+          creator_department: Database["public"]["Enums"]["roles_dept"] | null
           creator_email: string | null
+          creator_other_roles: Database["public"]["Enums"]["roles_pos"][] | null
+          creator_role: Database["public"]["Enums"]["roles_user"] | null
           date_ending: string | null
           date_starting: string | null
           description: string | null
@@ -377,11 +380,17 @@ export type Database = {
       }
       activities_faculties_view: {
         Row: {
+          active: boolean | null
           activity_id: string | null
-          faculty_avatar: string | null
-          faculty_email: string | null
-          faculty_id: string | null
-          faculty_name: string | null
+          avatar_url: string | null
+          created_at: string | null
+          department: Database["public"]["Enums"]["roles_dept"] | null
+          email: string | null
+          id: string | null
+          name: string | null
+          other_roles: Database["public"]["Enums"]["roles_pos"][] | null
+          role: Database["public"]["Enums"]["roles_user"] | null
+          updated_at: string | null
         }
         Relationships: []
       }

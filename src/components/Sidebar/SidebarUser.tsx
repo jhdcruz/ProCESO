@@ -3,20 +3,16 @@
 import { memo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Avatar,
-  Group,
-  Indicator,
   Menu,
-  Text,
   UnstyledButton,
   rem,
   useComputedColorScheme,
   useMantineColorScheme,
 } from '@mantine/core';
-import { IconChevronRight, IconLogout, IconSunMoon } from '@tabler/icons-react';
+import { IconLogout, IconSunMoon } from '@tabler/icons-react';
 import type { Tables } from '@/libs/supabase/_database';
-import { getRoleColor } from '@/utils/colors';
 import { signOut } from '@/utils/sign-out';
+import { UserDisplay } from '@/components/Display/UserDisplay';
 import classes from './SidebarUser.module.css';
 
 // Item contents of the user button dropdown in sidebar menu
@@ -57,43 +53,25 @@ const MenuItems = () => {
 };
 
 export const SidebarUser = memo(
-  ({ avatar_url, email, name, role }: Partial<Tables<'users'>>) => (
+  ({
+    avatar_url,
+    email,
+    name,
+    department,
+    role,
+    other_roles,
+  }: Partial<Tables<'users'>>) => (
     <Menu position="right" shadow="md" width={200}>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
-          <Group wrap="nowrap">
-            <Indicator
-              color={getRoleColor(role)}
-              inline={true}
-              label={role}
-              offset={-1}
-              position="bottom-center"
-              size={14}
-              tt="capitalize"
-            >
-              <Avatar
-                color="initials"
-                name={name}
-                radius="xl"
-                src={avatar_url}
-              />
-            </Indicator>
-
-            <div className="flex-1">
-              <Text fw={500} lineClamp={1} size="sm">
-                {name}
-              </Text>
-
-              <Text c="dimmed" lineClamp={1} size="xs">
-                {email}
-              </Text>
-            </div>
-
-            <IconChevronRight
-              stroke={1.5}
-              style={{ width: rem(14), height: rem(14) }}
-            />
-          </Group>
+          <UserDisplay
+            avatar_url={avatar_url}
+            department={department}
+            email={email}
+            name={name}
+            other_roles={other_roles}
+            role={role}
+          />
         </UnstyledButton>
       </Menu.Target>
 

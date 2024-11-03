@@ -68,6 +68,7 @@ function UsersTableComponent({
             <Avatar
               color="initials"
               name={item.name}
+              radius="md"
               size={36}
               src={item.avatar_url}
             />
@@ -80,7 +81,7 @@ function UsersTableComponent({
               <Badge
                 color={getPosColor(role)}
                 key={role}
-                size="sm"
+                size="xs"
                 tt="uppercase"
                 variant="dot"
               >
