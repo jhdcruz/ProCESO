@@ -74,6 +74,14 @@ function UserEdit({
     }
   };
 
+  const resetState = () => {
+    setDept([selected?.department ?? 'na']);
+    setRole([selected?.role ?? 'student']);
+    setPos(selected?.other_roles ?? []);
+
+    close();
+  };
+
   // reflect changes on selected user
   useEffect(() => {
     setDept([selected?.department ?? 'na']);
@@ -84,7 +92,7 @@ function UserEdit({
   return (
     <Modal
       centered
-      onClose={close}
+      onClose={resetState}
       opened={opened}
       size={rem(450)}
       title={<Text tt="capitalize">{selected?.name.toLowerCase()}</Text>}
@@ -121,7 +129,7 @@ function UserEdit({
       </Blockquote>
 
       <Group gap="sm" justify="flex-end" mt="lg">
-        <Button onClick={close} variant="default">
+        <Button onClick={resetState} variant="default">
           Cancel
         </Button>
 
