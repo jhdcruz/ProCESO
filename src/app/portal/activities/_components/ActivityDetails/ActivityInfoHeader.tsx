@@ -150,6 +150,7 @@ function ActivityDetailsHeader({
   const router = useRouter();
   const startProgress = useProgress();
 
+  // convert activity details to form props
   const activityForm: ActivityFormProps = {
     id: activity.id as string,
     title: activity.title as string,
@@ -157,6 +158,7 @@ function ActivityDetailsHeader({
     visibility: activity.visibility ?? 'Everyone',
     handled_by:
       activity.users?.map((user) => user.faculty_id as string) ?? undefined,
+    objectives: activity.objectives!,
     date_starting: new Date(activity.date_starting as string),
     date_ending: new Date(activity.date_ending as string),
     image_url: activity.image_url ?? undefined,

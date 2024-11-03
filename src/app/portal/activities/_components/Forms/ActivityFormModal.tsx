@@ -180,6 +180,7 @@ export function ActivityFormModalComponent({
         objective_2: activity.objectives?.[1] ?? '',
         objective_3: activity.objectives?.[2] ?? '',
       };
+
       // We're setting this separately to avoid unnecessary
       // remounting of the modal when changing existing
       // values used with `initialValues`.
@@ -345,7 +346,7 @@ export function ActivityFormModalComponent({
 
             <Divider my="xs" />
 
-            {/* TODO: Objectives and Outcomes */}
+            {/* Objectives and Outcomes */}
             <Input.Wrapper
               description="The activity's goals and objectives for its participants and partners."
               label="Goals and Objectives"

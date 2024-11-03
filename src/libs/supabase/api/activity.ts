@@ -142,7 +142,7 @@ export async function getActivitiesInRange({
  * @param activityId - The activity ID to fetch details for.
  * @param supabase - Supabase client instance.
  */
-export async function getActivitiesDetails({
+export async function getActivityDetails({
   activityId,
   supabase,
 }: {

@@ -6,7 +6,7 @@ import sanitizeHtml from 'sanitize-html';
 import { metadata as defaultMetadata } from '@/app/layout';
 import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
-import { getActivitiesDetails } from '@/libs/supabase/api/activity';
+import { getActivityDetails } from '@/libs/supabase/api/activity';
 import { ActivityDetailsShell } from '@portal/activities/_components/ActivityDetails/ActivityDetailsShell';
 import { siteUrl } from '@/utils/url';
 
@@ -16,7 +16,7 @@ const cacheActivityDetails = cache(async (id: string) => {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
-  return await getActivitiesDetails({
+  return await getActivityDetails({
     activityId: id,
     supabase,
   });
