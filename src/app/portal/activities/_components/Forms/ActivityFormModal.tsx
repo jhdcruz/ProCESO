@@ -194,7 +194,7 @@ export function ActivityFormModalComponent({
 
   return (
     <Modal
-      key={activity?.id}
+      key={activity?.id ?? 'new'}
       onClose={resetState}
       opened={opened}
       size="60rem"
@@ -358,11 +358,11 @@ export function ActivityFormModalComponent({
                 {...form.getInputProps('objective_1')}
               />
               <TextInput
-                key={form.key('objective_3')}
+                key={form.key('objective_2')}
                 leftSection={<IconLaurelWreath2 />}
                 mb="sm"
                 placeholder="To foster a sense of community and camaraderie."
-                {...form.getInputProps('objective_3')}
+                {...form.getInputProps('objective_2')}
               />
               <TextInput
                 key={form.key('objective_3')}
