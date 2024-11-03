@@ -25,9 +25,9 @@ export const emailReminders = task({
     // get faculty emails from faculty_assignment
     const usersQuery = supabase
       .from('activities_faculties_view')
-      .select('faculty_email')
+      .select('email')
       .eq('activity_id', payload.activityId)
-      .not('faculty_email', 'is', null);
+      .not('email', 'is', null);
 
     // get subscriber emails
     const subscribersQuery = supabase
@@ -91,9 +91,7 @@ export const emailReminders = task({
 
     // add emails to the emails array
     emails = [
-      ...usersRes.data.map(
-        (user: { faculty_email: string | null }) => user.faculty_email!,
-      ),
+      ...usersRes.data.map((user: { email: string | null }) => user.email!),
       ...staffsRes.data.map((staff: { email: string }) => staff.email),
       ...subscribersRes.data.map(
         (subscriber: { subscriber_email: string | null }) =>
