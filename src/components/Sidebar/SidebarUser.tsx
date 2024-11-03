@@ -61,7 +61,7 @@ export const SidebarUser = memo(
     role,
     other_roles,
   }: Partial<Tables<'users'>>) => (
-    <Menu position="right" shadow="md" width={200}>
+    <Menu position="right" shadow="md" width={200} withArrow>
       <Menu.Target>
         <UnstyledButton className={classes.user}>
           <UserDisplay

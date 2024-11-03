@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Tooltip, Badge } from '@mantine/core';
-import { checkHealth } from '../actions';
+import { checkSystemHealth } from '@/app/actions';
 
 /**
  * Check the system status and display health badge.
@@ -13,7 +13,7 @@ export function SystemHealth() {
   useEffect(() => {
     // check every 15 minutes
     const interval = setInterval(async () => {
-      const health = await checkHealth();
+      const health = await checkSystemHealth();
       setHealth(health);
     }, 900000);
 
@@ -28,9 +28,9 @@ export function SystemHealth() {
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
-        py={12}
+        py={10}
         radius="md"
-        size="md"
+        size="sm"
         target="__blank"
         variant="dot"
       >
@@ -45,9 +45,9 @@ export function SystemHealth() {
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
-        py={12}
+        py={10}
         radius="md"
-        size="md"
+        size="sm"
         target="__blank"
         variant="dot"
       >
@@ -62,9 +62,9 @@ export function SystemHealth() {
         component="a"
         href={process.env.NEXT_PUBLIC_STATUS_PAGE}
         px={15}
-        py={12}
+        py={10}
         radius="md"
-        size="md"
+        size="sm"
         target="__blank"
         variant="dot"
       >

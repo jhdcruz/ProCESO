@@ -7,8 +7,8 @@ import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
 
 import { onEmailLogin } from '../actions';
-import { SystemHealth } from './SystemHealth';
 import { GoogleButton } from './GoogleButton';
+import { SystemHealth } from '@/components/Buttons/SystemHealth';
 
 export function LoginFormComponent() {
   return (

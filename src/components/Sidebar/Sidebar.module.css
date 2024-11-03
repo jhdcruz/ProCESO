@@ -11,20 +11,15 @@
 }
 
 .header {
-  padding: var(--mantine-spacing-md);
-  padding-top: 0;
-  margin-left: calc(var(--mantine-spacing-md) * -1);
-  margin-right: calc(var(--mantine-spacing-md) * -1);
-  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  margin: var(--mantine-spacing-sm) calc(var(--mantine-spacing-md) * -1) 0
+    calc(var(--mantine-spacing-md) * -1);
 }
 
 .links {
   flex: 1;
-  margin-left: calc(var(--mantine-spacing-md) * -1);
-  margin-right: calc(var(--mantine-spacing-md) * -1);
+  margin: auto calc(var(--mantine-spacing-md) * -1);
 }
 
 .footer {
-  margin-left: calc(var(--mantine-spacing-md) * -1);
-  margin-right: calc(var(--mantine-spacing-md) * -1);
+  margin: auto calc(var(--mantine-spacing-md) * -1);
 }

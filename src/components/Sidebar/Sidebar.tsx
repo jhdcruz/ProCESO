@@ -1,13 +1,23 @@
-import { memo, Suspense } from 'react';
-import Image from 'next/image';
-import { Group, ScrollArea, Text } from '@mantine/core';
+import { lazy, memo, Suspense } from 'react';
+import { Loader, ScrollArea, Stack, Text } from '@mantine/core';
 import type { Tables } from '@/libs/supabase/_database';
 
 import type { Routes } from '@/app/routes';
-import { SidebarUser } from '@/components/Sidebar/SidebarUser';
 import { LinksGroup } from '@/components/Sidebar/LinksGroup';
 import classes from './Sidebar.module.css';
 import { useUser } from '@/components/Providers/UserProvider';
+
+const SidebarUser = lazy(() =>
+  import('@/components/Sidebar/SidebarUser').then((mod) => ({
+    default: mod.SidebarUser,
+  })),
+);
+
+const SystemHealth = lazy(() =>
+  import('@/components/Buttons/SystemHealth').then((mod) => ({
+    default: mod.SystemHealth,
+  })),
+);
 
 /**
  * Main sidebar component
@@ -32,31 +42,25 @@ export function Sidebar({
   return (
     <div className={classes.navbar}>
       <div className={classes.header}>
-        <Group justify="center">
-          <Image
-            alt=""
-            className="rounded-md bg-contain"
-            height={60}
-            src="/assets/ceso-manila.webp"
-            width={160}
-          />
-        </Group>
+        <Suspense fallback={<Loader size="lg" type="dots" />}>
+          <SidebarUser {...user} />
+        </Suspense>
       </div>
 
       <ScrollArea className={classes.links}>
         <div className="py-1">{links}</div>
       </ScrollArea>
 
-      <Text c="dimmed" mx="auto" py="xs" size="xs">
-        Build ver.{' '}
-        {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'DEV'}
-      </Text>
+      <Stack align="center" gap="xs" justify="flex-end">
+        <Suspense fallback={<Loader size="sm" />}>
+          <SystemHealth />
+        </Suspense>
 
-      <Suspense>
-        <div className={classes.footer}>
-          <SidebarUser {...user} />
-        </div>
-      </Suspense>
+        <Text c="dimmed" mx="auto" py="xs" size="xs">
+          Build ver.{' '}
+          {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'DEV'}
+        </Text>
+      </Stack>
     </div>
   );
 }
