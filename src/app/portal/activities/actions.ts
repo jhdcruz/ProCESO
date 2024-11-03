@@ -21,6 +21,7 @@ import {
 } from '@/libs/triggerdev/reminders';
 import { emailUnassigned } from '@/trigger/email-unassigned';
 import { revalidate } from '@/app/actions';
+import { emailDepts } from '@/trigger/email-dept';
 
 /**
  * Create and process new activity.
@@ -154,6 +155,14 @@ export async function submitActivity(
         activityStartingDate: activity.date_starting!,
       });
     }
+  }
+
+  // email notification to selected departments
+  if (activity.notify?.length) {
+    emailDepts.trigger({
+      activityId: activityId,
+      depts: activity.notify,
+    });
   }
 
   if (existingId) {

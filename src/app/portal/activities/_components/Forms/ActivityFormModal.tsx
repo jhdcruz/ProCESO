@@ -6,6 +6,7 @@ import {
   Alert,
   Badge,
   Button,
+  Checkbox,
   Divider,
   Grid,
   Group,
@@ -39,6 +40,8 @@ import { getActivitiesInRange } from '@/libs/supabase/api/activity';
 import { submitActivity } from '@portal/activities/actions';
 import { SeriesInput } from './SeriesInput';
 import classes from '@/styles/forms/ContainedInput.module.css';
+import { listDepts } from '@/utils/user-types';
+import { getDeptColor } from '@/utils/colors';
 
 export interface ActivityFormProps {
   id?: string;
@@ -54,6 +57,7 @@ export interface ActivityFormProps {
   objective_2?: string;
   objective_3?: string;
   handled_by?: string[];
+  notify?: Enums<'roles_dept'>[];
 }
 
 /**
@@ -135,6 +139,7 @@ export function ActivityFormModalComponent({
   // form handler & submission
   const handleSubmit = async (activityForm: ActivityFormProps) => {
     setPending(true);
+    console.log(activityForm);
     const result = await submitActivity(activityForm, activity?.id);
     setPending(false);
 
@@ -198,7 +203,7 @@ export function ActivityFormModalComponent({
       key={activity?.id ?? 'new'}
       onClose={resetState}
       opened={opened}
-      size="60rem"
+      size="62rem"
       title="New Activity"
     >
       <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -373,19 +378,51 @@ export function ActivityFormModalComponent({
                 {...form.getInputProps('objective_3')}
               />
             </Input.Wrapper>
+
+            <Divider my="xs" />
+
+            {/* Departments to notify */}
+            <Checkbox.Group
+              description="Send email to the selected college department chairs and dean."
+              key={form.key('notify')}
+              label="Departments to Notify"
+              {...form.getInputProps('notify', { type: 'checkbox' })}
+            >
+              <Group mt="xs">
+                {listDepts.map((dept) => (
+                  <Checkbox
+                    key={dept.value}
+                    label={
+                      <Group gap="xs" wrap="nowrap">
+                        <Text size="sm" tt="capitalize">
+                          {dept.label}
+                        </Text>
+                        <Badge
+                          color={getDeptColor(dept.value)}
+                          size="xs"
+                          variant="light"
+                        >
+                          {dept.value}
+                        </Badge>
+                      </Group>
+                    }
+                    value={dept.value}
+                  />
+                ))}
+              </Group>
+            </Checkbox.Group>
           </Grid.Col>
         </Grid>
 
         {/* Save Buttons */}
-        <Group justify="flex-end">
-          <Button mt="md" onClick={resetState} variant="subtle">
+        <Group justify="flex-end" mt="xl">
+          <Button onClick={resetState} variant="subtle">
             Cancel
           </Button>
 
           <Button
             loaderProps={{ type: 'dots' }}
             loading={pending || !form.isValid}
-            mt="md"
             rightSection={!pending && <IconArrowRight size={16} />}
             type="submit"
             variant={pending ? 'default' : 'filled'}
