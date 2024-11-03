@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
-  Grid,
   Group,
   Avatar,
   Divider,
@@ -10,6 +9,7 @@ import {
   Badge,
   Anchor,
   Tooltip,
+  Box,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
@@ -27,6 +27,7 @@ import { downloadActivityFile } from '@portal/activities/actions';
 import dayjs from '@/libs/dayjs';
 import { isPrivate, isInternal } from '@/utils/access-control';
 import { identifyFileType } from '@/utils/file-types';
+import { PageLoader } from '@/components/Loader/PageLoader';
 
 const RTEditor = dynamic(
   () =>
@@ -34,7 +35,7 @@ const RTEditor = dynamic(
       default: mod.RTEditor,
     })),
   {
-    loading: () => <Loader className="mx-auto my-5" size="md" type="dots" />,
+    loading: () => <PageLoader />,
     ssr: false,
   },
 );
@@ -155,102 +156,103 @@ function ActivityDetailsBody({
   }, [activity.id, role]);
 
   return (
-    <Grid grow gutter="xl">
-      <Grid.Col span={{ base: 12, xs: 9 }}>
+    <Group
+      align="start"
+      grow
+      justify="space-between"
+      preventGrowOverflow={false}
+      wrap="wrap-reverse"
+    >
+      <Box>
         <RTEditor
           content={content}
           editable={editable}
           loading={loading}
           onSubmit={onSave}
         />
-      </Grid.Col>
+      </Box>
 
-      <Grid.Col span={{ base: 12, xs: 3 }}>
-        <>
-          {isPrivate(role) && (
-            <>
-              <Divider
-                label={
-                  <Group gap={0} preventGrowOverflow wrap="nowrap">
-                    <IconScanEye className="mr-2" size={16} />
-                    Published by
-                  </Group>
-                }
-                labelPosition="left"
-                mt="xs"
-                my="md"
+      <Box maw={{ base: '100%', lg: '360px' }}>
+        {isPrivate(role) && (
+          <>
+            <Divider
+              label={
+                <Group gap={0} wrap="nowrap">
+                  <IconScanEye className="mr-2" size={16} />
+                  Published by
+                </Group>
+              }
+              labelPosition="left"
+              mb="md"
+            />
+
+            <Group my={16}>
+              <Avatar
+                alt={activity.created_by as string}
+                color="initials"
+                radius="xl"
+                src={activity.creator_avatar}
               />
+              <div>
+                <Text lineClamp={1} size="sm">
+                  {activity.created_by}
+                </Text>
+                <Text c="dimmed" size="xs">
+                  {dayjs(activity.created_at).fromNow()}
+                </Text>
+              </div>
+            </Group>
+          </>
+        )}
 
-              <Group my={16}>
-                <Avatar
-                  alt={activity.created_by as string}
-                  color="initials"
-                  radius="xl"
-                  src={activity.creator_avatar}
-                />
-                <div>
-                  <Text lineClamp={1} size="sm">
-                    {activity.created_by}
-                  </Text>
-                  <Text c="dimmed" size="xs">
-                    {dayjs(activity.created_at).fromNow()}
-                  </Text>
-                </div>
-              </Group>
-            </>
-          )}
-        </>
+        <Divider
+          label={
+            <Group gap={0} wrap="nowrap">
+              <IconUsersGroup className="mr-2" size={16} />
+              Faculty
+            </Group>
+          }
+          labelPosition="left"
+          mt="xs"
+          my="md"
+        />
 
-        <>
-          <Divider
-            label={
-              <Group gap={0} preventGrowOverflow wrap="nowrap">
-                <IconUsersGroup className="mr-2" size={16} />
-                Faculty
-              </Group>
-            }
-            labelPosition="left"
-            mt="xs"
-            my="md"
-          />
-
-          {faculties ? (
-            <>
-              {faculties.length ? (
-                <>
-                  {faculties.map((faculty) => (
-                    <Group key={faculty?.faculty_email} my={16}>
-                      <Avatar
-                        alt={faculty?.faculty_name as string}
-                        color="initials"
-                        radius="xl"
-                        src={faculty?.faculty_avatar}
-                      />
-                      <div>
-                        <Text lineClamp={1} size="sm">
-                          {faculty?.faculty_name}
-                        </Text>
-                        <Text c="dimmed" mt={2} size="xs">
-                          {faculty?.faculty_email}
-                        </Text>
-                      </div>
-                    </Group>
-                  ))}
-                </>
-              ) : (
-                <Text>No faculties assigned</Text>
-              )}
-            </>
-          ) : (
-            <Loader className="mx-auto my-5" size="sm" type="dots" />
-          )}
-        </>
+        {faculties ? (
+          <>
+            {faculties.length ? (
+              <>
+                {faculties.map((faculty) => (
+                  <Group key={faculty?.faculty_email} my={16}>
+                    <Avatar
+                      alt={faculty?.faculty_name as string}
+                      color="initials"
+                      radius="xl"
+                      src={faculty?.faculty_avatar}
+                    />
+                    <div>
+                      <Text lineClamp={1} size="sm">
+                        {faculty?.faculty_name}
+                      </Text>
+                      <Text c="dimmed" mt={2} size="xs">
+                        {faculty?.faculty_email}
+                      </Text>
+                    </div>
+                  </Group>
+                ))}
+              </>
+            ) : (
+              <Text>No faculties assigned</Text>
+            )}
+          </>
+        ) : (
+          <Loader className="mx-auto my-5" size="sm" type="dots" />
+        )}
 
         {isInternal(role) && files && (
           <>
             <Divider
               label={
-                <Group gap={0} preventGrowOverflow wrap="nowrap">
+                <Group gap={0} wrap="nowrap">
                   <IconLibrary className="mr-2" size={16} />
                   Reports
                 </Group>
@@ -311,8 +313,8 @@ function ActivityDetailsBody({
             )}
           </>
         )}
-      </Grid.Col>
-    </Grid>
+      </Box>
+    </Group>
   );
 }
 
