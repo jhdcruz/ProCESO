@@ -1,8 +1,8 @@
 import { Link, Text } from '@react-email/components';
 import type { Tables } from '@/libs/supabase/_database';
 import { formatDateRange } from 'little-date';
-import '@mantine/core/styles.css';
 import Template from './_Template';
+import '@mantine/core/styles.css';
 
 export default function FacultyRequest({
   activity,
