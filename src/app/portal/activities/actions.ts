@@ -21,7 +21,7 @@ import {
 } from '@/libs/triggerdev/reminders';
 import { emailUnassigned } from '@/trigger/email-unassigned';
 import { revalidate } from '@/app/actions';
-import { emailDepts } from '@/trigger/email-dept';
+import { emailDepts } from '@/trigger/email-depts';
 
 /**
  * Create and process new activity.
@@ -255,20 +255,6 @@ export async function deleteActivityAction(
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
-  // delete record from activities table
-  const { error: tableError } = await supabase
-    .from('activities')
-    .delete()
-    .eq('id', activityId);
-
-  if (tableError) {
-    return {
-      status: 2,
-      title: 'Unable to delete activity',
-      message: tableError.message,
-    };
-  }
-
   // delete storage usage
   const { error: storageError } = await supabase.storage
     .from('activity_cover')
@@ -293,6 +279,34 @@ export async function deleteActivityAction(
       status: 1,
       title: 'Unable to delete activity files metadata',
       message: metadataError.message,
+    };
+  }
+
+  // delete faculty assignment
+  const { error: facultyError } = await supabase
+    .from('faculty_assignments')
+    .delete()
+    .eq('activity_id', activityId);
+
+  if (facultyError) {
+    return {
+      status: 1,
+      title: 'Unable to delete faculty assignment',
+      message: facultyError.message,
+    };
+  }
+
+  // lastly, delete record from activities table
+  const { error: tableError } = await supabase
+    .from('activities')
+    .delete()
+    .eq('id', activityId);
+
+  if (tableError) {
+    return {
+      status: 2,
+      title: 'Unable to delete activity',
+      message: tableError.message,
     };
   }
 

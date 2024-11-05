@@ -27,7 +27,7 @@ export const emailDepts = task({
       .from('users')
       .select('email')
       .in('department', payload.depts)
-      .in('other_roles', ['dean', 'chair']);
+      .overlaps('other_roles', ['dean', 'chair']);
 
     // get activity id
     const activityQuery = supabase
@@ -48,6 +48,11 @@ export const emailDepts = task({
         usersRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(usersRes?.error?.message);
+    } else {
+      logger.info(
+        'Users fetched successfully',
+        usersRes.data as unknown as Record<string, unknown>,
+      );
     }
     if (activityRes.error) {
       logger.error(
