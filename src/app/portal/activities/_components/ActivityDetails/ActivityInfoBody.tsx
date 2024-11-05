@@ -229,7 +229,9 @@ function ActivityDetailsBody({
                 ))}
               </>
             ) : (
-              <Text>No faculties assigned</Text>
+              <Text c="dimmed" fs="italic" mt="xs" size="xs" ta="center">
+                No faculty assigned yet.
+              </Text>
             )}
           </>
         ) : (
