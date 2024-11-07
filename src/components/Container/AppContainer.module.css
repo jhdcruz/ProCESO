@@ -1,10 +1,17 @@
+.header {
+  margin: var(--mantine-spacing-xs);
+  margin-bottom: 2rem;
+  padding: 0 var(--mantine-spacing-xs);
+  width: max-content;
+}
+
 .main {
   background-color: light-dark(
     var(--mantine-color-white),
     var(--mantine-color-dark-6)
   );
   margin-inline-start: calc(
-    var(--app-shell-navbar-offset, 0rem) + var(--app-shell-padding)
+    var(--app-shell-navbar-offset) + var(--mantine-spacing-md)
   ) !important;
   padding-inline-start: var(--mantine-spacing-lg) !important;
   margin: var(--mantine-spacing-md);

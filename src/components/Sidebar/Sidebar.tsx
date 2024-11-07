@@ -1,17 +1,12 @@
 import { lazy, memo, Suspense } from 'react';
-import { Loader, ScrollArea, Stack, Text } from '@mantine/core';
+import { Burger, Group, Loader, ScrollArea, Stack, Text } from '@mantine/core';
 import type { Tables } from '@/libs/supabase/_database';
 
 import type { Routes } from '@/app/routes';
 import { LinksGroup } from '@/components/Sidebar/LinksGroup';
-import classes from './Sidebar.module.css';
 import { useUser } from '@/components/Providers/UserProvider';
-
-const SidebarUser = lazy(() =>
-  import('@/components/Sidebar/SidebarUser').then((mod) => ({
-    default: mod.SidebarUser,
-  })),
-);
+import classes from './Sidebar.module.css';
+import { SidebarUser } from './SidebarUser';
 
 const SystemHealth = lazy(() =>
   import('@/components/Buttons/SystemHealth').then((mod) => ({
@@ -26,9 +21,13 @@ const SystemHealth = lazy(() =>
 export function Sidebar({
   user,
   routes,
+  opened,
+  toggle,
 }: {
   user: Tables<'users'>;
   routes: Routes;
+  opened: boolean;
+  toggle: () => void;
 }) {
   const { role } = useUser();
 
@@ -42,17 +41,23 @@ export function Sidebar({
   return (
     <div className={classes.navbar}>
       <div className={classes.header}>
-        <Suspense fallback={<Loader size="lg" type="dots" />}>
+        <Group wrap="nowrap">
           <SidebarUser {...user} />
-        </Suspense>
+          <Burger
+            aria-label="Toggle sidebar menu"
+            hiddenFrom="sm"
+            onClick={toggle}
+            opened={opened}
+          />
+        </Group>
       </div>
 
       <ScrollArea className={classes.links}>
-        <div className="py-1">{links}</div>
+        <div>{links}</div>
       </ScrollArea>
 
       <Stack align="center" gap="xs" justify="flex-end">
-        <Suspense fallback={<Loader size="sm" />}>
+        <Suspense fallback={<Loader mx="auto" size="sm" type="dots" />}>
           <SystemHealth />
         </Suspense>
 

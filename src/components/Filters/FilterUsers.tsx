@@ -164,12 +164,10 @@ export const FilterPositions = memo(
         onClick={() => {
           if (single) {
             setPos([userPos.value]);
+          } else if (pos.includes(userPos.value)) {
+            setPos(pos.filter((p) => p !== userPos.value));
           } else {
-            if (pos.includes(userPos.value)) {
-              setPos(pos.filter((p) => p !== userPos.value));
-            } else {
-              setPos([...pos, userPos.value]);
-            }
+            setPos([...pos, userPos.value]);
           }
         }}
       >

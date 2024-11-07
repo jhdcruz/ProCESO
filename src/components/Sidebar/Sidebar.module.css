@@ -5,21 +5,22 @@
   );
   height: 100%;
   width: 100%;
-  padding: var(--mantine-spacing-md);
   display: flex;
   flex-direction: column;
+  padding: var(--mantine-spacing-md) 0;
 }
 
 .header {
-  margin: var(--mantine-spacing-sm) calc(var(--mantine-spacing-md) * -1) 0
-    calc(var(--mantine-spacing-md) * -1);
+  margin-bottom: var(--mantine-spacing-sm);
 }
 
 .links {
   flex: 1;
   margin: auto calc(var(--mantine-spacing-md) * -1);
+  padding: 0 var(--mantine-spacing-md);
 }
 
 .footer {
   margin: auto calc(var(--mantine-spacing-md) * -1);
+  padding: 0 var(--mantine-spacing-md);
 }
