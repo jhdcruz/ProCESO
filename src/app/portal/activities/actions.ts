@@ -396,6 +396,43 @@ export async function isSubscribed(
 }
 
 /**
+ * Set whether activity is open for feedback responses.
+ *
+ * @param activityId - The activity id to subscribe.
+ * @param open - Whether the activity is open for feedback.
+ */
+export async function setFeedback(
+  activityId: string,
+  open: boolean,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+
+  const { error } = await supabase
+    .from('activities')
+    .update({
+      feedback: open,
+    })
+    .eq('id', activityId);
+
+  if (error) {
+    return {
+      status: 1,
+      title: error?.message,
+      message: error?.details,
+    };
+  }
+
+  return {
+    status: 0,
+    title: `${open ? 'Opened' : 'Closed'} feedback responses`,
+    message: open
+      ? 'This activity is now open for feedback responses.'
+      : 'This activity is no longer accepting feedback responses.',
+  };
+}
+
+/**
  * Subscribe user for email reminders
  *
  * @param activityId - The activity id to subscribe.

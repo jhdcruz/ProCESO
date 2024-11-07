@@ -16,6 +16,7 @@ export type Database = {
           date_ending: string | null
           date_starting: string | null
           description: string | null
+          feedback: boolean
           id: string
           image_url: string | null
           objectives: string[]
@@ -30,6 +31,7 @@ export type Database = {
           date_ending?: string | null
           date_starting?: string | null
           description?: string | null
+          feedback?: boolean
           id?: string
           image_url?: string | null
           objectives?: string[]
@@ -44,6 +46,7 @@ export type Database = {
           date_ending?: string | null
           date_starting?: string | null
           description?: string | null
+          feedback?: boolean
           id?: string
           image_url?: string | null
           objectives?: string[]
@@ -79,6 +82,80 @@ export type Database = {
             columns: ["series"]
             isOneToOne: false
             referencedRelation: "series"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      activity_feedback: {
+        Row: {
+          activity_id: string
+          id: string
+          response: Json
+          submitted_at: string
+          user_id: string | null
+        }
+        Insert: {
+          activity_id: string
+          id?: string
+          response: Json
+          submitted_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          activity_id?: string
+          id?: string
+          response?: Json
+          submitted_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -367,6 +444,7 @@ export type Database = {
           date_ending: string | null
           date_starting: string | null
           description: string | null
+          feedback: boolean | null
           id: string | null
           image_url: string | null
           objectives: string[] | null

@@ -15,6 +15,7 @@ import {
   Title,
   Tooltip,
   FileButton,
+  Anchor,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -24,6 +25,9 @@ import {
   IconCalendarEvent,
   IconEdit,
   IconEditOff,
+  IconExternalLink,
+  IconInbox,
+  IconInboxOff,
   IconRss,
   IconTrash,
   IconUpload,
@@ -37,6 +41,7 @@ import { systemUrl } from '@/app/routes';
 import {
   deleteActivityAction,
   isSubscribed,
+  setFeedback,
   subscribeToActivity,
 } from '@portal/activities/actions';
 import { ActivityFormProps } from '../Forms/ActivityFormModal';
@@ -145,6 +150,8 @@ function ActivityDetailsHeader({
   const [assignOpened, { open: assignOpen, close: assignClose }] =
     useDisclosure(false);
   const [localFiles, setLocalFiles] = useState<File[]>();
+  const [responses, setResponses] = useState(activity.feedback);
+  const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
 
   const router = useRouter();
@@ -161,6 +168,35 @@ function ActivityDetailsHeader({
     date_starting: new Date(activity.date_starting as string),
     date_ending: new Date(activity.date_ending as string),
     image_url: activity.image_url ?? undefined,
+  };
+
+  // set activity feedback responses status
+  const setActivityFeedback = async (status: boolean) => {
+    setLoading(true);
+    const response = await setFeedback(activity.id as string, status);
+
+    if (response?.status === 0) {
+      notifications.show({
+        title: response?.title,
+        message: response?.message,
+        color: 'green',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+    } else {
+      notifications.show({
+        title: response?.title,
+        message: response?.message,
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+    }
+
+    setResponses(status);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -240,6 +276,67 @@ function ActivityDetailsHeader({
                   {activity.series}
                 </Badge>
               </Tooltip>
+            </Group>
+          )}
+
+          {isInternal(role) && (
+            <Group mb="xs">
+              <Text c="dimmed">Feedback:</Text>
+              <Group>
+                <Tooltip
+                  label={
+                    responses
+                      ? 'Accepting feedback responses'
+                      : 'Currently not accepting feedback responses'
+                  }
+                  position="bottom"
+                >
+                  <Button
+                    color={responses ? 'green' : 'red'}
+                    leftSection={
+                      responses ? (
+                        <IconInbox size={18} />
+                      ) : (
+                        <IconInboxOff size={18} />
+                      )
+                    }
+                    loaderProps={{ type: 'dots' }}
+                    loading={loading}
+                    onClick={() => setActivityFeedback(!responses)}
+                    size="xs"
+                    variant="filled"
+                  >
+                    {responses ? 'Accepting' : 'Not Accepting'}
+                  </Button>
+                </Tooltip>
+
+                {/* Feedback links */}
+                {responses && (
+                  <>
+                    <Anchor
+                      href={`/feedback/${activity.id}/partners`}
+                      size="xs"
+                      target="_blank"
+                    >
+                      Partners <IconExternalLink size={12} />
+                    </Anchor>
+                    <Anchor
+                      href={`/feedback/${activity.id}/implementers`}
+                      size="xs"
+                      target="_blank"
+                    >
+                      Implementers <IconExternalLink size={12} />
+                    </Anchor>
+                    <Anchor
+                      href={`/feedback/${activity.id}/beneficiaries`}
+                      size="xs"
+                      target="_blank"
+                    >
+                      Beneficiaries <IconExternalLink size={12} />
+                    </Anchor>
+                  </>
+                )}
+              </Group>
             </Group>
           )}
 

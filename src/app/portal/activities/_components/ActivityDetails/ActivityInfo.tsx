@@ -70,7 +70,7 @@ export const ActivityInfo = memo(
           toggleEdit={() => setEditable(!editable)}
         />
 
-        <Space h={16} />
+        <Space h={24} />
 
         <ActivityInfoBody
           activity={activity}
