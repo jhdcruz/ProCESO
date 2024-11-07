@@ -163,7 +163,11 @@ export const FilterPositions = memo(
         leftSection={pos.includes(userPos.value) && <IconCheck size={16} />}
         onClick={() => {
           if (single) {
-            setPos([userPos.value]);
+            if (pos.includes(userPos.value)) {
+              setPos(pos.filter((p) => p !== userPos.value));
+            } else {
+              setPos([userPos.value]);
+            }
           } else if (pos.includes(userPos.value)) {
             setPos(pos.filter((p) => p !== userPos.value));
           } else {
