@@ -314,21 +314,21 @@ function ActivityDetailsHeader({
                 {responses && (
                   <>
                     <Anchor
-                      href={`/feedback/${activity.id}/partners`}
+                      href={`/eval/${activity.id}/partners`}
                       size="xs"
                       target="_blank"
                     >
                       Partners <IconExternalLink size={12} />
                     </Anchor>
                     <Anchor
-                      href={`/feedback/${activity.id}/implementers`}
+                      href={`/eval/${activity.id}/implementers`}
                       size="xs"
                       target="_blank"
                     >
                       Implementers <IconExternalLink size={12} />
                     </Anchor>
                     <Anchor
-                      href={`/feedback/${activity.id}/beneficiaries`}
+                      href={`/eval/${activity.id}/beneficiaries`}
                       size="xs"
                       target="_blank"
                     >

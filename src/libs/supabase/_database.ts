@@ -20,6 +20,7 @@ export type Database = {
           id: string
           image_url: string | null
           objectives: string[]
+          outcomes: string[]
           series: string | null
           title: string
           updated_at: string | null
@@ -35,6 +36,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           objectives?: string[]
+          outcomes?: string[]
           series?: string | null
           title: string
           updated_at?: string | null
@@ -50,6 +52,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           objectives?: string[]
+          outcomes?: string[]
           series?: string | null
           title?: string
           updated_at?: string | null
@@ -92,6 +95,7 @@ export type Database = {
           id: string
           response: Json
           submitted_at: string
+          type: Database["public"]["Enums"]["feedback_type"]
           user_id: string | null
         }
         Insert: {
@@ -99,6 +103,7 @@ export type Database = {
           id?: string
           response: Json
           submitted_at?: string
+          type: Database["public"]["Enums"]["feedback_type"]
           user_id?: string | null
         }
         Update: {
@@ -106,6 +111,7 @@ export type Database = {
           id?: string
           response?: Json
           submitted_at?: string
+          type?: Database["public"]["Enums"]["feedback_type"]
           user_id?: string | null
         }
         Relationships: [
@@ -140,21 +146,21 @@ export type Database = {
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "activities_faculties_view"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["subscriber_id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -448,6 +454,7 @@ export type Database = {
           id: string | null
           image_url: string | null
           objectives: string[] | null
+          outcomes: string[] | null
           series: string | null
           series_color: string | null
           title: string | null
@@ -488,6 +495,7 @@ export type Database = {
     }
     Enums: {
       activity_visibility: "Everyone" | "Faculty" | "Internal"
+      feedback_type: "partners" | "implementers" | "beneficiaries"
       roles_dept: "ccs" | "cea" | "cbe" | "coa" | "ceso" | "na" | "itso"
       roles_pos: "head" | "dean" | "chair"
       roles_user: "admin" | "staff" | "faculty" | "officer" | "student"

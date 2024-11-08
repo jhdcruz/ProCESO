@@ -22,7 +22,7 @@ import {
   type FileWithPath,
 } from '@mantine/dropzone';
 import { DateTimePicker, type DateValue } from '@mantine/dates';
-import { useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
@@ -103,7 +103,7 @@ export function ActivityFormModalComponent({
     },
 
     validate: {
-      title: (value) => (!value.trim() ? 'Title cannot be empty.' : null),
+      title: isNotEmpty('Title is required.'),
 
       visibility: (value) =>
         !['Everyone', 'Faculty', 'Internal'].includes(value)

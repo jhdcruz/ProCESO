@@ -24,8 +24,8 @@ export function ThemeSwitcher() {
         size="lg"
         variant="default"
       >
-        <IconSun className="hidden w-5 dark:block" stroke={1.2} />
-        <IconMoon className="block w-5 dark:hidden" stroke={1.2} />
+        <IconSun className="hidden dark:block" size={20} />
+        <IconMoon className="block dark:hidden" size={20} />
       </ActionIcon>
     </Group>
   );
