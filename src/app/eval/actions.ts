@@ -4,7 +4,6 @@ import { cookies } from 'next/headers';
 import type ApiResponse from '@/utils/response';
 import { createServerClient } from '@/libs/supabase/server';
 import { UseFormReturnType } from '@mantine/form';
-import { PartnersFeedbackProps } from './_components/Forms/PartnersForm';
 
 /**
  * Submit feedback for an activity.
@@ -12,7 +11,8 @@ import { PartnersFeedbackProps } from './_components/Forms/PartnersForm';
  * @param form - Form data using PartnersFeedbackProps type.
  */
 export async function submitFeedback(
-  form: UseFormReturnType<PartnersFeedbackProps>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  form: UseFormReturnType<any>,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);

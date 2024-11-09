@@ -45,10 +45,10 @@ export interface PartnersFeedbackProps {
     remarks: string;
   }[];
   sentiments?: {
-    statement: string;
-    rating: string;
-    remarks: string;
-  }[];
+    beneficial: string;
+    improve: string;
+    comments: string;
+  };
 }
 
 const PartnersForm = ({
@@ -106,6 +106,11 @@ const PartnersForm = ({
           remarks: '',
         },
       ],
+      sentiments: {
+        beneficial: '',
+        improve: '',
+        comments: '',
+      },
     },
 
     validate: {
@@ -277,8 +282,10 @@ const PartnersForm = ({
         </Fieldset>
 
         <Button
+          display="block"
           loaderProps={{ type: 'dots' }}
           loading={loading}
+          ml={{ base: 0, sm: 'auto' }}
           rightSection={<IconSend2 size={20} />}
           type="submit"
           w={{ base: '100%', sm: rem(140) }}

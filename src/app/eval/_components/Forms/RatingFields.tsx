@@ -23,15 +23,20 @@ export const RatingField = memo(
     field,
     fieldData,
     label,
+    description,
   }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: UseFormReturnType<any>;
     field: string;
     fieldData: string[];
     label: string;
+    description?: string;
   }) => (
     <Input.Wrapper
-      description="1 - Disagree Strongly, 2 - Disagree, 3 - Slightly Disagree, 4 - Slightly Agree, 5 - Agree, 6 - Agree Strongly"
+      description={
+        description ??
+        '1 - Disagree Strongly, 2 - Disagree, 3 - Slightly Disagree, 4 - Slightly Agree, 5 - Agree, 6 - Agree Strongly'
+      }
       label={label}
       withAsterisk
     >

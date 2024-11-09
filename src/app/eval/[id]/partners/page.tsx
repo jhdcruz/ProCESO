@@ -84,7 +84,7 @@ export default async function PartnersFeedback({
 
   return (
     <>
-      <Divider label="Partner's Evaluation Form" my="lg" />
+      <Divider label="Partners' Evaluation Form" my="lg" />
 
       {/* Activity Details */}
       <Group mb="md">
