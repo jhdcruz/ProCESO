@@ -8,22 +8,18 @@ import {
   Textarea,
   Button,
   Fieldset,
-  Text,
   Transition,
-  Group,
-  Stack,
-  SegmentedControl,
-  Input,
   rem,
 } from '@mantine/core';
 import { useWindowScroll } from '@mantine/hooks';
-import { useForm } from '@mantine/form';
-import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
-import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
-import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
+import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
 import { submitFeedback } from '@/app/eval/actions';
+import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { Enums, Tables } from '@/libs/supabase/_database';
+import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
+import { RatingField } from './RatingFields';
 
 export interface PartnersFeedbackProps {
   id?: string;
@@ -110,6 +106,13 @@ const PartnersForm = ({
           remarks: '',
         },
       ],
+    },
+
+    validate: {
+      respondent: {
+        name: isNotEmpty('Name is required'),
+        email: isNotEmpty('Email is required'),
+      },
     },
   });
 
@@ -210,105 +213,35 @@ const PartnersForm = ({
             key={form.key('respondent.affiliation')}
             label="Affiliation"
             placeholder="Organization, Company, etc."
-            required
             {...form.getInputProps('respondent.affiliation')}
           />
         </Fieldset>
 
         <Fieldset legend="Objectives and Goals" my="md">
-          <Input.Wrapper
-            description="1 - Disagree Strongly, 2 - Disagree, 3 - Slightly Disagree, 4 - Slightly Agree, 5 - Agree, 6 - Agree Strongly"
+          <RatingField
+            field="objectives"
+            fieldData={activity.objectives!}
+            form={form}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
-            withAsterisk
-          >
-            {activity.objectives?.map((obj, index) => (
-              <Stack key={index} my="md">
-                <Text component="p" fw={500} my={0}>
-                  {obj}.
-                </Text>
-
-                <Group grow preventGrowOverflow={false}>
-                  <SegmentedControl
-                    data={['1', '2', '3', '4', '5', '6']}
-                    key={form.key(`objectives.${index}.rating`)}
-                    {...form.getInputProps(`objectives.${index}.rating`)}
-                  />
-                  <Textarea
-                    key={form.key(`objectives.${index}.remarks`)}
-                    label="Remarks"
-                    maxRows={5}
-                    placeholder="Anything that would help us achieve this objective more?"
-                    resize="vertical"
-                    {...form.getInputProps(`objectives.${index}.remarks`)}
-                  />
-                </Group>
-              </Stack>
-            ))}
-          </Input.Wrapper>
+          />
         </Fieldset>
 
-        <Fieldset legend="Outcomes" my="md">
-          <Input.Wrapper
-            description="1 - Disagree Strongly, 2 - Disagree, 3 - Slightly Disagree, 4 - Slightly Agree, 5 - Agree, 6 - Agree Strongly"
-            label="Rate the extent to which each aspect was achieved on a scale of 1 to 6:"
-            withAsterisk
-          >
-            {activity.outcomes?.map((outcome, index) => (
-              <Stack key={index} my="md">
-                <Text component="p" fw={500} my={0}>
-                  {outcome}
-                </Text>
-
-                <Group grow preventGrowOverflow={false}>
-                  <SegmentedControl
-                    data={['1', '2', '3', '4', '5', '6']}
-                    key={form.key(`outcomes.${index}.rating`)}
-                    {...form.getInputProps(`outcomes.${index}.rating`)}
-                  />
-                  <Textarea
-                    key={form.key(`outcomes.${index}.remarks`)}
-                    label="Remarks"
-                    maxRows={5}
-                    placeholder="Anything that would help us achieve this outcome more?"
-                    resize="vertical"
-                    {...form.getInputProps(`outcomes.${index}.remarks`)}
-                  />
-                </Group>
-              </Stack>
-            ))}
-          </Input.Wrapper>
+        <Fieldset legend="Intended Outcomes" my="md">
+          <RatingField
+            field="outcomes"
+            fieldData={activity.outcomes!}
+            form={form}
+            label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
+          />
         </Fieldset>
 
         <Fieldset legend="Feedback" my="md">
-          <Input.Wrapper
-            description="1 - Disagree Strongly, 2 - Disagree, 3 - Slightly Disagree, 4 - Slightly Agree, 5 - Agree, 6 - Agree Strongly"
-            label="Rate the following statements on a scale of 1 to 6:"
-            withAsterisk
-          >
-            {form.values.feedback?.map((fb, index) => (
-              <Stack key={index} my="md">
-                <Text component="p" fw={500} my={0}>
-                  {fb.statement}.
-                </Text>
-
-                <Group grow preventGrowOverflow={false}>
-                  <SegmentedControl
-                    data={['1', '2', '3', '4', '5', '6']}
-                    key={form.key(`feedback.${index}.rating`)}
-                    {...form.getInputProps(`feedback.${index}.rating`)}
-                  />
-                  <Textarea
-                    key={form.key(`feedback.${index}.remarks`)}
-                    label="Remarks"
-                    maxRows={5}
-                    placeholder="Anything that would help us achieve this outcome more?"
-                    resize="vertical"
-                    {...form.getInputProps(`feedback.${index}.remarks`)}
-                  />
-                </Group>
-              </Stack>
-            ))}
-          </Input.Wrapper>
+          <RatingField
+            field="feedback"
+            fieldData={form.values.feedback!.map((obj) => obj.statement)}
+            form={form}
+            label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
+          />
         </Fieldset>
 
         <Fieldset legend="Sentiments" my="md">
