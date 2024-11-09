@@ -223,24 +223,25 @@ const PartnersForm = ({
           >
             {activity.objectives?.map((obj, index) => (
               <Stack key={index} my="md">
+                <Text component="p" fw={500} my={0}>
+                  {obj}.
+                </Text>
+
                 <Group grow preventGrowOverflow={false}>
-                  <Text component="p" fw={500} my={0}>
-                    {obj}.
-                  </Text>
                   <SegmentedControl
                     data={['1', '2', '3', '4', '5', '6']}
                     key={form.key(`objectives.${index}.rating`)}
                     {...form.getInputProps(`objectives.${index}.rating`)}
                   />
+                  <Textarea
+                    key={form.key(`objectives.${index}.remarks`)}
+                    label="Remarks"
+                    maxRows={5}
+                    placeholder="Anything that would help us achieve this objective more?"
+                    resize="vertical"
+                    {...form.getInputProps(`objectives.${index}.remarks`)}
+                  />
                 </Group>
-                <Textarea
-                  key={form.key(`objectives.${index}.remarks`)}
-                  label="Remarks"
-                  maxRows={5}
-                  placeholder="Anything that would help us achieve this objective more?"
-                  resize="vertical"
-                  {...form.getInputProps(`objectives.${index}.remarks`)}
-                />
               </Stack>
             ))}
           </Input.Wrapper>
