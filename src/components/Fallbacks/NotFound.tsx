@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Container, Title, Text, Button, Group } from '@mantine/core';
-import { IconLogout, IconTicket, IconError404 } from '@tabler/icons-react';
+import { IconLogout, IconTicket } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import classes from './Fallbacks.module.css';
 
@@ -18,10 +18,10 @@ function NotFoundComponent() {
           <Image
             alt=""
             className="mx-auto mb-6 block rounded-md shadow-sm"
-            height={120}
+            height={102}
             priority={false}
             src="/assets/ceso-manila.webp"
-            width={290}
+            width={256}
           />
 
           <Group
@@ -30,10 +30,9 @@ function NotFoundComponent() {
             preventGrowOverflow={false}
             wrap="nowrap"
           >
-            <Title className={`${classes.title} drop-shadow-md`}>
-              Page not found.
+            <Title className={`${classes.title} drop-shadow-md`} ta="center">
+              Page not found
             </Title>
-            <IconError404 className="ml-2" color="#828282" size={48} />
           </Group>
           <Text
             c="dimmed"
@@ -49,7 +48,6 @@ function NotFoundComponent() {
             <Button
               leftSection={<IconLogout size={18} />}
               onClick={() => router.push(systemUrl)}
-              size="md"
               variant="default"
             >
               Back to home
@@ -59,7 +57,6 @@ function NotFoundComponent() {
               component="a"
               href="https://tip.jitbit.com/Tickets/New?ref=ProCESO"
               leftSection={<IconTicket size={18} />}
-              size="md"
               target="_blank"
             >
               Submit a ticket

@@ -30,7 +30,7 @@ function Disabled() {
             preventGrowOverflow={false}
             wrap="nowrap"
           >
-            <Title className={`${classes.title} drop-shadow-md`}>
+            <Title className={`${classes.title} drop-shadow-md`} ta="center">
               Your account were disabled.
             </Title>
             <IconShieldLock className="ml-2" color="#828282" size={48} />
