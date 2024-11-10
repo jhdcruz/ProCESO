@@ -80,7 +80,7 @@ export default async function BeneficiariesFeedback({
   const { id } = await params;
   const activity = await cacheActivityDetails(id);
 
-  if (!activity.data || !activity?.data?.feedback) {
+  if (!activity?.data?.feedback) {
     redirect('/eval/closed', RedirectType.replace);
   }
 

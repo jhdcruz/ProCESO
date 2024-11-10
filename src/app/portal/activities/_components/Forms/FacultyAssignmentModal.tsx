@@ -90,14 +90,12 @@ export function FacultyAssignment({
   };
 
   useEffect(() => {
-    if (activity) {
-      // keep record of the original activity data
-      const data = { handled_by: activity.handled_by ?? [] };
-      setOriginal(data.handled_by);
+    // keep record of the original activity data
+    const data = { handled_by: activity.handled_by ?? [] };
+    setOriginal(data.handled_by);
 
-      form.setInitialValues(data);
-      form.setValues(data);
-    }
+    form.setInitialValues(data);
+    form.setValues(data);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity]);
