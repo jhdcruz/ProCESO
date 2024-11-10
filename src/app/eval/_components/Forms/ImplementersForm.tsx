@@ -248,7 +248,7 @@ const ImplementersForm = ({
           {...form.getInputProps('type')}
         />
 
-        <Fieldset legend="Partner's Information" my="md">
+        <Fieldset legend="Implementer's Information" my="md">
           <TextInput
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
             key={form.key('respondent.name')}

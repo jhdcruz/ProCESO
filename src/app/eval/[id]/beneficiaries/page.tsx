@@ -86,7 +86,7 @@ export default async function BeneficiariesFeedback({
 
   return (
     <>
-      <Divider label="Implementers' Evaluation Form" my="lg" />
+      <Divider label="Beneficiaries' Evaluation Form" my="lg" />
 
       {/* Activity Details */}
       <Group mb="md">
