@@ -93,7 +93,7 @@ const ImplementersForm = ({
 
     initialValues: {
       id: activity.id!,
-      type: 'partners',
+      type: 'implementers',
       respondent: {
         name: '',
         email: '',
@@ -359,7 +359,9 @@ const ImplementersForm = ({
                   key={form.key('respondent.designation.officer')}
                   label="Officer"
                   mt="md"
-                  {...form.getInputProps('respondent.designation.officer')}
+                  {...form.getInputProps('respondent.designation.officer', {
+                    type: 'checkbox',
+                  })}
                 />
               </>
             )}
