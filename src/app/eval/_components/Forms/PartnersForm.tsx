@@ -134,7 +134,7 @@ const PartnersForm = ({
         loading: true,
       });
 
-      redirect('/feedback/done');
+      redirect('/eval/done');
     } else {
       notifications.show({
         title: 'Unable to submit feedback',

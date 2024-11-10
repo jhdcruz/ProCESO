@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
-import { redirect } from 'next/navigation';
+import { redirect, RedirectType } from 'next/navigation';
 import { Badge, Group, Stack, Title, Image, Divider } from '@mantine/core';
 import sanitizeHtml from 'sanitize-html';
 import { metadata as defaultMetadata } from '@/app/layout';
@@ -80,7 +80,9 @@ export default async function PartnersFeedback({
   const { id } = await params;
   const activity = await cacheActivityDetails(id);
 
-  if (!activity.data) redirect('/not-found');
+  if (!activity.data || !activity?.data?.feedback) {
+    redirect('/eval/closed', RedirectType.replace);
+  }
 
   return (
     <>
