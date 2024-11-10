@@ -29,6 +29,8 @@ export default async function Layout({ children }: { children: ReactNode }) {
       </Group>
 
       <Alert
+        className="shadow-sm"
+        color="yellow"
         icon={<IconInfoCircle size={20} />}
         my="lg"
         p="lg"
@@ -54,7 +56,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
             var(--mantine-color-white),
             var(--mantine-color-dark-6)
           )"
-        className="rounded-xl"
+        className="rounded-xl shadow-lg"
         my="lg"
         p="xl"
       >
