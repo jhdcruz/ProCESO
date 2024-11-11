@@ -16,7 +16,7 @@ export default function ActivityReminder({
         This email is to remind you that the:
         <br />
         <Link
-          className="font-bold text-yellow-500 underline"
+          className="font-bold text-yellow-500 underline underline-offset-1"
           href={`https://deuz.tech/activities/${activity?.id as string}`}
         >
           {activity?.title ?? 'Untitled Activity'}

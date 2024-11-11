@@ -1,6 +1,7 @@
 import { Link, Text } from '@react-email/components';
 import type { Tables } from '@/libs/supabase/_database';
 import { formatDateRange } from 'little-date';
+import { sidebarRoutes } from '@/app/routes';
 import Template from './_Template';
 import '@mantine/core/styles.css';
 
@@ -9,13 +10,15 @@ export default function Assigned({
 }: {
   activity: Tables<'activities'>;
 }) {
+  const link = `${sidebarRoutes[1]?.links?.[0]?.link}/${activity?.id as string}`;
+
   return (
     <Template>
       <Text className="mt-8">
         You have been assigned for an activity: <br />
         <Link
-          className="font-bold text-yellow-500 underline"
-          href={`https://deuz.tech/activities/${activity?.id as string}`}
+          className="font-semibold text-yellow-500 underline underline-offset-1"
+          href={link}
         >
           {activity?.title ?? 'Untitled Activity'}
         </Link>
