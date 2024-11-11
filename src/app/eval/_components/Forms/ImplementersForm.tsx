@@ -453,9 +453,8 @@ const ImplementersForm = ({
         <Fieldset legend="Sentiments" my="md">
           <Textarea
             autosize
-            description="What did you find most beneficial about the program?"
             key={form.key('sentiments.beneficial')}
-            label="Benefits"
+            label="What did you find most beneficial about the program?"
             maxRows={6}
             minRows={3}
             my="sm"
@@ -466,9 +465,8 @@ const ImplementersForm = ({
 
           <Textarea
             autosize
-            description="What aspects of the program could be improved?"
             key={form.key('sentiments.improve')}
-            label="Improvements"
+            label="What aspects of the program could be improved?"
             maxRows={6}
             minRows={3}
             my="sm"

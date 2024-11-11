@@ -258,6 +258,7 @@ const PartnersForm = ({
             mb="md"
             minRows={3}
             placeholder="..."
+            required
             {...form.getInputProps('sentiments.beneficial')}
           />
           <Textarea
@@ -267,6 +268,7 @@ const PartnersForm = ({
             maxRows={6}
             minRows={3}
             placeholder="..."
+            required
             {...form.getInputProps('sentiments.improve')}
           />
           <Textarea
