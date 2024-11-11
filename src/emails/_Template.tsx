@@ -20,7 +20,6 @@ export default function Template({ children }: { children: ReactNode }) {
           fallbackFontFamily="Arial"
           fontFamily="Inter"
           fontStyle="normal"
-          fontWeight="400"
           webFont={{
             url: ' https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hjp-Ek-_EeA.woff2',
             format: 'woff2',
@@ -29,10 +28,10 @@ export default function Template({ children }: { children: ReactNode }) {
         <Container className="mx-auto block w-full p-5">
           <Img
             alt="Community Extension Services Office of T.I.P Manila"
-            className="bock mx-auto rounded-md object-contain"
-            height={100}
+            className="mx-auto block rounded-md object-contain"
+            height={91.8}
             src="https://kcgvoeyhpkxzvanujxlt.supabase.co/storage/v1/object/public/public_assets/ceso-manila.jpg"
-            width="auto"
+            width={230.4}
           />
 
           <Hr className="my-6 border-t-2 border-gray-300" />
