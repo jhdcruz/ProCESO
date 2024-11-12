@@ -3,6 +3,20 @@ import withBundleAnalyzer from '@next/bundle-analyzer';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  webpack: (config) => {
+    // Ignore node-specific modules when bundling for the browser
+    // See https://webpack.js.org/configuration/resolve/#resolvealias
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'onnxruntime-node$': false,
+    };
+    return config;
+  },
+  serverExternalPackages: [
+    'sharp',
+    'onnxruntime-node',
+    '@huggingface/transformers',
+  ],
   experimental: {
     reactCompiler: true,
     optimizePackageImports: [
@@ -24,7 +38,7 @@ const nextConfig: NextConfig = {
       'dayjs',
       'resend',
       'little-date',
-      'recharts'
+      'recharts',
     ],
   },
   images: {

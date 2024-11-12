@@ -11,7 +11,7 @@ import {
   Transition,
   rem,
 } from '@mantine/core';
-import { useWindowScroll } from '@mantine/hooks';
+import { useWindowScroll, useId } from '@mantine/hooks';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
@@ -58,6 +58,7 @@ const PartnersForm = ({
   activity: Readonly<ActivityDetailsProps>;
   feedback?: Readonly<Tables<'activity_feedback'>>;
 }) => {
+  const uuid = useId();
   const [loading, setLoading] = useState(false);
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -184,6 +185,13 @@ const PartnersForm = ({
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
+          key={form.key('idempotencyKey')}
+          type="hidden"
+          value={uuid}
+          {...form.getInputProps('idempotencyKey')}
+        />
+
+        <TextInput
           key={form.key('id')}
           type="hidden"
           {...form.getInputProps('id')}
@@ -221,7 +229,6 @@ const PartnersForm = ({
             {...form.getInputProps('respondent.affiliation')}
           />
         </Fieldset>
-
         <Fieldset legend="Objectives and Goals" my="md">
           <RatingField
             field="objectives"
@@ -230,7 +237,6 @@ const PartnersForm = ({
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
           />
         </Fieldset>
-
         <Fieldset legend="Intended Outcomes" my="md">
           <RatingField
             field="outcomes"
@@ -239,7 +245,6 @@ const PartnersForm = ({
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
           />
         </Fieldset>
-
         <Fieldset legend="Feedback" my="md">
           <RatingField
             field="feedback"
@@ -248,7 +253,6 @@ const PartnersForm = ({
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
           />
         </Fieldset>
-
         <Fieldset legend="Sentiments" my="md">
           <Textarea
             autosize
@@ -282,7 +286,6 @@ const PartnersForm = ({
             {...form.getInputProps('sentiments.comments')}
           />
         </Fieldset>
-
         <Button
           display="block"
           loaderProps={{ type: 'dots' }}

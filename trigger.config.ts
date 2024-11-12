@@ -17,7 +17,7 @@ export const config: TriggerConfig = {
   build: {
     extensions: [
       additionalPackages({
-        packages: ['husky'],
+        packages: ['husky', 'onnxruntime-node'],
       }),
     ],
   },

@@ -94,6 +94,9 @@ export type Database = {
           activity_id: string
           id: string
           response: Json
+          score_emotions: Json | null
+          score_ratings: number | null
+          score_sentiment: Json | null
           submitted_at: string
           type: Database["public"]["Enums"]["feedback_type"]
           user_id: string | null
@@ -102,6 +105,9 @@ export type Database = {
           activity_id: string
           id?: string
           response: Json
+          score_emotions?: Json | null
+          score_ratings?: number | null
+          score_sentiment?: Json | null
           submitted_at?: string
           type: Database["public"]["Enums"]["feedback_type"]
           user_id?: string | null
@@ -110,6 +116,9 @@ export type Database = {
           activity_id?: string
           id?: string
           response?: Json
+          score_emotions?: Json | null
+          score_ratings?: number | null
+          score_sentiment?: Json | null
           submitted_at?: string
           type?: Database["public"]["Enums"]["feedback_type"]
           user_id?: string | null

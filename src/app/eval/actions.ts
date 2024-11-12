@@ -1,9 +1,14 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import type ApiResponse from '@/utils/response';
-import { createServerClient } from '@/libs/supabase/server';
 import { UseFormReturnType } from '@mantine/form';
+import { createServerClient } from '@/libs/supabase/server';
+import {
+  analyzePartner,
+  analyzeBeneficiary,
+  analyzeImplementer,
+} from '@/trigger/analyze-feedback';
+import type ApiResponse from '@/utils/response';
 
 /**
  * Submit feedback for an activity.
@@ -18,9 +23,9 @@ export async function submitFeedback(
   const supabase = await createServerClient(cookieStore);
 
   // separate id and type from the rest
-  const { id, type, ...feedback } = form.values;
+  const { id, idempotencyKey, type, ...feedback } = form.values;
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('activity_feedback')
     .insert({
       activity_id: id!,
@@ -37,9 +42,48 @@ export async function submitFeedback(
     };
   }
 
+  switch (type) {
+    case 'beneficiaries':
+      // analyze beneficiary feedback
+      analyzeBeneficiary.trigger(
+        { id: id!, form: feedback },
+        {
+          idempotencyKey: idempotencyKey,
+          tags: [`activity_${id}`, 'type_beneficiary'],
+        },
+      );
+      break;
+
+    case 'partners':
+      // analyze partner feedback
+      analyzePartner.trigger(
+        { id: id!, form: feedback },
+        {
+          idempotencyKey: idempotencyKey,
+          tags: [`activity_${id}`, 'type_partner'],
+        },
+      );
+      break;
+
+    case 'implementers':
+      // analyze implementers feedback
+      analyzeImplementer.trigger(
+        { id: id!, form: feedback },
+        {
+          idempotencyKey: idempotencyKey,
+          tags: [`activity_${id}`, 'type_implementer'],
+        },
+      );
+      break;
+
+    default:
+      throw new Error('Invalid feedback type: ' + type);
+  }
+
   return {
     status: 0,
     title: 'Feedback submitted',
     message: 'Thank you for your feedback!',
+    data: data,
   };
 }
