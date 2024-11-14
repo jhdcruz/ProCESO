@@ -13,15 +13,16 @@ import {
 } from '@/libs/supabase/api/faculty-assignments';
 import type { ActivityResponse } from '@/libs/supabase/api/_response';
 import type { ActivityFormProps } from './_components/Forms/ActivityFormModal';
-import type ApiResponse from '@/utils/response';
-import { emailAssigned } from '@/trigger/email-assigned';
+import type { emailAssigned } from '@/trigger/email-assigned';
+import type { emailUnassigned } from '@/trigger/email-unassigned';
+import type { emailDepts } from '@/trigger/email-depts';
 import {
   rescheduleReminders,
   scheduleReminders,
 } from '@/libs/triggerdev/reminders';
-import { emailUnassigned } from '@/trigger/email-unassigned';
 import { revalidate } from '@/app/actions';
-import { emailDepts } from '@/trigger/email-depts';
+import type ApiResponse from '@/utils/response';
+import { tasks } from '@trigger.dev/sdk/v3';
 
 /**
  * Create and process new activity.
@@ -159,7 +160,7 @@ export async function submitActivity(
 
   // email notification to selected departments
   if (activity.notify?.length) {
-    emailDepts.trigger({
+    await tasks.trigger<typeof emailDepts>('email-depts', {
       activityId: activityId,
       depts: activity.notify,
     });
@@ -210,7 +211,7 @@ export async function assignFaculty(
     if (assignResponse.status !== 0) return assignResponse!;
 
     // send email notice to newly assigned faculties
-    emailAssigned.trigger({
+    await tasks.trigger<typeof emailAssigned>('email-assigned', {
       activityId: activityId,
       ids: faculty.filter((id) => !original?.includes(id)),
     });
@@ -227,7 +228,7 @@ export async function assignFaculty(
     if (delResponse.status !== 0) return delResponse;
 
     // send email notice to unassigned faculties
-    emailUnassigned.trigger({
+    await tasks.trigger<typeof emailUnassigned>('email-unassigned', {
       activityId: activityId,
       ids: faculty.filter((id) => !original?.includes(id)),
     });

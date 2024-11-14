@@ -11,6 +11,7 @@ import type { ImplementerFeedbackProps } from './_components/Forms/ImplementersF
 import type { PartnersFeedbackProps } from './_components/Forms/PartnersForm';
 import type { BeneficiariesFeedbackProps } from './_components/Forms/BeneficiariesForm';
 import type ApiResponse from '@/utils/response';
+import { tasks } from '@trigger.dev/sdk/v3';
 
 /**
  * Submit feedback for an activity.
@@ -51,7 +52,8 @@ export async function submitFeedback(
   switch (type) {
     case 'beneficiaries':
       // analyze beneficiary feedback
-      await analyzeBeneficiary.trigger(
+      await tasks.trigger<typeof analyzeBeneficiary>(
+        'analyze-beneficiary',
         { id: data.id, form: feedback as BeneficiariesFeedbackProps },
         {
           idempotencyKey: idempotencyKey,
@@ -63,7 +65,8 @@ export async function submitFeedback(
 
     case 'partners':
       // analyze partner feedback
-      await analyzePartner.trigger(
+      await tasks.trigger<typeof analyzePartner>(
+        'analyze-partner',
         { id: data.id, form: feedback as PartnersFeedbackProps },
         {
           idempotencyKey: idempotencyKey,
@@ -75,7 +78,8 @@ export async function submitFeedback(
 
     case 'implementers':
       // analyze implementers feedback
-      await analyzeImplementer.trigger(
+      await tasks.trigger<typeof analyzeImplementer>(
+        'analyze-implementer',
         { id: data.id, form: feedback as ImplementerFeedbackProps },
         {
           idempotencyKey: idempotencyKey,

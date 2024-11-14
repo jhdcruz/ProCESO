@@ -72,8 +72,10 @@ export const analyzePartner = task({
     const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
-    await envvars.retrieve('SUPABASE_URL');
-    await envvars.retrieve('SUPABASE_SERVICE_KEY');
+    await Promise.all([
+      envvars.retrieve('SUPABASE_URL'),
+      envvars.retrieve('SUPABASE_SERVICE_KEY'),
+    ]);
     const supabase = createAdminClient();
 
     const data = {
@@ -166,8 +168,10 @@ export const analyzeImplementer = task({
     const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
-    await envvars.retrieve('SUPABASE_URL');
-    await envvars.retrieve('SUPABASE_SERVICE_KEY');
+    await Promise.all([
+      envvars.retrieve('SUPABASE_URL'),
+      envvars.retrieve('SUPABASE_SERVICE_KEY'),
+    ]);
     const supabase = createAdminClient();
 
     const data = {
@@ -249,8 +253,10 @@ export const analyzeBeneficiary = task({
     const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
-    await envvars.retrieve('SUPABASE_URL');
-    await envvars.retrieve('SUPABASE_SERVICE_KEY');
+    await Promise.all([
+      envvars.retrieve('SUPABASE_URL'),
+      envvars.retrieve('SUPABASE_SERVICE_KEY'),
+    ]);
     const supabase = createAdminClient();
 
     const data = {

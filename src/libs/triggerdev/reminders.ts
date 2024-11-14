@@ -1,5 +1,5 @@
-import { runs } from '@trigger.dev/sdk/v3';
-import { emailReminders } from '@/trigger/email-reminders';
+import { tasks, runs } from '@trigger.dev/sdk/v3';
+import type { emailReminders } from '@/trigger/email-reminders';
 
 /**
  * Schedule email reminders for an activity.
@@ -21,7 +21,8 @@ export async function scheduleReminders({
   // no need to await
   if (activityStartingDate.getTime() - 1 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 1 day before the activity
-    await emailReminders.trigger(
+    await tasks.trigger<typeof emailReminders>(
+      'email-reminders',
       { activityId: activityId },
       {
         idempotencyKey: activityId + '_1d',
@@ -37,7 +38,8 @@ export async function scheduleReminders({
   // check if the activity starting date is not within 3 days from now
   if (activityStartingDate.getTime() - 3 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 3 and 7 days before the activity
-    await emailReminders.trigger(
+    await tasks.trigger<typeof emailReminders>(
+      'email-reminders',
       { activityId: activityId },
       {
         idempotencyKey: activityId + '_3d',
@@ -53,7 +55,8 @@ export async function scheduleReminders({
   // check if the activity starting date is not within 7 days from now
   if (activityStartingDate.getTime() - 7 * 24 * 60 * 60 * 1000 > Date.now()) {
     // schedule new reminder task, 7 days before the activity
-    await emailReminders.trigger(
+    await tasks.trigger<typeof emailReminders>(
+      'email-reminders',
       { activityId: activityId },
       {
         idempotencyKey: activityId + '_7d',
