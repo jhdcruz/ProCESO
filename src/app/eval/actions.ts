@@ -56,6 +56,7 @@ export async function submitFeedback(
         {
           idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_beneficiary'],
+          metadata: { idempotencyKey },
         },
       );
       break;
@@ -67,6 +68,7 @@ export async function submitFeedback(
         {
           idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_partner'],
+          metadata: { idempotencyKey },
         },
       );
       break;
@@ -78,6 +80,7 @@ export async function submitFeedback(
         {
           idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_implementer'],
+          metadata: { idempotencyKey },
         },
       );
       break;
