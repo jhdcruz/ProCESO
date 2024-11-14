@@ -1,28 +1,75 @@
 import { logger } from '@trigger.dev/sdk/v3';
-import { pipeline, TextClassificationOutput } from '@huggingface/transformers';
-import type { EmotionResponse, SentimentResponse } from './types';
+import { pipeline } from '@huggingface/transformers';
+import type {
+  EmotionAnalysis,
+  EmotionsResponse,
+  SentimentAnalysis,
+  SentimentsResponse,
+} from './types';
 
 /**
- * Accumulate JSON data from an array,
- * assuming that the array contains exact key-value pairs.
+ * Total accumulated emotion analysis results.
  *
- * @param data Array JSON data
+ * @param emotions Emotion analysis array results.
  */
-export const accumulateArray = (
-  data: TextClassificationOutput | TextClassificationOutput[],
-): Record<string, number> => {
-  return (data as TextClassificationOutput[]).reduce(
-    (acc: Record<string, number>, obj: TextClassificationOutput) => {
-      return Object.keys(obj).reduce((acc, key: string) => {
-        if (acc[key] === undefined) {
-          acc[key] = 0;
-        }
-        acc[key] += (obj as unknown as Record<string, number>)[key];
-        return acc;
-      }, acc);
-    },
-    {},
+export const accumulateEmotions = (
+  emotions: EmotionAnalysis[],
+): EmotionsResponse => {
+  const total = emotions.length;
+
+  // combine and total similar labels
+  const accumulated = emotions.reduce((acc: Partial<EmotionsResponse>, e) => {
+    const key = e.label;
+    const value = e.score;
+
+    if (key in acc) {
+      acc[key] = (acc[key] ?? 0) + value;
+    } else {
+      acc[key] = value;
+    }
+
+    return acc;
+  }, {});
+
+  // filter out keys that are not in emotions
+  const validKeys = Object.keys(accumulated).filter((key) =>
+    emotions.some((e) => e.label === key),
   );
+
+  const filteredAccumulated = validKeys.reduce((acc, key) => {
+    acc[key as keyof EmotionsResponse] =
+      accumulated[key as keyof EmotionsResponse];
+    return acc;
+  }, {} as Partial<EmotionsResponse>);
+
+  return {
+    total,
+    ...filteredAccumulated,
+  };
+};
+
+/**
+ * Total accumulated sentiments from sentiment analysis results.
+ *
+ * @param sentiments Sentiment analysis array results.
+ */
+export const accumulateSentiments = (
+  sentiments: SentimentAnalysis[],
+): SentimentsResponse => {
+  const total = sentiments.length;
+
+  return {
+    total,
+    positive: sentiments
+      .filter((s) => s.label === 'positive')
+      .reduce((acc, s) => acc + s.score, 0),
+    neutral: sentiments
+      .filter((s) => s.label === 'neutral')
+      .reduce((acc, s) => acc + s.score, 0),
+    negative: sentiments
+      .filter((s) => s.label === 'negative')
+      .reduce((acc, s) => acc + s.score, 0),
+  };
 };
 
 /**
@@ -32,26 +79,22 @@ export const accumulateArray = (
  * @param text Text or string arrays to analyze.
  */
 export const analyzeEmotions = async (
-  text: string | string[],
-  trigger?: boolean,
-): Promise<EmotionResponse> => {
+  text: string[],
+  trigger: boolean = true,
+): Promise<EmotionsResponse> => {
   // NOTE: This uses transformer instead of HF API, therefore
   //       uses local machine for processing (CPU/GPU).
   const pipe = await pipeline(
     'text-classification',
     'SamLowe/roberta-base-go_emotions-onnx',
-    { dtype: 'int8' },
+    { dtype: 'q8' },
   );
 
-  const emotions = await pipe(text);
+  const emotions = (await pipe(text)) as EmotionAnalysis[];
 
-  if (emotions.length > 1) {
-    if (trigger) logger.info('Emotion analysis', { emotions });
-    return accumulateArray(emotions) as unknown as EmotionResponse;
-  } else {
-    if (trigger) logger.info('Emotion analysis', { emotions });
-    return emotions as unknown as EmotionResponse;
-  }
+  if (trigger) logger.info('Emotion analysis results', { ...emotions });
+
+  return accumulateEmotions(emotions);
 };
 
 /**
@@ -60,25 +103,26 @@ export const analyzeEmotions = async (
  *
  * @param text Text or string arrays to analyze.
  */
-export const analyzeSentiment = async (
-  text: string | string[],
-  trigger?: boolean,
-): Promise<SentimentResponse> => {
+export const analyzeSentiments = async (
+  text: string[],
+  trigger: boolean = true,
+): Promise<SentimentsResponse> => {
   // NOTE: This uses transformer instead of HF API, therefore
   //       uses local machine for processing (CPU/GPU).
   const pipe = await pipeline(
     'sentiment-analysis',
     'TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX',
-    { dtype: 'int8' },
+    { dtype: 'q8', model_file_name: 'decoder_model_merged' },
   );
 
-  const sentiments = await pipe(text);
+  const sentiments = (await pipe(text)) as SentimentAnalysis[];
 
-  if (sentiments.length > 1) {
-    if (trigger) logger.info('Sentiment analysis', { sentiments });
-    return accumulateArray(sentiments) as unknown as SentimentResponse;
-  } else {
-    if (trigger) logger.info('Sentiment analysis', { sentiments });
-    return sentiments as unknown as SentimentResponse;
+  if (trigger) {
+    logger.info('Sentiment analysis results', {
+      total: text.length,
+      ...sentiments,
+    });
   }
+
+  return accumulateSentiments(sentiments);
 };

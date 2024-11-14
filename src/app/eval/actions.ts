@@ -1,13 +1,15 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { UseFormReturnType } from '@mantine/form';
 import { createServerClient } from '@/libs/supabase/server';
 import {
   analyzePartner,
   analyzeBeneficiary,
   analyzeImplementer,
 } from '@/trigger/analyze-feedback';
+import type { ImplementerFeedbackProps } from './_components/Forms/ImplementersForm';
+import type { PartnersFeedbackProps } from './_components/Forms/PartnersForm';
+import type { BeneficiariesFeedbackProps } from './_components/Forms/BeneficiariesForm';
 import type ApiResponse from '@/utils/response';
 
 /**
@@ -16,14 +18,16 @@ import type ApiResponse from '@/utils/response';
  * @param form - Form data using PartnersFeedbackProps type.
  */
 export async function submitFeedback(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  form: UseFormReturnType<any>,
+  form:
+    | ImplementerFeedbackProps
+    | PartnersFeedbackProps
+    | BeneficiariesFeedbackProps,
 ): Promise<ApiResponse> {
   const cookieStore = cookies();
   const supabase = await createServerClient(cookieStore);
 
   // separate id and type from the rest
-  const { id, idempotencyKey, type, ...feedback } = form.values;
+  const { id, idempotencyKey, type, ...feedback } = form;
 
   const { data, error } = await supabase
     .from('activity_feedback')
@@ -32,7 +36,9 @@ export async function submitFeedback(
       type: type!,
       response: feedback,
     })
-    .select();
+    .select('id')
+    .limit(1)
+    .single();
 
   if (error) {
     return {
@@ -45,33 +51,33 @@ export async function submitFeedback(
   switch (type) {
     case 'beneficiaries':
       // analyze beneficiary feedback
-      analyzeBeneficiary.trigger(
-        { id: id!, form: feedback },
+      await analyzeBeneficiary.trigger(
+        { id: data.id, form: feedback as BeneficiariesFeedbackProps },
         {
           idempotencyKey: idempotencyKey,
-          tags: [`activity_${id}`, 'type_beneficiary'],
+          tags: [`activity_${id}`, `feedback_${data.id}`, 'type_beneficiary'],
         },
       );
       break;
 
     case 'partners':
       // analyze partner feedback
-      analyzePartner.trigger(
-        { id: id!, form: feedback },
+      await analyzePartner.trigger(
+        { id: data.id, form: feedback as PartnersFeedbackProps },
         {
           idempotencyKey: idempotencyKey,
-          tags: [`activity_${id}`, 'type_partner'],
+          tags: [`activity_${id}`, `feedback_${data.id}`, 'type_partner'],
         },
       );
       break;
 
     case 'implementers':
       // analyze implementers feedback
-      analyzeImplementer.trigger(
-        { id: id!, form: feedback },
+      await analyzeImplementer.trigger(
+        { id: data.id, form: feedback as ImplementerFeedbackProps },
         {
           idempotencyKey: idempotencyKey,
-          tags: [`activity_${id}`, 'type_implementer'],
+          tags: [`activity_${id}`, `feedback_${data.id}`, 'type_implementer'],
         },
       );
       break;

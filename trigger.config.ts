@@ -15,9 +15,10 @@ export const config: TriggerConfig = {
     },
   },
   build: {
+    external: ['onnxruntime-node'],
     extensions: [
       additionalPackages({
-        packages: ['husky', 'onnxruntime-node'],
+        packages: ['husky', '@huggingface/transformers'],
       }),
     ],
   },

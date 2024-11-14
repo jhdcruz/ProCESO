@@ -5,7 +5,7 @@ import { type BeneficiariesFeedbackProps } from '@/app/eval/_components/Forms/Be
 import { createAdminClient } from '@/libs/supabase/admin-client';
 import {
   analyzeEmotions,
-  analyzeSentiment,
+  analyzeSentiments,
 } from '@/libs/huggingface/transformers';
 
 /**
@@ -69,25 +69,27 @@ export const analyzePartner = task({
     // NOTE: This uses CPU, take into account when running in parallel
     //       such as Promise.all(...);
     const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiment(textsForSentiment);
+    const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
     const supabase = createAdminClient();
 
+    const data = {
+      score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
+      score_emotions: { ...emotionScore },
+      score_sentiment: { ...sentimentScore },
+    };
+
     const { error } = await supabase
       .from('activity_feedback')
-      .update({
-        score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
-        score_emotions: emotionScore as unknown as Record<string, number>,
-        score_sentiment: sentimentScore as unknown as Record<string, number>,
-      })
+      .update(data)
       .eq('id', payload.id)
-      .eq('type', 'partners');
+      .select('id');
 
     if (error) {
-      throw new Error(JSON.stringify(error));
+      logger.error(error.message, { error });
     }
   },
 });
@@ -161,25 +163,29 @@ export const analyzeImplementer = task({
     // NOTE: This uses CPU, take into account when running in parallel
     //       such as Promise.all(...);
     const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiment(textsForSentiment);
+    const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
     const supabase = createAdminClient();
 
+    const data = {
+      score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
+      score_emotions: { ...emotionScore },
+      score_sentiment: { ...sentimentScore },
+    };
+
+    logger.info('Saving feedback analysis results', { ...data });
+
     const { error } = await supabase
       .from('activity_feedback')
-      .update({
-        score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
-        score_emotions: emotionScore as unknown as Record<string, number>,
-        score_sentiment: sentimentScore as unknown as Record<string, number>,
-      })
+      .update(data)
       .eq('id', payload.id)
-      .eq('type', 'implementers');
+      .select('id');
 
     if (error) {
-      throw new Error(JSON.stringify(error));
+      logger.error(error.message, { error });
     }
   },
 });
@@ -240,28 +246,30 @@ export const analyzeBeneficiary = task({
     // NOTE: This uses CPU, take into account when running in parallel
     //       such as Promise.all(...);
     const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiment(textsForSentiment);
+    const sentimentScore = await analyzeSentiments(textsForSentiment);
 
     // save results
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
     const supabase = createAdminClient();
 
+    const data = {
+      score_ratings:
+        totalObjectivesRating + totalFeedbackRating + parseInt(form.importance),
+      score_emotions: { ...emotionScore },
+      score_sentiment: { ...sentimentScore },
+    };
+
+    logger.info('Saving feedback analysis results', { ...data });
+
     const { error } = await supabase
       .from('activity_feedback')
-      .update({
-        score_ratings:
-          totalObjectivesRating +
-          totalFeedbackRating +
-          parseInt(form.importance),
-        score_emotions: emotionScore as unknown as Record<string, number>,
-        score_sentiment: sentimentScore as unknown as Record<string, number>,
-      })
+      .update(data)
       .eq('id', payload.id)
-      .eq('type', 'beneficiaries');
+      .select('id');
 
     if (error) {
-      throw new Error(JSON.stringify(error));
+      logger.error(error.message, { error });
     }
   },
 });

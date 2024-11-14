@@ -26,6 +26,7 @@ import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { RatingField } from './RatingFields';
 
 export interface ImplementerFeedbackProps {
+  idempotencyKey?: string;
   id?: string;
   type?: Enums<'feedback_type'>;
   respondent: {
@@ -93,6 +94,7 @@ const ImplementersForm = ({
     validateInputOnChange: true,
 
     initialValues: {
+      idempotencyKey: uuid,
       id: activity.id!,
       type: 'implementers',
       respondent: {
@@ -171,9 +173,9 @@ const ImplementersForm = ({
     },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
-    const result = await submitFeedback(form);
+    const result = await submitFeedback(values);
     setLoading(false);
 
     if (result?.status === 0) {
@@ -238,24 +240,6 @@ const ImplementersForm = ({
       </Affix>
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <TextInput
-          key={form.key('idempotencyKey')}
-          type="hidden"
-          value={uuid}
-          {...form.getInputProps('idempotencyKey')}
-        />
-
-        <TextInput
-          key={form.key('id')}
-          type="hidden"
-          {...form.getInputProps('id')}
-        />
-        <TextInput
-          key={form.key('type')}
-          type="hidden"
-          {...form.getInputProps('type')}
-        />
-
         <Fieldset legend="Implementer's Information" my="md">
           <TextInput
             description="First Name, Middle Initial, Last Name, Suffix (if any)"

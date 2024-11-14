@@ -27,6 +27,7 @@ import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { RatingField } from './RatingFields';
 
 export interface BeneficiariesFeedbackProps {
+  idempotencyKey?: string;
   id?: string;
   type?: Enums<'feedback_type'>;
   respondent: {
@@ -74,6 +75,7 @@ const BeneficiariesForm = ({
     validateInputOnChange: true,
 
     initialValues: {
+      idempotencyKey: uuid,
       id: activity.id!,
       type: 'beneficiaries',
       respondent: {
@@ -117,9 +119,9 @@ const BeneficiariesForm = ({
     },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (values: typeof form.values) => {
     setLoading(true);
-    const result = await submitFeedback(form);
+    const result = await submitFeedback(values);
     setLoading(false);
 
     if (result?.status === 0) {
@@ -180,24 +182,6 @@ const BeneficiariesForm = ({
       </Affix>
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <TextInput
-          key={form.key('idempotencyKey')}
-          type="hidden"
-          value={uuid}
-          {...form.getInputProps('idempotencyKey')}
-        />
-
-        <TextInput
-          key={form.key('id')}
-          type="hidden"
-          {...form.getInputProps('id')}
-        />
-        <TextInput
-          key={form.key('type')}
-          type="hidden"
-          {...form.getInputProps('type')}
-        />
-
         <Fieldset legend="Beneficiary Information (Optional)" my="md">
           <TextInput
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
