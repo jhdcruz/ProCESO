@@ -131,10 +131,10 @@ const PartnersForm = ({
 
     if (result?.status === 0) {
       notifications.show({
-        title: 'Feedback submitted successfully',
-        message: 'Redirecting...',
+        message: 'Feedback submitted successfully',
         withBorder: true,
-        loading: true,
+        autoClose: 3000,
+        withCloseButton: true,
       });
 
       redirect('/eval/done');
