@@ -17,34 +17,27 @@ export const accumulateEmotions = (
 ): EmotionsResponse => {
   const total = emotions.length;
 
-  // combine and total similar labels
-  const accumulated = emotions.reduce((acc: Partial<EmotionsResponse>, e) => {
-    const key = e.label;
-    const value = e.score;
+  // merge and accumulate similar labels with their scores
+  const accumulated: EmotionAnalysis[] = emotions
+    .flat()
+    .reduce((acc, emotion) => {
+      const existing = acc.find((e) => e.label === emotion.label);
 
-    if (key in acc) {
-      acc[key] = (acc[key] ?? 0) + value;
-    } else {
-      acc[key] = value;
-    }
+      if (existing) {
+        existing.score += emotion.score;
+      } else {
+        acc.push({
+          label: emotion.label,
+          score: emotion.score,
+        });
+      }
 
-    return acc;
-  }, {});
-
-  // filter out keys that are not in emotions
-  const validKeys = Object.keys(accumulated).filter((key) =>
-    emotions.some((e) => e.label === key),
-  );
-
-  const filteredAccumulated = validKeys.reduce((acc, key) => {
-    acc[key as keyof EmotionsResponse] =
-      accumulated[key as keyof EmotionsResponse];
-    return acc;
-  }, {} as Partial<EmotionsResponse>);
+      return acc;
+    }, [] as EmotionAnalysis[]);
 
   return {
     total,
-    ...filteredAccumulated,
+    emotions: accumulated,
   };
 };
 
@@ -77,6 +70,7 @@ export const accumulateSentiments = (
  * Based on SamLowe/roberta-base-go_emotions-onnx model.
  *
  * @param text Text or string arrays to analyze.
+ * @param trigger Trigger.dev logging functionality
  */
 export const analyzeEmotions = async (
   text: string[],
@@ -90,7 +84,7 @@ export const analyzeEmotions = async (
     { dtype: 'q8' },
   );
 
-  const emotions = (await pipe(text)) as EmotionAnalysis[];
+  const emotions = (await pipe(text, { top_k: 3 })) as EmotionAnalysis[];
 
   if (trigger) logger.info('Emotion analysis results', { ...emotions });
 
@@ -102,6 +96,7 @@ export const analyzeEmotions = async (
  * Based on TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX model.
  *
  * @param text Text or string arrays to analyze.
+ * @param trigger Trigger.dev logging functionality
  */
 export const analyzeSentiments = async (
   text: string[],

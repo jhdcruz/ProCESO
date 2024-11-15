@@ -14,15 +14,18 @@ export interface SentimentsResponse {
 }
 
 export interface EmotionAnalysis {
-  label: keyof EmotionsResponse;
+  label: keyof Emotions;
   score: number;
+}
+
+export interface EmotionsResponse {
+  total?: number;
+  emotions: EmotionAnalysis[];
 }
 
 // Tailored for:
 // https://huggingface.co/SamLowe/roberta-base-go_emotions-onnx
-export interface EmotionsResponse {
-  // Total length/size of emotions analyzed.
-  total?: number;
+export interface Emotions {
   neutral?: number;
   admiration?: number;
   amusement?: number;

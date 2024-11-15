@@ -8,52 +8,59 @@ import {
   analyzeSentiments,
 } from '@/libs/huggingface/transformers';
 
-/**
- * Analyze partner feedback evaluation form.
- *
- * @param id - feedback ID.
- */
+async function analyzeFeedback(
+  id: string,
+  sentiments: string[],
+  emotions: string[],
+  rating: number,
+) {
+  logger.info('Total rating score', { ratings: rating });
+
+  const emotionScore = await analyzeEmotions(emotions);
+  const sentimentScore = await analyzeSentiments(sentiments);
+
+  await Promise.all([
+    envvars.retrieve('SUPABASE_URL'),
+    envvars.retrieve('SUPABASE_SERVICE_KEY'),
+  ]);
+  const supabase = createAdminClient();
+
+  const data: Record<string, unknown> = {
+    score_ratings: rating,
+    score_emotions: { ...emotionScore },
+    score_sentiment: { ...sentimentScore },
+  };
+
+  const { error } = await supabase
+    .from('activity_feedback')
+    .update(data)
+    .eq('id', id)
+    .select('id');
+
+  if (error) {
+    logger.error(error.message, { error });
+  }
+}
+
 export const analyzePartner = task({
   id: 'analyze-partner',
+  machine: {
+    memory: 2,
+  },
   run: async (payload: {
     id: string;
     form: Readonly<PartnersFeedbackProps>;
   }) => {
-    const { form } = payload;
+    const { id, form } = payload;
 
-    // calculate total ratings from objectives field
-    const totalRating =
-      form.objectives?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total rating score', { ratings: totalRating });
-
-    // calculate total ratings from outcomes field
-    const totalOutcomeRating =
-      form.outcomes?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total outcome rating score', { ratings: totalOutcomeRating });
-
-    // calculate total ratings from feedback field
-    const totalFeedbackRating =
-      form.feedback?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total feedback rating score', {
-      ratings: totalFeedbackRating,
-    });
-
-    // strings for sentiment analysis
-    const textsForSentiment: string[] | undefined =
+    const sentiments: string[] =
       [
         form.sentiments?.beneficial,
         form.sentiments?.improve,
         form.sentiments?.comments,
-      ].filter((text): text is string => !!text?.trim()) || undefined;
+      ].filter((text): text is string => !!text?.trim()) || [];
 
-    // strings for emotions analysis
-    const textsForEmotions: string[] = [
+    const emotions: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
@@ -63,89 +70,41 @@ export const analyzePartner = task({
       ...(form.feedback?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
-      ...textsForSentiment,
     ];
-    // analyze emotions
-    // NOTE: This uses CPU, take into account when running in parallel
-    //       such as Promise.all(...);
-    const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiments(textsForSentiment);
 
-    // save results
-    await Promise.all([
-      envvars.retrieve('SUPABASE_URL'),
-      envvars.retrieve('SUPABASE_SERVICE_KEY'),
-    ]);
-    const supabase = createAdminClient();
+    const ratings: number =
+      (form.objectives?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      (form.outcomes?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      (form.feedback?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ?? 0);
 
-    const data = {
-      score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
-      score_emotions: { ...emotionScore },
-      score_sentiment: { ...sentimentScore },
-    };
-
-    const { error } = await supabase
-      .from('activity_feedback')
-      .update(data)
-      .eq('id', payload.id)
-      .select('id');
-
-    if (error) {
-      logger.error(error.message, { error });
-    }
+    await analyzeFeedback(id, sentiments, emotions, ratings);
   },
 });
 
-/**
- * Analyze implenter feedback evaluation form.
- *
- * @param id - feedback ID.
- */
 export const analyzeImplementer = task({
   id: 'analyze-implementer',
+  machine: {
+    memory: 2,
+  },
   run: async (payload: {
     id: string;
     form: Readonly<ImplementerFeedbackProps>;
   }) => {
-    const { form } = payload;
+    const { id, form } = payload;
 
-    // calculate total ratings from objectives field
-    const totalRating =
-      form.objectives?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total rating score', { ratings: totalRating });
-
-    // calculate total ratings from outcomes field
-    const totalOutcomeRating =
-      form.outcomes?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total outcome rating score', { ratings: totalOutcomeRating });
-
-    // calculate total ratings from feedback field
-    const totalFeedbackRating =
-      form.feedback?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total feedback rating score', {
-      ratings: totalFeedbackRating,
-    });
-
-    // strings for sentiment analysis
-    const textsForSentiment: string[] | undefined = [
-      ...([
+    const sentiments: string[] =
+      [
         form.reflections?.interpersonal,
         form.reflections?.productivity,
         form.reflections?.social,
         form.sentiments?.beneficial,
         form.sentiments?.improve,
         form.sentiments?.comments,
-      ].filter((text): text is string => !!text?.trim()) || undefined),
-    ];
+      ].filter((text): text is string => !!text?.trim()) || [];
 
-    // strings for emotions analysis
-    const textsForEmotions: string[] = [
+    const emotions: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
@@ -158,124 +117,55 @@ export const analyzeImplementer = task({
       ...(form.implementations?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
-      ...textsForSentiment,
     ];
 
-    // analyze emotions
-    // NOTE: This uses CPU, take into account when running in parallel
-    //       such as Promise.all(...);
-    const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiments(textsForSentiment);
+    const ratings: number =
+      (form.objectives?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      (form.outcomes?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      (form.feedback?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ?? 0);
 
-    // save results
-    await Promise.all([
-      envvars.retrieve('SUPABASE_URL'),
-      envvars.retrieve('SUPABASE_SERVICE_KEY'),
-    ]);
-    const supabase = createAdminClient();
-
-    const data = {
-      score_ratings: totalRating + totalOutcomeRating + totalFeedbackRating,
-      score_emotions: { ...emotionScore },
-      score_sentiment: { ...sentimentScore },
-    };
-
-    logger.info('Saving feedback analysis results', { ...data });
-
-    const { error } = await supabase
-      .from('activity_feedback')
-      .update(data)
-      .eq('id', payload.id)
-      .select('id');
-
-    if (error) {
-      logger.error(error.message, { error });
-    }
+    await analyzeFeedback(id, sentiments, emotions, ratings);
   },
 });
 
-/**
- * Analyze implenter feedback evaluation form.
- *
- * @param id - feedback ID.
- */
 export const analyzeBeneficiary = task({
   id: 'analyze-beneficiary',
+  machine: {
+    memory: 2,
+  },
   run: async (payload: {
     id: string;
     form: Readonly<BeneficiariesFeedbackProps>;
   }) => {
-    const { form } = payload;
+    const { id, form } = payload;
 
-    // calculate total ratings from objectives field
-    const totalObjectivesRating =
-      form.objectives?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total rating score', { ratings: totalObjectivesRating });
-
-    // calculate total ratings from feedback field
-    const totalFeedbackRating =
-      form.feedback?.reduce((acc, obj) => {
-        return acc + parseInt(obj.rating);
-      }, 0) ?? 0;
-    logger.info('Total feedback rating score', {
-      ratings: totalFeedbackRating,
-    });
-
-    // strings for sentiment analysis
-    const textsForSentiment: string[] | undefined = [
-      ...([
+    const sentiments: string[] =
+      [
         form.reflections?.interpersonal,
         form.reflections?.productivity,
         form.reflections?.social,
         form.sentiments?.learning,
         form.sentiments?.value,
-      ].filter((text): text is string => !!text?.trim()) || undefined),
-    ];
+      ].filter((text): text is string => !!text?.trim()) || [];
 
-    // strings for emotions analysis
-    const textsForEmotions: string[] = [
+    const emotions: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
-
       ...(form.feedback?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
-      ...textsForSentiment,
     ];
 
-    // analyze emotions
-    // NOTE: This uses CPU, take into account when running in parallel
-    //       such as Promise.all(...);
-    const emotionScore = await analyzeEmotions(textsForEmotions);
-    const sentimentScore = await analyzeSentiments(textsForSentiment);
+    const ratings: number =
+      (form.objectives?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      (form.feedback?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ??
+        0) +
+      parseInt(form.importance);
 
-    // save results
-    await Promise.all([
-      envvars.retrieve('SUPABASE_URL'),
-      envvars.retrieve('SUPABASE_SERVICE_KEY'),
-    ]);
-    const supabase = createAdminClient();
-
-    const data = {
-      score_ratings:
-        totalObjectivesRating + totalFeedbackRating + parseInt(form.importance),
-      score_emotions: { ...emotionScore },
-      score_sentiment: { ...sentimentScore },
-    };
-
-    logger.info('Saving feedback analysis results', { ...data });
-
-    const { error } = await supabase
-      .from('activity_feedback')
-      .update(data)
-      .eq('id', payload.id)
-      .select('id');
-
-    if (error) {
-      logger.error(error.message, { error });
-    }
+    await analyzeFeedback(id, sentiments, emotions, ratings);
   },
 });
