@@ -52,11 +52,12 @@ Overview of current technologies and resources to be used in the system.
 
 ### AI Models
 
-- [TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX](https://huggingface.co/TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX) (Sentiment Analysis)
+- [cardiffnlp/twitter-roberta-base-sentiment-latest](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest) (Sentiment Analysis)
+   - [TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX](https://huggingface.co/TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX)
 - [SamLowe/roberta-base-go_emotions-onnx](https://huggingface.co/SamLowe/roberta-base-go_emotions-onnx) (Emotion/Text Classification)
 - [microsoft/Phi-3.5-mini-instruct-onnx](https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx) (Text Generation)
 
-> [!NOTE]:
+> [!NOTE]
 > **All models uses quantized version** of their original model for lightweight, and are run locally using
 > [`@huggingface/transformers`](https://www.npmjs.com/package/@huggingface/transformers).
 
@@ -121,44 +122,41 @@ Overview of current technologies and resources to be used in the system.
    bun dev:em  # to run email previews by react-email
    ```
 
-<details>
-   <summary>Using Doppler for Secret Management (Optional)</summary>
+### Using Doppler for Secret Management (Optional)
 
-   This project used [Doppler](https://doppler.com) ([CLI](https://docs.doppler.com/docs/install-cli))
-   for secrets management, therefore most scripts are
-   tailored for such env variables to be available when
-   running them using:
+This project used [Doppler](https://doppler.com) ([CLI](https://docs.doppler.com/docs/install-cli))
+for secrets management, therefore most scripts are
+tailored for such env variables to be available when
+running them using:
 
-   ```sh
-   doppler run -- bun gen:t
-   ```
+```sh
+doppler run -- bun gen:t
+```
 
-   Or you can do an alias to shorten it:
+Or you can do an alias to shorten it:
 
-   ```sh
-   alias dp='doppler run --'
+```sh
+alias dp='doppler run --'
 
-   # now you can run scripts using:
-   dp bun gen:t
-   # or
-   dp bun dev
-   ```
+# now you can run scripts using:
+dp bun gen:t
+# or
+dp bun dev
+```
 
-   You can upload your existing `.env` file using:
+You can upload your existing `.env` file using:
 
-   ```sh
-   doppler secret upload .env
-   ```
+```sh
+doppler secret upload .env
+```
 
-   > [!IMPORTANT]
-   >
-   > **You wouldn't need an `.env` file when using Doppler**.
-   > _(You can delete it)_
-   >
-   > It acquires the necessary secrets from doppler's dashboard
-   > using the CLI, and can be used across machines without manual transfers.
-
-</details>
+> [!NOTE]
+>
+> **You wouldn't need an `.env` file when using Doppler**.
+> _(You can delete it)_
+>
+> It acquires the necessary secrets from doppler's dashboard
+> using the CLI, and can be used across machines without manual transfers.
 
 ## Deployment
 
