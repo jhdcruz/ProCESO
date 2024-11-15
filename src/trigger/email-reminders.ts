@@ -11,6 +11,9 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
  */
 export const emailReminders = task({
   id: 'email-reminders',
+  machine: {
+    preset: 'micro',
+  },
   run: async (payload: { activityId: string }, { ctx }) => {
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');

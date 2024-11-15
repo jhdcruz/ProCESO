@@ -11,6 +11,9 @@ import { createAdminClient } from '@/libs/supabase/admin-client';
  */
 export const emailUnassigned = task({
   id: 'email-unassigned',
+  machine: {
+    preset: 'micro',
+  },
   run: async (
     payload: {
       activityId: string;
