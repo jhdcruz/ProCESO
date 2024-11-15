@@ -7,7 +7,7 @@ import { metadata as defaultMetadata } from '@/app/layout';
 import { systemUrl } from '@/app/routes';
 import { createServerClient } from '@/libs/supabase/server';
 import { getActivityDetails } from '@/libs/supabase/api/activity';
-import { ActivityDetailsShell } from '@portal/activities/_components/ActivityDetails/ActivityDetailsShell';
+import { ActivityShell } from '@portal/activities/_components/ActivityShell';
 import { siteUrl } from '@/utils/url';
 
 // cache the activity details to avoid duplicated
@@ -72,5 +72,5 @@ export default async function ActivityPage({
 
   if (!activity.data) redirect('/not-found');
 
-  return <ActivityDetailsShell activity={activity.data} />;
+  return <ActivityShell activity={activity.data} />;
 }

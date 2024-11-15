@@ -15,7 +15,7 @@ import { canAccessActivity, isInternal } from '@/utils/access-control';
 
 const ActivityInfo = dynamic(
   () =>
-    import('./ActivityInfo').then((mod) => ({
+    import('./ActivityDetails/ActivityInfo').then((mod) => ({
       default: mod.ActivityInfo,
     })),
   {
@@ -80,4 +80,4 @@ function ActivityDetailsComponent({
   );
 }
 
-export const ActivityDetailsShell = memo(ActivityDetailsComponent);
+export const ActivityShell = memo(ActivityDetailsComponent);
