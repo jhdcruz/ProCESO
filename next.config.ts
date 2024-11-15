@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     reactCompiler: true,
+    ppr: true,
     optimizePackageImports: [
       '@mantine/core',
       '@mantine/hooks',

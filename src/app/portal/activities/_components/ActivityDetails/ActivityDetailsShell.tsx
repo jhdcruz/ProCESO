@@ -10,13 +10,13 @@ import { systemUrl } from '@/app/routes';
 import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
+import { NotFound } from '@/components/Fallbacks/NotFound';
 import { canAccessActivity, isInternal } from '@/utils/access-control';
-import { ActivityInfo } from './ActivityInfo';
 
-const NotFound = dynamic(
+const ActivityInfo = dynamic(
   () =>
-    import('@/components/Fallbacks/NotFound').then((mod) => ({
-      default: mod.NotFound,
+    import('./ActivityInfo').then((mod) => ({
+      default: mod.ActivityInfo,
     })),
   {
     loading: () => <PageLoader />,
