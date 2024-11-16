@@ -3,6 +3,13 @@ import dynamic from 'next/dynamic';
 import { Paper, Group, rem } from '@mantine/core';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { PageLoader } from '@/components/Loader/PageLoader';
+import {
+  IconBuildings,
+  IconEmpathize,
+  IconPercentage,
+  IconUserShield,
+} from '@tabler/icons-react';
+import utilStyles from '@/styles/Utilties.module.css';
 
 const StatRingCard = dynamic(
   () =>
@@ -123,21 +130,25 @@ const StatsRingComponent = ({ id }: { id: string }) => {
     <Group gap="xs" grow preventGrowOverflow={false}>
       <StatRingCard
         color="red.6"
+        icon={<IconBuildings size="24" />}
         label="Partners"
         value={data?.partners.score ?? 0}
       />
       <StatRingCard
         color="green.6"
+        icon={<IconUserShield size="24" />}
         label="Implementers"
         value={data?.implementers.score ?? 0}
       />
       <StatRingCard
         color="blue.6"
+        icon={<IconEmpathize size="24" />}
         label="Beneficiaries"
         value={data?.beneficiaries.score ?? 0}
       />
       <StatRingCard
         color="yellow.6"
+        icon={<IconPercentage size="24" />}
         label="Total Ratings"
         value={data?.total ?? 0}
       />
