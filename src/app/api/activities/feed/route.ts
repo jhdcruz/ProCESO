@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
-import { activitiesToFc } from '@/utils/activities-to-fc';
+import { activitiesToFc } from '@/utils/json-restructure';
 import { createServerClient } from '@/libs/supabase/server';
 
 /**

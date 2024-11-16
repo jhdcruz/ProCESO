@@ -498,6 +498,47 @@ export type Database = {
         }
         Relationships: []
       }
+      activity_feedback_view: {
+        Row: {
+          activity_id: string | null
+          id: string | null
+          max_ratings: number | null
+          score_emotions: Json | null
+          score_ratings: number | null
+          score_sentiment: Json | null
+          type: Database["public"]["Enums"]["feedback_type"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

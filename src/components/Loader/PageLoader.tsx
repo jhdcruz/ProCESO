@@ -1,7 +1,7 @@
 import { Box, Stack, Text } from '@mantine/core';
 import { IconFidgetSpinner } from '@tabler/icons-react';
 
-export const PageLoader = () => (
+export const PageLoader = ({ label = true }: { label?: boolean }) => (
   <Box className="flex size-full place-content-center content-center items-center self-center py-10 align-middle">
     <Stack className="mx-auto size-full text-center">
       <IconFidgetSpinner
@@ -9,7 +9,7 @@ export const PageLoader = () => (
         stroke={1.5}
       />
 
-      <Text>Processing request, please wait...</Text>
+      {label && <Text>Processing request, please wait...</Text>}
     </Stack>
   </Box>
 );

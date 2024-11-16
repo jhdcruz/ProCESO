@@ -4,7 +4,7 @@ import type {
   EmotionAnalysis,
   EmotionsResponse,
   SentimentAnalysis,
-  SentimentsResponse,
+  SentimentResponse,
 } from './types';
 
 /**
@@ -48,7 +48,7 @@ export const accumulateEmotions = (
  */
 export const accumulateSentiments = (
   sentiments: SentimentAnalysis[],
-): SentimentsResponse => {
+): SentimentResponse => {
   const total = sentiments.length;
 
   return {
@@ -101,7 +101,7 @@ export const analyzeEmotions = async (
 export const analyzeSentiments = async (
   text: string[],
   trigger: boolean = true,
-): Promise<SentimentsResponse> => {
+): Promise<SentimentResponse> => {
   // NOTE: This uses transformer instead of HF API, therefore
   //       uses local machine for processing (CPU/GPU).
   const pipe = await pipeline(

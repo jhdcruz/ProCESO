@@ -5,7 +5,7 @@ export interface SentimentAnalysis {
 
 // Tailed for:
 // https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest
-export interface SentimentsResponse {
+export interface SentimentResponse {
   // Total length/size of sentiment analyzed.
   total?: number;
   positive: number;
@@ -19,6 +19,7 @@ export interface EmotionAnalysis {
 }
 
 export interface EmotionsResponse {
+  type?: 'partners' | 'implementers' | 'beneficiaries';
   total?: number;
   emotions: EmotionAnalysis[];
 }

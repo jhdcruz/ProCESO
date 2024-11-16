@@ -23,6 +23,16 @@ const ActivityInfo = dynamic(
   },
 );
 
+const ActivityAnalytics = dynamic(
+  () =>
+    import('./ActivityAnalytics/ActivityAnalytics').then((mod) => ({
+      default: mod.ActivityAnalytics,
+    })),
+  {
+    loading: () => <PageLoader />,
+  },
+);
+
 function ActivityDetailsComponent({
   activity,
 }: Readonly<{
@@ -65,13 +75,13 @@ function ActivityDetailsComponent({
             )}
           </Tabs.List>
 
-          <Tabs.Panel keepMounted={true} value="info">
+          <Tabs.Panel value="info">
             <ActivityInfo activity={activity} role={role!} />
           </Tabs.Panel>
 
           {isInternal(role!) && (
             <Tabs.Panel value="analytics">
-              <>Analytics, Insights, and Feedback Panel</>
+              <ActivityAnalytics id={activity.id!} />
             </Tabs.Panel>
           )}
         </Tabs>
