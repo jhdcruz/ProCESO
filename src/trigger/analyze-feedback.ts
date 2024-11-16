@@ -10,14 +10,13 @@ import {
 
 async function analyzeFeedback(
   id: string,
-  sentiments: string[],
-  emotions: string[],
+  forAnalysis: string[],
   rating: number,
 ) {
   logger.info('Total rating score', { ratings: rating });
 
-  const emotionScore = await analyzeEmotions(emotions);
-  const sentimentScore = await analyzeSentiments(sentiments);
+  const emotionScore = await analyzeEmotions(forAnalysis);
+  const sentimentScore = await analyzeSentiments(forAnalysis);
 
   await Promise.all([
     envvars.retrieve('SUPABASE_URL'),
@@ -53,14 +52,14 @@ export const analyzePartner = task({
   }) => {
     const { id, form } = payload;
 
-    const sentiments: string[] =
+    const remarks: string[] =
       [
         form.sentiments?.beneficial,
         form.sentiments?.improve,
         form.sentiments?.comments,
       ].filter((text): text is string => !!text?.trim()) || [];
 
-    const emotions: string[] = [
+    const forAnalysis: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
@@ -70,6 +69,7 @@ export const analyzePartner = task({
       ...(form.feedback?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
+      ...remarks,
     ];
 
     const ratings: number =
@@ -79,7 +79,7 @@ export const analyzePartner = task({
         0) +
       (form.feedback?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ?? 0);
 
-    await analyzeFeedback(id, sentiments, emotions, ratings);
+    await analyzeFeedback(id, forAnalysis, ratings);
   },
 });
 
@@ -94,7 +94,7 @@ export const analyzeImplementer = task({
   }) => {
     const { id, form } = payload;
 
-    const sentiments: string[] =
+    const remarks: string[] =
       [
         form.reflections?.interpersonal,
         form.reflections?.productivity,
@@ -104,7 +104,7 @@ export const analyzeImplementer = task({
         form.sentiments?.comments,
       ].filter((text): text is string => !!text?.trim()) || [];
 
-    const emotions: string[] = [
+    const forAnalysis: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
@@ -117,6 +117,7 @@ export const analyzeImplementer = task({
       ...(form.implementations?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
+      ...remarks,
     ];
 
     const ratings: number =
@@ -126,7 +127,7 @@ export const analyzeImplementer = task({
         0) +
       (form.feedback?.reduce((acc, obj) => acc + parseInt(obj.rating), 0) ?? 0);
 
-    await analyzeFeedback(id, sentiments, emotions, ratings);
+    await analyzeFeedback(id, forAnalysis, ratings);
   },
 });
 
@@ -141,7 +142,7 @@ export const analyzeBeneficiary = task({
   }) => {
     const { id, form } = payload;
 
-    const sentiments: string[] =
+    const remarks: string[] =
       [
         form.reflections?.interpersonal,
         form.reflections?.productivity,
@@ -150,13 +151,14 @@ export const analyzeBeneficiary = task({
         form.sentiments?.value,
       ].filter((text): text is string => !!text?.trim()) || [];
 
-    const emotions: string[] = [
+    const forAnalysis: string[] = [
       ...(form.objectives?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
       ...(form.feedback?.map((obj) => obj.remarks) ?? []).filter(
         (text) => text.trim() !== '',
       ),
+      ...remarks,
     ];
 
     const ratings: number =
@@ -166,6 +168,6 @@ export const analyzeBeneficiary = task({
         0) +
       parseInt(form.importance);
 
-    await analyzeFeedback(id, sentiments, emotions, ratings);
+    await analyzeFeedback(id, forAnalysis, ratings);
   },
 });
