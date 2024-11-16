@@ -45,9 +45,10 @@ export async function middleware(request: NextRequest) {
     !request.nextUrl.pathname.match(systemUrl + /\/activities\/.*\/info$/) // allow /portal/activities/**/info
   ) {
     // no user, potentially respond by redirecting the user to the login page
+    const original = request.nextUrl.pathname;
     const url = request.nextUrl.clone();
     url.pathname = '/';
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(url + '?next=' + original);
   } else {
     // redirect if user is disabled
     if (user?.app_metadata?.active === 'false') {

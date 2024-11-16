@@ -4,6 +4,7 @@ import { Button } from '@mantine/core';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { siteUrl } from '@/utils/url';
 import { systemUrl } from '../../routes';
+import { useSearchParams } from 'next/navigation';
 
 const GoogleIcon = () => (
   <svg
@@ -37,14 +38,18 @@ const GoogleIcon = () => (
  * OAuth function is already included.
  */
 export function GoogleButton() {
+  const searchParams = useSearchParams();
+
   // OAuth only works on browser clients
   const onGoogleAuth = async () => {
     const supabase = createBrowserClient();
 
+    const next = searchParams.get('next') ?? systemUrl;
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${siteUrl()}/auth/callback?next=${systemUrl}`,
+        redirectTo: `${siteUrl()}/auth/callback?next=${next}`,
       },
     });
 
