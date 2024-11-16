@@ -65,7 +65,7 @@
     "dayjs": "1.11.13",
     "framer-motion": "11.11.17",
     "little-date": "1.0.0",
-    "next": "15.0.4-canary.12",
+    "next": "15.0.4-canary.13",
     "react": "19.0.0-rc-b01722d5-20241114",
     "react-dom": "19.0.0-rc-b01722d5-20241114",
     "react-transition-progress": "0.0.4",
