@@ -11,6 +11,7 @@ import {
   aggregateEmotions,
 } from '@/utils/json-restructure';
 import classes from '@/styles/Utilties.module.css';
+import { getEvaluatorColor } from '@/utils/colors';
 
 function EmotionsRadarComponent({ id }: { id: string }) {
   const [data, setData] = useState<CategorizedEmotions[]>([]);
@@ -55,19 +56,19 @@ function EmotionsRadarComponent({ id }: { id: string }) {
           {
             label: 'Partners',
             name: 'partners',
-            color: 'red.6',
+            color: getEvaluatorColor('partners'),
             opacity: 0.2,
           },
           {
             label: 'Implementers',
             name: 'implementers',
-            color: 'green.6',
+            color: getEvaluatorColor('implementers'),
             opacity: 0.2,
           },
           {
             label: 'Beneficiaries',
             name: 'beneficiaries',
-            color: 'blue.6',
+            color: getEvaluatorColor('beneficiaries'),
             opacity: 0.2,
           },
         ]}

@@ -66,7 +66,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
 
   const Segments = () => (
     <>
-      <Progress.Section color="#fa5252" value={sentimentPercentages.negative}>
+      <Progress.Section color="red" value={sentimentPercentages.negative}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
             decimalScale={2}
@@ -76,7 +76,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         </Progress.Label>
       </Progress.Section>
 
-      <Progress.Section color="#343a40" value={sentimentPercentages.neutral}>
+      <Progress.Section color="gray" value={sentimentPercentages.neutral}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
             decimalScale={2}
@@ -86,7 +86,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         </Progress.Label>
       </Progress.Section>
 
-      <Progress.Section color="#40c057" value={sentimentPercentages.positive}>
+      <Progress.Section color="teal" value={sentimentPercentages.positive}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
             decimalScale={2}
@@ -100,11 +100,11 @@ function StatsSegmentsComponent({ id }: { id: string }) {
 
   const Descriptions = () => (
     <>
-      <Box className={classes.stat} style={{ borderBottomColor: '#fa5252' }}>
+      <Box className={classes.stat} style={{ borderBottomColor: '#f03e3e' }}>
         <Text mb={4} size="sm">
           Negative
         </Text>
-        <Text c="#fa5252" className={classes.statCount} fw="bold" size="sm">
+        <Text c="#f03e3e" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
             decimalScale={2}
             suffix="%"
@@ -112,11 +112,11 @@ function StatsSegmentsComponent({ id }: { id: string }) {
           />
         </Text>
       </Box>
-      <Box className={classes.stat} style={{ borderBottomColor: '#343a40' }}>
+      <Box className={classes.stat} style={{ borderBottomColor: '#495057' }}>
         <Text mb={4} size="sm">
           Neutral
         </Text>
-        <Text c="#868e96" className={classes.statCount} fw="bold" size="sm">
+        <Text c="#495057" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
             decimalScale={2}
             suffix="%"
@@ -124,11 +124,11 @@ function StatsSegmentsComponent({ id }: { id: string }) {
           />
         </Text>
       </Box>
-      <Box className={classes.stat} style={{ borderBottomColor: '#40c057' }}>
+      <Box className={classes.stat} style={{ borderBottomColor: '#38d9a9' }}>
         <Text mb={4} size="sm">
           Positive
         </Text>
-        <Text c="#40c057" className={classes.statCount} fw="bold" size="sm">
+        <Text c="#38d9a9" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
             decimalScale={2}
             suffix="%"
