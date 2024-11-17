@@ -10,6 +10,7 @@ import {
   Divider,
   Grid,
   Group,
+  Indicator,
   Input,
   Modal,
   SegmentedControl,
@@ -21,7 +22,11 @@ import {
   IMAGE_MIME_TYPE,
   type FileWithPath,
 } from '@mantine/dropzone';
-import { DateTimePicker, type DateValue } from '@mantine/dates';
+import {
+  DateTimePicker,
+  type DatePickerProps,
+  type DateValue,
+} from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import {
@@ -39,9 +44,9 @@ import type { Tables, Enums } from '@/libs/supabase/_database';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
 import { submitActivity } from '@portal/activities/actions';
 import { SeriesInput } from './SeriesInput';
-import classes from '@/styles/forms/ContainedInput.module.css';
 import { listDepts } from '@/utils/user-types';
 import { getDeptColor } from '@/utils/colors';
+import classes from '@/styles/forms/ContainedInput.module.css';
 
 export interface ActivityFormProps {
   id?: string;
@@ -306,6 +311,7 @@ export function ActivityFormModalComponent({
                 key={form.key('date_starting')}
                 label="Starting Date & Time"
                 placeholder="Starting date and time of activity"
+                renderDay={dayRenderer}
                 {...form.getInputProps('date_starting')}
               />
 
@@ -316,6 +322,7 @@ export function ActivityFormModalComponent({
                 key={form.key('date_ending')}
                 label="Ending Date & Time"
                 placeholder="Last day and time of activity."
+                renderDay={dayRenderer}
                 {...form.getInputProps('date_ending')}
               />
             </Group>
@@ -434,5 +441,20 @@ export function ActivityFormModalComponent({
     </Modal>
   );
 }
+const dayRenderer: DatePickerProps['renderDay'] = (date: Date) => {
+  const day = date.getDate();
+  const today = new Date();
+
+  const isToday =
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+
+  return (
+    <Indicator size={6} offset={-5} disabled={!isToday}>
+      <div>{day}</div>
+    </Indicator>
+  );
+};
 
 export const ActivityFormModal = memo(ActivityFormModalComponent);

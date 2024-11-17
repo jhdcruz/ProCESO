@@ -9,6 +9,7 @@ import {
   Anchor,
   Tooltip,
   Box,
+  Timeline,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
@@ -17,6 +18,7 @@ import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getActivityReports } from '@/libs/supabase/api/storage';
 import {
+  IconCornerDownRight,
   IconLibrary,
   IconRosetteDiscountCheck,
   IconScanEye,
@@ -40,6 +42,12 @@ const RTEditor = dynamic(
   },
 );
 
+interface FacultyGroup {
+  referrerEmail: string;
+  referrer: Tables<'activities_faculties_view'> | null;
+  members: Tables<'activities_faculties_view'>[];
+}
+
 /**
  * Description of the activity with aside information
  * for published by, date created and updated, etc.
@@ -61,9 +69,7 @@ function ActivityDetailsBody({
 }) {
   const clipboard = useClipboard({ timeout: 1000 });
 
-  const [faculties, setFaculties] = useState<
-    Tables<'activities_faculties_view'>[] | null
-  >();
+  const [faculties, setFaculties] = useState<FacultyGroup[] | null>();
   const [files, setFiles] = useState<Tables<'activity_files'>[] | null>();
 
   const saveFile = async (fileName: string, checksum: string) => {
@@ -148,7 +154,40 @@ function ActivityDetailsBody({
         });
       }
 
-      setFaculties(activityFaculties?.data);
+      if (activityFaculties?.data) {
+        // Transform flat faculty array into grouped structure by referrer
+        const groups = activityFaculties.data.reduce((acc, faculty) => {
+          // Use referrer's email as group identifier, fallback to 'none' if no referrer
+          const referrerEmail = faculty.referrer_email ?? 'none';
+
+          // Check if a group with this referrer already exists
+          const existingGroup = acc.find(
+            (g) => g.referrerEmail === referrerEmail,
+          );
+
+          if (existingGroup) {
+            // If group exists, add faculty to its members array
+            existingGroup.members.push(faculty);
+          } else {
+            // If no group exists yet, create new group with:
+            // - referrerEmail: identifier for the group
+            // - referrer: faculty object if has referrer, null if none
+            // - members: array starting with current faculty
+            acc.push({
+              referrerEmail,
+              referrer: faculty.referrer_email ? faculty : null,
+              members: [faculty],
+            });
+          }
+          return acc;
+        }, [] as FacultyGroup[]); // Initialize with empty array typed as FacultyGroup[]
+
+        setFaculties(groups);
+      } else {
+        // If no faculty data, reset state to null
+        setFaculties(null);
+      }
+
       setFiles(activityFiles?.data ?? null);
     };
 
@@ -215,16 +254,40 @@ function ActivityDetailsBody({
           <>
             {faculties.length ? (
               <>
-                {faculties.map((faculty) => (
-                  <Box key={faculty.id} mb="lg">
-                    <UserDisplay
-                      avatar_url={faculty.avatar_url}
-                      department={faculty.department!}
-                      email={faculty.email!}
-                      name={faculty.name!}
-                      other_roles={faculty.other_roles}
-                      role={faculty.role!}
-                    />
+                {faculties.map((group) => (
+                  <Box key={group.referrerEmail}>
+                    {group.referrer && (
+                      <Box mb="xs">
+                        <Text size="xs" c="dimmed" mb={4}>
+                          Referrer:
+                        </Text>
+                        <UserDisplay
+                          avatar_url={group.referrer.referrer_avatar}
+                          department={group.referrer.referrer_department!}
+                          email={group.referrer.referrer_email!}
+                          name={group.referrer.referrer_name!}
+                          other_roles={group.referrer.referrer_other_roles}
+                          role={group.referrer.referrer_role!}
+                        />
+                      </Box>
+                    )}
+                    <Timeline bulletSize={22} my="md" lineWidth={2}>
+                      {group.members.map((faculty) => (
+                        <Timeline.Item
+                          key={faculty.id}
+                          bullet={<IconCornerDownRight size={12} />}
+                        >
+                          <UserDisplay
+                            avatar_url={faculty.avatar_url}
+                            department={faculty.department!}
+                            email={faculty.email!}
+                            name={faculty.name!}
+                            other_roles={faculty.other_roles}
+                            role={faculty.role!}
+                          />
+                        </Timeline.Item>
+                      ))}
+                    </Timeline>
                   </Box>
                 ))}
               </>
