@@ -57,6 +57,24 @@ export function FacultyAssignment({
   // form handler & submission
   const handleSubmit = async (values: Props) => {
     setPending(true);
+
+    // only allow changes before the activity starts
+    const now = new Date();
+    if (now > activity.date_starting!) {
+      notifications.show({
+        title: 'Cannot assign faculty',
+        message: 'The activity has already started or completed.',
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 6000,
+      });
+
+      setPending(false);
+
+      return;
+    }
+
     const result = await assignFaculty(
       activity.id!,
       values.handled_by,
@@ -139,7 +157,7 @@ export function FacultyAssignment({
             type="submit"
             variant={pending ? 'default' : 'filled'}
           >
-            {activity ? 'Reassign' : 'Assign'}
+            Assign
           </Button>
         </Group>
       </form>

@@ -391,6 +391,9 @@ function ActivityDetailsHeader({
                 {/* Faculty Assignment */}
                 {isElevated(role, other_roles) && (
                   <Button
+                    disabled={
+                      new Date(activity.date_starting as string) < new Date()
+                    }
                     leftSection={<IconUsersGroup size={16} />}
                     onClick={assignOpen}
                     variant="default"
