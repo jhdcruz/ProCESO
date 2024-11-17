@@ -119,19 +119,19 @@ export const getEmotionColor = (emotion: keyof Emotions): MantineColor => {
     case 'sadness':
       return 'blue.7';
     case 'fear':
-      return 'dark.8';
+      return 'red.8';
     case 'disgust':
       return 'grape.7';
     case 'disappointment':
       return 'indigo.6';
     case 'disapproval':
-      return 'red.7';
+      return 'red.6';
     case 'grief':
-      return 'dark.7';
+      return 'gray.7';
     case 'remorse':
       return 'blue.6';
     case 'annoyance':
-      return 'grape.6';
+      return 'orange.7';
     case 'embarrassment':
       return 'pink.7';
 

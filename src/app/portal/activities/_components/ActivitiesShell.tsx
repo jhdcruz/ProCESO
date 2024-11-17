@@ -1,9 +1,9 @@
 'use client';
 
-import { memo, useDeferredValue, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Button, Group, TextInput, rem } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import { IconCalendarPlus, IconSearch } from '@tabler/icons-react';
 import { getActivities } from '@/libs/supabase/api/activity';
 import { getAssignedActivities } from '@/libs/supabase/api/faculty-assignments';
@@ -34,7 +34,7 @@ function ActivitiesShellComponent() {
 
   const [opened, { open, close }] = useDisclosure(false);
   const [query, setQuery] = useState<string>('');
-  const searchQuery = useDeferredValue<string>(query);
+  const [searchQuery] = useDebouncedValue(query, 200);
 
   // data
   const [assigned, setAssigned] = useState<ActivitiesViewResponse>();
