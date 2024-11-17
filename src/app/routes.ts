@@ -51,12 +51,6 @@ export const sidebarRoutes: Routes = [
     access: ['student', 'faculty', 'staff', 'admin'],
   },
   {
-    label: 'Analytics',
-    icon: IconPresentationAnalytics,
-    link: `${systemUrl}/analytics`,
-    access: ['staff', 'admin'],
-  },
-  {
     label: 'Certificates',
     icon: IconFileAnalytics,
     link: `${systemUrl}/certs`,
