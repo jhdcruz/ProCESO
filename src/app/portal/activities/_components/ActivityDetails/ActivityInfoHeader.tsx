@@ -16,6 +16,7 @@ import {
   Tooltip,
   FileButton,
   Anchor,
+  AspectRatio,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -442,16 +443,14 @@ function ActivityDetailsHeader({
         </Stack>
         <Image
           alt=""
-          className="object-contain shadow-md"
+          className="object-contain shadow-sm"
           component={NextImage}
           fallbackSrc="/assets/no-image.png"
-          h="auto"
-          height={340}
+          width={360}
+          height={260}
           mb={16}
           radius="md"
           src={activity.image_url}
-          w="auto"
-          width={340}
         />
       </Group>
     </>
