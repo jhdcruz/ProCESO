@@ -1,17 +1,18 @@
 'use client';
 
-import { memo, useState, useDeferredValue, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Autocomplete, type AutocompleteProps, Loader } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { getFilteredSeries } from '@/libs/supabase/api/series';
 import type { Tables } from '@/libs/supabase/_database';
+import { useDebouncedValue } from '@mantine/hooks';
 
 /**
  * Activity series autocomplete input
  */
 export const SeriesInput = memo((props: AutocompleteProps) => {
   const [query, setQuery] = useState('');
-  const seriesQuery = useDeferredValue<string>(query);
+  const [seriesQuery] = useDebouncedValue(query, 200);
   const [data, setData] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 

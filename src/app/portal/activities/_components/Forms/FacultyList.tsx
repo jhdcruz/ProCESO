@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  useEffect,
-  useState,
-  Suspense,
-  useDeferredValue,
-  type ChangeEvent,
-  memo,
-} from 'react';
+import { useEffect, useState, Suspense, type ChangeEvent, memo } from 'react';
 import {
   Table,
   Checkbox,
@@ -34,6 +27,7 @@ import {
   FilterDepartments,
   FilterPositions,
 } from '@/components/Filters/FilterUsers';
+import { useDebouncedValue } from '@mantine/hooks';
 
 export function FacultyListComponent({
   startDate,
@@ -48,7 +42,7 @@ export function FacultyListComponent({
 
   // search
   const [search, setSearch] = useState<string>('');
-  const searchQuery = useDeferredValue(search);
+  const [searchQuery] = useDebouncedValue(search, 200);
 
   // filters
   const [dept, setDept] = useState<Enums<'roles_dept'>[]>([]);
