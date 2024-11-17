@@ -42,7 +42,6 @@ export interface CategorizedEmotions {
 
 /**
  * Flattens the emotions response into a categorized emotions array.
- * Mostly for Mantine/Recharts Radar Chart.
  *
  * @param data EmotionsResponse[]
  * @returns CategorizedEmotions[]
@@ -88,6 +87,7 @@ export function aggregateEmotions(
     return acc;
   }, []);
 }
+
 /**
  * Aggregate sentiment response into a single response object.
  */
@@ -108,4 +108,37 @@ export function aggregateSentiments(
       negative: 0,
     },
   );
+}
+
+/**
+ * Accumulate emotions that all 3 types has in common.
+ * Mostly for Mantine/Recharts Radar Chart.
+ *
+ * @param emotions EmotionAnalysis[]
+ * @returns CategorizedEmotions[]
+ */
+export function aggregateCommonEmotions(
+  data: EmotionsResponse[],
+): CategorizedEmotions[] {
+  const emotions = aggregateEmotions(data);
+
+  return emotions.reduce<CategorizedEmotions[]>((acc, emotion) => {
+    // Find existing emotion entry or create new one
+    let existingEmotion = acc.find((item) => item.label === emotion.label);
+
+    if (!existingEmotion) {
+      existingEmotion = { label: emotion.label };
+      acc.push(existingEmotion);
+    }
+
+    // Add to existing value or set new value based on the type
+    existingEmotion.beneficiaries =
+      (existingEmotion.beneficiaries ?? 0) + (emotion.beneficiaries ?? 0);
+    existingEmotion.partners =
+      (existingEmotion.partners ?? 0) + (emotion.partners ?? 0);
+    existingEmotion.implementers =
+      (existingEmotion.implementers ?? 0) + (emotion.implementers ?? 0);
+
+    return acc;
+  }, []);
 }

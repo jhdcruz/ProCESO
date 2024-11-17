@@ -8,7 +8,7 @@ import { createBrowserClient } from '@/libs/supabase/client';
 import type { EmotionsResponse } from '@/libs/huggingface/types';
 import {
   type CategorizedEmotions,
-  aggregateEmotions,
+  aggregateCommonEmotions,
 } from '@/utils/json-restructure';
 import classes from '@/styles/Utilties.module.css';
 import { getEvaluatorColor } from '@/utils/colors';
@@ -27,7 +27,7 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         .limit(1000)
         .returns<EmotionsResponse[]>();
 
-      if (results) setData(aggregateEmotions(results));
+      if (results) setData(aggregateCommonEmotions(results));
     };
 
     void fetchEmotions();
@@ -58,19 +58,19 @@ function EmotionsRadarComponent({ id }: { id: string }) {
             label: 'Partners',
             name: 'partners',
             color: getEvaluatorColor('partners'),
-            opacity: 0.3,
+            opacity: 0.2,
           },
           {
             label: 'Implementers',
             name: 'implementers',
             color: getEvaluatorColor('implementers'),
-            opacity: 0.3,
+            opacity: 0.2,
           },
           {
             label: 'Beneficiaries',
             name: 'beneficiaries',
             color: getEvaluatorColor('beneficiaries'),
-            opacity: 0.3,
+            opacity: 0.2,
           },
         ]}
         withLegend

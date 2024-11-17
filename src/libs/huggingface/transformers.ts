@@ -47,19 +47,20 @@ export const accumulateEmotions = (
  * @param sentiments Sentiment analysis array results.
  */
 export const accumulateSentiments = (
-  sentiments: SentimentAnalysis[],
+  sentiments: SentimentAnalysis[][],
 ): SentimentResponse => {
   const total = sentiments.length;
+  const flatSentiments = sentiments.flat();
 
   return {
     total,
-    positive: sentiments
+    positive: flatSentiments
       .filter((s) => s.label === 'positive')
       .reduce((acc, s) => acc + s.score, 0),
-    neutral: sentiments
+    neutral: flatSentiments
       .filter((s) => s.label === 'neutral')
       .reduce((acc, s) => acc + s.score, 0),
-    negative: sentiments
+    negative: flatSentiments
       .filter((s) => s.label === 'negative')
       .reduce((acc, s) => acc + s.score, 0),
   };
@@ -84,7 +85,7 @@ export const analyzeEmotions = async (
     { dtype: 'q8' },
   );
 
-  const emotions = (await pipe(text, { top_k: 3 })) as EmotionAnalysis[];
+  const emotions = (await pipe(text, { top_k: 2 })) as EmotionAnalysis[];
 
   if (trigger) logger.info('Emotion analysis results', { ...emotions });
 
@@ -110,7 +111,7 @@ export const analyzeSentiments = async (
     { dtype: 'q8', model_file_name: 'decoder_model_merged' },
   );
 
-  const sentiments = (await pipe(text)) as SentimentAnalysis[];
+  const sentiments = (await pipe(text, { top_k: 3 })) as SentimentAnalysis[][];
 
   if (trigger) {
     logger.info('Sentiment analysis results', {
