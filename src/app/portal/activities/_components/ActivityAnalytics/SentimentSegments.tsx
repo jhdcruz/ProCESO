@@ -112,11 +112,11 @@ function StatsSegmentsComponent({ id }: { id: string }) {
           />
         </Text>
       </Box>
-      <Box className={classes.stat} style={{ borderBottomColor: '#495057' }}>
+      <Box className={classes.stat} style={{ borderBottomColor: '#868e96' }}>
         <Text mb={4} size="sm">
           Neutral
         </Text>
-        <Text c="#495057" className={classes.statCount} fw="bold" size="sm">
+        <Text c="gray" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
             decimalScale={1}
             suffix="%"
