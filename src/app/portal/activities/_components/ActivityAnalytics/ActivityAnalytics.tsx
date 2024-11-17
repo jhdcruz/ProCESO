@@ -2,10 +2,9 @@
 
 import { memo } from 'react';
 import dynamic from 'next/dynamic';
-import { Divider, Grid, Group, Paper, ScrollArea, rem } from '@mantine/core';
+import { Box, Grid, Paper } from '@mantine/core';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { StatRatings } from './StatRatings';
-import { IconFileSpreadsheet } from '@tabler/icons-react';
 
 const EmotionsRadar = dynamic(
   () =>
@@ -42,23 +41,14 @@ const EvaluationsTable = dynamic(
 
 function ActivityAnalyticsShell({ id }: { id: string }) {
   return (
-    <Grid align="flex-start" columns={3} gutter={0} justify="space-between">
-      <Grid.Col span="auto">
-        <ScrollArea.Autosize offsetScrollbars type="auto">
-          <StatRatings id={id} />
-          <Divider
-            label={
-              <Group gap={0} wrap="nowrap">
-                <IconFileSpreadsheet className="mr-2" size={16} />
-                Evaluation Responses
-              </Group>
-            }
-            labelPosition="left"
-            my="md"
-          />
+    <Box>
+      <StatRatings id={id} />
 
+      <Grid align="flex-start" columns={3} justify="space-between">
+        <Grid.Col span="auto">
           {/* Respondents Table */}
           <Paper
+            shadow="sm"
             bg="light-dark(
               var(--mantine-color-gray-0),
               var(--mantine-color-dark-7)
@@ -68,37 +58,37 @@ function ActivityAnalyticsShell({ id }: { id: string }) {
           >
             <EvaluationsTable id={id} />
           </Paper>
-        </ScrollArea.Autosize>
-      </Grid.Col>
+        </Grid.Col>
 
-      <Grid.Col span="content">
-        <Paper
-          bg="light-dark(
+        <Grid.Col span={{ base: 'auto', sm: 1 }}>
+          <Paper
+            shadow="sm"
+            bg="light-dark(
         var(--mantine-color-gray-0),
         var(--mantine-color-dark-7)
       )"
-          mb="xs"
-          p="md"
-          w={{ base: '100%', sm: rem(350) }}
-          withBorder
-        >
-          <SentimentSegments id={id} />
-        </Paper>
+            mb="xs"
+            p="md"
+            withBorder
+          >
+            <SentimentSegments id={id} />
+          </Paper>
 
-        <Paper
-          bg="light-dark(
+          <Paper
+            shadow="sm"
+            bg="light-dark(
           var(--mantine-color-gray-0),
           var(--mantine-color-dark-7)
         )"
-          my="xs"
-          p="md"
-          w={{ base: '100%', sm: rem(350) }}
-          withBorder
-        >
-          <EmotionsRadar id={id} />
-        </Paper>
-      </Grid.Col>
-    </Grid>
+            my="xs"
+            p="md"
+            withBorder
+          >
+            <EmotionsRadar id={id} />
+          </Paper>
+        </Grid.Col>
+      </Grid>
+    </Box>
   );
 }
 

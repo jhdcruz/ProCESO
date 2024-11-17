@@ -29,6 +29,7 @@ export const StatsRingCard = memo(
       mx={{ base: 'auto', sm: 0 }}
       p="md"
       w={{ base: '100%', sm: rem(240) }}
+      shadow="sm"
       withBorder
     >
       <Group>
@@ -46,7 +47,7 @@ export const StatsRingCard = memo(
           </Text>
           <Text fw={700} size="xl">
             {value > 0 ? (
-              <NumberFormatter decimalScale={2} suffix="%" value={value} />
+              <NumberFormatter decimalScale={1} suffix="%" value={value} />
             ) : (
               '--'
             )}

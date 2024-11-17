@@ -9,7 +9,6 @@ import {
   IconPercentage,
   IconUserShield,
 } from '@tabler/icons-react';
-import utilStyles from '@/styles/Utilties.module.css';
 import { getEvaluatorColor } from '@/utils/colors';
 
 const StatRingCard = dynamic(
@@ -128,7 +127,7 @@ const StatsRingComponent = ({ id }: { id: string }) => {
   }, [id]);
 
   return (
-    <Group gap="xs" grow preventGrowOverflow={false}>
+    <Group gap="xs" my="sm" grow preventGrowOverflow={false}>
       <StatRingCard
         color={getEvaluatorColor('partners')}
         icon={<IconBuildings size="24" />}

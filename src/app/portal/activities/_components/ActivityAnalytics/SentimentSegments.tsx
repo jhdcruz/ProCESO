@@ -69,7 +69,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
       <Progress.Section color="red" value={sentimentPercentages.negative}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.negative}
           />
@@ -79,7 +79,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
       <Progress.Section color="gray" value={sentimentPercentages.neutral}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.neutral}
           />
@@ -89,7 +89,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
       <Progress.Section color="teal" value={sentimentPercentages.positive}>
         <Progress.Label className={classes.progressLabel}>
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.positive}
           />
@@ -106,7 +106,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         </Text>
         <Text c="#f03e3e" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.negative}
           />
@@ -118,7 +118,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         </Text>
         <Text c="#495057" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.neutral}
           />
@@ -130,7 +130,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         </Text>
         <Text c="#38d9a9" className={classes.statCount} fw="bold" size="sm">
           <NumberFormatter
-            decimalScale={2}
+            decimalScale={1}
             suffix="%"
             value={sentimentPercentages.positive}
           />

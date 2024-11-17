@@ -51,25 +51,26 @@ function EmotionsRadarComponent({ id }: { id: string }) {
       <RadarChart
         data={data}
         dataKey="label"
-        h={300}
+        h={360}
+        miw={300}
         series={[
           {
             label: 'Partners',
             name: 'partners',
             color: getEvaluatorColor('partners'),
-            opacity: 0.2,
+            opacity: 0.3,
           },
           {
             label: 'Implementers',
             name: 'implementers',
             color: getEvaluatorColor('implementers'),
-            opacity: 0.2,
+            opacity: 0.3,
           },
           {
             label: 'Beneficiaries',
             name: 'beneficiaries',
             color: getEvaluatorColor('beneficiaries'),
-            opacity: 0.2,
+            opacity: 0.3,
           },
         ]}
         withLegend

@@ -1,22 +1,27 @@
 'use client';
 
-import { memo, useDeferredValue, useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
   Anchor,
   Badge,
-  Box,
   Button,
   Group,
+  Loader,
   NumberFormatter,
-  Pill,
   Progress,
   rem,
+  Stack,
   Table,
   Text,
   TextInput,
 } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
+import {
+  IconDownload,
+  IconFileSpreadsheet,
+  IconSearch,
+} from '@tabler/icons-react';
 import { createBrowserClient } from '@/libs/supabase/client';
-import { IconDownload, IconSearch } from '@tabler/icons-react';
 import type { Tables } from '@/libs/supabase/_database';
 import type { BeneficiariesFeedbackProps } from '@/app/eval/_components/Forms/BeneficiariesForm';
 import type { PartnersFeedbackProps } from '@/app/eval/_components/Forms/PartnersForm';
@@ -26,9 +31,11 @@ import type {
   EmotionsResponse,
   SentimentResponse,
 } from '@/libs/huggingface/types';
-import classes from '@/styles/Table.module.css';
 import { notifications } from '@mantine/notifications';
 import { getEmotionColor, getEvaluatorColor } from '@/utils/colors';
+import dayjs from '@/libs/dayjs';
+import classes from '@/styles/Table.module.css';
+import utilStyles from '@/styles/Utilties.module.css';
 
 interface EvaluationProps
   extends Omit<
@@ -45,9 +52,10 @@ interface EvaluationProps
 
 export const EvaluationsTable = memo(({ id }: { id: string }) => {
   const [data, setData] = useState<EvaluationProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [search, setSearch] = useState<string>('');
-  const query = useDeferredValue(search);
+  const [query] = useDebouncedValue(search, 200);
 
   const handleExport = async () => {
     notifications.show({
@@ -98,6 +106,7 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
 
   useEffect(() => {
     const fetchEvals = async () => {
+      setLoading(true);
       const supabase = createBrowserClient();
 
       let db = supabase
@@ -109,13 +118,15 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
       if (query) {
         // allow search on respondent->name, respondent->email, or id
         db = db.or(
-          `response->respondent(name,email).ilike.%${query}%,id.ilike.%${query}%`,
+          `response->respondent->>name.ilike.%${query}%,response->respondent->>email.ilike.%${query}%`,
         );
       }
 
       const { data: results } = await db.returns<EvaluationProps[]>();
 
       if (results) setData(results);
+
+      setLoading(false);
     };
 
     void fetchEvals();
@@ -142,35 +153,44 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
 
     return (
       <Table.Tr key={row.id}>
-        <Table.Td>
-          <Badge
-            color={getEvaluatorColor(row.type)}
-            size="sm"
-            tt="capitalize"
-            variant="dot"
-          >
-            {row.type}
-          </Badge>
-        </Table.Td>
+        <Table.Td maw={160}>
+          <Stack gap={2} align="start">
+            <Group gap={6}>
+              <Anchor fw={600} maw={110} component="button" fz="sm" truncate>
+                {response?.respondent.name ??
+                  response?.respondent.email ??
+                  row.id}
+              </Anchor>
 
-        <Table.Td>
-          <Anchor component="button" fz="sm" truncate>
-            {response?.respondent.name ?? response?.respondent.email ?? row.id}
-          </Anchor>
+              <Badge
+                color={getEvaluatorColor(row.type)}
+                tt="capitalize"
+                size="xs"
+                variant="dot"
+              >
+                {row.type}
+              </Badge>
+            </Group>
+            <Text size="xs" c="dimmed">
+              {dayjs(row.submitted_at).fromNow()}
+            </Text>
+          </Stack>
         </Table.Td>
-        <Table.Td>
-          {emotionTags.map((tag) => (
-            <Badge
-              autoContrast
-              color={getEmotionColor(tag as keyof Emotions)}
-              key={tag}
-              size="sm"
-              tt="capitalize"
-              variant="light"
-            >
-              {tag}
-            </Badge>
-          ))}
+        <Table.Td maw={180}>
+          <Group gap={4}>
+            {emotionTags.map((tag) => (
+              <Badge
+                autoContrast
+                color={getEmotionColor(tag as keyof Emotions)}
+                key={tag}
+                size="sm"
+                tt="capitalize"
+                variant="light"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </Group>
         </Table.Td>
 
         {/* Sentiment Bar */}
@@ -178,21 +198,21 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
           <Group justify="space-between">
             <Text c="red" fw={700} fz="xs">
               <NumberFormatter
-                decimalScale={2}
+                decimalScale={1}
                 suffix="%"
                 value={sentimentData.negative}
               />
             </Text>
             <Text c="gray" fw={700} fz="xs">
               <NumberFormatter
-                decimalScale={2}
+                decimalScale={1}
                 suffix="%"
                 value={sentimentData.neutral}
               />
             </Text>
             <Text c="teal" fw={700} fz="xs">
               <NumberFormatter
-                decimalScale={2}
+                decimalScale={1}
                 suffix="%"
                 value={sentimentData.positive}
               />
@@ -221,8 +241,27 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
   });
 
   return (
-    <Box>
-      <Group mb="xs">
+    <>
+      <Group justify="space-between">
+        <Group gap="xs">
+          <Text fw={700} fz="lg">
+            Evaluation Responses
+          </Text>
+          {loading && <Loader mx={6} size="sm" type="dots" />}
+        </Group>
+
+        <IconFileSpreadsheet
+          className={utilStyles.icon}
+          size="1.4rem"
+          stroke={1.5}
+        />
+      </Group>
+
+      <Text c="dimmed" fz="sm">
+        Responses from evaluation participants.
+      </Text>
+
+      <Group my="md" gap="xs">
         <TextInput
           bg="light-dark(
             var(--mantine-color-gray-0),
@@ -231,7 +270,7 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
           leftSection={<IconSearch size={16} />}
           miw={rem(400)}
           onChange={(event) => setSearch(event.currentTarget.value)}
-          placeholder="Search for name, email or uuid"
+          placeholder="Search for name or email"
           value={search}
         />
 
@@ -248,7 +287,6 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
         <Table verticalSpacing="xs">
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Type</Table.Th>
               <Table.Th>Respondent</Table.Th>
               <Table.Th>Emotions</Table.Th>
               <Table.Th>Sentiment</Table.Th>
@@ -258,7 +296,7 @@ export const EvaluationsTable = memo(({ id }: { id: string }) => {
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </Table.ScrollContainer>
-    </Box>
+    </>
   );
 });
 EvaluationsTable.displayName = 'EvaluationsTable';
