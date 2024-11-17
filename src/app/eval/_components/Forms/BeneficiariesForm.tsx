@@ -64,7 +64,7 @@ const BeneficiariesForm = ({
   feedback,
 }: {
   activity: Readonly<ActivityDetailsProps>;
-  feedback?: Readonly<Tables<'activity_feedback'>>;
+  feedback?: Readonly<BeneficiariesFeedbackProps>;
 }) => {
   const uuid = useId();
   const [loading, setLoading] = useState(false);
@@ -147,15 +147,8 @@ const BeneficiariesForm = ({
 
   useEffect(() => {
     if (feedback) {
-      const response =
-        feedback.response as unknown as BeneficiariesFeedbackProps;
-
-      form.setValues({
-        id: feedback.activity_id,
-        type: feedback.type,
-        ...response,
-      });
       form.resetDirty();
+      form.setValues(feedback);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedback]);
@@ -184,6 +177,7 @@ const BeneficiariesForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Beneficiary Information (Optional)" my="md">
           <TextInput
+            readOnly={!!feedback}
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
             key={form.key('respondent.name')}
             label="Name"
@@ -192,6 +186,7 @@ const BeneficiariesForm = ({
           />
 
           <TextInput
+            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
@@ -202,6 +197,7 @@ const BeneficiariesForm = ({
 
           <Group grow preventGrowOverflow={false}>
             <NumberInput
+              readOnly={!!feedback}
               allowDecimal={false}
               allowNegative={false}
               clampBehavior="strict"
@@ -213,6 +209,7 @@ const BeneficiariesForm = ({
               {...form.getInputProps('respondent.age')}
             />
             <Select
+              disabled={!!feedback}
               data={['Elementary', 'High School', 'College', 'Post Graduate']}
               key={form.key('respondent.background')}
               label="Education Background"
@@ -223,6 +220,7 @@ const BeneficiariesForm = ({
           </Group>
 
           <TextInput
+            readOnly={!!feedback}
             key={form.key('respondent.occupation')}
             label="Occupation"
             my="sm"
@@ -236,6 +234,7 @@ const BeneficiariesForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((fb) => fb.statement)}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
           />
         </Fieldset>
@@ -249,10 +248,12 @@ const BeneficiariesForm = ({
             withAsterisk
           >
             <SegmentedControl
+              disabled={!!feedback}
               data={['1', '2', '3', '4', '5', '6']}
               fullWidth
               key={form.key('importance')}
               mt="md"
+              readOnly={!!feedback}
               {...form.getInputProps('importance')}
             />
           </Input.Wrapper>
@@ -263,12 +264,14 @@ const BeneficiariesForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
           />
         </Fieldset>
 
         <Fieldset legend="Sentiments" my="md">
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.value')}
             label="What value did you get from this activity?"
@@ -281,6 +284,7 @@ const BeneficiariesForm = ({
           />
 
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What is the best idea you learned in this activity that you plan to apply?"
@@ -298,6 +302,7 @@ const BeneficiariesForm = ({
             label="How did the activity resonates with you?"
           >
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your social and ethical responsibility?"
               key={form.key('reflections.social')}
@@ -310,6 +315,7 @@ const BeneficiariesForm = ({
               {...form.getInputProps('reflections.social')}
             />
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your productivity?"
               key={form.key('reflections.productivity')}
@@ -323,6 +329,7 @@ const BeneficiariesForm = ({
             />
 
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity affects your interpersonal and communication skills?"
               key={form.key('reflections.interpersonal')}
@@ -337,17 +344,19 @@ const BeneficiariesForm = ({
           </Input.Wrapper>
         </Fieldset>
 
-        <Button
-          display="block"
-          loaderProps={{ type: 'dots' }}
-          loading={loading}
-          ml={{ base: 0, sm: 'auto' }}
-          rightSection={<IconSend2 size={20} />}
-          type="submit"
-          w={{ base: '100%', sm: rem(140) }}
-        >
-          Submit
-        </Button>
+        {!feedback && (
+          <Button
+            display="block"
+            loaderProps={{ type: 'dots' }}
+            loading={loading}
+            ml={{ base: 0, sm: 'auto' }}
+            rightSection={<IconSend2 size={20} />}
+            type="submit"
+            w={{ base: '100%', sm: rem(140) }}
+          >
+            Submit
+          </Button>
+        )}
       </form>
     </>
   );

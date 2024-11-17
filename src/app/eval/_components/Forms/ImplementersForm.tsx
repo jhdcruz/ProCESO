@@ -81,7 +81,7 @@ const ImplementersForm = ({
   feedback,
 }: {
   activity: Readonly<ActivityDetailsProps>;
-  feedback?: Readonly<Tables<'activity_feedback'>>;
+  feedback?: Readonly<ImplementerFeedbackProps>;
 }) => {
   const uuid = useId();
   const [loading, setLoading] = useState(false);
@@ -206,14 +206,8 @@ const ImplementersForm = ({
 
   useEffect(() => {
     if (feedback) {
-      const response = feedback.response as unknown as ImplementerFeedbackProps;
-
-      form.setValues({
-        id: feedback.activity_id,
-        type: feedback.type,
-        ...response,
-      });
       form.resetDirty();
+      form.setValues(feedback);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedback]);
@@ -242,6 +236,7 @@ const ImplementersForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Implementer's Information" my="md">
           <TextInput
+            readOnly={!!feedback}
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
             key={form.key('respondent.name')}
             label="Name"
@@ -251,6 +246,7 @@ const ImplementersForm = ({
           />
 
           <TextInput
+            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
@@ -262,6 +258,7 @@ const ImplementersForm = ({
 
           <Group gap="sm" grow preventGrowOverflow={false}>
             <Select
+              disabled={!!feedback}
               allowDeselect={false}
               data={[
                 { label: 'Student', value: 'student' },
@@ -278,6 +275,7 @@ const ImplementersForm = ({
             {isStudent ? (
               <>
                 <Select
+                  disabled={!!feedback}
                   data={[
                     { label: '1st Year', value: '1' },
                     { label: '2nd Year', value: '2' },
@@ -293,6 +291,7 @@ const ImplementersForm = ({
                 />
 
                 <Select
+                  disabled={!!feedback}
                   data={[
                     {
                       group: 'College of Computer Studies',
@@ -340,6 +339,7 @@ const ImplementersForm = ({
             ) : (
               <>
                 <TextInput
+                  readOnly={!!feedback}
                   key={form.key('respondent.designation.unit')}
                   label="Unit"
                   placeholder="Enter your unit"
@@ -348,6 +348,7 @@ const ImplementersForm = ({
                 />
 
                 <Checkbox
+                  disabled={!!feedback}
                   key={form.key('respondent.designation.officer')}
                   label="Officer"
                   mt="md"
@@ -365,6 +366,7 @@ const ImplementersForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
           />
         </Fieldset>
@@ -375,6 +377,7 @@ const ImplementersForm = ({
             field="implementations"
             fieldData={form.values.implementations!.map((imp) => imp.statement)}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
           />
         </Fieldset>
@@ -384,6 +387,7 @@ const ImplementersForm = ({
             field="outcomes"
             fieldData={activity.outcomes!}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
           />
         </Fieldset>
@@ -393,6 +397,7 @@ const ImplementersForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((fb) => fb.statement)}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
           />
         </Fieldset>
@@ -403,6 +408,7 @@ const ImplementersForm = ({
             label="How did the activity resonates with you?"
           >
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your social and ethical responsibility?"
               key={form.key('reflections.social')}
@@ -415,6 +421,7 @@ const ImplementersForm = ({
               {...form.getInputProps('reflections.social')}
             />
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your productivity?"
               key={form.key('reflections.productivity')}
@@ -428,6 +435,7 @@ const ImplementersForm = ({
             />
 
             <Textarea
+              readOnly={!!feedback}
               autosize
               description="How did the activity affects your interpersonal and communication skills?"
               key={form.key('reflections.interpersonal')}
@@ -444,6 +452,7 @@ const ImplementersForm = ({
 
         <Fieldset legend="Sentiments" my="md">
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.beneficial')}
             label="What did you find most beneficial about the program?"
@@ -456,6 +465,7 @@ const ImplementersForm = ({
           />
 
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What aspects of the program could be improved?"
@@ -468,6 +478,7 @@ const ImplementersForm = ({
           />
 
           <Textarea
+            readOnly={!!feedback}
             autosize
             description="Comments and Suggestions"
             key={form.key('sentiments.comments')}
@@ -480,17 +491,19 @@ const ImplementersForm = ({
           />
         </Fieldset>
 
-        <Button
-          display="block"
-          loaderProps={{ type: 'dots' }}
-          loading={loading}
-          ml={{ base: 0, sm: 'auto' }}
-          rightSection={<IconSend2 size={20} />}
-          type="submit"
-          w={{ base: '100%', sm: rem(140) }}
-        >
-          Submit
-        </Button>
+        {!feedback && (
+          <Button
+            display="block"
+            loaderProps={{ type: 'dots' }}
+            loading={loading}
+            ml={{ base: 0, sm: 'auto' }}
+            rightSection={<IconSend2 size={20} />}
+            type="submit"
+            w={{ base: '100%', sm: rem(140) }}
+          >
+            Submit
+          </Button>
+        )}
       </form>
     </>
   );

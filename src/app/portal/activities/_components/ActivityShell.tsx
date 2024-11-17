@@ -81,7 +81,7 @@ function ActivityDetailsComponent({
 
           {isInternal(role!) && (
             <Tabs.Panel value="analytics">
-              <ActivityAnalytics id={activity.id!} />
+              <ActivityAnalytics activity={activity} />
             </Tabs.Panel>
           )}
         </Tabs>

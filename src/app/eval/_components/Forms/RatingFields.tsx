@@ -24,6 +24,7 @@ export const RatingField = memo(
     fieldData,
     label,
     description,
+    readOnly,
   }: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     form: UseFormReturnType<any>;
@@ -31,6 +32,7 @@ export const RatingField = memo(
     fieldData: string[];
     label: string;
     description?: string;
+    readOnly?: boolean;
   }) => (
     <Input.Wrapper
       description={
@@ -49,6 +51,7 @@ export const RatingField = memo(
           <Group grow preventGrowOverflow={false}>
             <SegmentedControl
               data={['1', '2', '3', '4', '5', '6']}
+              readOnly={readOnly}
               key={form.key(`${field}.${index}.rating`)}
               {...form.getInputProps(`${field}.${index}.rating`)}
             />
@@ -56,6 +59,7 @@ export const RatingField = memo(
               key={form.key(`${field}.${index}.remarks`)}
               label="Remarks"
               maxRows={5}
+              readOnly={readOnly}
               placeholder={`Anything that would help us achieve this ${field} more?`}
               resize="vertical"
               {...form.getInputProps(`${field}.${index}.remarks`)}

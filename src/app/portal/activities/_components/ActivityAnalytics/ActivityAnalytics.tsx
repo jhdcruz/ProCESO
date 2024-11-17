@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { Box, Grid, Paper } from '@mantine/core';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { StatRatings } from './StatRatings';
+import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 
 const EmotionsRadar = dynamic(
   () =>
@@ -39,10 +40,16 @@ const EvaluationsTable = dynamic(
   },
 );
 
-function ActivityAnalyticsShell({ id }: { id: string }) {
+function ActivityAnalyticsShell({
+  activity,
+}: {
+  activity: ActivityDetailsProps;
+}) {
+  const { id } = activity;
+
   return (
     <Box>
-      <StatRatings id={id} />
+      <StatRatings id={id!} />
 
       <Grid align="flex-start" columns={3} justify="space-between">
         <Grid.Col span="auto">
@@ -56,7 +63,7 @@ function ActivityAnalyticsShell({ id }: { id: string }) {
             p="md"
             withBorder
           >
-            <EvaluationsTable id={id} />
+            <EvaluationsTable activity={activity} />
           </Paper>
         </Grid.Col>
 
@@ -71,7 +78,7 @@ function ActivityAnalyticsShell({ id }: { id: string }) {
             p="md"
             withBorder
           >
-            <SentimentSegments id={id} />
+            <SentimentSegments id={id!} />
           </Paper>
 
           <Paper
@@ -84,7 +91,7 @@ function ActivityAnalyticsShell({ id }: { id: string }) {
             p="md"
             withBorder
           >
-            <EmotionsRadar id={id} />
+            <EmotionsRadar id={id!} />
           </Paper>
         </Grid.Col>
       </Grid>

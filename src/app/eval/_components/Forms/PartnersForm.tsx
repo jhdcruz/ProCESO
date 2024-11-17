@@ -57,7 +57,7 @@ const PartnersForm = ({
   feedback,
 }: {
   activity: Readonly<ActivityDetailsProps>;
-  feedback?: Readonly<Tables<'activity_feedback'>>;
+  feedback?: Readonly<PartnersFeedbackProps>;
 }) => {
   const uuid = useId();
   const [loading, setLoading] = useState(false);
@@ -152,14 +152,8 @@ const PartnersForm = ({
 
   useEffect(() => {
     if (feedback) {
-      const response = feedback.response as unknown as PartnersFeedbackProps;
-
-      form.setValues({
-        id: feedback.activity_id,
-        type: feedback.type,
-        ...response,
-      });
       form.resetDirty();
+      form.setValues(feedback);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [feedback]);
@@ -188,7 +182,7 @@ const PartnersForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Partner's Information" my="md">
           <TextInput
-            description="First Name, Middle Initial, Last Name, Suffix (if any)"
+            readOnly={!!feedback}
             key={form.key('respondent.name')}
             label="Name"
             placeholder="Enter your name"
@@ -197,6 +191,7 @@ const PartnersForm = ({
           />
 
           <TextInput
+            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
@@ -207,6 +202,7 @@ const PartnersForm = ({
           />
 
           <TextInput
+            readOnly={!!feedback}
             key={form.key('respondent.affiliation')}
             label="Affiliation"
             placeholder="Organization, Company, etc."
@@ -218,6 +214,7 @@ const PartnersForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
           />
         </Fieldset>
@@ -226,6 +223,7 @@ const PartnersForm = ({
             field="outcomes"
             fieldData={activity.outcomes!}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
           />
         </Fieldset>
@@ -234,11 +232,13 @@ const PartnersForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((obj) => obj.statement)}
             form={form}
+            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
           />
         </Fieldset>
         <Fieldset legend="Sentiments" my="md">
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.beneficial')}
             label="What did you find most beneficial about the program?"
@@ -250,6 +250,7 @@ const PartnersForm = ({
             {...form.getInputProps('sentiments.beneficial')}
           />
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What aspects of the program could be improved?"
@@ -260,6 +261,7 @@ const PartnersForm = ({
             {...form.getInputProps('sentiments.improve')}
           />
           <Textarea
+            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.comments')}
             label="Any additional comments or suggestions"
@@ -270,17 +272,19 @@ const PartnersForm = ({
             {...form.getInputProps('sentiments.comments')}
           />
         </Fieldset>
-        <Button
-          display="block"
-          loaderProps={{ type: 'dots' }}
-          loading={loading}
-          ml={{ base: 0, sm: 'auto' }}
-          rightSection={<IconSend2 size={20} />}
-          type="submit"
-          w={{ base: '100%', sm: rem(140) }}
-        >
-          Submit
-        </Button>
+        {!feedback && (
+          <Button
+            display="block"
+            loaderProps={{ type: 'dots' }}
+            loading={loading}
+            ml={{ base: 0, sm: 'auto' }}
+            rightSection={<IconSend2 size={20} />}
+            type="submit"
+            w={{ base: '100%', sm: rem(140) }}
+          >
+            Submit
+          </Button>
+        )}
       </form>
     </>
   );
