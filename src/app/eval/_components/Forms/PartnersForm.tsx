@@ -16,8 +16,8 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
 import { submitFeedback } from '@/app/eval/actions';
-import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
-import { Enums, Tables } from '@/libs/supabase/_database';
+import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
+import type { Enums } from '@/libs/supabase/_database';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { RatingField } from './RatingFields';
 
@@ -182,30 +182,30 @@ const PartnersForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Partner's Information" my="md">
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.name')}
             label="Name"
             placeholder="Enter your name"
+            readOnly={!!feedback}
             required
             {...form.getInputProps('respondent.name')}
           />
 
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
             placeholder="Enter your email address"
+            readOnly={!!feedback}
             required
             type="email"
             {...form.getInputProps('respondent.email')}
           />
 
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.affiliation')}
             label="Affiliation"
             placeholder="Organization, Company, etc."
+            readOnly={!!feedback}
             {...form.getInputProps('respondent.affiliation')}
           />
         </Fieldset>
@@ -214,8 +214,8 @@ const PartnersForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
         <Fieldset legend="Intended Outcomes" my="md">
@@ -223,8 +223,8 @@ const PartnersForm = ({
             field="outcomes"
             fieldData={activity.outcomes!}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
         <Fieldset legend="Feedback" my="md">
@@ -232,13 +232,12 @@ const PartnersForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((obj) => obj.statement)}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
         <Fieldset legend="Sentiments" my="md">
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.beneficial')}
             label="What did you find most beneficial about the program?"
@@ -246,22 +245,22 @@ const PartnersForm = ({
             mb="md"
             minRows={3}
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.beneficial')}
           />
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What aspects of the program could be improved?"
             maxRows={6}
             minRows={3}
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.improve')}
           />
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.comments')}
             label="Any additional comments or suggestions"
@@ -269,6 +268,7 @@ const PartnersForm = ({
             minRows={3}
             my="md"
             placeholder="..."
+            readOnly={!!feedback}
             {...form.getInputProps('sentiments.comments')}
           />
         </Fieldset>

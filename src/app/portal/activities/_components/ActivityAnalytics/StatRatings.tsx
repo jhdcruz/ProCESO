@@ -127,7 +127,7 @@ const StatsRingComponent = ({ id }: { id: string }) => {
   }, [id]);
 
   return (
-    <Group gap="xs" my="sm" grow preventGrowOverflow={false}>
+    <Group gap="xs" grow my="sm" preventGrowOverflow={false}>
       <StatRingCard
         color={getEvaluatorColor('partners')}
         icon={<IconBuildings size="24" />}

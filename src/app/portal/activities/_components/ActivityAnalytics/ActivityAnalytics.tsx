@@ -55,12 +55,12 @@ function ActivityAnalyticsShell({
         <Grid.Col span="auto">
           {/* Respondents Table */}
           <Paper
-            shadow="sm"
             bg="light-dark(
               var(--mantine-color-gray-0),
               var(--mantine-color-dark-7)
             )"
             p="md"
+            shadow="sm"
             withBorder
           >
             <EvaluationsTable activity={activity} />
@@ -69,26 +69,26 @@ function ActivityAnalyticsShell({
 
         <Grid.Col span={{ base: 'auto', sm: 1 }}>
           <Paper
-            shadow="sm"
             bg="light-dark(
         var(--mantine-color-gray-0),
         var(--mantine-color-dark-7)
       )"
             mb="xs"
             p="md"
+            shadow="sm"
             withBorder
           >
             <SentimentSegments id={id!} />
           </Paper>
 
           <Paper
-            shadow="sm"
             bg="light-dark(
           var(--mantine-color-gray-0),
           var(--mantine-color-dark-7)
         )"
             my="xs"
             p="md"
+            shadow="sm"
             withBorder
           >
             <EmotionsRadar id={id!} />

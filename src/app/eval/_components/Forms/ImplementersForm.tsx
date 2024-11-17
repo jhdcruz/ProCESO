@@ -20,8 +20,8 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
 import { submitFeedback } from '@/app/eval/actions';
-import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
-import { Enums, Tables } from '@/libs/supabase/_database';
+import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
+import type { Enums } from '@/libs/supabase/_database';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { RatingField } from './RatingFields';
 
@@ -236,21 +236,21 @@ const ImplementersForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Implementer's Information" my="md">
           <TextInput
-            readOnly={!!feedback}
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
             key={form.key('respondent.name')}
             label="Name"
             placeholder="Enter your name"
+            readOnly={!!feedback}
             required
             {...form.getInputProps('respondent.name')}
           />
 
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
             placeholder="Enter your email address"
+            readOnly={!!feedback}
             required
             type="email"
             {...form.getInputProps('respondent.email')}
@@ -258,13 +258,13 @@ const ImplementersForm = ({
 
           <Group gap="sm" grow preventGrowOverflow={false}>
             <Select
-              disabled={!!feedback}
               allowDeselect={false}
               data={[
                 { label: 'Student', value: 'student' },
                 { label: 'Teaching Staff', value: 'teaching' },
                 { label: 'Non-Teaching Staff', value: 'non-teaching' },
               ]}
+              disabled={!!feedback}
               key={form.key('respondent.designation.position')}
               label="Position"
               placeholder="Select your position"
@@ -275,7 +275,6 @@ const ImplementersForm = ({
             {isStudent ? (
               <>
                 <Select
-                  disabled={!!feedback}
                   data={[
                     { label: '1st Year', value: '1' },
                     { label: '2nd Year', value: '2' },
@@ -283,6 +282,7 @@ const ImplementersForm = ({
                     { label: '4th Year', value: '4' },
                     { label: '5th Year', value: '5' },
                   ]}
+                  disabled={!!feedback}
                   key={form.key('respondent.designation.year')}
                   label="Year Level"
                   placeholder="Select your year level"
@@ -291,7 +291,6 @@ const ImplementersForm = ({
                 />
 
                 <Select
-                  disabled={!!feedback}
                   data={[
                     {
                       group: 'College of Computer Studies',
@@ -328,6 +327,7 @@ const ImplementersForm = ({
                       ],
                     },
                   ]}
+                  disabled={!!feedback}
                   key={form.key('respondent.designation.program')}
                   label="Program"
                   placeholder="Select your program"
@@ -339,10 +339,10 @@ const ImplementersForm = ({
             ) : (
               <>
                 <TextInput
-                  readOnly={!!feedback}
                   key={form.key('respondent.designation.unit')}
                   label="Unit"
                   placeholder="Enter your unit"
+                  readOnly={!!feedback}
                   required
                   {...form.getInputProps('respondent.designation.unit')}
                 />
@@ -366,8 +366,8 @@ const ImplementersForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
@@ -377,8 +377,8 @@ const ImplementersForm = ({
             field="implementations"
             fieldData={form.values.implementations!.map((imp) => imp.statement)}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
@@ -387,8 +387,8 @@ const ImplementersForm = ({
             field="outcomes"
             fieldData={activity.outcomes!}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which aspect was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
@@ -397,8 +397,8 @@ const ImplementersForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((fb) => fb.statement)}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
@@ -408,7 +408,6 @@ const ImplementersForm = ({
             label="How did the activity resonates with you?"
           >
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your social and ethical responsibility?"
               key={form.key('reflections.social')}
@@ -417,11 +416,11 @@ const ImplementersForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.social')}
             />
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your productivity?"
               key={form.key('reflections.productivity')}
@@ -430,12 +429,12 @@ const ImplementersForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.productivity')}
             />
 
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity affects your interpersonal and communication skills?"
               key={form.key('reflections.interpersonal')}
@@ -444,6 +443,7 @@ const ImplementersForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.interpersonal')}
             />
@@ -452,7 +452,6 @@ const ImplementersForm = ({
 
         <Fieldset legend="Sentiments" my="md">
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.beneficial')}
             label="What did you find most beneficial about the program?"
@@ -460,12 +459,12 @@ const ImplementersForm = ({
             minRows={3}
             my="sm"
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.beneficial')}
           />
 
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What aspects of the program could be improved?"
@@ -473,12 +472,12 @@ const ImplementersForm = ({
             minRows={3}
             my="sm"
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.improve')}
           />
 
           <Textarea
-            readOnly={!!feedback}
             autosize
             description="Comments and Suggestions"
             key={form.key('sentiments.comments')}
@@ -487,6 +486,7 @@ const ImplementersForm = ({
             minRows={3}
             my="sm"
             placeholder="..."
+            readOnly={!!feedback}
             {...form.getInputProps('sentiments.comments')}
           />
         </Fieldset>

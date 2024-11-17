@@ -3,7 +3,6 @@ import {
   IconCalendarStats,
   IconFileAnalytics,
   IconNotes,
-  IconPresentationAnalytics,
   IconUsersGroup,
   type IconProps,
 } from '@tabler/icons-react';

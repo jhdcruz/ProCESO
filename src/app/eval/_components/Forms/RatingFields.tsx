@@ -51,16 +51,16 @@ export const RatingField = memo(
           <Group grow preventGrowOverflow={false}>
             <SegmentedControl
               data={['1', '2', '3', '4', '5', '6']}
-              readOnly={readOnly}
               key={form.key(`${field}.${index}.rating`)}
+              readOnly={readOnly}
               {...form.getInputProps(`${field}.${index}.rating`)}
             />
             <Textarea
               key={form.key(`${field}.${index}.remarks`)}
               label="Remarks"
               maxRows={5}
-              readOnly={readOnly}
               placeholder={`Anything that would help us achieve this ${field} more?`}
+              readOnly={readOnly}
               resize="vertical"
               {...form.getInputProps(`${field}.${index}.remarks`)}
             />

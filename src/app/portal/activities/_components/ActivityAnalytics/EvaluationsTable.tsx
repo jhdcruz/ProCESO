@@ -189,15 +189,15 @@ export const EvaluationsTable = memo(
       return (
         <Table.Tr key={row.id}>
           <Table.Td maw={160}>
-            <Stack gap={2} align="start">
+            <Stack align="start" gap={2}>
               <Group gap={6}>
                 <Anchor
-                  fw={600}
-                  maw={110}
                   component="button"
+                  fw={600}
                   fz="sm"
-                  truncate
+                  maw={110}
                   onClick={() => handleModal(row)}
+                  truncate
                 >
                   {response?.respondent.name ??
                     response?.respondent.email ??
@@ -206,14 +206,14 @@ export const EvaluationsTable = memo(
 
                 <Badge
                   color={getEvaluatorColor(row.type)}
-                  tt="capitalize"
                   size="xs"
+                  tt="capitalize"
                   variant="dot"
                 >
                   {row.type}
                 </Badge>
               </Group>
-              <Text size="xs" c="dimmed">
+              <Text c="dimmed" size="xs">
                 {dayjs(row.submitted_at).fromNow()}
               </Text>
             </Stack>
@@ -285,11 +285,11 @@ export const EvaluationsTable = memo(
     return (
       <>
         <Modal
-          opened={opened}
           onClose={close}
-          title="Evaluation Form"
+          opened={opened}
           scrollAreaComponent={ScrollArea.Autosize}
           size="xl"
+          title="Evaluation Form"
         >
           {selected?.type === 'beneficiaries' && (
             <BeneficiariesForm
@@ -330,7 +330,7 @@ export const EvaluationsTable = memo(
           Responses from evaluation participants.
         </Text>
 
-        <Group my="md" gap="xs">
+        <Group gap="xs" my="md">
           <TextInput
             bg="light-dark(
             var(--mantine-color-gray-0),

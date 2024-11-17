@@ -28,8 +28,8 @@ export const StatsRingCard = memo(
   )"
       mx={{ base: 'auto', sm: 0 }}
       p="md"
-      w={{ base: '100%', sm: rem(240) }}
       shadow="sm"
+      w={{ base: '100%', sm: rem(240) }}
       withBorder
     >
       <Group>

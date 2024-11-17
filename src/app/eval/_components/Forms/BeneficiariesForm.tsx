@@ -21,8 +21,8 @@ import { isInRange, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
 import { submitFeedback } from '@/app/eval/actions';
-import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
-import { Enums, Tables } from '@/libs/supabase/_database';
+import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
+import type { Enums } from '@/libs/supabase/_database';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import { RatingField } from './RatingFields';
 
@@ -177,27 +177,26 @@ const BeneficiariesForm = ({
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Fieldset legend="Beneficiary Information (Optional)" my="md">
           <TextInput
-            readOnly={!!feedback}
             description="First Name, Middle Initial, Last Name, Suffix (if any)"
             key={form.key('respondent.name')}
             label="Name"
             placeholder="Enter your name"
+            readOnly={!!feedback}
             {...form.getInputProps('respondent.name')}
           />
 
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.email')}
             label="Email Address"
             my="sm"
             placeholder="Enter your email address"
+            readOnly={!!feedback}
             type="email"
             {...form.getInputProps('respondent.email')}
           />
 
           <Group grow preventGrowOverflow={false}>
             <NumberInput
-              readOnly={!!feedback}
               allowDecimal={false}
               allowNegative={false}
               clampBehavior="strict"
@@ -206,11 +205,12 @@ const BeneficiariesForm = ({
               max={100}
               min={0}
               my="sm"
+              readOnly={!!feedback}
               {...form.getInputProps('respondent.age')}
             />
             <Select
-              disabled={!!feedback}
               data={['Elementary', 'High School', 'College', 'Post Graduate']}
+              disabled={!!feedback}
               key={form.key('respondent.background')}
               label="Education Background"
               my="sm"
@@ -220,11 +220,11 @@ const BeneficiariesForm = ({
           </Group>
 
           <TextInput
-            readOnly={!!feedback}
             key={form.key('respondent.occupation')}
             label="Occupation"
             my="sm"
             placeholder="Enter your occupation"
+            readOnly={!!feedback}
             {...form.getInputProps('respondent.occupation')}
           />
         </Fieldset>
@@ -234,8 +234,8 @@ const BeneficiariesForm = ({
             field="feedback"
             fieldData={form.values.feedback!.map((fb) => fb.statement)}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which you agree with the following statements on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
@@ -248,8 +248,8 @@ const BeneficiariesForm = ({
             withAsterisk
           >
             <SegmentedControl
-              disabled={!!feedback}
               data={['1', '2', '3', '4', '5', '6']}
+              disabled={!!feedback}
               fullWidth
               key={form.key('importance')}
               mt="md"
@@ -264,14 +264,13 @@ const BeneficiariesForm = ({
             field="objectives"
             fieldData={activity.objectives!}
             form={form}
-            readOnly={!!feedback}
             label="Rate the extent to which each objective was achieved on a scale of 1 to 6"
+            readOnly={!!feedback}
           />
         </Fieldset>
 
         <Fieldset legend="Sentiments" my="md">
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.value')}
             label="What value did you get from this activity?"
@@ -279,12 +278,12 @@ const BeneficiariesForm = ({
             minRows={3}
             my="sm"
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.value')}
           />
 
           <Textarea
-            readOnly={!!feedback}
             autosize
             key={form.key('sentiments.improve')}
             label="What is the best idea you learned in this activity that you plan to apply?"
@@ -292,6 +291,7 @@ const BeneficiariesForm = ({
             minRows={3}
             my="sm"
             placeholder="..."
+            readOnly={!!feedback}
             required
             {...form.getInputProps('sentiments.improve')}
           />
@@ -302,7 +302,6 @@ const BeneficiariesForm = ({
             label="How did the activity resonates with you?"
           >
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your social and ethical responsibility?"
               key={form.key('reflections.social')}
@@ -311,11 +310,11 @@ const BeneficiariesForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.social')}
             />
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity influenced your productivity?"
               key={form.key('reflections.productivity')}
@@ -324,12 +323,12 @@ const BeneficiariesForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.productivity')}
             />
 
             <Textarea
-              readOnly={!!feedback}
               autosize
               description="How did the activity affects your interpersonal and communication skills?"
               key={form.key('reflections.interpersonal')}
@@ -338,6 +337,7 @@ const BeneficiariesForm = ({
               minRows={3}
               my="sm"
               placeholder="..."
+              readOnly={!!feedback}
               required
               {...form.getInputProps('reflections.interpersonal')}
             />

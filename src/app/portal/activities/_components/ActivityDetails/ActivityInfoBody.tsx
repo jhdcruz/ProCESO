@@ -258,7 +258,7 @@ function ActivityDetailsBody({
                   <Box key={group.referrerEmail}>
                     {group.referrer && (
                       <Box mb="xs">
-                        <Text size="xs" c="dimmed" mb={4}>
+                        <Text c="dimmed" mb={4} size="xs">
                           Referrer:
                         </Text>
                         <UserDisplay
@@ -271,11 +271,11 @@ function ActivityDetailsBody({
                         />
                       </Box>
                     )}
-                    <Timeline bulletSize={22} my="md" lineWidth={2}>
+                    <Timeline bulletSize={22} lineWidth={2} my="md">
                       {group.members.map((faculty) => (
                         <Timeline.Item
-                          key={faculty.id}
                           bullet={<IconCornerDownRight size={12} />}
+                          key={faculty.id}
                         >
                           <UserDisplay
                             avatar_url={faculty.avatar_url}

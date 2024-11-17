@@ -451,7 +451,7 @@ const dayRenderer: DatePickerProps['renderDay'] = (date: Date) => {
     date.getFullYear() === today.getFullYear();
 
   return (
-    <Indicator size={6} offset={-5} disabled={!isToday}>
+    <Indicator disabled={!isToday} offset={-5} size={6}>
       <div>{day}</div>
     </Indicator>
   );
