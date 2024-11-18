@@ -44,7 +44,7 @@ async function analyzeFeedback(
 export const analyzePartner = task({
   id: 'analyze-partner',
   machine: {
-    preset: 'small-2x',
+    preset: 'medium-1x',
   },
   run: async (payload: {
     id: string;
@@ -86,7 +86,7 @@ export const analyzePartner = task({
 export const analyzeImplementer = task({
   id: 'analyze-implementer',
   machine: {
-    preset: 'small-2x',
+    preset: 'medium-1x',
   },
   run: async (payload: {
     id: string;
@@ -134,7 +134,7 @@ export const analyzeImplementer = task({
 export const analyzeBeneficiary = task({
   id: 'analyze-beneficiary',
   machine: {
-    preset: 'small-2x',
+    preset: 'medium-1x',
   },
   run: async (payload: {
     id: string;
