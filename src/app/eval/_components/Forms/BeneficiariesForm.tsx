@@ -72,7 +72,7 @@ const BeneficiariesForm = ({
 
   const form = useForm<BeneficiariesFeedbackProps>({
     mode: 'uncontrolled',
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
 
     initialValues: {
       idempotencyKey: uuid,

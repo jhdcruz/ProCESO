@@ -91,7 +91,7 @@ const ImplementersForm = ({
 
   const form = useForm<ImplementerFeedbackProps>({
     mode: 'uncontrolled',
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
 
     initialValues: {
       idempotencyKey: uuid,
