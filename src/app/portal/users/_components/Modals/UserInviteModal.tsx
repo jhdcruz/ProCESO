@@ -48,11 +48,12 @@ function UserInvite() {
       >
         <Stack>
           <TextInput
-            autoComplete="off"
+            autoComplete="email"
             label="Email Address"
             onChange={(e) => setEmail(e.currentTarget.value)}
             placeholder="mjdoe@tip.edu.ph"
             required
+            type="email"
             value={email}
           />
           <FilterUsers
