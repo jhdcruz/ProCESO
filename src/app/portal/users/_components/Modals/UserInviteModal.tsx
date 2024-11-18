@@ -73,7 +73,6 @@ function UserInvite() {
             mt="md"
             onClick={inviteUser}
             rightSection={!pending && <IconSend size={16} />}
-            type="submit"
             variant={pending ? 'default' : 'filled'}
           >
             Send
@@ -85,6 +84,7 @@ function UserInvite() {
         className="shadow-md"
         leftSection={<IconMailSpark size={16} />}
         onClick={open}
+        type="button"
       >
         Invite user
       </Button>

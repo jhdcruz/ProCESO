@@ -26,7 +26,7 @@ export async function inviteUserAction(
 
   const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
     data: metadata,
-    redirectTo: siteUrl() + 'auth/callback' + systemUrl,
+    redirectTo: `${siteUrl()}/auth/callback?next=${systemUrl}`,
   });
 
   if (error) {
