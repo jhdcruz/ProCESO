@@ -11,7 +11,7 @@ import {
   Transition,
   rem,
 } from '@mantine/core';
-import { useWindowScroll, useId } from '@mantine/hooks';
+import { useWindowScroll } from '@mantine/hooks';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
@@ -59,7 +59,6 @@ const PartnersForm = ({
   activity: Readonly<ActivityDetailsProps>;
   feedback?: Readonly<PartnersFeedbackProps>;
 }) => {
-  const uuid = useId();
   const [loading, setLoading] = useState(false);
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -68,7 +67,6 @@ const PartnersForm = ({
     validateInputOnBlur: true,
 
     initialValues: {
-      idempotencyKey: uuid,
       id: activity.id!,
       type: 'partners',
       respondent: {

@@ -2,7 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { createServerClient } from '@/libs/supabase/server';
-import {
+import { tasks } from '@trigger.dev/sdk/v3';
+import type {
   analyzePartner,
   analyzeBeneficiary,
   analyzeImplementer,
@@ -11,7 +12,6 @@ import type { ImplementerFeedbackProps } from './_components/Forms/ImplementersF
 import type { PartnersFeedbackProps } from './_components/Forms/PartnersForm';
 import type { BeneficiariesFeedbackProps } from './_components/Forms/BeneficiariesForm';
 import type ApiResponse from '@/utils/response';
-import { tasks } from '@trigger.dev/sdk/v3';
 
 /**
  * Submit feedback for an activity.
@@ -28,7 +28,7 @@ export async function submitFeedback(
   const supabase = await createServerClient(cookieStore);
 
   // separate id and type from the rest
-  const { id, idempotencyKey, type, ...feedback } = form;
+  const { id, type, ...feedback } = form;
 
   const { data, error } = await supabase
     .from('activity_feedback')
@@ -56,9 +56,7 @@ export async function submitFeedback(
         'analyze-beneficiary',
         { id: data.id, form: feedback as BeneficiariesFeedbackProps },
         {
-          idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_beneficiary'],
-          metadata: { idempotencyKey },
         },
       );
       break;
@@ -69,9 +67,7 @@ export async function submitFeedback(
         'analyze-partner',
         { id: data.id, form: feedback as PartnersFeedbackProps },
         {
-          idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_partner'],
-          metadata: { idempotencyKey },
         },
       );
       break;
@@ -82,9 +78,7 @@ export async function submitFeedback(
         'analyze-implementer',
         { id: data.id, form: feedback as ImplementerFeedbackProps },
         {
-          idempotencyKey: idempotencyKey,
           tags: [`activity_${id}`, `feedback_${data.id}`, 'type_implementer'],
-          metadata: { idempotencyKey },
         },
       );
       break;

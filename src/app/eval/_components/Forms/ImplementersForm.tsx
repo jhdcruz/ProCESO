@@ -15,7 +15,7 @@ import {
   Group,
   Checkbox,
 } from '@mantine/core';
-import { useId, useWindowScroll } from '@mantine/hooks';
+import { useWindowScroll } from '@mantine/hooks';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
@@ -83,7 +83,6 @@ const ImplementersForm = ({
   activity: Readonly<ActivityDetailsProps>;
   feedback?: Readonly<ImplementerFeedbackProps>;
 }) => {
-  const uuid = useId();
   const [loading, setLoading] = useState(false);
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -94,7 +93,6 @@ const ImplementersForm = ({
     validateInputOnBlur: true,
 
     initialValues: {
-      idempotencyKey: uuid,
       id: activity.id!,
       type: 'implementers',
       respondent: {

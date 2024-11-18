@@ -16,7 +16,7 @@ import {
   Group,
   SegmentedControl,
 } from '@mantine/core';
-import { useId, useWindowScroll } from '@mantine/hooks';
+import { useWindowScroll } from '@mantine/hooks';
 import { isInRange, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { IconArrowUp, IconSend2 } from '@tabler/icons-react';
@@ -66,7 +66,6 @@ const BeneficiariesForm = ({
   activity: Readonly<ActivityDetailsProps>;
   feedback?: Readonly<BeneficiariesFeedbackProps>;
 }) => {
-  const uuid = useId();
   const [loading, setLoading] = useState(false);
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -75,7 +74,6 @@ const BeneficiariesForm = ({
     validateInputOnBlur: true,
 
     initialValues: {
-      idempotencyKey: uuid,
       id: activity.id!,
       type: 'beneficiaries',
       respondent: {
