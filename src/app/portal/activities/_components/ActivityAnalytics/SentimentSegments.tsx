@@ -49,6 +49,7 @@ function StatsSegmentsComponent({ id }: { id: string }) {
         .from('activity_feedback')
         .select('score_sentiment')
         .eq('activity_id', id)
+        .not('score_sentiment', 'is', null)
         .limit(1000);
 
       if (results)

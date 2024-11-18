@@ -65,7 +65,7 @@ const PartnersForm = ({
 
   const form = useForm<PartnersFeedbackProps>({
     mode: 'uncontrolled',
-    validateInputOnChange: true,
+    validateInputOnBlur: true,
 
     initialValues: {
       idempotencyKey: uuid,

@@ -445,11 +445,12 @@ function ActivityDetailsHeader({
           className="object-contain shadow-sm"
           component={NextImage}
           fallbackSrc="/assets/no-image.png"
-          height={260}
-          mb={16}
+          h="auto"
+          height={200}
           radius="md"
           src={activity.image_url}
-          width={360}
+          w="auto"
+          width={280}
         />
       </Group>
     </>

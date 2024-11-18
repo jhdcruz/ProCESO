@@ -51,8 +51,8 @@ function ActivityAnalyticsShell({
     <Box>
       <StatRatings id={id!} />
 
-      <Grid align="flex-start" columns={3} justify="space-between">
-        <Grid.Col span="auto">
+      <Grid align="flex-start" justify="space-between">
+        <Grid.Col span={{ base: 'auto', md: 12, lg: 8 }}>
           {/* Respondents Table */}
           <Paper
             bg="light-dark(
@@ -67,7 +67,7 @@ function ActivityAnalyticsShell({
           </Paper>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 'auto', sm: 1 }}>
+        <Grid.Col span={{ base: 'auto', md: 12, lg: 4 }}>
           <Paper
             bg="light-dark(
         var(--mantine-color-gray-0),
