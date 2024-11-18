@@ -271,11 +271,12 @@ function ActivityDetailsBody({
                         />
                       </Box>
                     )}
-                    <Timeline bulletSize={22} lineWidth={2} my="md">
+                    <Timeline bulletSize={22} lineWidth={2} my="lg">
                       {group.members.map((faculty) => (
                         <Timeline.Item
                           bullet={<IconCornerDownRight size={12} />}
                           key={faculty.id}
+                          mt="md"
                         >
                           <UserDisplay
                             avatar_url={faculty.avatar_url}
