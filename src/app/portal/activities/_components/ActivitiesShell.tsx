@@ -40,6 +40,7 @@ function ActivitiesShellComponent() {
   const [assigned, setAssigned] = useState<ActivitiesViewResponse>();
   const [ongoing, setOngoing] = useState<ActivitiesViewResponse>();
   const [upcoming, setUpcoming] = useState<ActivitiesViewResponse>();
+  const [undated, setUndated] = useState<ActivitiesViewResponse>();
   const [past, setPast] = useState<ActivitiesViewResponse>();
 
   useEffect(() => {
@@ -63,18 +64,25 @@ function ActivitiesShellComponent() {
       search: searchQuery,
     });
 
+    const activitiesUndated = getActivities({
+      filter: 'undated',
+      search: searchQuery,
+    });
+
     const fetchActivities = async () => {
-      const [assigned, ongoing, upcoming, past] = await Promise.all([
+      const [assigned, ongoing, upcoming, past, undated] = await Promise.all([
         activitiesAssigned,
         activitiesOngoing,
         activitiesUpcoming,
         activitiesPast,
+        activitiesUndated,
       ]);
 
       setAssigned(assigned);
       setOngoing(ongoing);
       setUpcoming(upcoming);
       setPast(past);
+      setUndated(undated);
     };
 
     void fetchActivities();
@@ -111,6 +119,7 @@ function ActivitiesShellComponent() {
         ongoing={ongoing}
         past={past}
         role={user.role ?? 'student'}
+        undated={undated}
         upcoming={upcoming}
       />
     </>

@@ -18,12 +18,14 @@ function ActivityAccordionShell({
   assigned,
   ongoing,
   upcoming,
+  undated,
   past,
   role,
 }: {
   assigned: ActivitiesViewResponse | undefined;
   ongoing: ActivitiesViewResponse | undefined;
   upcoming: ActivitiesViewResponse | undefined;
+  undated: ActivitiesViewResponse | undefined;
   past: ActivitiesViewResponse | undefined;
   role: Enums<'roles_user'>;
 }) {
@@ -77,7 +79,7 @@ function ActivityAccordionShell({
   );
   return (
     <Accordion
-      defaultValue={['assigned', 'ongoing', 'upcoming']}
+      defaultValue={['assigned', 'ongoing', 'upcoming', 'undated']}
       multiple={true}
       variant="separated"
     >
@@ -90,6 +92,7 @@ function ActivityAccordionShell({
 
       <ActivityItems activities={ongoing} type="ongoing" />
       <ActivityItems activities={upcoming} type="upcoming" />
+      <ActivityItems activities={undated} type="undated" />
       <ActivityItems activities={past} type="past" />
     </Accordion>
   );

@@ -23,7 +23,7 @@ export default function ActivityReminder({
         </Link>
         .
         <br />
-        is coming up in {dayjs(activity?.date_starting).toNow()}.
+        is coming up in {dayjs(activity?.date_starting).toNow(true)}.
       </Text>
 
       {activity?.date_starting && activity?.date_ending ? (

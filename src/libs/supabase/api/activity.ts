@@ -29,7 +29,7 @@ export async function getActivities({
   supabase,
 }: {
   search?: string;
-  filter?: 'recent' | 'ongoing' | 'upcoming' | 'past';
+  filter?: 'recent' | 'ongoing' | 'upcoming' | 'past' | 'undated';
   limit?: number;
   supabase?: SupabaseClient;
 }): Promise<ActivitiesViewResponse> {
@@ -41,6 +41,13 @@ export async function getActivities({
     const now = new Date().toISOString();
 
     switch (filter) {
+      case 'undated':
+        query = query
+          .is('date_starting', null)
+          .is('date_ending', null)
+          .order('created_at', { ascending: false });
+        break;
+
       case 'recent':
         query = query.order('created_at', { ascending: false });
         break;
