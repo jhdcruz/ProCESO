@@ -470,36 +470,36 @@ export type Database = {
           active: boolean
           avatar_url: string | null
           created_at: string
-          department: Database["public"]["Enums"]["roles_dept"]
-          email: string
+          department: Database["public"]["Enums"]["roles_dept"] | null
+          email: string | null
           id: string
-          name: string
+          name: string | null
           other_roles: Database["public"]["Enums"]["roles_pos"][] | null
-          role: Database["public"]["Enums"]["roles_user"]
+          role: Database["public"]["Enums"]["roles_user"] | null
           updated_at: string
         }
         Insert: {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
-          department?: Database["public"]["Enums"]["roles_dept"]
-          email: string
+          department?: Database["public"]["Enums"]["roles_dept"] | null
+          email?: string | null
           id?: string
-          name: string
+          name?: string | null
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
-          role?: Database["public"]["Enums"]["roles_user"]
+          role?: Database["public"]["Enums"]["roles_user"] | null
           updated_at?: string
         }
         Update: {
           active?: boolean
           avatar_url?: string | null
           created_at?: string
-          department?: Database["public"]["Enums"]["roles_dept"]
-          email?: string
+          department?: Database["public"]["Enums"]["roles_dept"] | null
+          email?: string | null
           id?: string
-          name?: string
+          name?: string | null
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
-          role?: Database["public"]["Enums"]["roles_user"]
+          role?: Database["public"]["Enums"]["roles_user"] | null
           updated_at?: string
         }
         Relationships: []
@@ -567,7 +567,6 @@ export type Database = {
       activity_feedback_view: {
         Row: {
           activity_id: string | null
-          id: string | null
           max_ratings: number | null
           score_emotions: Json | null
           score_ratings: number | null
