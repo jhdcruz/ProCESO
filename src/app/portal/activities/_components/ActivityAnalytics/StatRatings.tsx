@@ -64,6 +64,7 @@ const StatsRingComponent = ({ id }: { id: string }) => {
         .from('activity_feedback_view')
         .select('type, score_ratings, max_ratings')
         .eq('activity_id', id)
+        .not('score_ratings', 'is', null)
         .limit(1000)
         .returns<RatingResult[]>();
 

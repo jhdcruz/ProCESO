@@ -17,11 +17,13 @@ import {
   Table,
   Text,
   TextInput,
+  Tooltip,
 } from '@mantine/core';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import {
   IconDownload,
   IconFileSpreadsheet,
+  IconHelpCircle,
   IconSearch,
 } from '@tabler/icons-react';
 import { createBrowserClient } from '@/libs/supabase/client';
@@ -51,8 +53,8 @@ interface EvaluationProps
     | BeneficiariesFeedbackProps
     | PartnersFeedbackProps
     | ImplementerFeedbackProps;
-  score_emotions: EmotionsResponse;
-  score_sentiment: SentimentResponse;
+  score_emotions: EmotionsResponse | null;
+  score_sentiment: SentimentResponse | null;
 }
 
 const BeneficiariesForm = dynamic(
@@ -174,17 +176,26 @@ export const EvaluationsTable = memo(
         score_sentiment: sentiments,
       } = row;
 
-      const totalSentiment =
-        sentiments?.negative + sentiments?.neutral + sentiments?.positive;
-      const sentimentData = {
-        negative: (sentiments?.negative / totalSentiment) * 100,
-        neutral: (sentiments?.neutral / totalSentiment) * 100,
-        positive: (sentiments?.positive / totalSentiment) * 100,
+      const sentimentValues = {
+        negative: sentiments?.negative ?? 0,
+        neutral: sentiments?.neutral ?? 0,
+        positive: sentiments?.positive ?? 0,
       };
 
-      const emotionTags: string[] = emotions.emotions.map(
+      const totalSentiment =
+        sentimentValues.negative +
+        sentimentValues.neutral +
+        sentimentValues.positive;
+
+      const sentimentData = {
+        negative: (sentimentValues.negative / totalSentiment) * 100,
+        neutral: (sentimentValues.neutral / totalSentiment) * 100,
+        positive: (sentimentValues.positive / totalSentiment) * 100,
+      };
+
+      const emotionTags: string[] = emotions?.emotions.map(
         (emotion) => emotion.label,
-      );
+      ) ?? ['N/A'];
 
       return (
         <Table.Tr key={row.id}>
@@ -237,46 +248,59 @@ export const EvaluationsTable = memo(
 
           {/* Sentiment Bar */}
           <Table.Td>
-            <Group justify="space-between">
-              <Text c="red" fw={700} fz="xs">
-                <NumberFormatter
-                  decimalScale={1}
-                  suffix="%"
-                  value={sentimentData.negative}
-                />
-              </Text>
-              <Text c="gray" fw={700} fz="xs">
-                <NumberFormatter
-                  decimalScale={1}
-                  suffix="%"
-                  value={sentimentData.neutral}
-                />
-              </Text>
-              <Text c="teal" fw={700} fz="xs">
-                <NumberFormatter
-                  decimalScale={1}
-                  suffix="%"
-                  value={sentimentData.positive}
-                />
-              </Text>
-            </Group>
-            <Progress.Root>
-              <Progress.Section
-                className={classes.progressSection}
-                color="red"
-                value={sentimentData.negative}
-              />
-              <Progress.Section
-                className={classes.progressSection}
-                color="gray"
-                value={sentimentData.neutral}
-              />
-              <Progress.Section
-                className={classes.progressSection}
-                color="teal"
-                value={sentimentData.positive}
-              />
-            </Progress.Root>
+            {totalSentiment === 0 ? (
+              <Tooltip
+                label="Check trigger.dev instance for more details."
+                withArrow
+              >
+                <Text c="gray" fw={700} fz="xs" ta="center">
+                  No sentiment data <IconHelpCircle size={16} />
+                </Text>
+              </Tooltip>
+            ) : (
+              <>
+                <Group justify="space-between">
+                  <Text c="red" fw={700} fz="xs">
+                    <NumberFormatter
+                      decimalScale={1}
+                      suffix="%"
+                      value={sentimentData.negative}
+                    />
+                  </Text>
+                  <Text c="gray" fw={700} fz="xs">
+                    <NumberFormatter
+                      decimalScale={1}
+                      suffix="%"
+                      value={sentimentData.neutral}
+                    />
+                  </Text>
+                  <Text c="teal" fw={700} fz="xs">
+                    <NumberFormatter
+                      decimalScale={1}
+                      suffix="%"
+                      value={sentimentData.positive}
+                    />
+                  </Text>
+                </Group>
+                <Progress.Root>
+                  <Progress.Section
+                    className={classes.progressSection}
+                    color="red"
+                    value={sentimentData.negative}
+                  />
+                  <Progress.Section
+                    className={classes.progressSection}
+                    color="gray"
+                    value={sentimentData.neutral}
+                  />
+                  <Progress.Section
+                    className={classes.progressSection}
+                    color="teal"
+                    value={sentimentData.positive}
+                  />
+                </Progress.Root>
+              </>
+            )}
           </Table.Td>
         </Table.Tr>
       );

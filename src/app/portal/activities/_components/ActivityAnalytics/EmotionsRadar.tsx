@@ -24,6 +24,7 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         .from('activity_feedback')
         .select('type, score_emotions->emotions')
         .eq('activity_id', id)
+        .not('score_emotions', 'is', null)
         .limit(1000)
         .returns<EmotionsResponse[]>();
 
@@ -52,7 +53,6 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         data={data}
         dataKey="label"
         h={360}
-        miw={300}
         series={[
           {
             label: 'Partners',
@@ -73,6 +73,7 @@ function EmotionsRadarComponent({ id }: { id: string }) {
             opacity: 0.2,
           },
         ]}
+        w="100%"
         withLegend
       />
     </>
