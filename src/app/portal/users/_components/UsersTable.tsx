@@ -73,7 +73,7 @@ function UsersTableComponent({
               src={item.avatar_url}
             />
             <Text fw={500} size="sm" tt="capitalize">
-              {item.name.toLowerCase()}
+              {item.name?.toLowerCase() ?? 'N/A'}
             </Text>
 
             {/* Inline other roles, such as committee head or dean. */}
@@ -91,7 +91,7 @@ function UsersTableComponent({
           </Group>
         </Table.Td>
         <Table.Td>
-          <span onClick={() => clipboard.copy(item.email)}>
+          <span onClick={() => clipboard.copy(item.email ?? '')}>
             <Badge className="cursor-copy" tt="lowercase" variant="default">
               {item.email}
             </Badge>
@@ -131,7 +131,7 @@ function UsersTableComponent({
             </Button>
 
             <ActionIcon
-              aria-label={`Edit user ${item.name.toLowerCase()}`}
+              aria-label={`Edit user ${item.name?.toLowerCase() ?? 'N/A'}`}
               color="gray"
               onClick={() => {
                 setSelectedUser(item);
