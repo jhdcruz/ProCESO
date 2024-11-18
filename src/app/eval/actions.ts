@@ -90,7 +90,12 @@ export async function submitFeedback(
       break;
 
     default:
-      throw new Error('Invalid feedback type: ' + type);
+      return {
+        status: 1,
+        title: 'Unable to analyze feedback',
+        message:
+          'Feedback is saved, but check trigger.dev instance for more details.',
+      };
   }
 
   return {
