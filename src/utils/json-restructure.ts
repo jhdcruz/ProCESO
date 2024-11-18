@@ -115,14 +115,19 @@ export function aggregateSentiments(
  * Mostly for Mantine/Recharts Radar Chart.
  *
  * @param emotions EmotionAnalysis[]
+ * @param exclude Optional array of emotion labels to exclude
  * @returns CategorizedEmotions[]
  */
 export function aggregateCommonEmotions(
   data: EmotionsResponse[],
+  exclude?: string[],
 ): CategorizedEmotions[] {
   const emotions = aggregateEmotions(data);
 
   return emotions.reduce<CategorizedEmotions[]>((acc, emotion) => {
+    // Skip excluded emotions
+    if (exclude?.includes(emotion.label)) return acc;
+
     // Find existing emotion entry or create new one
     let existingEmotion = acc.find((item) => item.label === emotion.label);
 

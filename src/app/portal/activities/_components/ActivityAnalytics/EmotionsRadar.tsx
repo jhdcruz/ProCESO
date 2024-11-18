@@ -28,7 +28,8 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         .limit(1000)
         .returns<EmotionsResponse[]>();
 
-      if (results) setData(aggregateCommonEmotions(results));
+      // exclude neutral from results, overwhelms the rest of the emotions
+      if (results) setData(aggregateCommonEmotions(results, ['neutral']));
     };
 
     void fetchEmotions();
