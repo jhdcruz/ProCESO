@@ -70,7 +70,9 @@ export async function getFacultyUsers(
   if (dept?.length) query = query.in('department', dept);
   if (pos?.length) query = query.contains('other_roles', pos);
 
-  const { data: users, error } = await query.eq('role', 'faculty');
+  const { data: users, error } = await query
+    .eq('role', 'faculty')
+    .not('active', 'is', false);
 
   if (error) {
     return {

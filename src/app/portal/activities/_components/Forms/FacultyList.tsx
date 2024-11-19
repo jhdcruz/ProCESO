@@ -135,7 +135,7 @@ export function FacultyListComponent({
               {/* Name and other roles */}
               <Group gap={6} preventGrowOverflow wrap="nowrap">
                 <Text fw={500} size="sm" tt="capitalize">
-                  {item.name.toLowerCase()}
+                  {item.name?.toLowerCase() ?? 'Unverified Faculty'}
                 </Text>
 
                 {/* Display other roles, such as head rep. */}
