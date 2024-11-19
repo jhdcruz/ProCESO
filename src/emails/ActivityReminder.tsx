@@ -4,12 +4,15 @@ import { formatDateRange } from 'little-date';
 import dayjs from '../libs/dayjs';
 import Template from './_Template';
 import '@mantine/core/styles.css';
+import { sidebarRoutes } from '@/app/routes';
 
 export default function ActivityReminder({
   activity,
 }: {
   activity: Tables<'activities'>;
 }) {
+  const link = `${sidebarRoutes[1]?.links?.[0]?.link}/${activity?.id as string}`;
+
   return (
     <Template>
       <Text className="mt-8">
@@ -17,7 +20,7 @@ export default function ActivityReminder({
         <br />
         <Link
           className="font-bold text-yellow-500 underline underline-offset-1"
-          href={`https://deuz.tech/activities/${activity?.id as string}`}
+          href={link}
         >
           {activity?.title ?? 'Untitled Activity'}
         </Link>
