@@ -58,6 +58,7 @@ export const RatingField = memo(
             <Textarea
               key={form.key(`${field}.${index}.remarks`)}
               label="Remarks"
+              maxLength={300}
               maxRows={5}
               placeholder={`Anything that would help us achieve this ${field} more?`}
               readOnly={readOnly}

@@ -239,6 +239,7 @@ const PartnersForm = ({
             autosize
             key={form.key('sentiments.beneficial')}
             label="What did you find most beneficial about the program?"
+            maxLength={500}
             maxRows={6}
             mb="md"
             minRows={3}
@@ -251,6 +252,7 @@ const PartnersForm = ({
             autosize
             key={form.key('sentiments.improve')}
             label="What aspects of the program could be improved?"
+            maxLength={500}
             maxRows={6}
             minRows={3}
             placeholder="..."
@@ -262,6 +264,7 @@ const PartnersForm = ({
             autosize
             key={form.key('sentiments.comments')}
             label="Any additional comments or suggestions"
+            maxLength={500}
             maxRows={6}
             minRows={3}
             my="md"
