@@ -10,6 +10,7 @@ import { getAssignedActivities } from '@/libs/supabase/api/faculty-assignments';
 import { ActivitiesViewResponse } from '@/libs/supabase/api/_response';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
+import { isInternal } from '@/utils/access-control';
 
 const ActivityAccordion = dynamic(
   () => import('./ActivityAccordion').then((mod) => mod.ActivityAccordion),
@@ -91,15 +92,19 @@ function ActivitiesShellComponent() {
   return (
     <>
       <Group className="content-center" mb="md">
-        {/* New activity */}
-        <Button
-          className="drop-shadow-sm"
-          leftSection={<IconCalendarPlus size={16} />}
-          onClick={open}
-        >
-          Schedule new activity
-        </Button>
-        <ActivityFormModal close={close} opened={opened} />
+        {isInternal(user.role) && (
+          <>
+            {/* New activity */}
+            <Button
+              className="drop-shadow-sm"
+              leftSection={<IconCalendarPlus size={16} />}
+              onClick={open}
+            >
+              Schedule new activity
+            </Button>
+            <ActivityFormModal close={close} opened={opened} />
+          </>
+        )}
 
         {/*  activity search */}
         <TextInput
