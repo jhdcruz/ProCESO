@@ -36,7 +36,7 @@ export const sidebarRoutes: Routes = [
   {
     label: 'Dashboard',
     icon: IconCalendarStats,
-    link: systemUrl,
+    link: `${systemUrl}/dashboard`,
     access: ['student', 'faculty', 'staff', 'admin'],
   },
   {
