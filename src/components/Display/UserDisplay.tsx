@@ -22,7 +22,7 @@ export const UserDisplay = memo(
         <Avatar
           color="initials"
           mx="auto"
-          name={name}
+          name={name ?? 'Unverified User'}
           radius="md"
           src={avatar_url}
         />

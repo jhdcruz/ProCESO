@@ -95,7 +95,11 @@ function UserEdit({
       onClose={resetState}
       opened={opened}
       size={rem(450)}
-      title={<Text tt="capitalize">{selected?.name.toLowerCase()}</Text>}
+      title={
+        <Text tt="capitalize">
+          {selected?.name?.toLowerCase() ?? 'Unverified User'}
+        </Text>
+      }
     >
       <FilterUsers
         dept={dept}

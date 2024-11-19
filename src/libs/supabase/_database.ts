@@ -471,9 +471,9 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           department: Database["public"]["Enums"]["roles_dept"] | null
-          email: string | null
+          email: string
           id: string
-          name: string | null
+          name: string
           other_roles: Database["public"]["Enums"]["roles_pos"][] | null
           role: Database["public"]["Enums"]["roles_user"] | null
           updated_at: string
@@ -483,9 +483,9 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           department?: Database["public"]["Enums"]["roles_dept"] | null
-          email?: string | null
+          email: string
           id?: string
-          name?: string | null
+          name?: string
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
           role?: Database["public"]["Enums"]["roles_user"] | null
           updated_at?: string
@@ -495,9 +495,9 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           department?: Database["public"]["Enums"]["roles_dept"] | null
-          email?: string | null
+          email?: string
           id?: string
-          name?: string | null
+          name?: string
           other_roles?: Database["public"]["Enums"]["roles_pos"][] | null
           role?: Database["public"]["Enums"]["roles_user"] | null
           updated_at?: string

@@ -67,7 +67,7 @@ function UsersTableComponent({
           <Group gap="sm">
             <Avatar
               color="initials"
-              name={item.name}
+              name={item?.name ?? 'Unverified User'}
               radius="md"
               size={36}
               src={item.avatar_url}
