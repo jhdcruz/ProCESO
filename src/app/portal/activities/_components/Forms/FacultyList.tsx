@@ -125,7 +125,7 @@ export function FacultyListComponent({
           <Group gap="sm">
             <Avatar
               color="initials"
-              name={item.name}
+              name={item?.name ?? 'XX'}
               radius={26}
               size={32}
               src={item.avatar_url}
