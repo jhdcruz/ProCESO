@@ -61,7 +61,7 @@
     "@tiptap/react": "2.10.0",
     "@tiptap/starter-kit": "2.10.0",
     "@trigger.dev/build": "3.2.0",
-    "@trigger.dev/sdk": "3.2.0",
+    "@trigger.dev/sdk": "3.2.1",
     "dayjs": "1.11.13",
     "framer-motion": "11.11.17",
     "little-date": "1.0.0",
