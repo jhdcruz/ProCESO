@@ -11,7 +11,7 @@ export default function ActivityNotice({
 }: {
   activity: Tables<'activities'>;
 }) {
-  const link = `${sidebarRoutes[1]?.links?.[0]?.link}/${activity?.id as string}`;
+  const link = `https://deuz.tech${sidebarRoutes[1]?.links?.[0]?.link}/${activity?.id as string}`;
 
   return (
     <Template>
