@@ -300,22 +300,6 @@ from
       activity_feedback.activity_id,
       activity_feedback.type;
 
-    -- Create the function to delete the user from auth.users
-    CREATE
-    OR REPLACE FUNCTION remove_user_from_auth () RETURNS TRIGGER AS $$
-    BEGIN
-        -- Delete the user from auth.users based on the id
-        DELETE FROM auth.users WHERE id = OLD.id;
-        RETURN OLD;
-    END;
-    $$ LANGUAGE plpgsql;
-
-    -- Create the trigger that calls the function on delete
-    CREATE TRIGGER delete_user_from_auth
-    AFTER DELETE ON public.users FOR EACH ROW
-    EXECUTE FUNCTION remove_user_from_auth ();
-
-
     CREATE FUNCTION public.delete_linked_activity_data () RETURNS TRIGGER AS $$
     BEGIN
         -- Delete from activity_subscriptions
