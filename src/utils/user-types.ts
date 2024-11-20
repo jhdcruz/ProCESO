@@ -27,10 +27,10 @@ export const listUserRoles: RolesUsers[] = [
     value: 'faculty',
     label: 'Faculty',
   },
-  {
-    value: 'student',
-    label: 'Student',
-  },
+  // {
+  //   value: 'student',
+  //   label: 'Student',
+  // },
 ];
 
 /** List of college departments. */
