@@ -60,8 +60,8 @@
     "@tiptap/pm": "2.10.0",
     "@tiptap/react": "2.10.0",
     "@tiptap/starter-kit": "2.10.0",
-    "@trigger.dev/build": "3.2.0",
-    "@trigger.dev/sdk": "3.2.0",
+    "@trigger.dev/build": "3.2.1",
+    "@trigger.dev/sdk": "3.2.1",
     "dayjs": "1.11.13",
     "framer-motion": "11.11.17",
     "little-date": "1.0.0",
@@ -98,7 +98,7 @@
     "supabase": "1.223.10",
     "tailwindcss": "3.4.15",
     "tailwindcss-animate": "1.0.7",
-    "trigger.dev": "3.2.0",
+    "trigger.dev": "3.2.1",
     "typescript": "5.6.3"
   },
   "lint-staged": {
