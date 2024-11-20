@@ -115,3 +115,37 @@ export async function updateUser(
     message: 'User credentials has been successfully updated.',
   };
 }
+
+/**
+ * Delete a user
+ *
+ * There is already *should be* a trigger on supabase that removes
+ * users from auth.users when a user is deleted from users table.
+ *
+ * @param id User ID to delete
+ */
+export async function deleteUser(id: string): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createAdminClient(cookieStore);
+
+  // delete db record
+  const db = supabase.from('users').delete().eq('id', id);
+
+  // delete from auth provider
+  const auth = supabase.auth.admin.deleteUser(id, true);
+
+  const [dbRes, authRes] = await Promise.all([db, auth]);
+
+  if (dbRes.error || authRes.error) {
+    return {
+      status: 2,
+      title: 'Unable to delete user',
+      message: `${dbRes.error?.message}, ${authRes.error?.message}`,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'User deleted',
+  };
+}

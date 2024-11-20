@@ -11,10 +11,15 @@ import {
   List,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconDeviceFloppy, IconInfoCircle } from '@tabler/icons-react';
-import { updateUser } from '@portal/users/actions';
+import {
+  IconDeviceFloppy,
+  IconInfoCircle,
+  IconTrash,
+} from '@tabler/icons-react';
+import { deleteUser, updateUser } from '@portal/users/actions';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { FilterUsers } from '@/components/Filters/FilterUsers';
+import { modals } from '@mantine/modals';
 
 function UserEdit({
   selected,
@@ -38,6 +43,41 @@ function UserEdit({
   const [pos, setPos] = useState<Enums<'roles_pos'>[]>(
     selected?.other_roles ?? [],
   );
+
+  const handleDelete = async () => {
+    if (!selected?.id) return;
+
+    modals.openConfirmModal({
+      centered: true,
+      title: 'Delete User?',
+      children: (
+        <>
+          <Text>Are you sure you want to delete this user?</Text>
+          <Text fw="bold" mt="sm">
+            This action is irreversible!.
+          </Text>
+        </>
+      ),
+      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        const response = await deleteUser(selected.id);
+
+        if (response.status === 0) {
+          setUsers(users.filter((user) => user.id !== selected.id));
+        }
+
+        notifications.show({
+          title: response.title,
+          message: response.message,
+          color: response.status === 0 ? 'green' : 'red',
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 4000,
+        });
+      },
+    });
+  };
 
   const handleSubmit = async () => {
     const response = await updateUser(selected?.id as string, {
@@ -132,18 +172,29 @@ function UserEdit({
         </Text>
       </Blockquote>
 
-      <Group gap="sm" justify="flex-end" mt="lg">
-        <Button onClick={resetState} variant="default">
-          Cancel
-        </Button>
-
+      <Group gap="sm" justify="space-between" mt="lg">
         <Button
-          leftSection={<IconDeviceFloppy size={20} stroke={1.6} />}
-          onClick={handleSubmit}
+          color="red"
+          leftSection={<IconTrash size={18} />}
+          onClick={handleDelete}
           variant="filled"
         >
-          Update
+          Delete
         </Button>
+
+        <Group gap="xs">
+          <Button onClick={resetState} variant="default">
+            Cancel
+          </Button>
+
+          <Button
+            leftSection={<IconDeviceFloppy size={20} stroke={1.6} />}
+            onClick={handleSubmit}
+            variant="filled"
+          >
+            Update
+          </Button>
+        </Group>
       </Group>
     </Modal>
   );
