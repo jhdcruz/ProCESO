@@ -202,8 +202,8 @@ const BeneficiariesForm = ({
               label="Age"
               max={100}
               min={0}
-              placeholder="How old are you?"
               my="sm"
+              placeholder="How old are you?"
               readOnly={!!feedback}
               {...form.getInputProps('respondent.age')}
             />

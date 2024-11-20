@@ -10,6 +10,7 @@ import {
   Tooltip,
   Box,
   Timeline,
+  ActionIcon,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
@@ -26,14 +27,19 @@ import {
   IconShieldExclamation,
   IconShieldX,
   IconUsersGroup,
+  IconX,
 } from '@tabler/icons-react';
-import { downloadActivityFile } from '@portal/activities/actions';
+import {
+  deleteActivityFile,
+  downloadActivityFile,
+} from '@portal/activities/actions';
 import dayjs from '@/libs/dayjs';
 import { isPrivate, isInternal } from '@/utils/access-control';
 import { identifyFileType } from '@/utils/file-types';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { UserDisplay } from '@/components/Display/UserDisplay';
 import { createBrowserClient } from '@/libs/supabase/client';
+import { modals } from '@mantine/modals';
 
 const RTEditor = dynamic(
   () =>
@@ -217,6 +223,65 @@ function ActivityDetailsBody({
         autoClose: 8000,
       });
     }
+  };
+
+  const handleDeleteFile = async (name: string, checksum: string) => {
+    modals.openConfirmModal({
+      centered: true,
+      title: `Delete ${name}?`,
+      children: (
+        <>
+          <Text>Are you sure you want to delete this file?</Text>
+          <Text fw="bold" mt="sm">
+            This action is irreversible!.
+          </Text>
+        </>
+      ),
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
+      confirmProps: { color: 'red' },
+      onConfirm: async () => {
+        notifications.show({
+          id: `delete-${checksum}`,
+          loading: true,
+          title: 'Deleting file...',
+          message: name,
+          withBorder: true,
+        });
+
+        const response = await deleteActivityFile(activity.id!, checksum);
+
+        if (response.status === 0) {
+          notifications.update({
+            id: `delete-${checksum}`,
+            loading: false,
+            title: 'File deleted',
+            message: 'The file has been successfully deleted.',
+            color: 'green',
+            icon: <IconCheck />,
+            withBorder: true,
+            withCloseButton: true,
+            autoClose: 4000,
+          });
+
+          // remove file from list
+          setFiles((files) => {
+            if (!files) return null;
+            return files.filter((file) => file.checksum !== checksum);
+          });
+        } else {
+          notifications.update({
+            id: `delete-${checksum}`,
+            loading: false,
+            title: 'Unable to delete file',
+            message: 'The file may have been deleted or is inaccessible.',
+            color: 'red',
+            withBorder: true,
+            withCloseButton: true,
+            autoClose: 4000,
+          });
+        }
+      },
+    });
   };
 
   // show notification when email is copied to clipboard
@@ -450,9 +515,11 @@ function ActivityDetailsBody({
                         onClick={() => saveFile(file.name, file.checksum)}
                         size="sm"
                         ta="left"
+                        w={260}
                       >
                         {file.name}
                       </Anchor>
+
                       <Group gap={2} mt={4}>
                         <Text c="dimmed" size="xs">
                           {dayjs(file.uploaded_at).fromNow()}
@@ -475,6 +542,15 @@ function ActivityDetailsBody({
                         </Tooltip>
                       </Group>
                     </div>
+
+                    <ActionIcon
+                      aria-label="Delete file"
+                      color="dimmed"
+                      onClick={() => handleDeleteFile(file.name, file.checksum)}
+                      variant="transparent"
+                    >
+                      <IconX size={16} />
+                    </ActionIcon>
                   </Group>
                 ))}
               </>

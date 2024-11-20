@@ -355,6 +355,50 @@ export async function downloadActivityFile(
 }
 
 /**
+ * Delete activity file based on checksum
+ *
+ * @param activityId - The activity id to delete.
+ * @param checksum - The checksum of the file.
+ */
+export async function deleteActivityFile(
+  activityId: string,
+  checksum: string,
+): Promise<ApiResponse> {
+  const cookieStore = cookies();
+  const supabase = await createServerClient(cookieStore);
+
+  // remove from table
+  const db = supabase.from('activity_files').delete().eq('checksum', checksum);
+
+  const storage = supabase.storage
+    .from('activities')
+    .remove([`${activityId}/${checksum}`]);
+
+  const [dbRes, storageRes] = await Promise.all([db, storage]);
+
+  if (dbRes.error) {
+    return {
+      status: 1,
+      title: 'Unable to delete file metadata',
+      message: dbRes.error.message,
+    };
+  }
+
+  if (storageRes.error) {
+    return {
+      status: 1,
+      title: 'Unable to delete file',
+      message: storageRes.error.message,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'File deleted',
+  };
+}
+
+/**
  * Check if user is subscribed to the activity
  *
  * @param activityId - The activity id to check.

@@ -58,7 +58,7 @@ function UserEdit({
           </Text>
         </>
       ),
-      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      labels: { confirm: 'Delete', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
       onConfirm: async () => {
         const response = await deleteUser(selected.id);
