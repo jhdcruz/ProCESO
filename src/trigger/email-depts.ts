@@ -25,12 +25,19 @@ export const emailDepts = task({
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
     const supabase = createAdminClient();
 
-    // fetch emails
+    // fetch emails for faculty assignment
     const usersQuery = supabase
       .from('users')
       .select('email')
       .in('department', payload.depts)
       .overlaps('other_roles', ['dean', 'chair']);
+
+    // fetch emails for faculty info relay
+    const committeeQuery = supabase
+      .from('users')
+      .select('email')
+      .in('department', payload.depts)
+      .overlaps('other_roles', ['head']);
 
     // get activity id
     const activityQuery = supabase
@@ -40,8 +47,9 @@ export const emailDepts = task({
       .limit(1)
       .single();
 
-    const [usersRes, activityRes] = await Promise.all([
+    const [usersRes, committeeRes, activityRes] = await Promise.all([
       usersQuery,
+      committeeQuery,
       activityQuery,
     ]);
 
@@ -71,7 +79,7 @@ export const emailDepts = task({
     //           to avoid additional backend requests.
     //           Currently, using resend API here with react as template
     //           throws an error of `Objects are not valid as a React child`.
-    const response = await fetch(
+    const assignment = fetch(
       appUrl.value + '/api/triggers/emails/faculty-request',
       {
         method: 'POST',
@@ -83,10 +91,23 @@ export const emailDepts = task({
       },
     );
 
-    if (!response.ok) {
-      throw new Error(await response.json());
+    const relay = fetch(appUrl.value + '/api/triggers/emails/activity-notice', {
+      method: 'POST',
+      body: JSON.stringify({
+        runId: ctx.run.id,
+        activity: activityRes?.data,
+        emails: committeeRes?.data?.map((dept) => dept.email) ?? [],
+      }),
+    });
+
+    const [assignmentRes, relayRes] = await Promise.all([assignment, relay]);
+
+    if (!assignmentRes.ok) {
+      throw new Error('Failed to send assignment emails');
     }
 
-    return response;
+    if (!relayRes.ok) {
+      throw new Error('Failed to send relay emails');
+    }
   },
 });
