@@ -193,7 +193,9 @@ export type Database = {
         Row: {
           activity: string
           checksum: string
+          encrypted_checksum: string | null
           id: string
+          key: string | null
           name: string
           type: string
           uploaded_at: string
@@ -201,7 +203,9 @@ export type Database = {
         Insert: {
           activity?: string
           checksum?: string
+          encrypted_checksum?: string | null
           id?: string
+          key?: string | null
           name?: string
           type?: string
           uploaded_at?: string
@@ -209,7 +213,9 @@ export type Database = {
         Update: {
           activity?: string
           checksum?: string
+          encrypted_checksum?: string | null
           id?: string
+          key?: string | null
           name?: string
           type?: string
           uploaded_at?: string

@@ -18,10 +18,13 @@ import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getActivityReports } from '@/libs/supabase/api/storage';
 import {
+  IconCheck,
   IconCornerDownRight,
   IconLibrary,
   IconRosetteDiscountCheck,
   IconScanEye,
+  IconShieldExclamation,
+  IconShieldX,
   IconUsersGroup,
 } from '@tabler/icons-react';
 import { downloadActivityFile } from '@portal/activities/actions';
@@ -30,6 +33,7 @@ import { isPrivate, isInternal } from '@/utils/access-control';
 import { identifyFileType } from '@/utils/file-types';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { UserDisplay } from '@/components/Display/UserDisplay';
+import { createBrowserClient } from '@/libs/supabase/client';
 
 const RTEditor = dynamic(
   () =>
@@ -72,32 +76,146 @@ function ActivityDetailsBody({
   const [faculties, setFaculties] = useState<FacultyGroup[] | null>();
   const [files, setFiles] = useState<Tables<'activity_files'>[] | null>();
 
-  const saveFile = async (fileName: string, checksum: string) => {
+  const saveFile = async (fileName: string, localChecksum: string) => {
     notifications.show({
-      id: checksum,
+      id: localChecksum,
       loading: true,
-      title: `Downloading ${fileName}`,
-      message: 'It may open in a new tab instead of downloading.',
-      color: 'gray',
+      title: 'Downloading file...',
+      message: fileName,
       withBorder: true,
     });
 
-    const blob = await downloadActivityFile(activity.id as string, checksum);
+    // download encrypted file
+    const encryptedBlob = await downloadActivityFile(
+      activity.id as string,
+      localChecksum,
+    );
 
-    notifications.show({
-      id: checksum,
-      loading: false,
-      title: blob.title,
-      message: blob.message,
-      color: blob.status === 0 ? 'green' : 'red',
+    if (!encryptedBlob) {
+      notifications.update({
+        id: localChecksum,
+        loading: false,
+        title: 'Unable to download file',
+        message: 'The file may have been deleted or is inaccessible.',
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+
+      return;
+    }
+
+    // get key and server version of checksums
+    const supabase = createBrowserClient();
+    const { data, error } = await supabase
+      .from('activity_files')
+      .select('type, key, checksum, encrypted_checksum')
+      .eq('checksum', localChecksum)
+      .limit(1)
+      .single();
+
+    if (error || !data) {
+      notifications.update({
+        id: localChecksum,
+        loading: false,
+        title: 'Unable to decrypt and verify file',
+        message: "Couldn't acquire key and checksum for file: " + fileName,
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+      return;
+    }
+
+    notifications.update({
+      id: localChecksum,
+      loading: true,
+      title: `Decrypting ${fileName}...`,
+      message:
+        'Decrypting and verifying integrity of the file. It may open in a new tab instead of downloading.',
       withBorder: true,
-      withCloseButton: true,
-      autoClose: 4000,
     });
 
-    if (blob?.data) {
-      const url = URL.createObjectURL(blob.data);
+    // lazy load encryption modules
+    const hashing = import('@noble/hashes/blake3');
+    const utils = import('@noble/hashes/utils');
+    const cipher = import('@noble/ciphers/chacha');
+    const webcrypto = import('@noble/ciphers/webcrypto');
+
+    const [
+      { blake3 },
+      { hexToBytes, bytesToHex },
+      { chacha20poly1305 },
+      { managedNonce },
+    ] = await Promise.all([hashing, utils, cipher, webcrypto]);
+
+    // convert data to file
+    const encryptedFile = new File([encryptedBlob.data], localChecksum);
+
+    // verify encrypted file checksum
+    const encryptedHash = bytesToHex(
+      blake3(new Uint8Array(await encryptedFile.arrayBuffer())),
+    );
+
+    if (encryptedHash !== data.encrypted_checksum) {
+      notifications.update({
+        id: localChecksum,
+        loading: false,
+        title: 'File integrity compromised',
+        message: 'The file has been tampered with during download.',
+        color: 'red',
+        icon: <IconShieldExclamation />,
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+
+      return;
+    }
+
+    // decrypt file and verify integrity through AAD
+    const key = hexToBytes(data.key!);
+    const aad = hexToBytes(data.checksum!);
+    const decryptedFile = managedNonce(chacha20poly1305)(key, aad).decrypt(
+      new Uint8Array(await encryptedFile.arrayBuffer()),
+    );
+
+    if (decryptedFile) {
+      notifications.update({
+        id: localChecksum,
+        loading: false,
+        title: `File decrypted: ${fileName}`,
+        message: 'File may open in a new tab instead of downloading.',
+        color: 'green',
+        icon: <IconCheck />,
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
+
+      const blob = new Blob([decryptedFile], {
+        type: data.type,
+      });
+
+      const url = URL.createObjectURL(blob);
+
+      // open file in new tab, suchas PDFs,
+      // download directly if unsupported
       window.open(url, '_blank');
+    } else {
+      notifications.update({
+        id: localChecksum,
+        loading: false,
+        title: `File decryption failed`,
+        message: 'Unable to decrypt file, refer to an Admin.',
+        color: 'red',
+        icon: <IconShieldX />,
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 8000,
+      });
     }
   };
 

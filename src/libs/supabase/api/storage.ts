@@ -105,8 +105,9 @@ export async function getActivityReports(
 /**
  * Upload files to supabase storage /activities/[id]/file_hash
  *
- * @param files - The files array o upload.
  * @param activityId - The activity id to associate the file with.
+ * @param files - The files array o upload.
+ * @param notify - The notifications object from @mantine/notifications.
  */
 export async function uploadActivityFiles(
   activityId: string,
@@ -132,19 +133,39 @@ export async function uploadActivityFiles(
     autoClose: false,
   });
 
-  // lazy load hashing and toHex functions
+  // lazy load encryption modules
   const hashing = import('@noble/hashes/blake3');
-  const toHex = import('@noble/hashes/utils');
+  const utils = import('@noble/hashes/utils');
+  const cipher = import('@noble/ciphers/chacha');
+  const webcrypto = import('@noble/ciphers/webcrypto');
 
-  const [{ blake3 }, { bytesToHex }] = await Promise.all([hashing, toHex]);
+  const [
+    { blake3 },
+    { randomBytes, bytesToHex },
+    { chacha20poly1305 },
+    { managedNonce },
+  ] = await Promise.all([hashing, utils, cipher, webcrypto]);
 
   for (const file of files) {
-    const hash = bytesToHex(blake3(new Uint8Array(await file.arrayBuffer())));
+    // compute integrity hash of the file
+    const hash = blake3(new Uint8Array(await file.arrayBuffer()));
+
+    // generate SPRNG key
+    const key = randomBytes(32);
+
+    // encrypt file, use hash as AAD
+    const encrypted = managedNonce(chacha20poly1305)(key, hash).encrypt(
+      new Uint8Array(await file.arrayBuffer()),
+    );
+
+    // compute integrity hash of the encrypted file
+    const encryptedHash = blake3(encrypted);
+    const encryptedFile = new File([encrypted], bytesToHex(hash));
 
     // upload file to storage
     const { error: storageError } = await supabase.storage
       .from(`activities`)
-      .upload(`${activityId}/${hash}`, file, {
+      .upload(`${activityId}/${bytesToHex(hash)}`, encryptedFile, {
         upsert: true,
       });
 
@@ -164,8 +185,10 @@ export async function uploadActivityFiles(
       await supabase.from('activity_files').insert({
         activity: activityId,
         name: file.name,
-        checksum: hash,
+        checksum: bytesToHex(hash),
+        encrypted_checksum: bytesToHex(encryptedHash),
         type: file.type,
+        key: bytesToHex(key),
       });
     }
   }

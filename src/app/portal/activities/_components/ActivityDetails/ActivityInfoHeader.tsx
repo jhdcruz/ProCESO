@@ -3,7 +3,7 @@
 import { memo, startTransition, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NextImage from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Badge,
   Button,
@@ -49,6 +49,7 @@ import type { Enums } from '@/libs/supabase/_database';
 import { isElevated, isInternal, isPublic } from '@/utils/access-control';
 import { useUser } from '@/components/Providers/UserProvider';
 import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
+import { revalidate } from '@/app/actions';
 
 const ActivityFormModal = dynamic(
   () =>
@@ -155,6 +156,7 @@ function ActivityDetailsHeader({
   const [subscribed, setSubscribed] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
   const startProgress = useProgress();
 
   // convert activity details to form props
@@ -207,10 +209,14 @@ function ActivityDetailsHeader({
           files: localFiles,
           notify: notifications,
         });
+
+        revalidate(pathname);
       };
 
       void uploadFiles();
     }
+    // ignore pathname from deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity.id, localFiles, role]);
 
   // check if student is subscribed to activity

@@ -19,6 +19,6 @@ export const identifyFileType = (type: string): string => {
     case 'application/vnd.ms-powerpoint':
       return 'PowerPoint';
     default:
-      return type;
+      return type.split('/')[1];
   }
 };
