@@ -33,7 +33,7 @@ export interface BeneficiariesFeedbackProps {
   respondent: {
     name: string;
     email: string;
-    age: number;
+    age: number | null;
     background: string;
     occupation?: string;
   };
@@ -79,7 +79,7 @@ const BeneficiariesForm = ({
       respondent: {
         name: '',
         email: '',
-        age: 0,
+        age: null,
         background: '',
         occupation: '',
       },
@@ -202,6 +202,7 @@ const BeneficiariesForm = ({
               label="Age"
               max={100}
               min={0}
+              placeholder="How old are you?"
               my="sm"
               readOnly={!!feedback}
               {...form.getInputProps('respondent.age')}
