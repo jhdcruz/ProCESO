@@ -82,6 +82,8 @@ export const EvaluationsTable = memo(
     const [selected, setSelected] = useState<EvaluationProps>();
 
     const [data, setData] = useState<EvaluationProps[]>([]);
+    const [range, setRange] = useState<[number, number]>([0, 6]);
+    const [total, setTotal] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
 
     const [search, setSearch] = useState<string>('');
@@ -148,9 +150,10 @@ export const EvaluationsTable = memo(
 
         let db = supabase
           .from('activity_feedback')
-          .select()
+          .select('*', { count: 'exact' })
           .eq('activity_id', id!)
-          .order('submitted_at', { ascending: false });
+          .order('submitted_at', { ascending: false })
+          .range(range[0], range[1]);
 
         if (query) {
           // allow search on respondent->name, respondent->email, or id
@@ -159,15 +162,18 @@ export const EvaluationsTable = memo(
           );
         }
 
-        const { data: results } = await db.returns<EvaluationProps[]>();
+        const { data: results, count } = await db.returns<EvaluationProps[]>();
 
-        if (results) setData(results);
+        if (results) {
+          setTotal(count ?? 0);
+          setData(results);
+        }
 
         setLoading(false);
       };
 
       void fetchEvals();
-    }, [id, query]);
+    }, [id, query, range]);
 
     const rows = data.map((row) => {
       const {
@@ -354,26 +360,50 @@ export const EvaluationsTable = memo(
           Responses from evaluation participants.
         </Text>
 
-        <Group gap="xs" my="md">
-          <TextInput
-            bg="light-dark(
+        <Group gap="xs" justify="space-between" my="md">
+          <Group gap="xs">
+            <TextInput
+              bg="light-dark(
             var(--mantine-color-gray-0),
             var(--mantine-color-dark-7)
           )"
-            leftSection={<IconSearch size={16} />}
-            miw={rem(400)}
-            onChange={(event) => setSearch(event.currentTarget.value)}
-            placeholder="Search for name or email"
-            value={search}
-          />
+              leftSection={<IconSearch size={16} />}
+              miw={rem(400)}
+              onChange={(event) => setSearch(event.currentTarget.value)}
+              placeholder="Search for name or email"
+              value={search}
+            />
 
-          <Button
-            onClick={handleExport}
-            rightSection={<IconDownload size={16} stroke={1.5} />}
-            variant="default"
-          >
-            Export
-          </Button>
+            <Button
+              onClick={handleExport}
+              rightSection={<IconDownload size={16} stroke={1.5} />}
+              variant="default"
+            >
+              Export
+            </Button>
+          </Group>
+
+          {/* Pagination Controls */}
+          <Button.Group>
+            <Button
+              // disable previous button if range is 0-6 or not set
+              disabled={
+                range[0] === 0 || range[0] === undefined || range[0] === null
+              }
+              onClick={() => setRange([range[0] - 6, range[1] - 6])}
+              variant="default"
+            >
+              Previous
+            </Button>
+            <Button
+              // disable if total data count exceeds the range
+              disabled={range[1] >= total}
+              onClick={() => setRange([range[0] + 6, range[1] + 6])}
+              variant="default"
+            >
+              Next
+            </Button>
+          </Button.Group>
         </Group>
 
         <Table.ScrollContainer minWidth={600}>
