@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   const supabase = await createServerClient(cookies);
 
   const { data, error } = await supabase
-    .from('activity_feedback')
+    .from('activity_eval_view')
     .select()
     .csv();
 
