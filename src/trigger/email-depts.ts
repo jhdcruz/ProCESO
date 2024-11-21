@@ -103,10 +103,12 @@ export const emailDepts = task({
     const [assignmentRes, relayRes] = await Promise.all([assignment, relay]);
 
     if (!assignmentRes.ok) {
+      logger.error('Failed to send assignment emails', { assignmentRes });
       throw new Error('Failed to send assignment emails');
     }
 
     if (!relayRes.ok) {
+      logger.error('Failed to send relay emails', { relayRes });
       throw new Error('Failed to send relay emails');
     }
   },
