@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from 'react';
 import { RadarChart } from '@mantine/charts';
-import { Button, Group, Text, Tooltip } from '@mantine/core';
+import { Center, Button, Group, Text, Tooltip } from '@mantine/core';
 import { IconChartRadar } from '@tabler/icons-react';
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { EmotionsResponse } from '@/libs/huggingface/types';
@@ -99,33 +99,42 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         </Tooltip>
       </Group>
 
-      <RadarChart
-        data={processed}
-        dataKey="label"
-        h={360}
-        series={[
-          {
-            label: 'Partners',
-            name: 'partners',
-            color: getEvaluatorColor('partners'),
-            opacity: 0.2,
-          },
-          {
-            label: 'Implementers',
-            name: 'implementers',
-            color: getEvaluatorColor('implementers'),
-            opacity: 0.2,
-          },
-          {
-            label: 'Beneficiaries',
-            name: 'beneficiaries',
-            color: getEvaluatorColor('beneficiaries'),
-            opacity: 0.2,
-          },
-        ]}
-        w="100%"
-        withLegend
-      />
+      {processed.length == 0 ? (
+        <Center h={360}>
+          <Text c="dimemd" fs="italic" my="xs" size="xs" ta="center">
+            No available data on current filter, <br />
+            try turning &quot;common&quot; setting off.
+          </Text>
+        </Center>
+      ) : (
+        <RadarChart
+          data={processed}
+          dataKey="label"
+          h={360}
+          series={[
+            {
+              label: 'Partners',
+              name: 'partners',
+              color: getEvaluatorColor('partners'),
+              opacity: 0.2,
+            },
+            {
+              label: 'Implementers',
+              name: 'implementers',
+              color: getEvaluatorColor('implementers'),
+              opacity: 0.2,
+            },
+            {
+              label: 'Beneficiaries',
+              name: 'beneficiaries',
+              color: getEvaluatorColor('beneficiaries'),
+              opacity: 0.2,
+            },
+          ]}
+          w="100%"
+          withLegend
+        />
+      )}
     </>
   );
 }
