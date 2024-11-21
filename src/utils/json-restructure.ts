@@ -48,6 +48,7 @@ export interface CategorizedEmotions {
  */
 export function aggregateEmotions(
   data: EmotionsResponse[],
+  showNeutral: boolean = false,
 ): CategorizedEmotions[] {
   return data.reduce<CategorizedEmotions[]>((acc, response) => {
     if (!response.type) {
@@ -59,6 +60,11 @@ export function aggregateEmotions(
     const type = response.type;
 
     response.emotions.forEach((emotion) => {
+      // Skip neutral emotions if includeNeutral is false
+      if (!showNeutral && emotion.label === 'neutral') {
+        return;
+      }
+
       // Find existing emotion entry or create new one
       let existingEmotion = acc.find((item) => item.label === emotion.label);
 
@@ -120,30 +126,15 @@ export function aggregateSentiments(
  */
 export function aggregateCommonEmotions(
   data: EmotionsResponse[],
-  exclude?: string[],
+  showNeutral: boolean = false,
 ): CategorizedEmotions[] {
-  const emotions = aggregateEmotions(data);
+  const emotions = aggregateEmotions(data, showNeutral);
 
-  return emotions.reduce<CategorizedEmotions[]>((acc, emotion) => {
-    // Skip excluded emotions
-    if (exclude?.includes(emotion.label)) return acc;
-
-    // Find existing emotion entry or create new one
-    let existingEmotion = acc.find((item) => item.label === emotion.label);
-
-    if (!existingEmotion) {
-      existingEmotion = { label: emotion.label };
-      acc.push(existingEmotion);
-    }
-
-    // Add to existing value or set new value based on the type
-    existingEmotion.beneficiaries =
-      (existingEmotion.beneficiaries ?? 0) + (emotion.beneficiaries ?? 0);
-    existingEmotion.partners =
-      (existingEmotion.partners ?? 0) + (emotion.partners ?? 0);
-    existingEmotion.implementers =
-      (existingEmotion.implementers ?? 0) + (emotion.implementers ?? 0);
-
-    return acc;
-  }, []);
+  return emotions.filter(
+    (emotion) =>
+      // Check if emotion exists in all three types
+      emotion.beneficiaries !== undefined &&
+      emotion.partners !== undefined &&
+      emotion.implementers !== undefined,
+  );
 }

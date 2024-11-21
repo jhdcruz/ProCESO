@@ -2,19 +2,25 @@
 
 import { memo, useEffect, useState } from 'react';
 import { RadarChart } from '@mantine/charts';
-import { Group, Text } from '@mantine/core';
+import { Button, Group, Text, Tooltip } from '@mantine/core';
 import { IconChartRadar } from '@tabler/icons-react';
 import { createBrowserClient } from '@/libs/supabase/client';
 import type { EmotionsResponse } from '@/libs/huggingface/types';
 import {
   type CategorizedEmotions,
   aggregateCommonEmotions,
+  aggregateEmotions,
 } from '@/utils/json-restructure';
 import classes from '@/styles/Utilties.module.css';
 import { getEvaluatorColor } from '@/utils/colors';
 
 function EmotionsRadarComponent({ id }: { id: string }) {
-  const [data, setData] = useState<CategorizedEmotions[]>([]);
+  const [data, setData] = useState<EmotionsResponse[]>([]);
+  const [processed, setProcessed] = useState<CategorizedEmotions[]>([]);
+
+  // filters
+  const [neutral, showNeutral] = useState<boolean>(false);
+  const [common, showCommon] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchEmotions = async () => {
@@ -29,11 +35,19 @@ function EmotionsRadarComponent({ id }: { id: string }) {
         .returns<EmotionsResponse[]>();
 
       // exclude neutral from results, overwhelms the rest of the emotions
-      if (results) setData(aggregateCommonEmotions(results, ['neutral']));
+      if (results) setData(results);
     };
 
     void fetchEmotions();
   }, [id]);
+
+  useEffect(() => {
+    if (common) {
+      setProcessed(aggregateCommonEmotions(data, neutral));
+    } else {
+      setProcessed(aggregateEmotions(data, neutral));
+    }
+  }, [common, neutral, data]);
 
   return (
     <>
@@ -48,10 +62,45 @@ function EmotionsRadarComponent({ id }: { id: string }) {
       </Group>
 
       <Text c="dimmed" fz="sm">
-        Analyzed emotions of evaluation respondents.
+        Common emotions across all feedback types.
       </Text>
+
+      <Group gap={4} mt={4} wrap="nowrap">
+        <Tooltip
+          label="Filters common emotions across response types"
+          multiline
+          openDelay={300}
+          withArrow
+        >
+          <Button
+            color={common ? 'brand' : ''}
+            onClick={() => showCommon(!common)}
+            size="compact-xs"
+            variant={common ? 'light' : 'default'}
+          >
+            Common
+          </Button>
+        </Tooltip>
+
+        <Tooltip
+          label="Show neutral emotion on the chart"
+          multiline
+          openDelay={300}
+          withArrow
+        >
+          <Button
+            color={neutral ? 'blue' : ''}
+            onClick={() => showNeutral(!neutral)}
+            size="compact-xs"
+            variant={neutral ? 'light' : 'default'}
+          >
+            Neutral
+          </Button>
+        </Tooltip>
+      </Group>
+
       <RadarChart
-        data={data}
+        data={processed}
         dataKey="label"
         h={360}
         series={[
