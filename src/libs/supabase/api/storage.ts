@@ -182,14 +182,19 @@ export async function uploadActivityFiles(
       });
     } else {
       // store metadata to 'activity_files' table
-      await supabase.from('activity_files').insert({
-        activity: activityId,
-        name: file.name,
-        checksum: bytesToHex(hash),
-        encrypted_checksum: bytesToHex(encryptedHash),
-        type: file.type,
-        key: bytesToHex(key),
-      });
+      await supabase.from('activity_files').upsert(
+        {
+          activity: activityId,
+          name: file.name,
+          checksum: bytesToHex(hash),
+          encrypted_checksum: bytesToHex(encryptedHash),
+          type: file.type,
+          key: bytesToHex(key),
+        },
+        {
+          onConflict: 'activity,checksum',
+        },
+      );
     }
   }
 
