@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       'onnxruntime-node$': false,
+      sharp$: false,
+      pdfkit$: false,
     };
+
     return config;
   },
   serverExternalPackages: [

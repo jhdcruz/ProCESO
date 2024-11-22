@@ -107,5 +107,6 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|assets|.*\\.(?:svg|png|jpg|jpeg|gif|webp,ttf,woff,woff2)$).*)',
     '/(api|trpc)/triggers/(.*)', // ignore /api/triggers
+    '/portal/certs/(.*)', // ignore /certs/id
   ],
 };

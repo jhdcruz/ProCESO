@@ -64,14 +64,14 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
@@ -164,14 +164,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
@@ -304,14 +304,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
@@ -340,6 +340,96 @@ export type Database = {
           domain?: string
         }
         Relationships: []
+      }
+      certs: {
+        Row: {
+          activity_id: string | null
+          created_at: string
+          generated_by: string | null
+          hash: string | null
+          id: string
+          recipient_email: string | null
+          recipient_name: string | null
+          url: string | null
+        }
+        Insert: {
+          activity_id?: string | null
+          created_at?: string
+          generated_by?: string | null
+          hash?: string | null
+          id?: string
+          recipient_email?: string | null
+          recipient_name?: string | null
+          url?: string | null
+        }
+        Update: {
+          activity_id?: string | null
+          created_at?: string
+          generated_by?: string | null
+          hash?: string | null
+          id?: string
+          recipient_email?: string | null
+          recipient_name?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certs_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certs_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certs_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "certs_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "certs_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certs_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["referrer_id"]
+          },
+          {
+            foreignKeyName: "certs_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["subscriber_id"]
+          },
+          {
+            foreignKeyName: "certs_generated_by_fkey"
+            columns: ["generated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       faculty_assignments: {
         Row: {
@@ -397,14 +487,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -425,14 +515,14 @@ export type Database = {
             columns: ["referrer"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "faculty_assignments_referrer_fkey"
             columns: ["referrer"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "faculty_assignments_referrer_fkey"
@@ -567,6 +657,21 @@ export type Database = {
           subscriber_email: string | null
           subscriber_id: string | null
           subscriber_name: string | null
+        }
+        Relationships: []
+      }
+      activity_eval_view: {
+        Row: {
+          email: string | null
+          emotion_labels: Json | null
+          name: string | null
+          rating_max: number | null
+          rating_score: number | null
+          sentiment_negative: number | null
+          sentiment_neutral: number | null
+          sentiment_positive: number | null
+          title: string | null
+          type: Database["public"]["Enums"]["feedback_type"] | null
         }
         Relationships: []
       }
