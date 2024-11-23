@@ -2,8 +2,7 @@
 
 import { memo } from 'react';
 import dynamic from 'next/dynamic';
-import { Box, Grid, Paper } from '@mantine/core';
-import { PageLoader } from '@/components/Loader/PageLoader';
+import { Box, Grid, Paper, Skeleton } from '@mantine/core';
 import { StatRatings } from './StatRatings';
 import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 
@@ -14,7 +13,7 @@ const EmotionsRadar = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <PageLoader label={false} />,
+    loading: () => <Skeleton h={470} w="100%" />,
   },
 );
 
@@ -25,7 +24,7 @@ const SentimentSegments = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <PageLoader label={false} />,
+    loading: () => <Skeleton h={194} w="100%" />,
   },
 );
 
@@ -36,7 +35,7 @@ const EvaluationsTable = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <PageLoader label={false} />,
+    loading: () => <Skeleton h={330} w="100%" />,
   },
 );
 

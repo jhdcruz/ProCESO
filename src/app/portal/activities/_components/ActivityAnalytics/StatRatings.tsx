@@ -1,8 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Paper, Group, rem } from '@mantine/core';
+import { Paper, Group, Skeleton } from '@mantine/core';
 import { createBrowserClient } from '@/libs/supabase/client';
-import { PageLoader } from '@/components/Loader/PageLoader';
 import {
   IconBuildings,
   IconEmpathize,
@@ -10,7 +9,17 @@ import {
   IconUserShield,
 } from '@tabler/icons-react';
 import { getEvaluatorColor } from '@/utils/colors';
-import { MoodRating } from './MoodRating';
+
+const MoodRating = dynamic(
+  () =>
+    import('./MoodRating').then((mod) => ({
+      default: mod.MoodRating,
+    })),
+  {
+    ssr: false,
+    loading: () => <Skeleton h={178} w="100%" />,
+  },
+);
 
 const StatRingCard = dynamic(
   () =>
@@ -19,20 +28,7 @@ const StatRingCard = dynamic(
     })),
   {
     ssr: false,
-    loading: () => (
-      <Paper
-        bg="light-dark(
-        var(--mantine-color-gray-0),
-        var(--mantine-color-dark-7)
-      )"
-        mb="xs"
-        p="md"
-        w={{ base: '100%', sm: rem(240) }}
-        withBorder
-      >
-        <PageLoader label={false} />
-      </Paper>
-    ),
+    loading: () => <Skeleton h={114} w={280} />,
   },
 );
 

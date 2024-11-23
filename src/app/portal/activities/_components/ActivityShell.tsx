@@ -8,7 +8,6 @@ import { Tabs } from '@mantine/core';
 import { IconInfoSquare, IconTimeline } from '@tabler/icons-react';
 import { systemUrl } from '@/app/routes';
 import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
-import { PageLoader } from '@/components/Loader/PageLoader';
 import { useUser } from '@/components/Providers/UserProvider';
 import { NotFound } from '@/components/Fallbacks/NotFound';
 import { canAccessActivity, isInternal } from '@/utils/access-control';
@@ -19,7 +18,7 @@ const ActivityInfo = dynamic(
       default: mod.ActivityInfo,
     })),
   {
-    loading: () => <PageLoader />,
+    ssr: false,
   },
 );
 
@@ -29,7 +28,7 @@ const ActivityAnalytics = dynamic(
       default: mod.ActivityAnalytics,
     })),
   {
-    loading: () => <PageLoader />,
+    ssr: false,
   },
 );
 
