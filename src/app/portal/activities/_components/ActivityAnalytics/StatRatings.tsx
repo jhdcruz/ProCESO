@@ -10,6 +10,7 @@ import {
   IconUserShield,
 } from '@tabler/icons-react';
 import { getEvaluatorColor } from '@/utils/colors';
+import { MoodRating } from './MoodRating';
 
 const StatRingCard = dynamic(
   () =>
@@ -128,32 +129,45 @@ const StatsRingComponent = ({ id }: { id: string }) => {
   }, [id]);
 
   return (
-    <Group gap="xs" grow my="sm" preventGrowOverflow={false}>
-      <StatRingCard
-        color={getEvaluatorColor('partners')}
-        icon={<IconBuildings size="24" />}
-        label="Partners"
-        value={data?.partners.score ?? 0}
-      />
-      <StatRingCard
-        color={getEvaluatorColor('implementers')}
-        icon={<IconUserShield size="24" />}
-        label="Implementers"
-        value={data?.implementers.score ?? 0}
-      />
-      <StatRingCard
-        color={getEvaluatorColor('beneficiaries')}
-        icon={<IconEmpathize size="24" />}
-        label="Beneficiaries"
-        value={data?.beneficiaries.score ?? 0}
-      />
-      <StatRingCard
-        color="yellow.4"
-        icon={<IconPercentage size="24" />}
-        label="Total Ratings"
-        value={data?.total ?? 0}
-      />
-    </Group>
+    <>
+      <Paper
+        bg="light-dark(
+        var(--mantine-color-gray-0),
+        var(--mantine-color-dark-7)
+      )"
+        p="md"
+        shadow="sm"
+        withBorder
+      >
+        <MoodRating rating={data?.total ?? 0} />
+      </Paper>
+      <Group gap="xs" grow my="sm" preventGrowOverflow={false}>
+        <StatRingCard
+          color={getEvaluatorColor('partners')}
+          icon={<IconBuildings size="24" />}
+          label="Partners"
+          value={data?.partners.score ?? 0}
+        />
+        <StatRingCard
+          color={getEvaluatorColor('implementers')}
+          icon={<IconUserShield size="24" />}
+          label="Implementers"
+          value={data?.implementers.score ?? 0}
+        />
+        <StatRingCard
+          color={getEvaluatorColor('beneficiaries')}
+          icon={<IconEmpathize size="24" />}
+          label="Beneficiaries"
+          value={data?.beneficiaries.score ?? 0}
+        />
+        <StatRingCard
+          color="yellow.4"
+          icon={<IconPercentage size="24" />}
+          label="Total Ratings"
+          value={data?.total ?? 0}
+        />
+      </Group>
+    </>
   );
 };
 
