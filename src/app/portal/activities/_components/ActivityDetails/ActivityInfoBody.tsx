@@ -11,6 +11,9 @@ import {
   Box,
   Timeline,
   ActionIcon,
+  Grid,
+  Stack,
+  Code,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useClipboard } from '@mantine/hooks';
@@ -228,10 +231,15 @@ function ActivityDetailsBody({
   const handleDeleteFile = async (name: string, checksum: string) => {
     modals.openConfirmModal({
       centered: true,
-      title: `Delete ${name}?`,
+      title: `Delete file`,
+      size: 'lg',
       children: (
         <>
           <Text>Are you sure you want to delete this file?</Text>
+          <Code block mt="sm">
+            {name}
+          </Code>
+
           <Text fw="bold" mt="sm">
             This action is irreversible!.
           </Text>
@@ -378,23 +386,23 @@ function ActivityDetailsBody({
   }, [activity.id, role]);
 
   return (
-    <Group
-      align="start"
-      grow
-      justify="space-between"
-      preventGrowOverflow={false}
-      wrap="wrap-reverse"
-    >
-      <Box>
+    <Grid align="start" justify="space-between">
+      <Grid.Col
+        order={{ base: 1, md: 2, lg: 1 }}
+        span={{ base: 'auto', md: 12, lg: 9 }}
+      >
         <RTEditor
           content={content}
           editable={editable}
           loading={loading}
           onSubmit={onSave}
         />
-      </Box>
+      </Grid.Col>
 
-      <Box maw={{ base: '100%', lg: '360px' }}>
+      <Grid.Col
+        order={{ base: 2, md: 1, lg: 2 }}
+        span={{ base: 'auto', md: 12, lg: 3 }}
+      >
         {isPrivate(role) && (
           <>
             <Divider
@@ -502,23 +510,45 @@ function ActivityDetailsBody({
             {files.length > 0 ? (
               <>
                 {files.map((file) => (
-                  <Group align="flex-start" gap={8} key={file.checksum} my={16}>
-                    <Badge mr={4} size="sm" variant="default">
-                      {identifyFileType(file.type)}
-                    </Badge>
+                  <Group
+                    align="flex-start"
+                    gap={8}
+                    key={file.checksum}
+                    my={16}
+                    wrap="nowrap"
+                  >
+                    <ActionIcon
+                      aria-label="Delete file"
+                      color="dimmed"
+                      onClick={() => handleDeleteFile(file.name, file.checksum)}
+                      variant="transparent"
+                    >
+                      <IconX size={16} />
+                    </ActionIcon>
 
-                    <div>
-                      <Anchor
-                        component="button"
-                        fw={500}
-                        lineClamp={1}
-                        onClick={() => saveFile(file.name, file.checksum)}
-                        size="sm"
-                        ta="left"
-                        w={260}
+                    <Stack gap={6}>
+                      <Badge mr={4} size="sm" variant="default">
+                        {identifyFileType(file.type)}
+                      </Badge>
+
+                      <Tooltip
+                        label={file.name}
+                        multiline
+                        openDelay={400}
+                        withArrow
                       >
-                        {file.name}
-                      </Anchor>
+                        <Anchor
+                          component="button"
+                          fw={500}
+                          lineClamp={2}
+                          onClick={() => saveFile(file.name, file.checksum)}
+                          size="sm"
+                          ta="left"
+                          w={260}
+                        >
+                          {file.name}
+                        </Anchor>
+                      </Tooltip>
 
                       <Group gap={2} mt={4}>
                         <Text c="dimmed" size="xs">
@@ -527,7 +557,9 @@ function ActivityDetailsBody({
 
                         <Tooltip
                           label="Verified checksum of the uploaded file, should match the downloaded file."
+                          multiline
                           position="bottom"
+                          withArrow
                         >
                           <Badge
                             className="cursor-pointer"
@@ -541,16 +573,7 @@ function ActivityDetailsBody({
                           </Badge>
                         </Tooltip>
                       </Group>
-                    </div>
-
-                    <ActionIcon
-                      aria-label="Delete file"
-                      color="dimmed"
-                      onClick={() => handleDeleteFile(file.name, file.checksum)}
-                      variant="transparent"
-                    >
-                      <IconX size={16} />
-                    </ActionIcon>
+                    </Stack>
                   </Group>
                 ))}
               </>
@@ -561,8 +584,8 @@ function ActivityDetailsBody({
             )}
           </>
         )}
-      </Box>
-    </Group>
+      </Grid.Col>
+    </Grid>
   );
 }
 
