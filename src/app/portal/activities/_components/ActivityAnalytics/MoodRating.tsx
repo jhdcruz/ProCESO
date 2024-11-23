@@ -54,22 +54,22 @@ function MoodRatingComponent({ rating }: { rating: number }) {
           <Progress
             color="red"
             radius={0}
-            value={rating <= 25 ? rating * 4 : 100}
+            value={rating <= 20 ? rating * 4 : 100}
           />
           <Progress
             color="orange"
             radius={0}
-            value={rating <= 45 ? Math.max(0, (rating - 25) * 4) : 100}
+            value={rating <= 40 ? Math.max(0, (rating - 20) * 5) : 100}
           />
           <Progress
             color="gray.5"
             radius={0}
-            value={rating <= 65 ? Math.max(0, (rating - 45) * 4) : 100}
+            value={rating <= 60 ? Math.max(0, (rating - 40) * 5) : 100}
           />
           <Progress
             color="green"
             radius={0}
-            value={rating <= 100 ? Math.max(0, (rating - 65) * 4) : 100}
+            value={rating <= 100 ? Math.max(0, (rating - 60) * 5) : 100}
           />
           <Progress color="lime" radius={0} value={rating === 100 ? 100 : 0} />
         </Group>
