@@ -26,7 +26,7 @@ export const isElevated = (
     return false;
   }
 
-  return pos?.includes('chair') || isInternal(role);
+  return pos?.includes('chair') ?? pos?.includes('dean') ?? isInternal(role);
 };
 
 /**
@@ -53,6 +53,19 @@ export const isAdmin = (role: Enums<'roles_user'> | null): boolean => {
   }
 
   return role === 'admin';
+};
+
+/**
+ * Check if the user is a faculty.
+ *
+ * @param role - The user's role.
+ */
+export const isFaculty = (role: Enums<'roles_user'> | null): boolean => {
+  if (!role) {
+    return false;
+  }
+
+  return role === 'faculty';
 };
 
 /**
