@@ -397,7 +397,9 @@ function ActivityDetailsHeader({
                 {isElevated(role, other_roles) && (
                   <Button
                     disabled={
-                      new Date(activity.date_starting as string) < new Date()
+                      activity?.date_starting
+                        ? new Date(activity.date_starting) < new Date()
+                        : activity.visibility === 'Internal'
                     }
                     leftSection={<IconUsersGroup size={16} />}
                     onClick={assignOpen}
