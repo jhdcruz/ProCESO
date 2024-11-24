@@ -183,8 +183,12 @@ export function ActivityFormModalComponent({
 
   useEffect(() => {
     if (activity) {
+      const { date_starting, date_ending } = activity;
+
       const data = {
         ...activity,
+        date_starting: new Date(date_starting!),
+        date_ending: new Date(date_ending!),
         objective_1: activity.objectives?.[0] ?? '',
         objective_2: activity.objectives?.[1] ?? '',
         objective_3: activity.objectives?.[2] ?? '',
@@ -311,6 +315,7 @@ export function ActivityFormModalComponent({
                 label="Starting Date & Time"
                 placeholder="Starting date and time of activity"
                 renderDay={dayRenderer}
+                valueFormat="MMM DD YYYY hh:mm A"
                 {...form.getInputProps('date_starting')}
               />
 
@@ -322,6 +327,7 @@ export function ActivityFormModalComponent({
                 label="Ending Date & Time"
                 placeholder="Last day and time of activity."
                 renderDay={dayRenderer}
+                valueFormat="MMM DD YYYY hh:mm A"
                 {...form.getInputProps('date_ending')}
               />
             </Group>

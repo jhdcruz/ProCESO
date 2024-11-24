@@ -90,7 +90,7 @@ export default function RootLayout({
           theme={theme}
           withCssVariables
         >
-          <DatesProvider settings={{ timezone: 'UTC' }}>
+          <DatesProvider settings={{ timezone: undefined }}>
             <ProgressBarProvider>
               <ProgressBar className="fixed left-0 top-0 z-[500] h-1 bg-[--mantine-primary-color-filled] shadow-lg shadow-[--mantine-primary-color-hover]" />
               <ModalsProvider>
