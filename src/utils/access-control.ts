@@ -26,7 +26,7 @@ export const isElevated = (
     return false;
   }
 
-  return pos?.includes('chair') ?? pos?.includes('dean') ?? isInternal(role);
+  return pos?.includes('chair') || pos?.includes('dean') || isInternal(role);
 };
 
 /**
