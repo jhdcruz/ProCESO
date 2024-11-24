@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { Text, Group, Box, Image, Center } from '@mantine/core';
-import { IconDeviceAnalytics } from '@tabler/icons-react';
+import { Text, Group, Box, Image, Center, Button } from '@mantine/core';
+import { IconDeviceAnalytics, IconPhotoDown } from '@tabler/icons-react';
 import utilStyles from '@/styles/Utilties.module.css';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { notifications } from '@mantine/notifications';
@@ -50,41 +50,48 @@ function WordCloudComponent({ id }: { id: string }) {
         return;
       }
 
-      const response = (data as ResponseData[])?.[0]?.response;
+      // ignore word cloud when no responses
+      if (data.length === 0) return;
 
-      const sentiments: string[] =
-        [
-          response?.reflections?.interpersonal,
-          response?.reflections?.productivity,
-          response?.reflections?.social,
-          response?.sentiments?.beneficial,
-          response?.sentiments?.improve,
-          response?.sentiments?.comments,
-          response?.sentiments?.learning,
-          response?.sentiments?.value,
-        ].filter((text): text is string => !!text?.trim()) || [];
+      const allRemarks: string[] = (data as ResponseData[]).flatMap((item) => {
+        const response = item.response;
 
-      const allRemarks: string[] = [
-        ...(
-          response?.implementations?.map(
-            (obj: { remarks: string }) => obj.remarks,
-          ) ?? []
-        ).filter((text: string) => text.trim() !== ''),
-        ...(
-          response?.objectives?.map(
-            (obj: { remarks: string }) => obj.remarks,
-          ) ?? []
-        ).filter((text: string) => text.trim() !== ''),
-        ...(
-          response?.outcomes?.map((obj: { remarks: string }) => obj.remarks) ??
-          []
-        ).filter((text: string) => text.trim() !== ''),
-        ...(
-          response?.feedback?.map((obj: { remarks: string }) => obj.remarks) ??
-          []
-        ).filter((text: string) => text.trim() !== ''),
-        ...sentiments,
-      ];
+        const sentiments: string[] =
+          [
+            response?.reflections?.interpersonal,
+            response?.reflections?.productivity,
+            response?.reflections?.social,
+            response?.sentiments?.beneficial,
+            response?.sentiments?.improve,
+            response?.sentiments?.comments,
+            response?.sentiments?.learning,
+            response?.sentiments?.value,
+          ].filter((text): text is string => !!text?.trim()) || [];
+
+        return [
+          ...(
+            response?.implementations?.map(
+              (obj: { remarks: string }) => obj.remarks,
+            ) ?? []
+          ).filter((text: string) => text.trim() !== ''),
+          ...(
+            response?.objectives?.map(
+              (obj: { remarks: string }) => obj.remarks,
+            ) ?? []
+          ).filter((text: string) => text.trim() !== ''),
+          ...(
+            response?.outcomes?.map(
+              (obj: { remarks: string }) => obj.remarks,
+            ) ?? []
+          ).filter((text: string) => text.trim() !== ''),
+          ...(
+            response?.feedback?.map(
+              (obj: { remarks: string }) => obj.remarks,
+            ) ?? []
+          ).filter((text: string) => text.trim() !== ''),
+          ...sentiments,
+        ];
+      });
 
       // generate word cloud using quickcharts API
       const cloudSvg = await fetch('https://quickchart.io/wordcloud', {
@@ -119,7 +126,7 @@ function WordCloudComponent({ id }: { id: string }) {
 
       await supabase.storage
         .from('activity_analytics')
-        .upload(`${id}/wordcloud.svg`, cloudSvgBlob, {
+        .upload(`${id}/wordcloud.png`, cloudSvgBlob, {
           cacheControl: '3600', // 1 hour in seconds
           upsert: true,
         });
@@ -156,10 +163,10 @@ function WordCloudComponent({ id }: { id: string }) {
         .maybeSingle();
 
       // check if record is within 1 hour, if not, regenerate word cloud
-      if (data && dayjs().diff(dayjs(data?.updated_at), 'hour') < 1) {
+      if (data && dayjs().diff(dayjs(data?.updated_at), 'hour') < 2) {
         const { data } = await supabase.storage
           .from('activity_analytics')
-          .download(`${id}/wordcloud.svg`);
+          .download(`${id}/wordcloud.png`);
 
         setImage(URL.createObjectURL(data!));
       } else {
@@ -179,11 +186,28 @@ function WordCloudComponent({ id }: { id: string }) {
           </Text>
         </Group>
 
-        <IconDeviceAnalytics
-          className={utilStyles.icon}
-          size="1.4rem"
-          stroke={1.5}
-        />
+        <Group gap="xs">
+          <Button
+            disabled={image === ''}
+            leftSection={<IconPhotoDown size={16} />}
+            onClick={() => {
+              const a = document.createElement('a');
+              a.href = image;
+              a.download = `wordcloud-${id}.png`;
+              a.click();
+            }}
+            size="xs"
+            variant="default"
+          >
+            Export
+          </Button>
+
+          <IconDeviceAnalytics
+            className={utilStyles.icon}
+            size="1.4rem"
+            stroke={1.5}
+          />
+        </Group>
       </Group>
 
       <Text c="dimmed" fz="sm">
