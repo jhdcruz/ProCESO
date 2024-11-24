@@ -29,18 +29,18 @@ Overview of current technologies and resources to be used in the system.
 
 ### Front-End
 
-- Next.js 15
-- React 19
+- Next.js 15 _(Canary)_
+- React 19 _(RC)_
 - TypeScript 5
 - [Mantine](https://mantine.dev/)
-- TailwindCSS
+- TailwindCSS 3
 
 ### Core Packages
 
-- [fullcalendar](https://www.npmjs.com/package/fullcalendar)
 - [@mantine/tiptap](https://mantine.dev/x/tiptap/)
-- [pdfkit](https://pdfkit.org/)
-- [jimp](https://www.npmjs.com/package/jimp)
+- [@huggingface/transformers](https://www.npmjs.com/package/@huggingface/transformers)
+- [fullcalendar](https://www.npmjs.com/package/fullcalendar)
+- [pdf-lib](https://pdf-lib.js.org/)
 
 ### Back-End
 
