@@ -181,7 +181,13 @@ const StatsRingComponent = ({ id }: { id: string }) => {
             shadow="xs"
             withBorder
           >
-            <SummaryText id={id!} rating={data!} />
+            <SummaryText
+              beneficiaries={beneficiaries}
+              id={id!}
+              implementers={implementers}
+              partners={partners}
+              ratings={data!}
+            />
           </Paper>
         </Grid.Col>
 

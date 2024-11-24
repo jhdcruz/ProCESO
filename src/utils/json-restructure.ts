@@ -49,8 +49,9 @@ export interface CategorizedEmotions {
 export function aggregateEmotions(
   data: EmotionsResponse[],
   showNeutral: boolean = false,
+  sortDescending: boolean = false,
 ): CategorizedEmotions[] {
-  return data.reduce<CategorizedEmotions[]>((acc, response) => {
+  const result = data.reduce<CategorizedEmotions[]>((acc, response) => {
     if (!response.type) {
       throw new Error(
         'Feedback type is missing, please inform ITSO team with the URL.',
@@ -92,6 +93,18 @@ export function aggregateEmotions(
 
     return acc;
   }, []);
+
+  if (sortDescending) {
+    result.sort((a, b) => {
+      const sumA =
+        (a.beneficiaries ?? 0) + (a.partners ?? 0) + (a.implementers ?? 0);
+      const sumB =
+        (b.beneficiaries ?? 0) + (b.partners ?? 0) + (b.implementers ?? 0);
+      return sumB - sumA;
+    });
+  }
+
+  return result;
 }
 
 /**
@@ -127,8 +140,9 @@ export function aggregateSentiments(
 export function aggregateCommonEmotions(
   data: EmotionsResponse[],
   showNeutral: boolean = false,
+  sortDescending: boolean = false,
 ): CategorizedEmotions[] {
-  const emotions = aggregateEmotions(data, showNeutral);
+  const emotions = aggregateEmotions(data, showNeutral, sortDescending);
 
   return emotions.filter(
     (emotion) =>
