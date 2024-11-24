@@ -39,6 +39,17 @@ const EvaluationsTable = dynamic(
   },
 );
 
+const WordCloud = dynamic(
+  () =>
+    import('./WordCloud').then((mod) => ({
+      default: mod.WorldCloud,
+    })),
+  {
+    ssr: false,
+    loading: () => <Skeleton h={600} w="100%" />,
+  },
+);
+
 function ActivityAnalyticsShell({
   activity,
 }: {
@@ -62,7 +73,7 @@ function ActivityAnalyticsShell({
             shadow="sm"
             withBorder
           >
-            <EvaluationsTable activity={activity} />
+            <WordCloud id={id!} />
           </Paper>
         </Grid.Col>
 
@@ -94,6 +105,19 @@ function ActivityAnalyticsShell({
           </Paper>
         </Grid.Col>
       </Grid>
+
+      {/* Respondents Table */}
+      <Paper
+        bg="light-dark(
+          var(--mantine-color-gray-0),
+          var(--mantine-color-dark-7)
+        )"
+        p="md"
+        shadow="sm"
+        withBorder
+      >
+        <EvaluationsTable activity={activity} />
+      </Paper>
     </Box>
   );
 }

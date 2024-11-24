@@ -341,6 +341,59 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_metadata: {
+        Row: {
+          activity_id: string
+          created_at: string
+          id: number
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          created_at?: string
+          id?: number
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          created_at?: string
+          id?: number
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_metadata_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analytics_metadata_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_details_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analytics_metadata_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_faculties_view"
+            referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "analytics_metadata_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities_subscriptions_view"
+            referencedColumns: ["activity_id"]
+          },
+        ]
+      }
       certs: {
         Row: {
           activity_id: string | null
@@ -663,7 +716,7 @@ export type Database = {
       activity_eval_view: {
         Row: {
           email: string | null
-          emotion_labels: Json | null
+          emotion_labels: string | null
           name: string | null
           rating_max: number | null
           rating_score: number | null
