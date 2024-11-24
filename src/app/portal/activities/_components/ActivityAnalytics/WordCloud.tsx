@@ -1,34 +1,15 @@
 import { memo, useEffect, useState } from 'react';
 import { Text, Group, Box, Image, Center, Button } from '@mantine/core';
 import { IconDeviceAnalytics, IconPhotoDown } from '@tabler/icons-react';
-import utilStyles from '@/styles/Utilties.module.css';
-import { createBrowserClient } from '@/libs/supabase/client';
 import { notifications } from '@mantine/notifications';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import dayjs from 'dayjs';
-import { SupabaseClient } from '@supabase/supabase-js';
-
-// TODO: Use types from /eval forms
-//       currently having a hard time using union types.
-interface ResponseData {
-  response: {
-    reflections?: {
-      interpersonal?: string;
-      productivity?: string;
-      social?: string;
-    };
-    sentiments?: {
-      beneficial?: string;
-      improve?: string;
-      comments?: string;
-      learning?: string;
-      value?: string;
-    };
-    implementations?: Array<{ remarks: string }>;
-    objectives?: Array<{ remarks: string }>;
-    outcomes?: Array<{ remarks: string }>;
-    feedback?: Array<{ remarks: string }>;
-  };
-}
+import { createBrowserClient } from '@/libs/supabase/client';
+import {
+  type EvaluationRemarksProps,
+  getTextInputs,
+} from '@/utils/evaluation-inputs';
+import utilStyles from '@/styles/Utilties.module.css';
 
 function WordCloudComponent({ id }: { id: string }) {
   const [image, setImage] = useState('');
@@ -38,7 +19,8 @@ function WordCloudComponent({ id }: { id: string }) {
       const { data, error } = await supabase
         .from('activity_feedback')
         .select('response')
-        .eq('activity_id', id);
+        .eq('activity_id', id)
+        .returns<EvaluationRemarksProps[]>();
 
       if (error) {
         notifications.show({
@@ -52,46 +34,6 @@ function WordCloudComponent({ id }: { id: string }) {
 
       // ignore word cloud when no responses
       if (data.length === 0) return;
-
-      const allRemarks: string[] = (data as ResponseData[]).flatMap((item) => {
-        const response = item.response;
-
-        const sentiments: string[] =
-          [
-            response?.reflections?.interpersonal,
-            response?.reflections?.productivity,
-            response?.reflections?.social,
-            response?.sentiments?.beneficial,
-            response?.sentiments?.improve,
-            response?.sentiments?.comments,
-            response?.sentiments?.learning,
-            response?.sentiments?.value,
-          ].filter((text): text is string => !!text?.trim()) || [];
-
-        return [
-          ...(
-            response?.implementations?.map(
-              (obj: { remarks: string }) => obj.remarks,
-            ) ?? []
-          ).filter((text: string) => text.trim() !== ''),
-          ...(
-            response?.objectives?.map(
-              (obj: { remarks: string }) => obj.remarks,
-            ) ?? []
-          ).filter((text: string) => text.trim() !== ''),
-          ...(
-            response?.outcomes?.map(
-              (obj: { remarks: string }) => obj.remarks,
-            ) ?? []
-          ).filter((text: string) => text.trim() !== ''),
-          ...(
-            response?.feedback?.map(
-              (obj: { remarks: string }) => obj.remarks,
-            ) ?? []
-          ).filter((text: string) => text.trim() !== ''),
-          ...sentiments,
-        ];
-      });
 
       // generate word cloud using quickcharts API
       const cloudSvg = await fetch('https://quickchart.io/wordcloud', {
@@ -107,7 +49,7 @@ function WordCloudComponent({ id }: { id: string }) {
           removeStopwords: true,
           fontFamily: 'sans',
           scale: 'linear',
-          text: allRemarks.join(),
+          text: getTextInputs(data).join(),
         }),
       });
 
