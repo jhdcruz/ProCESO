@@ -26,6 +26,7 @@ import {
   IconClock,
   IconFileZip,
   IconMailFast,
+  IconSignature,
   IconUpload,
 } from '@tabler/icons-react';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
@@ -41,10 +42,10 @@ const createWorker = createWorkerFactory(
 
 export interface CertsProps {
   activity?: string;
-  local: boolean;
+  local: boolean | null;
   type: string[];
   template?: string;
-  qrPos: 'left' | 'right';
+  qrPos?: 'left' | 'right';
 }
 
 export interface TemplateProps {
@@ -59,7 +60,11 @@ function CertsShellComponent() {
   const worker = useWorker(createWorker);
 
   const [templates, setTemplates] = useState<TemplateProps[]>([]);
-  const [file, setFile] = useState<File | null>(null);
+  const [customTemplate, setCustomTemplate] = useState<File | null>(null);
+
+  // Signatures
+  const [coordinator, setCoordinator] = useState<File | null>(null);
+  const [vpsas, setVpsas] = useState<File | null>(null);
 
   const form = useForm<CertsProps>({
     mode: 'uncontrolled',
@@ -67,10 +72,9 @@ function CertsShellComponent() {
 
     initialValues: {
       activity: '',
-      local: true,
+      local: null,
       type: [],
-      template: 'coa_1.png',
-      qrPos: 'right',
+      template: '',
     },
   });
 
@@ -90,13 +94,13 @@ function CertsShellComponent() {
     const supabase = createBrowserClient();
     const { data: activity } = await supabase
       .from('activities')
-      .select('id')
+      .select('id, date_ending')
       .eq('title', values.activity!)
       .limit(1)
       .single();
 
-    const selectedTemplate = file
-      ? new Blob([file], { type: file.type })
+    const selectedTemplate = customTemplate
+      ? new Blob([customTemplate], { type: customTemplate.type })
       : templates.find((tmpl) => tmpl.name === values.template)?.data!;
 
     // Convert blob to data URL properly
@@ -104,6 +108,17 @@ function CertsShellComponent() {
 
     // Use web worker for local generation
     if (!values.local) {
+      if (coordinator === null || vpsas === null) {
+        notifications.show({
+          title: 'Missing signatures',
+          message: 'Please upload the coordinator and VPSAS signatures',
+          color: 'red',
+          withBorder: true,
+          autoClose: 6000,
+        });
+        return;
+      }
+
       notifications.show({
         title: 'Queued certificate generation',
         message: `${values.type.toLocaleString()} certificates is queued for ${values.activity}.`,
@@ -113,14 +128,30 @@ function CertsShellComponent() {
         autoClose: 4000,
       });
 
+      const coordinatorUrl = await blobToDataURL(new Blob([coordinator]));
+      const vpsasUrl = await blobToDataURL(new Blob([vpsas]));
+
       // trigger the generate-certs trigger
       await triggerGenerateCerts(
         values.activity!,
         templateDataUrl,
+        coordinatorUrl,
+        vpsasUrl,
         values.type,
-        values.qrPos,
+        values.qrPos ?? 'right',
       );
     } else {
+      if (coordinator === null || vpsas === null) {
+        notifications.show({
+          title: 'Missing signatures',
+          message: 'Please upload the coordinator and VPSAS signatures',
+          color: 'red',
+          withBorder: true,
+          autoClose: 6000,
+        });
+        return;
+      }
+
       notifications.show({
         id: 'certs',
         loading: true,
@@ -131,7 +162,7 @@ function CertsShellComponent() {
       });
 
       // get respondents
-      const { data } = await supabase
+      const { data: respondents } = await supabase
         .from('activity_eval_view')
         .select('name, email')
         .eq('title', values.activity!)
@@ -141,9 +172,13 @@ function CertsShellComponent() {
         .not('name', 'is', null);
 
       const response = (await worker.generateCertificate({
-        data: data!,
+        respondents: respondents!,
         activityId: activity?.id!,
+        activityTitle: values.activity!,
+        activityEnd: activity?.date_ending!,
         template: templateDataUrl,
+        coordinator,
+        vpsas,
         qrPos: values.qrPos,
       })) as CertReturnProps;
 
@@ -224,7 +259,10 @@ function CertsShellComponent() {
       setTemplates(newTemplates);
     };
 
+    form.setValues({ local: true, template: 'coa_1.png', qrPos: 'right' });
     void fetchTemplates();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -284,30 +322,69 @@ function CertsShellComponent() {
           <Group grow justify="space-between" preventGrowOverflow={false}>
             <div>
               <Text fw={500} size="sm">
-                Filled/Signed certificate
+                Custom Certificate/Signatures
               </Text>
               <Text c="dimmed" size="xs">
-                For automated sending of certificates to recipients.
+                For automated sending of certificates to recipients. or custom
+                certificates template.
               </Text>
             </div>
 
-            <FileButton accept="image/png,image/jpeg" onChange={setFile}>
+            <FileButton
+              accept="image/png,image/jpeg"
+              onChange={setCustomTemplate}
+            >
               {(props) => (
-                <Group gap="xs">
+                <Group gap="xs" justify="flex-end">
+                  {/* Custom Template Upload */}
                   <Button
-                    fullWidth
                     leftSection={<IconUpload size={16} stroke={1.5} />}
-                    mt="xs"
                     variant="default"
                     {...props}
                   >
-                    Upload certificate
+                    {customTemplate
+                      ? `${customTemplate.name?.slice(0, 8)}...`
+                      : 'Custom Template'}
                   </Button>
-                  {file && (
-                    <Text mt="xs" size="sm">
-                      Selected file: {file.name}
-                    </Text>
-                  )}
+
+                  <Divider orientation="vertical" />
+
+                  {/* Signatures Upload */}
+                  <FileButton accept="image/png" onChange={setCoordinator}>
+                    {(props) => (
+                      <Button
+                        leftSection={
+                          coordinator ? (
+                            <IconCheck size={18} />
+                          ) : (
+                            <IconSignature size={18} />
+                          )
+                        }
+                        variant="filled"
+                        {...props}
+                      >
+                        {coordinator ? 'Uploaded' : 'Coordinator'}
+                      </Button>
+                    )}
+                  </FileButton>
+
+                  <FileButton accept="image/png" onChange={setVpsas}>
+                    {(props) => (
+                      <Button
+                        leftSection={
+                          vpsas ? (
+                            <IconCheck size={18} />
+                          ) : (
+                            <IconSignature size={18} />
+                          )
+                        }
+                        variant="filled"
+                        {...props}
+                      >
+                        {vpsas ? 'Uploaded' : 'VPSAS'}
+                      </Button>
+                    )}
+                  </FileButton>
                 </Group>
               )}
             </FileButton>
@@ -352,7 +429,7 @@ function CertsShellComponent() {
 
           <Divider my="md" />
 
-          <Group gap="xs" ml="auto" mr={0}>
+          <Group gap="xs" justify="flex-end">
             <Tooltip
               label="Only save generated certificates"
               multiline
@@ -369,7 +446,11 @@ function CertsShellComponent() {
             </Tooltip>
 
             <Button
-              disabled={file === null}
+              disabled={
+                form.values.activity === '' ||
+                coordinator === null ||
+                vpsas === null
+              }
               onClick={() => form.setValues({ local: false })}
               rightSection={<IconMailFast size={20} stroke={1.5} />}
               type="submit"

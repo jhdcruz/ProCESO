@@ -20,8 +20,10 @@ export const generateCerts = task({
   },
   run: async (payload: {
     activity: string;
-    type: string[];
     template: string;
+    coordinator: string;
+    vpsas: string;
+    type: string[];
     qrPos?: 'left' | 'right';
     send?: boolean;
   }) => {
@@ -84,6 +86,10 @@ export const generateCerts = task({
         entry.name!.trim(),
         template,
         hash,
+        activityRes?.data.title,
+        activityRes?.data.date_ending as string,
+        payload.coordinator,
+        payload.vpsas,
         qrPos,
       )) as Blob;
 

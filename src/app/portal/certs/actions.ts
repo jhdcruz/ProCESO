@@ -6,6 +6,8 @@ import type { generateCerts } from '@/trigger/generate-certificate';
 export async function triggerGenerateCerts(
   activity: string,
   templateDataUrl: string,
+  coordinator: string,
+  vpsas: string,
   type: string[],
   qrPos: 'left' | 'right',
   send: boolean = true,
@@ -16,6 +18,8 @@ export async function triggerGenerateCerts(
     {
       activity,
       template: templateDataUrl,
+      coordinator,
+      vpsas,
       type,
       qrPos,
       send,

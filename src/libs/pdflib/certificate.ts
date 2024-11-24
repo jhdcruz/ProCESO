@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import QRCode from 'qrcode';
 
@@ -37,12 +38,16 @@ const cursiveConfig = {
 export async function generateCert(
   name: string,
   template: string,
-  id: string,
+  hash: string,
+  activityTitle: string,
+  activityEnd: string,
+  coordinator: string,
+  vpsas: string,
   qrLoc: 'left' | 'right' = 'right',
 ): Promise<Blob | undefined> {
   try {
     // Create QR code
-    const qrDataUrl = await QRCode.toDataURL(`https://deuz.tech/certs/${id}`);
+    const qrDataUrl = await QRCode.toDataURL(`https://deuz.tech/certs/${hash}`);
     const qrImageBytes = Buffer.from(qrDataUrl.split(',')[1], 'base64');
 
     // Create PDF document
@@ -75,6 +80,46 @@ export async function generateCert(
       y: CERTIFICATE_DIMENSIONS.height - 280,
       width: 240,
       height: 240,
+    });
+
+    // Add activity title
+    page.drawText(activityTitle, {
+      x: CERTIFICATE_DIMENSIONS.width / 2 + 182,
+      y: 564,
+      font: await doc.embedFont(StandardFonts.HelveticaBold),
+      size: 36,
+    });
+
+    // Add activity end date
+    const dateFormat = dayjs(activityEnd).format('MMMM D, YYYY');
+    page.drawText(dateFormat, {
+      x: CERTIFICATE_DIMENSIONS.width / 2 - 42,
+      y: 424,
+      font: await doc.embedFont(StandardFonts.HelveticaBold),
+      size: 36,
+    });
+
+    // Embed coordinator and VPSAs signatures
+    const coordinatorBytes = Buffer.from(coordinator.split(',')[1], 'base64');
+    const vpsasBytes = Buffer.from(vpsas.split(',')[1], 'base64');
+
+    const coordinatorImage = await doc.embedPng(coordinatorBytes);
+    const vpsasImage = await doc.embedPng(vpsasBytes);
+
+    // Draw coordinator signature
+    page.drawImage(coordinatorImage, {
+      x: CERTIFICATE_DIMENSIONS.width / 2 - 540,
+      y: 170,
+      width: 210,
+      height: 210,
+    });
+
+    // Draw VPSAs signature
+    page.drawImage(vpsasImage, {
+      x: CERTIFICATE_DIMENSIONS.width / 2 + 340,
+      y: 170,
+      width: 210,
+      height: 210,
     });
 
     // Add name text

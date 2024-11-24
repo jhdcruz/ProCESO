@@ -3,6 +3,7 @@ import { bytesToHex } from '@noble/hashes/utils';
 import { ZipWriter, BlobWriter, BlobReader } from '@zip.js/zip.js';
 import { generateCert } from './certificate';
 import { createBrowserClient } from '../supabase/client';
+import { blobToDataURL } from 'blob-util';
 
 export interface CertReturnProps {
   blob: Blob;
@@ -14,14 +15,22 @@ export interface CertReturnProps {
 }
 
 export async function generateCertificate({
-  data,
+  respondents,
   activityId,
+  activityTitle,
+  activityEnd,
   template,
+  coordinator,
+  vpsas,
   qrPos = 'right',
 }: {
-  data: Readonly<{ name: string | null; email: string | null }[]>;
+  respondents: Readonly<{ name: string | null; email: string | null }[]>;
   activityId: string;
+  activityTitle: string;
+  activityEnd: string;
   template: string;
+  coordinator: File;
+  vpsas: File;
   qrPos?: 'left' | 'right';
 }): Promise<CertReturnProps> {
   const supabase = createBrowserClient();
@@ -29,31 +38,41 @@ export async function generateCertificate({
   const records: CertReturnProps['records'] = [];
   const zipWriter = new ZipWriter(new BlobWriter());
 
-  for (const entry of data) {
+  // Object URLs for coordinator and VPSAs signatures
+  const coordinatorUrl = await blobToDataURL(new Blob([coordinator]));
+  const vpsasUrl = await blobToDataURL(new Blob([vpsas]));
+
+  for (const respondent of respondents) {
+    // Generate hash using activityId, respondent name and email
     const hash = bytesToHex(
       blake3(
         new TextEncoder().encode(
-          activityId + entry.name!.trim() + entry.email!.trim(),
+          activityId + respondent.name!.trim() + respondent.email!.trim(),
         ),
       ),
     );
 
     const certBlob = (await generateCert(
-      entry.name!.trim(),
+      respondent.name!.trim(),
       template,
       hash,
+      activityTitle,
+      activityEnd,
+      coordinatorUrl,
+      vpsasUrl,
       qrPos,
     )) as Blob;
 
+    // save records for logging
     records.push({
       hash,
-      recipient_name: entry.name!,
-      recipient_email: entry.email!,
+      recipient_name: respondent.name!,
+      recipient_email: respondent.email!,
     });
 
     // Add to zip file
     await zipWriter?.add(
-      `${entry.name!.replace(/[^a-z0-9]/gi, '_')}.pdf`,
+      `${respondent.name!.replace(/[^a-z0-9]/gi, '_')}.pdf`,
       new BlobReader(certBlob),
     );
   }
