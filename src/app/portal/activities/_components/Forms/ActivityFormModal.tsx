@@ -144,7 +144,6 @@ export function ActivityFormModalComponent({
   // form handler & submission
   const handleSubmit = async (activityForm: ActivityFormProps) => {
     setPending(true);
-    console.log(activityForm);
     const result = await submitActivity(activityForm, activity?.id);
     setPending(false);
 

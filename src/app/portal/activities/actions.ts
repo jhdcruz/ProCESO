@@ -89,8 +89,8 @@ export async function submitActivity(
         title: activity.title,
         visibility: activity.visibility,
         series: seriesId,
-        date_ending: activity.date_ending?.toISOString(),
-        date_starting: activity.date_starting?.toISOString(),
+        date_ending: activity.date_ending?.toUTCString(),
+        date_starting: activity.date_starting?.toUTCString(),
         created_by: session.user.id,
         objectives: [
           activity.objective_1?.trim() ?? '',
