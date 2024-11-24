@@ -10,6 +10,7 @@ import { systemUrl } from '@/app/routes';
 import type { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { useUser } from '@/components/Providers/UserProvider';
 import { NotFound } from '@/components/Fallbacks/NotFound';
+import { PageLoader } from '@/components/Loader/PageLoader';
 import { canAccessActivity, isInternal } from '@/utils/access-control';
 
 const ActivityInfo = dynamic(
@@ -18,6 +19,7 @@ const ActivityInfo = dynamic(
       default: mod.ActivityInfo,
     })),
   {
+    loading: () => <PageLoader />,
     ssr: false,
   },
 );
@@ -28,6 +30,7 @@ const ActivityAnalytics = dynamic(
       default: mod.ActivityAnalytics,
     })),
   {
+    loading: () => <PageLoader />,
     ssr: false,
   },
 );

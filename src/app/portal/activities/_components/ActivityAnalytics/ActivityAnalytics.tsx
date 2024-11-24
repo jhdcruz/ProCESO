@@ -13,7 +13,7 @@ const EmotionsRadar = dynamic(
     })),
   {
     ssr: false,
-    loading: () => <Skeleton h={470} w="100%" />,
+    loading: () => <Skeleton h={370} w="100%" />,
   },
 );
 

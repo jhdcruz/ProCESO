@@ -344,21 +344,21 @@ export type Database = {
       analytics_metadata: {
         Row: {
           activity_id: string
-          created_at: string
+          content: string | null
           id: number
           type: string
           updated_at: string
         }
         Insert: {
           activity_id: string
-          created_at?: string
+          content?: string | null
           id?: number
           type: string
           updated_at?: string
         }
         Update: {
           activity_id?: string
-          created_at?: string
+          content?: string | null
           id?: number
           type?: string
           updated_at?: string

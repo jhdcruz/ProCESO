@@ -1,9 +1,11 @@
-import { memo, useEffect, useRef } from 'react';
-import { Text, Group, Box, Image } from '@mantine/core';
+import { memo, useEffect, useState } from 'react';
+import { Text, Group, Box, Image, Center } from '@mantine/core';
 import { IconDeviceAnalytics } from '@tabler/icons-react';
 import utilStyles from '@/styles/Utilties.module.css';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { notifications } from '@mantine/notifications';
+import dayjs from 'dayjs';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 // TODO: Use types from /eval forms
 //       currently having a hard time using union types.
@@ -29,12 +31,10 @@ interface ResponseData {
 }
 
 function WordCloudComponent({ id }: { id: string }) {
-  const image = useRef('');
+  const [image, setImage] = useState('');
 
   useEffect(() => {
-    const generateCloud = async () => {
-      const supabase = createBrowserClient();
-
+    const generateCloud = async (supabase: SupabaseClient) => {
       const { data, error } = await supabase
         .from('activity_feedback')
         .select('response')
@@ -87,39 +87,87 @@ function WordCloudComponent({ id }: { id: string }) {
       ];
 
       // generate word cloud using quickcharts API
-      const cloudSvg = await fetch('https://quickcharts.io/wordcloud', {
+      const cloudSvg = await fetch('https://quickchart.io/wordcloud', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          format: 'svg',
+          format: 'png',
           width: 800,
           height: 800,
           rotation: 0,
           removeStopwords: true,
-          loadGoogleFonts: 'Inter',
-          fontFamily: 'Inter',
+          fontFamily: 'sans',
           scale: 'linear',
-          text: allRemarks.join(' '),
+          text: allRemarks.join(),
         }),
       });
 
-      image.current = URL.createObjectURL(await cloudSvg.blob());
+      if (cloudSvg.status !== 200) {
+        notifications.show({
+          title: 'Unable to generate word cloud',
+          message: cloudSvg.statusText,
+          autoClose: 4000,
+          withBorder: true,
+        });
+        return;
+      }
 
-      // save svg to supabase storage
+      const cloudSvgBlob = await cloudSvg.blob();
+      setImage(URL.createObjectURL(cloudSvgBlob));
+
       await supabase.storage
         .from('activity_analytics')
-        .upload(`${id}/wordcloud.svg`, await cloudSvg.blob());
+        .upload(`${id}/wordcloud.svg`, cloudSvgBlob, {
+          cacheControl: '3600', // 1 hour in seconds
+          upsert: true,
+        });
 
       // save metadata to supabase 'analytics_metadata'
-      await supabase.from('analytics_metadata').upsert({
-        activity_id: id,
-        type: 'wordcloud',
-      });
+      const { error: dbError } = await supabase
+        .from('analytics_metadata')
+        .upsert(
+          {
+            activity_id: id,
+            type: 'wordcloud',
+          },
+          {
+            onConflict: 'activity_id, type',
+          },
+        );
+
+      if (dbError) {
+        console.error(dbError);
+      }
     };
 
-    void generateCloud();
+    // get saved/cached word cloud, and use them if they are 1hr fresh
+    const getSavedCloud = async () => {
+      const supabase = createBrowserClient();
+
+      // check if word cloud is already saved in 'analytics_metadata'
+      const { data } = await supabase
+        .from('analytics_metadata')
+        .select('updated_at')
+        .eq('activity_id', id)
+        .eq('type', 'wordcloud')
+        .limit(1)
+        .maybeSingle();
+
+      // check if record is within 1 hour, if not, regenerate word cloud
+      if (data && dayjs().diff(dayjs(data?.updated_at), 'hour') < 1) {
+        const { data } = await supabase.storage
+          .from('activity_analytics')
+          .download(`${id}/wordcloud.svg`);
+
+        setImage(URL.createObjectURL(data!));
+      } else {
+        void generateCloud(supabase);
+      }
+    };
+
+    void getSavedCloud();
   }, [id]);
 
   return (
@@ -143,13 +191,23 @@ function WordCloudComponent({ id }: { id: string }) {
       </Text>
 
       <Box>
-        <Image
-          alt="Word Cloud"
-          h="auto"
-          radius="md"
-          src={image.current}
-          w="100%"
-        />
+        {image ? (
+          <Image
+            alt="Word Cloud"
+            fit="contain"
+            h={590}
+            radius="md"
+            src={image}
+            w="100%"
+          />
+        ) : (
+          <Center h={590}>
+            <Text c="dimemd" fs="italic" my="xs" size="xs" ta="center">
+              Word cloud is not available yet, <br />
+              Come back again after a few hours.
+            </Text>
+          </Center>
+        )}
       </Box>
     </>
   );
