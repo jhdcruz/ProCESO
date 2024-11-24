@@ -82,7 +82,7 @@ export const EvaluationsTable = memo(
     const [selected, setSelected] = useState<EvaluationProps>();
 
     const [data, setData] = useState<EvaluationProps[]>([]);
-    const [range, setRange] = useState<[number, number]>([0, 6]);
+    const [range, setRange] = useState<[number, number]>([0, 15]);
     const [total, setTotal] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -207,14 +207,13 @@ export const EvaluationsTable = memo(
         <Table.Tr key={row.id}>
           <Table.Td maw={160}>
             <Stack align="start" gap={2}>
-              <Group gap={6}>
+              <Group gap={6} wrap="wrap-reverse">
                 <Anchor
                   component="button"
                   fw={600}
                   fz="sm"
-                  maw={110}
+                  lineClamp={1}
                   onClick={() => handleModal(row)}
-                  truncate
                 >
                   {response?.respondent.name ??
                     response?.respondent.email ??
@@ -346,7 +345,13 @@ export const EvaluationsTable = memo(
             <Text fw={700} fz="lg">
               Evaluation Responses
             </Text>
-            {loading && <Loader mx={6} size="sm" type="dots" />}
+            {loading ? (
+              <Loader mx={6} size="sm" type="dots" />
+            ) : (
+              <Badge size="sm" variant="default">
+                {total}
+              </Badge>
+            )}
           </Group>
 
           <IconFileSpreadsheet
@@ -390,7 +395,7 @@ export const EvaluationsTable = memo(
               disabled={
                 range[0] === 0 || range[0] === undefined || range[0] === null
               }
-              onClick={() => setRange([range[0] - 6, range[1] - 6])}
+              onClick={() => setRange([range[0] - 15, range[1] - 15])}
               variant="default"
             >
               Previous
@@ -398,7 +403,7 @@ export const EvaluationsTable = memo(
             <Button
               // disable if total data count exceeds the range
               disabled={range[1] >= total}
-              onClick={() => setRange([range[0] + 6, range[1] + 6])}
+              onClick={() => setRange([range[0] + 15, range[1] + 15])}
               variant="default"
             >
               Next

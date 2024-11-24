@@ -28,7 +28,7 @@ export const StatsRingCard = memo(
   )"
       mx={{ base: 'auto', sm: 0 }}
       p="md"
-      shadow="sm"
+      shadow="xs"
       w={{ base: '100%', sm: rem(240) }}
       withBorder
     >

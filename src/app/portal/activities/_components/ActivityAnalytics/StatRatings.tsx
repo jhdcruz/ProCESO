@@ -132,7 +132,7 @@ const StatsRingComponent = ({ id }: { id: string }) => {
         var(--mantine-color-dark-7)
       )"
         p="md"
-        shadow="sm"
+        shadow="xs"
         withBorder
       >
         <MoodRating rating={data?.total ?? 0} />

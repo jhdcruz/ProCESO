@@ -219,7 +219,8 @@ function WordCloudComponent({ id }: { id: string }) {
           <Image
             alt="Word Cloud"
             fit="contain"
-            h={590}
+            mah={590}
+            p="sm"
             radius="md"
             src={image}
             w="100%"

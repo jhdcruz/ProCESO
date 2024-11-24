@@ -62,7 +62,7 @@ function ActivityAnalyticsShell({
       <StatRatings id={id!} />
 
       <Grid align="flex-start" justify="space-between">
-        <Grid.Col span={{ base: 'auto', md: 12, lg: 8 }}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 12, lg: 8 }}>
           {/* Respondents Table */}
           <Paper
             bg="light-dark(
@@ -70,14 +70,14 @@ function ActivityAnalyticsShell({
               var(--mantine-color-dark-7)
             )"
             p="md"
-            shadow="sm"
+            shadow="xs"
             withBorder
           >
             <WordCloud id={id!} />
           </Paper>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 'auto', md: 12, lg: 4 }}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 12, lg: 4 }}>
           <Paper
             bg="light-dark(
         var(--mantine-color-gray-0),
@@ -85,7 +85,7 @@ function ActivityAnalyticsShell({
       )"
             mb="xs"
             p="md"
-            shadow="sm"
+            shadow="xs"
             withBorder
           >
             <SentimentSegments id={id!} />
@@ -98,7 +98,7 @@ function ActivityAnalyticsShell({
         )"
             my="xs"
             p="md"
-            shadow="sm"
+            shadow="xs"
             withBorder
           >
             <EmotionsRadar id={id!} />
@@ -112,8 +112,9 @@ function ActivityAnalyticsShell({
           var(--mantine-color-gray-0),
           var(--mantine-color-dark-7)
         )"
+        mt="xs"
         p="md"
-        shadow="sm"
+        shadow="xs"
         withBorder
       >
         <EvaluationsTable activity={activity} />
