@@ -46,13 +46,13 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
 
         <Image
           alt=""
-          className="object-scale-down"
+          className="object-cover"
           component={NextImage}
           fallbackSrc="/assets/no-image.png"
-          h="180"
+          h="auto"
           height={180}
           src={data.image_url}
-          w="326"
+          w={326}
           width={326}
         />
       </Card.Section>
