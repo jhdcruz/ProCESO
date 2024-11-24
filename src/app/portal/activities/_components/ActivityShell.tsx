@@ -53,6 +53,7 @@ function ActivityDetailsComponent({
       ) : (
         <Tabs
           defaultValue="info"
+          keepMounted={false}
           onChange={(value) => {
             startTransition(() => {
               startProgress();
