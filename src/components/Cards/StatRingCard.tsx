@@ -14,11 +14,13 @@ export const StatsRingCard = memo(
     label,
     value,
     color,
+    count,
     icon,
   }: {
     label: string;
     value: number;
     color: string;
+    count: number;
     icon?: ReactNode;
   }) => (
     <Paper
@@ -52,6 +54,12 @@ export const StatsRingCard = memo(
               '--'
             )}
           </Text>
+
+          {count > 0 && (
+            <Text c="dimmed" size="xs">
+              across {count} submissions.
+            </Text>
+          )}
         </div>
       </Group>
     </Paper>

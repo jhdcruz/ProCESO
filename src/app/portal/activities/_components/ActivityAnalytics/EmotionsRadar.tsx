@@ -101,7 +101,7 @@ function EmotionsRadarComponent({ id }: { id: string }) {
 
       {processed.length == 0 ? (
         <Center h={360}>
-          <Text c="dimemd" fs="italic" my="xs" size="xs" ta="center">
+          <Text c="dimmed" fs="italic" my="xs" size="xs" ta="center">
             No available data on current filter, <br />
             try turning &quot;common&quot; setting off.
           </Text>
