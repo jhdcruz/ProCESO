@@ -66,7 +66,7 @@ export const generateSummary = task({
         },
         {
           role: 'user',
-          content: `Here are ratings score from the evaluation: Partners gave a score of ${ratings?.partners?.score ?? 0}% from ${count.partners} partners, ${ratings?.implementers?.score ?? 0}% from ${count.implementers} for implementers, and ${ratings?.beneficiaries?.score ?? 0}% from ${count.beneficiaries} for beneficiaries. Totaling to ${ratings?.total} total score across ${count.implementers + count.partners + count.beneficiaries} responses.`,
+          content: `Here are ratings score from the evaluation: Partners gave a score of ${ratings?.partners?.score ?? 0}% from ${count.partners} partners, ${ratings?.implementers?.score ?? 0}% from ${count.implementers} for implementers, and ${ratings?.beneficiaries?.score ?? 0}% from ${count.beneficiaries} for beneficiaries. Totaling to ${count.total} total score across ${count.implementers + count.partners + count.beneficiaries} responses.`,
         },
         {
           role: 'user',
