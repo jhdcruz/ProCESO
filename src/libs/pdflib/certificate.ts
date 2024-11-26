@@ -47,7 +47,12 @@ export async function generateCert(
 ): Promise<Blob | undefined> {
   try {
     // Create QR code
-    const qrDataUrl = await QRCode.toDataURL(`https://deuz.tech/certs/${hash}`);
+    const qrDataUrl = await QRCode.toDataURL(
+      `https://deuz.tech/certs/${hash}`,
+      {
+        margin: 1,
+      },
+    );
     const qrImageBytes = Buffer.from(qrDataUrl.split(',')[1], 'base64');
 
     // Create PDF document
@@ -74,28 +79,31 @@ export async function generateCert(
       height: CERTIFICATE_DIMENSIONS.height,
     });
 
+    const qrSize = qrImage.scaleToFit(190, 190);
     // Draw QR code
     page.drawImage(qrImage, {
       x: qrLoc === 'right' ? CERTIFICATE_DIMENSIONS.width - 320 : 70,
-      y: CERTIFICATE_DIMENSIONS.height - 280,
-      width: 240,
-      height: 240,
+      y: CERTIFICATE_DIMENSIONS.height - 256,
+      width: qrSize.width,
+      height: qrSize.height,
     });
 
     // Add activity title
     page.drawText(activityTitle, {
-      x: CERTIFICATE_DIMENSIONS.width / 2 + 182,
+      x: CERTIFICATE_DIMENSIONS.width / 2 + 180,
       y: 564,
       font: await doc.embedFont(StandardFonts.HelveticaBold),
+      color: rgb(0.17, 0.17, 0.17),
       size: 36,
     });
 
     // Add activity end date
     const dateFormat = dayjs(activityEnd).format('MMMM D, YYYY');
     page.drawText(dateFormat, {
-      x: CERTIFICATE_DIMENSIONS.width / 2 - 42,
+      x: CERTIFICATE_DIMENSIONS.width / 2 - 38,
       y: 424,
       font: await doc.embedFont(StandardFonts.HelveticaBold),
+      color: rgb(0.17, 0.17, 0.17),
       size: 36,
     });
 
@@ -106,20 +114,27 @@ export async function generateCert(
     const coordinatorImage = await doc.embedPng(coordinatorBytes);
     const vpsasImage = await doc.embedPng(vpsasBytes);
 
+    const sigSize = [580, 210];
+    const scaledCoordinator = coordinatorImage.scaleToFit(
+      sigSize[0],
+      sigSize[1],
+    );
+    const scaledVpsas = vpsasImage.scaleToFit(sigSize[0], sigSize[1]);
+
     // Draw coordinator signature
     page.drawImage(coordinatorImage, {
-      x: CERTIFICATE_DIMENSIONS.width / 2 - 540,
-      y: 170,
-      width: 210,
-      height: 210,
+      x: CERTIFICATE_DIMENSIONS.width / 2 - 710,
+      y: 210,
+      width: scaledCoordinator.width,
+      height: scaledCoordinator.height,
     });
 
     // Draw VPSAs signature
     page.drawImage(vpsasImage, {
-      x: CERTIFICATE_DIMENSIONS.width / 2 + 340,
-      y: 170,
-      width: 210,
-      height: 210,
+      x: CERTIFICATE_DIMENSIONS.width / 2 + 160,
+      y: 210,
+      width: scaledVpsas.width,
+      height: scaledVpsas.height,
     });
 
     // Add name text
@@ -143,7 +158,7 @@ export async function generateCert(
     page.drawText(name, {
       x: (CERTIFICATE_DIMENSIONS.width - textWidth) / 2,
       y: verticalPos,
-      color: rgb(0, 0, 0),
+      color: rgb(0.17, 0.17, 0.17),
     });
 
     // Generate PDF bytes

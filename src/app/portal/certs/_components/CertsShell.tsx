@@ -17,6 +17,7 @@ import {
   FileButton,
   Tooltip,
   Radio,
+  ActionIcon,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -24,7 +25,9 @@ import NextImage from 'next/image';
 import {
   IconCheck,
   IconClock,
+  IconFilePencil,
   IconFileZip,
+  IconInfoSquareRounded,
   IconMailFast,
   IconSignature,
   IconUpload,
@@ -106,8 +109,8 @@ function CertsShellComponent() {
     // Convert blob to data URL properly
     const templateDataUrl = await blobToDataURL(selectedTemplate);
 
-    // Use web worker for local generation
     if (!values.local) {
+      // use trigger.dev and send emails
       if (coordinator === null || vpsas === null) {
         notifications.show({
           title: 'Missing signatures',
@@ -115,6 +118,16 @@ function CertsShellComponent() {
           color: 'red',
           withBorder: true,
           autoClose: 6000,
+        });
+        return;
+      }
+      if (!activity) {
+        notifications.show({
+          title: 'No activity selected',
+          message: 'Please select an activity to generate certificates for.',
+          color: 'red',
+          withBorder: true,
+          autoClose: 4000,
         });
         return;
       }
@@ -141,6 +154,7 @@ function CertsShellComponent() {
         values.qrPos ?? 'right',
       );
     } else {
+      // Use web worker for local generation, does not send to emails
       if (coordinator === null || vpsas === null) {
         notifications.show({
           title: 'Missing signatures',
@@ -148,6 +162,16 @@ function CertsShellComponent() {
           color: 'red',
           withBorder: true,
           autoClose: 6000,
+        });
+        return;
+      }
+      if (!activity) {
+        notifications.show({
+          title: 'No activity selected',
+          message: 'Please select an activity to generate certificates for.',
+          color: 'red',
+          withBorder: true,
+          autoClose: 4000,
         });
         return;
       }
@@ -287,6 +311,7 @@ function CertsShellComponent() {
                       h="auto"
                       height={183}
                       mx="auto"
+                      priority={false}
                       src={URL.createObjectURL(tmpl.data as Blob)}
                       w={260}
                       width={260}
@@ -330,13 +355,13 @@ function CertsShellComponent() {
               </Text>
             </div>
 
-            <FileButton
-              accept="image/png,image/jpeg"
-              onChange={setCustomTemplate}
-            >
-              {(props) => (
-                <Group gap="xs" justify="flex-end">
-                  {/* Custom Template Upload */}
+            <Group gap="xs" justify="flex-end">
+              {/* Custom Template Upload */}
+              <FileButton
+                accept="image/png,image/jpeg"
+                onChange={setCustomTemplate}
+              >
+                {(props) => (
                   <Button
                     leftSection={<IconUpload size={16} stroke={1.5} />}
                     variant="default"
@@ -346,53 +371,72 @@ function CertsShellComponent() {
                       ? `${customTemplate.name?.slice(0, 8)}...`
                       : 'Custom Template'}
                   </Button>
+                )}
+              </FileButton>
 
-                  <Divider orientation="vertical" />
+              <Tooltip label="Get guided template format" withArrow>
+                <ActionIcon
+                  color="gray"
+                  component="a"
+                  href="https://www.canva.com/design/DAGXGDPJ954/zTy-hn1dQ5h7v7nnwidxcA/view?mode=preview#1"
+                  target="__blank"
+                  variant="subtle"
+                >
+                  <IconFilePencil size={18} />
+                </ActionIcon>
+              </Tooltip>
 
-                  {/* Signatures Upload */}
-                  <FileButton accept="image/png" onChange={setCoordinator}>
-                    {(props) => (
-                      <Button
-                        leftSection={
-                          coordinator ? (
-                            <IconCheck size={18} />
-                          ) : (
-                            <IconSignature size={18} />
-                          )
-                        }
-                        variant="filled"
-                        {...props}
-                      >
-                        {coordinator ? 'Uploaded' : 'Coordinator'}
-                      </Button>
-                    )}
-                  </FileButton>
+              <Divider orientation="vertical" />
 
-                  <FileButton accept="image/png" onChange={setVpsas}>
-                    {(props) => (
-                      <Button
-                        leftSection={
-                          vpsas ? (
-                            <IconCheck size={18} />
-                          ) : (
-                            <IconSignature size={18} />
-                          )
-                        }
-                        variant="filled"
-                        {...props}
-                      >
-                        {vpsas ? 'Uploaded' : 'VPSAS'}
-                      </Button>
-                    )}
-                  </FileButton>
-                </Group>
-              )}
-            </FileButton>
+              {/* Signatures Upload */}
+              <FileButton accept="image/png" onChange={setCoordinator}>
+                {(props) => (
+                  <Button
+                    leftSection={
+                      coordinator ? (
+                        <IconCheck size={18} />
+                      ) : (
+                        <IconSignature size={18} />
+                      )
+                    }
+                    variant="filled"
+                    {...props}
+                  >
+                    {coordinator ? 'Uploaded' : 'Coordinator'}
+                  </Button>
+                )}
+              </FileButton>
+
+              <FileButton accept="image/png" onChange={setVpsas}>
+                {(props) => (
+                  <Button
+                    leftSection={
+                      vpsas ? (
+                        <IconCheck size={18} />
+                      ) : (
+                        <IconSignature size={18} />
+                      )
+                    }
+                    variant="filled"
+                    {...props}
+                  >
+                    {vpsas ? 'Uploaded' : 'VPSAS'}
+                  </Button>
+                )}
+              </FileButton>
+
+              <Tooltip
+                label="Must be 800x200px, with signature at center"
+                withArrow
+              >
+                <IconInfoSquareRounded className="cursor-help" size={18} />
+              </Tooltip>
+            </Group>
           </Group>
 
           <Divider my="md" />
 
-          <Group gap="md" grow preventGrowOverflow={false}>
+          <Group gap="sm" grow justify="center" preventGrowOverflow={false}>
             <ActivityInput
               description="Enter name of activity to search"
               key={form.key('activity')}
@@ -415,15 +459,16 @@ function CertsShellComponent() {
             </Checkbox.Group>
 
             <Radio.Group
+              description="Where to place the QR code."
               key={form.key('qrPos')}
               label="QR Code"
               {...form.getInputProps('qrPos')}
               required
             >
-              <Stack mt="xs">
+              <Group mt="xs">
                 <Radio label="Top-Left" value="left" />
                 <Radio label="Top-Right" value="right" />
-              </Stack>
+              </Group>
             </Radio.Group>
           </Group>
 
@@ -431,7 +476,7 @@ function CertsShellComponent() {
 
           <Group gap="xs" justify="flex-end">
             <Tooltip
-              label="Only save generated certificates"
+              label="Save generated certificate as ZIP locally."
               multiline
               withArrow
             >
@@ -446,11 +491,7 @@ function CertsShellComponent() {
             </Tooltip>
 
             <Button
-              disabled={
-                form.values.activity === '' ||
-                coordinator === null ||
-                vpsas === null
-              }
+              disabled={coordinator === null || vpsas === null}
               onClick={() => form.setValues({ local: false })}
               rightSection={<IconMailFast size={20} stroke={1.5} />}
               type="submit"
