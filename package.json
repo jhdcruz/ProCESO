@@ -69,7 +69,7 @@
     "framer-motion": "11.11.17",
     "little-date": "1.0.0",
     "next": "15.0.4-canary.28",
-    "openai": "4.73.0",
+    "openai": "4.73.1",
     "pdf-lib": "1.17.1",
     "pdfkit": "0.15.1",
     "qrcode": "1.5.4",
