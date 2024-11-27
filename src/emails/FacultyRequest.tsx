@@ -15,7 +15,7 @@ export default function FacultyRequest({
   return (
     <Template>
       <Text className="mt-8">
-        Your department has been selected for an outreach activity: <br />
+        Your department has been nominated for an outreach activity: <br />
         <Link className="font-semibold text-yellow-500" href={link}>
           {activity?.title ?? 'Untitled Activity'}
         </Link>
@@ -44,8 +44,12 @@ export default function FacultyRequest({
         className="mt-5 font-bold text-yellow-500 underline underline-offset-1"
         href={link}
       >
-        Visit the activity page to delegate faculty members for the activity.
+        Click here to delegate faculty members for the activity.
       </Link>
+
+      <Text className="mt-4 text-sm">
+        If the link above does not work, use: {link}
+      </Text>
     </Template>
   );
 }

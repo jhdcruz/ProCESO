@@ -32,7 +32,9 @@ export const emailAssigned = task({
     const usersQuery = supabase
       .from('users')
       .select('email')
-      .in('id', payload.ids);
+      .eq('active', true)
+      .in('id', payload.ids)
+      .not('email', 'is', null);
 
     // get activity id
     const activityQuery = supabase
@@ -81,9 +83,12 @@ export const emailAssigned = task({
     );
 
     if (!response.ok) {
-      throw new Error(await response.json());
+      logger.error(`${response.status}: Error on email API route`, {
+        ...response.body,
+      });
+      throw new Error(`${response.status}: Error on email API route`);
     }
 
-    return response;
+    return { response };
   },
 });

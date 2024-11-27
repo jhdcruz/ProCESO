@@ -17,7 +17,8 @@ export default function ActivityNotice({
     <Template>
       <Text className="mt-8">
         This is to inform you that the Community Extensions Services Office -
-        Manila has scheduled to conduct an activity titled: <br />
+        Manila has scheduled to conduct an activity with your department,
+        entitled: <br />
         <Link
           className="font-bold text-yellow-500 underline underline-offset-1"
           href={link}

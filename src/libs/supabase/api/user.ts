@@ -72,7 +72,7 @@ export async function getFacultyUsers(
 
   const { data: users, error } = await query
     .eq('role', 'faculty')
-    .not('active', 'is', false);
+    .eq('active', true);
 
   if (error) {
     return {

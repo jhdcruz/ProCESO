@@ -29,15 +29,19 @@ export const emailDepts = task({
     const usersQuery = supabase
       .from('users')
       .select('email')
+      .eq('active', true)
       .in('department', payload.depts)
-      .overlaps('other_roles', ['dean', 'chair']);
+      .overlaps('other_roles', ['dean', 'chair'])
+      .not('email', 'is', null);
 
     // fetch emails for faculty info relay
     const committeeQuery = supabase
       .from('users')
       .select('email')
+      .eq('active', true)
       .in('department', payload.depts)
-      .overlaps('other_roles', ['head']);
+      .overlaps('other_roles', ['head'])
+      .not('email', 'is', null);
 
     // get activity id
     const activityQuery = supabase
@@ -103,13 +107,20 @@ export const emailDepts = task({
     const [assignmentRes, relayRes] = await Promise.all([assignment, relay]);
 
     if (!assignmentRes.ok) {
-      logger.error('Failed to send assignment emails', { assignmentRes });
-      throw new Error('Failed to send assignment emails');
+      logger.error(
+        `${assignmentRes.status}: Failed to send assignment emails`,
+        { ...assignmentRes.body },
+      );
+      throw new Error(
+        `${assignmentRes.status}: Failed to send assignment emails`,
+      );
     }
 
     if (!relayRes.ok) {
-      logger.error('Failed to send relay emails', { relayRes });
-      throw new Error('Failed to send relay emails');
+      logger.error(`${relayRes.status}: Failed to send relay emails`, {
+        ...relayRes.body,
+      });
+      throw new Error(`${relayRes.status}: Failed to send relay emails`);
     }
   },
 });

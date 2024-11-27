@@ -29,6 +29,7 @@ export const emailReminders = task({
     const usersQuery = supabase
       .from('activities_faculties_view')
       .select('email')
+      .eq('active', true)
       .eq('activity_id', payload.activityId)
       .not('email', 'is', null);
 
@@ -36,6 +37,7 @@ export const emailReminders = task({
     const subscribersQuery = supabase
       .from('activities_subscriptions_view')
       .select('subscriber_email')
+      .eq('active', true)
       .eq('activity_id', payload.activityId)
       .not('subscriber_email', 'is', null);
 
@@ -43,6 +45,7 @@ export const emailReminders = task({
     const staffsQuery = supabase
       .from('users')
       .select('email')
+      .eq('active', true)
       .in('role', ['admin', 'staff'])
       .not('email', 'is', null);
 
