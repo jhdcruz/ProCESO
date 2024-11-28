@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
 };
 
 export default MillionLint.next({
-  enabled: true,
+  enabled: process.env.DEBUG === '1',
   rsc: true,
 })(
   withBundleAnalyzer({
