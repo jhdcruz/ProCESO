@@ -512,25 +512,16 @@ function ActivityDetailsBody({
                 {files.map((file) => (
                   <Group
                     align="flex-start"
-                    gap={8}
+                    gap={6}
                     key={file.checksum}
                     my={16}
                     wrap="nowrap"
                   >
-                    <ActionIcon
-                      aria-label="Delete file"
-                      color="dimmed"
-                      onClick={() => handleDeleteFile(file.name, file.checksum)}
-                      variant="transparent"
-                    >
-                      <IconX size={16} />
-                    </ActionIcon>
+                    <Badge miw={40} size="sm" variant="default">
+                      {identifyFileType(file.type)}
+                    </Badge>
 
                     <Stack gap={6}>
-                      <Badge mr={4} size="sm" variant="default">
-                        {identifyFileType(file.type)}
-                      </Badge>
-
                       <Tooltip
                         label={file.name}
                         multiline
@@ -544,7 +535,6 @@ function ActivityDetailsBody({
                           onClick={() => saveFile(file.name, file.checksum)}
                           size="sm"
                           ta="left"
-                          w={260}
                         >
                           {file.name}
                         </Anchor>
@@ -558,7 +548,6 @@ function ActivityDetailsBody({
                         <Tooltip
                           label="Verified checksum of the uploaded file, should match the downloaded file."
                           multiline
-                          position="bottom"
                           withArrow
                         >
                           <Badge
@@ -574,6 +563,16 @@ function ActivityDetailsBody({
                         </Tooltip>
                       </Group>
                     </Stack>
+
+                    <ActionIcon
+                      aria-label="Delete file"
+                      color="dimmed"
+                      ml="auto"
+                      onClick={() => handleDeleteFile(file.name, file.checksum)}
+                      variant="transparent"
+                    >
+                      <IconX size={16} />
+                    </ActionIcon>
                   </Group>
                 ))}
               </>

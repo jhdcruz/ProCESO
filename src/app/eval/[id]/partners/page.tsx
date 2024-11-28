@@ -113,9 +113,9 @@ export default async function PartnersFeedback({
               size="lg"
               variant="light"
             >
-              {dayjs(activity.data.date_starting).format('MMMM D, YYYY h:mm A')}
+              {dayjs(activity.data.date_starting).format('MMM D, YYYY h:mm A')}
               {' - '}
-              {dayjs(activity.data.date_ending).format('MMMM D, YYYY h:mm A')}
+              {dayjs(activity.data.date_ending).format('MMM D, YYYY h:mm A')}
             </Badge>
           )}
         </Stack>

@@ -43,9 +43,9 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
           <Text c="dimmed" size="xs">
             {activity?.date_starting && (
               <>
-                {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+                {dayjs(activity.date_starting).format('MMM D, YYYY h:mm A')}
                 {' - '}
-                {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
+                {dayjs(activity.date_ending).format('MMM D, YYYY h:mm A')}
               </>
             )}
           </Text>

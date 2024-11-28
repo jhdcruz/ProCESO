@@ -33,9 +33,9 @@ export default function ActivityNotice({
         <Text>
           The activity is to be conducted at{' '}
           <span className="font-bold">
-            {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+            {dayjs(activity.date_starting).format('MMM D, YYYY h:mm A')}
             {' - '}
-            {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
+            {dayjs(activity.date_ending).format('MMM D, YYYY h:mm A')}
           </span>
           .
         </Text>
