@@ -15,19 +15,20 @@ import {
   TextInput,
   Button,
 } from '@mantine/core';
-import { notifications } from '@mantine/notifications';
+import { useDebouncedValue } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 import { type DateValue } from '@mantine/dates';
 import type { Enums, Tables } from '@/libs/supabase/_database';
 import { getFacultyUsers } from '@/libs/supabase/api/user';
 import { getFacultyConflicts } from '@/libs/supabase/api/faculty-assignments';
-import classes from '@/styles/Table.module.css';
 import { getDeptColor, getPosColor } from '@/utils/colors';
 import {
   FilterDepartments,
   FilterPositions,
 } from '@/components/Filters/FilterUsers';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useUser } from '@/components/Providers/UserProvider';
+import classes from '@/styles/Table.module.css';
+import { isInternal } from '@/utils/access-control';
 
 export function FacultyListComponent({
   startDate,
@@ -38,6 +39,8 @@ export function FacultyListComponent({
   endDate: DateValue;
   defaultSelection?: string[];
 }) {
+  const { role: currentRole, department: currentDept } = useUser();
+
   const [selection, setSelection] = useState<string[]>(defaultSelection ?? []);
 
   // search
@@ -45,7 +48,9 @@ export function FacultyListComponent({
   const [searchQuery] = useDebouncedValue(search, 200);
 
   // filters
-  const [dept, setDept] = useState<Enums<'roles_dept'>[]>([]);
+  const [dept, setDept] = useState<Enums<'roles_dept'>[]>(
+    currentRole === 'faculty' && currentDept ? [currentDept] : [],
+  );
   const [pos, setPos] = useState<Enums<'roles_pos'>[]>([]);
 
   // data
@@ -72,6 +77,7 @@ export function FacultyListComponent({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+
       const facultyRequest = getFacultyUsers(searchQuery, dept, pos);
       const assignmentsRequest = getFacultyConflicts(startDate, endDate);
 
@@ -98,13 +104,7 @@ export function FacultyListComponent({
       setLoading(false);
     };
 
-    void fetchData().catch((error: { message: string }) => {
-      notifications.show({
-        title: 'Unable to fetch series',
-        message: `${error.message}, you can set it later.`,
-        color: 'yellow',
-      });
-    });
+    void fetchData();
   }, [searchQuery, startDate, endDate, dept, pos]);
 
   // individual rows component
@@ -199,7 +199,9 @@ export function FacultyListComponent({
         />
 
         <Button.Group>
-          <FilterDepartments dept={dept} setDept={setDept} />
+          {isInternal(currentRole!) && (
+            <FilterDepartments dept={dept} setDept={setDept} />
+          )}
           <FilterPositions pos={pos} setPos={setPos} />
         </Button.Group>
       </Group>

@@ -571,7 +571,7 @@ function ActivityDetailsBody({
 
                             {currentUser === faculty.id ? (
                               // RSVP controls for current logged-in faculty
-                              <ActionIcon.Group>
+                              <ActionIcon.Group my={6}>
                                 <Tooltip label="Will Go" withArrow>
                                   <ActionIcon
                                     color="green"
