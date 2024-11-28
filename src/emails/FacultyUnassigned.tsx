@@ -4,7 +4,7 @@ import { sidebarRoutes } from '@/app/routes';
 import Template from './_Template';
 import '@mantine/core/styles.css';
 
-export default function Unassigned({
+export default function FacultyUnassigned({
   activity,
 }: {
   activity: Tables<'activities'>;
@@ -14,8 +14,8 @@ export default function Unassigned({
   return (
     <Template>
       <Text className="mt-8">
-        You are <span className="font-bold">no longer assigned</span> for the
-        activity: <br />
+        You are <span className="font-bold">no longer assigned/nominated</span>{' '}
+        for the activity: <br />
         <Link className="font-semibold text-yellow-500" href={link}>
           {activity?.title ?? 'Untitled Activity'}
         </Link>

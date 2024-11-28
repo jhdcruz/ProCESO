@@ -3,6 +3,7 @@ import { redirect, RedirectType } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { sidebarRoutes, systemUrl } from '../routes';
 import type { Tables } from '@/libs/supabase/_database';
+import { PageLoader } from '@/components/Loader/PageLoader';
 
 // Helper function to check if objects have different values
 const hasChanges = (
@@ -64,10 +65,10 @@ export default async function RootPage() {
     const oAuthUser = {
       email,
       name,
-      department: department ?? 'na',
+      department,
       avatar_url,
       other_roles,
-      role: role ?? 'student',
+      role,
       active,
     };
 
@@ -88,4 +89,6 @@ export default async function RootPage() {
     sidebarRoutes[0].link ?? systemUrl + '/dashboard',
     RedirectType.replace,
   );
+
+  return <PageLoader />;
 }

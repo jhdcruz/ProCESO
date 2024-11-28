@@ -16,7 +16,8 @@ export const UserDisplay = memo(
     department,
     role,
     other_roles,
-  }: Partial<Tables<'users'>>) => (
+    highlightSelf,
+  }: Partial<Tables<'users'>> & { highlightSelf?: boolean }) => (
     <Group gap="sm" wrap="nowrap">
       <Box maw={rem(56)} miw={rem(40)} pos="relative">
         <Avatar
@@ -49,10 +50,15 @@ export const UserDisplay = memo(
 
       <Stack gap={2}>
         <Group gap={4} wrap="wrap-reverse">
-          <Text lineClamp={1} mr="4" size="sm" tt="capitalize">
+          <Text
+            fw={highlightSelf ? 'bold' : 'normal'}
+            lineClamp={1}
+            mr="4"
+            size="sm"
+            tt="capitalize"
+          >
             {name?.toLowerCase() ?? 'Unknown'}
           </Text>
-
           <Badge
             color={getDeptColor(department)}
             key={department}
@@ -61,7 +67,6 @@ export const UserDisplay = memo(
           >
             {department}
           </Badge>
-
           {other_roles?.map((role) => (
             <Badge
               color={getPosColor(role)}

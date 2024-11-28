@@ -545,6 +545,7 @@ function ActivityDetailsHeader({
           fallbackSrc="/assets/no-image.png"
           h="auto"
           height={200}
+          priority={false}
           radius="md"
           src={activity.image_url}
           w="auto"

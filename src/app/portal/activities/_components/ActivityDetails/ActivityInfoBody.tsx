@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import {
+  ActionIcon,
   Group,
   Divider,
   Text,
@@ -10,7 +11,6 @@ import {
   Tooltip,
   Box,
   Timeline,
-  ActionIcon,
   Grid,
   Stack,
   Code,
@@ -22,8 +22,12 @@ import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
 import { getActivityReports } from '@/libs/supabase/api/storage';
 import {
+  IconAlertTriangle,
   IconCheck,
   IconCornerDownRight,
+  IconFlagCheck,
+  IconFlagQuestion,
+  IconFlagX,
   IconLibrary,
   IconRosetteDiscountCheck,
   IconScanEye,
@@ -43,6 +47,7 @@ import { PageLoader } from '@/components/Loader/PageLoader';
 import { UserDisplay } from '@/components/Display/UserDisplay';
 import { createBrowserClient } from '@/libs/supabase/client';
 import { modals } from '@mantine/modals';
+import { useUser } from '@/components/Providers/UserProvider';
 
 const RTEditor = dynamic(
   () =>
@@ -80,10 +85,16 @@ function ActivityDetailsBody({
   loading: boolean;
   onSave: (content: string) => void;
 }) {
+  const { id: currentUser } = useUser();
+
   const clipboard = useClipboard({ timeout: 1000 });
 
   const [faculties, setFaculties] = useState<FacultyGroup[] | null>();
   const [files, setFiles] = useState<Tables<'activity_files'>[] | null>();
+
+  // RSVP assignment of current user
+  const [acceptLoading, setAcceptLoading] = useState(false);
+  const [accept, setAccept] = useState<boolean | null>(null);
 
   const saveFile = async (fileName: string, localChecksum: string) => {
     notifications.show({
@@ -292,6 +303,77 @@ function ActivityDetailsBody({
     });
   };
 
+  const handleRsvp = async (
+    rsvp: boolean,
+    faculty: Pick<
+      Tables<'activities_faculties_view'>,
+      'name' | 'email' | 'department'
+    >,
+    referrer: string,
+  ) => {
+    if (accept === rsvp) return;
+
+    setAcceptLoading(true);
+    const supabase = createBrowserClient();
+
+    // save rsvp resposne
+    const { error } = await supabase
+      .from('faculty_assignments')
+      .update({ rsvp })
+      .eq('activity_id', activity.id!)
+      .eq('user_id', currentUser);
+
+    // email referrer or staff about faculty assignment response
+    const emailResponse = await fetch('/api/activities/rsvp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        activity,
+        rsvp: rsvp,
+        faculty: {
+          name: faculty.name,
+          email: faculty.email,
+          dept: faculty.department,
+        },
+        referrer: referrer,
+      }),
+    });
+
+    if (!emailResponse.ok) {
+      console.error('Email error', { emailResponse });
+      notifications.show({
+        title: 'Unable to notify referrer',
+        message:
+          'A technical error occured, please approach the referrer directly.',
+        color: 'yellow',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+    } else {
+      notifications.show({
+        title: error ? 'Unable to respond' : 'Response saved',
+        message: error
+          ? error.message
+          : 'Referrer has been notified of your response.',
+        color: error ? 'red' : 'green',
+        icon: error ? <IconAlertTriangle /> : <IconCheck />,
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 4000,
+      });
+    }
+
+    // update local state
+    if (error === null) {
+      setAccept(rsvp);
+    }
+
+    setAcceptLoading(false);
+  };
+
   // show notification when email is copied to clipboard
   useEffect(() => {
     // fixes notification appearing twice
@@ -373,6 +455,13 @@ function ActivityDetailsBody({
           return acc;
         }, [] as FacultyGroup[]); // Initialize with empty array typed as FacultyGroup[]
 
+        const userRsvp = groups
+          .find((g) => g.members.find((m) => m.id === currentUser)?.id)
+          ?.members.find((m) => m.id === currentUser)?.rsvp;
+
+        // Check if current user RSVP status
+        setAccept(userRsvp ?? null);
+
         setFaculties(groups);
       } else {
         // If no faculty data, reset state to null
@@ -383,7 +472,7 @@ function ActivityDetailsBody({
     };
 
     void fetchActivityDetails();
-  }, [activity.id, role]);
+  }, [activity.id, role, currentUser]);
 
   return (
     <Grid align="start" justify="space-between">
@@ -469,14 +558,95 @@ function ActivityDetailsBody({
                           key={faculty.id}
                           mt="md"
                         >
-                          <UserDisplay
-                            avatar_url={faculty.avatar_url}
-                            department={faculty.department!}
-                            email={faculty.email!}
-                            name={faculty.name!}
-                            other_roles={faculty.other_roles}
-                            role={faculty.role!}
-                          />
+                          <Group gap={6} justify="space-between">
+                            <UserDisplay
+                              avatar_url={faculty.avatar_url}
+                              department={faculty.department!}
+                              email={faculty.email!}
+                              highlightSelf={currentUser === faculty.id}
+                              name={faculty.name!}
+                              other_roles={faculty.other_roles}
+                              role={faculty.role!}
+                            />
+
+                            {currentUser === faculty.id ? (
+                              // RSVP controls for current logged-in faculty
+                              <ActionIcon.Group>
+                                <Tooltip label="Will Go" withArrow>
+                                  <ActionIcon
+                                    color="green"
+                                    loading={acceptLoading}
+                                    onClick={() =>
+                                      handleRsvp(
+                                        true,
+                                        faculty,
+                                        group.referrerEmail,
+                                      )
+                                    }
+                                    size="lg"
+                                    variant={
+                                      accept === true ? 'filled' : 'outline'
+                                    }
+                                  >
+                                    <IconFlagCheck size={16} />
+                                  </ActionIcon>
+                                </Tooltip>
+
+                                <Tooltip label="Can't Go" withArrow>
+                                  <ActionIcon
+                                    color="red"
+                                    loading={acceptLoading}
+                                    onClick={() =>
+                                      handleRsvp(
+                                        false,
+                                        faculty,
+                                        group.referrerEmail,
+                                      )
+                                    }
+                                    size="lg"
+                                    variant={
+                                      accept === false ? 'filled' : 'outline'
+                                    }
+                                  >
+                                    <IconFlagX size={16} />
+                                  </ActionIcon>
+                                </Tooltip>
+                              </ActionIcon.Group>
+                            ) : (
+                              // Show RSVP status for other faculty
+                              <Tooltip
+                                label={
+                                  faculty.rsvp === null
+                                    ? 'Waiting for response'
+                                    : faculty.rsvp
+                                      ? 'Will Go'
+                                      : "Can't Go"
+                                }
+                                withArrow
+                              >
+                                <ActionIcon
+                                  className="cursor-default"
+                                  color={
+                                    faculty.rsvp === null
+                                      ? 'gray'
+                                      : faculty.rsvp
+                                        ? 'green'
+                                        : 'red'
+                                  }
+                                  size="lg"
+                                  variant="light"
+                                >
+                                  {faculty.rsvp === null ? (
+                                    <IconFlagQuestion size={16} />
+                                  ) : faculty.rsvp ? (
+                                    <IconFlagCheck size={16} />
+                                  ) : (
+                                    <IconFlagX size={16} />
+                                  )}
+                                </ActionIcon>
+                              </Tooltip>
+                            )}
+                          </Group>
                         </Timeline.Item>
                       ))}
                     </Timeline>
