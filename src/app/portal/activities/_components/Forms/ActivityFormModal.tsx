@@ -286,9 +286,10 @@ export const ActivityFormModal = memo(
               />
 
               <SeriesInput
+                className="my-1"
+                classNames={classes}
                 key={form.key('series')}
                 {...form.getInputProps('series')}
-                classNames={classes}
               />
 
               <Input.Wrapper
@@ -398,33 +399,40 @@ export const ActivityFormModal = memo(
 
               {/* Departments to notify */}
               <Checkbox.Group
-                description="Send email to the selected college department chairs and dean."
+                description="Send notice to the selected college dept. chairs, dean, and committee heads."
                 key={form.key('notify')}
                 label="Departments to Notify"
                 {...form.getInputProps('notify', { type: 'checkbox' })}
               >
-                <Group mt="xs">
-                  {listDepts.map((dept) => (
-                    <Checkbox
-                      key={dept.value}
-                      label={
-                        <Group gap="xs" wrap="nowrap">
-                          <Text size="sm" tt="capitalize">
-                            {dept.label}
-                          </Text>
-                          <Badge
-                            color={getDeptColor(dept.value)}
-                            size="xs"
-                            variant="light"
-                          >
-                            {dept.value}
-                          </Badge>
-                        </Group>
-                      }
-                      value={dept.value}
-                    />
-                  ))}
-                </Group>
+                {form.getValues().visibility !== 'Internal' ? (
+                  <Group mt="xs">
+                    {listDepts.map((dept) => (
+                      <Checkbox
+                        key={dept.value}
+                        label={
+                          <Group gap="xs" wrap="nowrap">
+                            <Text size="sm" tt="capitalize">
+                              {dept.label}
+                            </Text>
+                            <Badge
+                              color={getDeptColor(dept.value)}
+                              size="xs"
+                              variant="light"
+                            >
+                              {dept.value}
+                            </Badge>
+                          </Group>
+                        }
+                        value={dept.value}
+                      />
+                    ))}
+                  </Group>
+                ) : (
+                  <Text c="dimmed" fs="italic" mt="xl" size="xs" ta="center">
+                    Activity must not be &quot;Internal&quot; to notify
+                    departments.
+                  </Text>
+                )}
               </Checkbox.Group>
             </Grid.Col>
           </Grid>
