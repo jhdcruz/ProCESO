@@ -1,6 +1,5 @@
 import { Link, Text } from '@react-email/components';
 import type { Tables } from '@/libs/supabase/_database';
-import { formatDateRange } from 'little-date';
 import dayjs from '../libs/dayjs';
 import Template from './_Template';
 import '@mantine/core/styles.css';
@@ -34,13 +33,9 @@ export default function ActivityNotice({
         <Text>
           The activity is to be conducted at{' '}
           <span className="font-bold">
-            {formatDateRange(
-              new Date(activity?.date_starting),
-              new Date(activity.date_ending),
-              {
-                includeTime: true,
-              },
-            )}
+            {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+            {' - '}
+            {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
           </span>
           .
         </Text>

@@ -42,7 +42,6 @@ const nextConfig: NextConfig = {
       'framer-motion',
       'dayjs',
       'resend',
-      'little-date',
       'recharts',
     ],
   },
@@ -66,7 +65,9 @@ const nextConfig: NextConfig = {
 
 export default MillionLint.next({
   enabled: true,
-  rsc: true
-})(withBundleAnalyzer({
-  enabled: process.env.DEBUG === '1',
-})(nextConfig));
+  rsc: true,
+})(
+  withBundleAnalyzer({
+    enabled: process.env.DEBUG === '1',
+  })(nextConfig),
+);

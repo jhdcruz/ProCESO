@@ -13,7 +13,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import { getActivities } from '@/libs/supabase/api/activity';
 import type { Tables } from '@/libs/supabase/_database';
-import { formatDateRange } from 'little-date';
+import dayjs from '@/libs/dayjs';
 
 export const ActivityInput = memo((props: AutocompleteProps) => {
   const [query, setQuery] = useState('');
@@ -41,14 +41,13 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
             {data.find((activity) => activity.id === option.value)?.title}
           </Text>
           <Text c="dimmed" size="xs">
-            {activity?.date_starting &&
-              formatDateRange(
-                new Date(activity.date_starting),
-                new Date(activity?.date_ending!),
-                {
-                  includeTime: true,
-                },
-              )}
+            {activity?.date_starting && (
+              <>
+                {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+                {' - '}
+                {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
+              </>
+            )}
           </Text>
         </div>
       </Group>

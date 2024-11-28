@@ -12,7 +12,7 @@ import { getActivityDetails } from '@/libs/supabase/api/activity';
 import { siteUrl } from '@/utils/url';
 import { PageLoader } from '@/components/Loader/PageLoader';
 import { IconCalendarClock } from '@tabler/icons-react';
-import { formatDateRange } from 'little-date';
+import dayjs from '@/libs/dayjs';
 
 const ImplementersForm = dynamic(
   () => import('@/app/eval/_components/Forms/ImplementersForm'),
@@ -113,13 +113,9 @@ export default async function ImplementersFeedback({
               size="lg"
               variant="light"
             >
-              {formatDateRange(
-                new Date(activity.data.date_starting),
-                new Date(activity.data.date_ending),
-                {
-                  includeTime: true,
-                },
-              )}
+              {dayjs(activity.data.date_starting).format('MMMM D, YYYY h:mm A')}
+              {' - '}
+              {dayjs(activity.data.date_ending).format('MMMM D, YYYY h:mm A')}
             </Badge>
           )}
         </Stack>

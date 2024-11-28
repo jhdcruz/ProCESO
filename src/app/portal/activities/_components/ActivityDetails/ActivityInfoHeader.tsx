@@ -34,7 +34,6 @@ import {
   IconUsersGroup,
 } from '@tabler/icons-react';
 import { useProgress } from 'react-transition-progress';
-import { formatDateRange } from 'little-date';
 import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { uploadActivityFiles } from '@/libs/supabase/api/storage';
 import { systemUrl } from '@/app/routes';
@@ -50,6 +49,7 @@ import { isElevated, isInternal, isPublic } from '@/utils/access-control';
 import { useUser } from '@/components/Providers/UserProvider';
 import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
 import { revalidate } from '@/app/actions';
+import dayjs from '@/libs/dayjs';
 
 const ActivityFormModal = dynamic(
   () =>
@@ -259,13 +259,9 @@ function ActivityDetailsHeader({
                 size="lg"
                 variant="light"
               >
-                {formatDateRange(
-                  new Date(activity.date_starting),
-                  new Date(activity.date_ending),
-                  {
-                    includeTime: true,
-                  },
-                )}
+                {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+                {' - '}
+                {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
               </Badge>
             </Group>
           )}
@@ -398,7 +394,8 @@ function ActivityDetailsHeader({
                   <Button
                     disabled={
                       activity.visibility === 'Internal' ||
-                      new Date(activity.date_starting!) < new Date()
+                      new Date(activity.date_starting!).getTime() <
+                        new Date().getTime()
                     }
                     leftSection={<IconUsersGroup size={16} />}
                     onClick={assignOpen}

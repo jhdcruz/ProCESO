@@ -58,6 +58,20 @@ export function FacultyAssignment({
   const handleSubmit = async (values: Props) => {
     setPending(true);
 
+    if (!activity.visibility) {
+      notifications.show({
+        title: 'Cannot assign faculty',
+        message: 'The activity is not visible to the public.',
+        color: 'red',
+        withBorder: true,
+        withCloseButton: true,
+        autoClose: 6000,
+      });
+
+      setPending(false);
+      return;
+    }
+
     // only allow changes before the activity starts
     const now = new Date();
     if (now > activity.date_starting!) {
@@ -71,7 +85,6 @@ export function FacultyAssignment({
       });
 
       setPending(false);
-
       return;
     }
 

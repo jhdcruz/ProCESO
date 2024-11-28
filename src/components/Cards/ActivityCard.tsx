@@ -13,11 +13,11 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { IconCalendarClock, IconTimeline } from '@tabler/icons-react';
-import { formatDateRange } from 'little-date';
 import sanitizeHtml from 'sanitize-html';
 import { Tables } from '@/libs/supabase/_database';
 import classes from '@/components/Cards/Card.module.css';
 import { useUser } from '@/components/Providers/UserProvider';
+import dayjs from '@/libs/dayjs';
 
 export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
   const { role } = useUser();
@@ -73,13 +73,9 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
               my="xs"
               variant="light"
             >
-              {formatDateRange(
-                new Date(data.date_starting),
-                new Date(data.date_ending),
-                {
-                  includeTime: true,
-                },
-              )}
+              {dayjs(data.date_starting).format('MMMM D, YYYY h:mm A')}
+              {' - '}
+              {dayjs(data.date_ending).format('MMMM D, YYYY h:mm A')}
             </Badge>
           )}
 

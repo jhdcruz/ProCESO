@@ -1,10 +1,9 @@
 import { Link, Text } from '@react-email/components';
+import { sidebarRoutes } from '@/app/routes';
 import type { Tables } from '@/libs/supabase/_database';
-import { formatDateRange } from 'little-date';
-import dayjs from '../libs/dayjs';
+import dayjs from '@/libs/dayjs';
 import Template from './_Template';
 import '@mantine/core/styles.css';
-import { sidebarRoutes } from '@/app/routes';
 
 export default function ActivityReminder({
   activity,
@@ -33,13 +32,9 @@ export default function ActivityReminder({
         <Text>
           The activity is to be conducted at{' '}
           <span className="font-bold">
-            {formatDateRange(
-              new Date(activity?.date_starting),
-              new Date(activity.date_ending),
-              {
-                includeTime: true,
-              },
-            )}
+            {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+            {' - '}
+            {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
           </span>
           .
         </Text>
@@ -47,7 +42,7 @@ export default function ActivityReminder({
         <Text>
           The activity is to be conducted at{' '}
           <span className="font-bold">
-            {dayjs(activity?.date_starting).format('MMMM DD, YYYY')}
+            {dayjs(activity?.date_starting).format('MMMM DD, YYYY hh:mm A')}
           </span>
           .
         </Text>

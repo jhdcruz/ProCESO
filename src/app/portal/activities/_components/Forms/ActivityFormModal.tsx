@@ -39,7 +39,6 @@ import {
   IconLaurelWreath3,
   IconAlertTriangle,
 } from '@tabler/icons-react';
-import { formatDateRange } from 'little-date';
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
 import { submitActivity } from '@portal/activities/actions';
@@ -47,6 +46,7 @@ import { SeriesInput } from './SeriesInput';
 import { listDepts } from '@/utils/user-types';
 import { getDeptColor } from '@/utils/colors';
 import classes from '@/styles/forms/ContainedInput.module.css';
+import dayjs from '@/libs/dayjs';
 
 export interface ActivityFormProps {
   id?: string;
@@ -349,9 +349,12 @@ export function ActivityFormModalComponent({
                       <li key={activity.id}>
                         {activity.title} -{' '}
                         <Badge variant="default">
-                          {formatDateRange(
-                            new Date(activity.date_starting as string),
-                            new Date(activity.date_ending as string),
+                          {dayjs(activity.date_starting).format(
+                            'MMMM D, YYYY h:mm A',
+                          )}
+                          {' - '}
+                          {dayjs(activity.date_ending).format(
+                            'MMMM D, YYYY h:mm A',
                           )}
                         </Badge>
                       </li>
