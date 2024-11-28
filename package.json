@@ -61,7 +61,7 @@
     "@tiptap/pm": "2.10.3",
     "@tiptap/react": "2.10.3",
     "@tiptap/starter-kit": "2.10.3",
-    "@trigger.dev/build": "3.2.2",
+    "@trigger.dev/build": "3.3.0",
     "@trigger.dev/sdk": "3.2.2",
     "@zip.js/zip.js": "2.7.53",
     "blob-util": "2.0.2",
