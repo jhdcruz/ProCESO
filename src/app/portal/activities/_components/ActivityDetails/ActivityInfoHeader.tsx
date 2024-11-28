@@ -16,6 +16,7 @@ import {
   Tooltip,
   FileButton,
   Anchor,
+  ActionIcon,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -23,11 +24,12 @@ import { modals } from '@mantine/modals';
 import {
   IconCalendarClock,
   IconCalendarEvent,
+  IconCheck,
   IconEdit,
   IconEditOff,
-  IconExternalLink,
   IconInbox,
   IconInboxOff,
+  IconQrcode,
   IconRss,
   IconTrash,
   IconUpload,
@@ -50,6 +52,7 @@ import { useUser } from '@/components/Providers/UserProvider';
 import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
 import { revalidate } from '@/app/actions';
 import dayjs from '@/libs/dayjs';
+import { siteUrl } from '@/utils/url';
 
 const ActivityFormModal = dynamic(
   () =>
@@ -200,6 +203,40 @@ function ActivityDetailsHeader({
     setLoading(false);
   };
 
+  const exportQr = async (type: string, link: string) => {
+    notifications.show({
+      id: 'qr-code',
+      loading: true,
+      title: 'Generating QR Code',
+      message: 'Please wait while we generate the QR code.',
+      withBorder: true,
+      autoClose: false,
+    });
+
+    const QRCode = await import('qrcode');
+    const qrImage = await QRCode.toDataURL(link, {
+      width: 500,
+      margin: 2,
+      type: 'image/png',
+    });
+
+    notifications.update({
+      id: 'qr-code',
+      loading: false,
+      title: 'QR Code Generated',
+      message: `QR Code for ${type} has been generated, downloading...`,
+      icon: <IconCheck />,
+      withBorder: true,
+      autoClose: 5000,
+    });
+
+    // download qr code
+    const a = document.createElement('a');
+    a.href = qrImage;
+    a.download = `${type}-eval_${activity?.title}.png`;
+    a.click();
+  };
+
   useEffect(() => {
     if (role !== 'student' && localFiles?.length && activity.id) {
       // upload files to storage
@@ -259,9 +296,9 @@ function ActivityDetailsHeader({
                 size="lg"
                 variant="light"
               >
-                {dayjs(activity.date_starting).format('MMMM D, YYYY h:mm A')}
+                {dayjs(activity.date_starting).format('MMM D, YYYY h:mm A')}
                 {' - '}
-                {dayjs(activity.date_ending).format('MMMM D, YYYY h:mm A')}
+                {dayjs(activity.date_ending).format('MMM D, YYYY h:mm A')}
               </Badge>
             </Group>
           )}
@@ -314,27 +351,81 @@ function ActivityDetailsHeader({
                 {/* Feedback links */}
                 {responses && (
                   <>
-                    <Anchor
-                      href={`/eval/${activity.id}/partners`}
-                      size="xs"
-                      target="_blank"
-                    >
-                      Partners <IconExternalLink size={12} />
-                    </Anchor>
-                    <Anchor
-                      href={`/eval/${activity.id}/implementers`}
-                      size="xs"
-                      target="_blank"
-                    >
-                      Implementers <IconExternalLink size={12} />
-                    </Anchor>
-                    <Anchor
-                      href={`/eval/${activity.id}/beneficiaries`}
-                      size="xs"
-                      target="_blank"
-                    >
-                      Beneficiaries <IconExternalLink size={12} />
-                    </Anchor>
+                    {/* Partners Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`${siteUrl()}/eval/${activity.id}/partners`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Partners
+                      </Anchor>
+
+                      <ActionIcon
+                        aria-label="Export Partners' QR"
+                        onClick={() =>
+                          exportQr(
+                            'partners',
+                            `${siteUrl()}/eval/${activity.id}/partners`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={18} />
+                      </ActionIcon>
+                    </Group>
+
+                    <Divider orientation="vertical" />
+
+                    {/* Implementers Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`${siteUrl()}/eval/${activity.id}/implementers`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Implementers
+                      </Anchor>
+
+                      <ActionIcon
+                        aria-label="Export Implementers' QR"
+                        onClick={() =>
+                          exportQr(
+                            'implementers',
+                            `${siteUrl()}/eval/${activity.id}/implementers`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={16} />
+                      </ActionIcon>
+                    </Group>
+
+                    <Divider orientation="vertical" />
+
+                    {/* Beneficiaries Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`/eval/${activity.id}/beneficiaries`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Beneficiaries
+                      </Anchor>
+
+                      <ActionIcon
+                        aria-label="Export Beneficiaries' QR"
+                        onClick={() =>
+                          exportQr(
+                            'beneficiaries',
+                            `/eval/${activity.id}/beneficiaries`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={16} />
+                      </ActionIcon>
+                    </Group>
                   </>
                 )}
               </Group>
