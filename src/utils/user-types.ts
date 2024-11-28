@@ -47,7 +47,7 @@ export const listDepts: RolesDept[] = [
 /** List of college offices. */
 export const listOffices: RolesDept[] = [
   { value: 'ceso', label: 'Community Extensions Services' },
-  { value: 'itso', label: 'IT Services Office' },
+  // { value: 'itso', label: 'IT Services Office' },
 ];
 
 /** List of other offices or departments. */
