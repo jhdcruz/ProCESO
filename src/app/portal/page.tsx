@@ -64,10 +64,10 @@ export default async function RootPage() {
     const oAuthUser = {
       email,
       name,
-      department,
+      department: department ?? 'na',
       avatar_url,
       other_roles,
-      role,
+      role: role ?? 'student',
       active,
     };
 

@@ -98,8 +98,8 @@ function UsersTableComponent({
           </span>
         </Table.Td>
         <Table.Td>
-          <Badge color={getDeptColor(item.department)} variant="light">
-            {item.department}
+          <Badge color={getDeptColor(item.department ?? 'na')} variant="light">
+            {item.department ?? 'na'}
           </Badge>
         </Table.Td>
         <Table.Td>
