@@ -220,7 +220,7 @@ function ActivityDetailsHeader({
 
   // check if student is subscribed to activity
   useEffect(() => {
-    if (role === 'student' && activity.id) {
+    if (activity.id) {
       const checkSubscription = async () => {
         const response = await isSubscribed(activity.id!, userId);
 
