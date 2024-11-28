@@ -317,10 +317,10 @@ function ActivityDetailsHeader({
             </Group>
           )}
 
-          <Group mb="xs">
-            <Text c="dimmed">Feedback:</Text>
-            <Group>
-              {isInternal(role) ? (
+          {isInternal(role) && (
+            <Group mb="xs">
+              <Text c="dimmed">Feedback:</Text>
+              <Group>
                 <Tooltip
                   label={
                     responses
@@ -347,94 +347,86 @@ function ActivityDetailsHeader({
                     {responses ? 'Accepting' : 'Not Accepting'}
                   </Button>
                 </Tooltip>
-              ) : (
-                <Text c="dimmed" fs="italic" mx={6} size="xs">
-                  {!responses && 'Not accepting feedback responses'}
-                </Text>
-              )}
 
-              {/* Feedback links */}
-              {responses && (
-                <>
-                  {isInternal(role) && (
-                    <>
-                      {/* Partners Evaluation Link */}
-                      <Group gap={4}>
-                        <Anchor
-                          href={`${siteUrl()}/eval/${activity.id}/partners`}
-                          size="xs"
-                          target="_blank"
-                        >
-                          Partners
-                        </Anchor>
+                {/* Feedback links */}
+                {responses && (
+                  <>
+                    {/* Partners Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`${siteUrl()}/eval/${activity.id}/partners`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Partners
+                      </Anchor>
 
-                        <ActionIcon
-                          aria-label="Export Partners' QR"
-                          onClick={() =>
-                            exportQr(
-                              'partners',
-                              `${siteUrl()}/eval/${activity.id}/partners`,
-                            )
-                          }
-                          variant="subtle"
-                        >
-                          <IconQrcode size={18} />
-                        </ActionIcon>
-                      </Group>
+                      <ActionIcon
+                        aria-label="Export Partners' QR"
+                        onClick={() =>
+                          exportQr(
+                            'partners',
+                            `${siteUrl()}/eval/${activity.id}/partners`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={18} />
+                      </ActionIcon>
+                    </Group>
 
-                      {/* Beneficiaries Evaluation Link */}
-                      <Group gap={4}>
-                        <Anchor
-                          href={`/eval/${activity.id}/beneficiaries`}
-                          size="xs"
-                          target="_blank"
-                        >
-                          Beneficiaries
-                        </Anchor>
+                    {/* Beneficiaries Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`/eval/${activity.id}/beneficiaries`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Beneficiaries
+                      </Anchor>
 
-                        <ActionIcon
-                          aria-label="Export Beneficiaries' QR"
-                          onClick={() =>
-                            exportQr(
-                              'beneficiaries',
-                              `/eval/${activity.id}/beneficiaries`,
-                            )
-                          }
-                          variant="subtle"
-                        >
-                          <IconQrcode size={16} />
-                        </ActionIcon>
-                      </Group>
-                    </>
-                  )}
+                      <ActionIcon
+                        aria-label="Export Beneficiaries' QR"
+                        onClick={() =>
+                          exportQr(
+                            'beneficiaries',
+                            `/eval/${activity.id}/beneficiaries`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={16} />
+                      </ActionIcon>
+                    </Group>
 
-                  {/* Implementers Evaluation Link */}
-                  <Group gap={4}>
-                    <Anchor
-                      href={`${siteUrl()}/eval/${activity.id}/implementers`}
-                      size="xs"
-                      target="_blank"
-                    >
-                      Implementers
-                    </Anchor>
+                    {/* Implementers Evaluation Link */}
+                    <Group gap={4}>
+                      <Anchor
+                        href={`${siteUrl()}/eval/${activity.id}/implementers`}
+                        size="xs"
+                        target="_blank"
+                      >
+                        Implementers
+                      </Anchor>
 
-                    <ActionIcon
-                      aria-label="Export Implementers' QR"
-                      onClick={() =>
-                        exportQr(
-                          'implementers',
-                          `${siteUrl()}/eval/${activity.id}/implementers`,
-                        )
-                      }
-                      variant="subtle"
-                    >
-                      <IconQrcode size={16} />
-                    </ActionIcon>
-                  </Group>
-                </>
-              )}
+                      <ActionIcon
+                        aria-label="Export Implementers' QR"
+                        onClick={() =>
+                          exportQr(
+                            'implementers',
+                            `${siteUrl()}/eval/${activity.id}/implementers`,
+                          )
+                        }
+                        variant="subtle"
+                      >
+                        <IconQrcode size={16} />
+                      </ActionIcon>
+                    </Group>
+                  </>
+                )}
+              </Group>
             </Group>
-          </Group>
+          )}
 
           {/* Activity control buttons */}
           <Group gap="xs" mt={16}>
