@@ -48,7 +48,7 @@
     "@react-email/components": "0.0.28",
     "@shopify/react-web-worker": "5.1.6",
     "@supabase/ssr": "0.5.2",
-    "@supabase/supabase-js": "2.46.1",
+    "@supabase/supabase-js": "2.46.2",
     "@tabler/icons-react": "3.22.0",
     "@tiptap/extension-color": "2.10.3",
     "@tiptap/extension-highlight": "2.10.3",
