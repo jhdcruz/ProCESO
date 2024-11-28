@@ -51,13 +51,19 @@ export async function getSeriesByTitle({
  */
 export async function getFilteredSeries(
   filter?: string,
+  limit?: number,
 ): Promise<SeriesResponse> {
   const supabase = createBrowserClient();
 
-  const { data: series, error } = await supabase
+  let query = supabase
     .from('series')
     .select()
-    .ilike('title', `%${filter}%`);
+    .order('created_at', { ascending: false });
+
+  if (limit) query = query.limit(limit);
+  if (filter) query = query.ilike('title', `%${filter}%`);
+
+  const { data: series, error } = await query;
 
   if (error) {
     return {

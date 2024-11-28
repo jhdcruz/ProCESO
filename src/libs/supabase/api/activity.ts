@@ -38,7 +38,7 @@ export async function getActivities({
 
   // filters based on activity dates
   if (filter) {
-    const now = new Date().toISOString();
+    const now = new Date().toUTCString();
 
     switch (filter) {
       case 'undated':

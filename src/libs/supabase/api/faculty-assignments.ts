@@ -27,7 +27,7 @@ export async function getAssignedActivities({
   supabase?: SupabaseClient;
 }): Promise<ActivitiesViewResponse> {
   if (!supabase) supabase = createBrowserClient();
-  const now = new Date().toISOString();
+  const now = new Date().toUTCString();
 
   let query = supabase
     .from('faculty_assignments')
@@ -133,8 +133,8 @@ export async function getFacultyConflicts(
       )
       `,
     )
-    .gte('date_starting', date_starting.toISOString())
-    .lte('date_ending', date_ending.toISOString());
+    .gte('date_starting', date_starting.toUTCString())
+    .lte('date_ending', date_ending.toUTCString());
 
   if (error) {
     return {

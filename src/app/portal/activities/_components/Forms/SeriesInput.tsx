@@ -16,10 +16,12 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
   const [data, setData] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const dataLimit = 5;
+
   useEffect(() => {
     const fetchSeries = async () => {
       setLoading(true);
-      const response = await getFilteredSeries(seriesQuery);
+      const response = await getFilteredSeries(seriesQuery, dataLimit);
 
       if (response.data) {
         setData(response.data.map((s: Tables<'series'>) => s.title ?? []));
@@ -37,18 +39,14 @@ export const SeriesInput = memo((props: AutocompleteProps) => {
       setLoading(false);
     };
 
-    // practivities query on initial render
-    if (seriesQuery) {
-      // noinspection JSIgnoredPromiseFromCall
-      void fetchSeries();
-    }
+    void fetchSeries();
   }, [seriesQuery]);
 
   return (
     <Autocomplete
       data={data}
       label="Activity Series"
-      limit={5}
+      limit={dataLimit}
       onChangeCapture={(e) => setQuery(e.currentTarget.value)}
       placeholder="Brigada Eskwela"
       rightSection={loading ? <Loader size="1rem" /> : null}
