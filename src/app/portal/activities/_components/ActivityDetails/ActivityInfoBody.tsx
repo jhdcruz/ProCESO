@@ -241,7 +241,7 @@ function ActivityDetailsBody({
           </Code>
 
           <Text fw="bold" mt="sm">
-            This action is irreversible!.
+            This action is irreversible!
           </Text>
         </>
       ),

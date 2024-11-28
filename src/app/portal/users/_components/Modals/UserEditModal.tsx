@@ -54,7 +54,7 @@ function UserEdit({
         <>
           <Text>Are you sure you want to delete this user?</Text>
           <Text fw="bold" mt="sm">
-            This action is irreversible!.
+            This action is irreversible!
           </Text>
         </>
       ),
