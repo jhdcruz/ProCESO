@@ -24,6 +24,7 @@ export type Database = {
           series: string | null
           title: string
           updated_at: string | null
+          venue: number[] | null
           visibility: Database["public"]["Enums"]["activity_visibility"]
         }
         Insert: {
@@ -40,6 +41,7 @@ export type Database = {
           series?: string | null
           title: string
           updated_at?: string | null
+          venue?: number[] | null
           visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Update: {
@@ -56,6 +58,7 @@ export type Database = {
           series?: string | null
           title?: string
           updated_at?: string | null
+          venue?: number[] | null
           visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Relationships: [
@@ -64,14 +67,14 @@ export type Database = {
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
             columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "events_created_by_fkey"
@@ -164,14 +167,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "activity_feedback_user_id_fkey"
@@ -304,14 +307,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
@@ -459,14 +462,14 @@ export type Database = {
             columns: ["generated_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "certs_generated_by_fkey"
             columns: ["generated_by"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "certs_generated_by_fkey"
@@ -543,14 +546,14 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -571,14 +574,14 @@ export type Database = {
             columns: ["referrer"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["referrer_id"]
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "faculty_assignments_referrer_fkey"
             columns: ["referrer"]
             isOneToOne: false
             referencedRelation: "activities_faculties_view"
-            referencedColumns: ["id"]
+            referencedColumns: ["referrer_id"]
           },
           {
             foreignKeyName: "faculty_assignments_referrer_fkey"
@@ -679,6 +682,7 @@ export type Database = {
           series_color: string | null
           title: string | null
           updated_at: string | null
+          venue: number[] | null
           visibility: Database["public"]["Enums"]["activity_visibility"] | null
         }
         Relationships: []

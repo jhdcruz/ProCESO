@@ -29,6 +29,7 @@ import {
 } from '@mantine/dates';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import dynamic from 'next/dynamic';
 import {
   IconCheck,
   IconUpload,
@@ -42,16 +43,26 @@ import {
 import type { Tables, Enums } from '@/libs/supabase/_database';
 import { getActivitiesInRange } from '@/libs/supabase/api/activity';
 import { submitActivity } from '@portal/activities/actions';
+import { PageLoader } from '@/components/Loader/PageLoader';
 import { SeriesInput } from './SeriesInput';
 import { listDepts } from '@/utils/user-types';
 import { getDeptColor } from '@/utils/colors';
 import classes from '@/styles/forms/ContainedInput.module.css';
 import dayjs from '@/libs/dayjs';
 
+const MapboxGeocoder = dynamic(
+  () => import('./MapboxGeocoder').then((mod) => mod.MapboxGeocoder),
+  {
+    loading: () => <PageLoader />,
+    ssr: false,
+  },
+);
+
 export interface ActivityFormProps {
   id?: string;
   title: string;
   visibility: Enums<'activity_visibility'>;
+  venue?: [number, number];
   image_url?: FileWithPath | string;
   series?: string | null;
   date_starting: DateValue;
@@ -91,6 +102,10 @@ export const ActivityFormModal = memo(
     const imagePreview: string | null = coverFile.length
       ? URL.createObjectURL(coverFile[0])
       : null;
+
+    const [venue, setVenue] = useState<[number, number]>([
+      120.98851163771423, 14.595059433301486,
+    ]);
 
     // form submission
     const form = useForm<ActivityFormProps>({
@@ -205,6 +220,12 @@ export const ActivityFormModal = memo(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activity]);
+
+    // set venue
+    useEffect(() => {
+      form.setFieldValue('venue', venue);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [venue]);
 
     return (
       <Modal
@@ -364,6 +385,15 @@ export const ActivityFormModal = memo(
                   )}
                 </Alert>
               )}
+
+              <Divider my="xs" />
+
+              <Input.Wrapper
+                description="Where will the activity take place?"
+                label="Activity Venue"
+              >
+                <MapboxGeocoder coordinates={venue} setCoordinates={setVenue} />
+              </Input.Wrapper>
 
               <Divider my="xs" />
 

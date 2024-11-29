@@ -91,6 +91,7 @@ export async function submitActivity(
         series: seriesId,
         date_ending: activity.date_ending?.toUTCString(),
         date_starting: activity.date_starting?.toUTCString(),
+        venue: activity.venue,
         created_by: session.user.id,
         objectives: [
           activity.objective_1?.trim() ?? '',
@@ -109,6 +110,7 @@ export async function submitActivity(
         series: seriesId,
         date_ending: activity.date_ending?.toUTCString(),
         date_starting: activity.date_starting?.toUTCString(),
+        venue: activity.venue,
         objectives: [
           activity.objective_1?.trim() ?? '',
           activity.objective_2?.trim() ?? '',
