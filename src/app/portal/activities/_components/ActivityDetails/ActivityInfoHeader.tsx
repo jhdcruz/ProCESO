@@ -296,9 +296,20 @@ function ActivityDetailsHeader({
                 size="lg"
                 variant="light"
               >
-                {dayjs(activity.date_starting).format('MMM D, YYYY h:mm A')}
-                {' - '}
-                {dayjs(activity.date_ending).format('MMM D, YYYY h:mm A')}
+                {dayjs(activity.date_starting).format(
+                  dayjs(activity.date_starting).year() !==
+                    dayjs(activity.date_ending).year() ||
+                    dayjs(activity.date_starting).year() !== dayjs().year()
+                    ? 'MMM D, YYYY h:mm A'
+                    : 'MMM D h:mm A',
+                )}{' '}
+                {dayjs(activity.date_ending).format(
+                  dayjs(activity.date_ending).year() !==
+                    dayjs(activity.date_starting).year() ||
+                    dayjs(activity.date_ending).year() !== dayjs().year()
+                    ? 'MMM D, YYYY h:mm A'
+                    : 'MMM D h:mm A',
+                )}
               </Badge>
             </Group>
           )}

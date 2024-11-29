@@ -73,9 +73,20 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
               my="xs"
               variant="light"
             >
-              {dayjs(data.date_starting).format('MMM D, YYYY h:mm A')}
-              {' - '}
-              {dayjs(data.date_ending).format('MMM D, YYYY h:mm A')}
+              {dayjs(data.date_starting).format(
+                dayjs(data.date_starting).year() !==
+                  dayjs(data.date_ending).year() ||
+                  dayjs(data.date_starting).year() !== dayjs().year()
+                  ? 'MMM D, YYYY h:mm A'
+                  : 'MMM D h:mm A',
+              )}{' '}
+              {dayjs(data.date_ending).format(
+                dayjs(data.date_ending).year() !==
+                  dayjs(data.date_starting).year() ||
+                  dayjs(data.date_ending).year() !== dayjs().year()
+                  ? 'MMM D, YYYY h:mm A'
+                  : 'MMM D h:mm A',
+              )}
             </Badge>
           )}
 
