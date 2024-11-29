@@ -315,22 +315,6 @@ function ActivityDetailsHeader({
             </Group>
           )}
 
-          {activity?.venue && (
-            <Group mb="xs">
-              <Text c="dimmed">Venue:</Text>
-              <Anchor
-                href={`https://www.google.com/maps/search/${activity.venue.replace(/ /g, '+')}`}
-                target="_blank"
-              >
-                {activity.venue}
-              </Anchor>
-
-              <Tooltip label="Link might be inaccurate" withArrow>
-                <IconExclamationCircle size={18} />
-              </Tooltip>
-            </Group>
-          )}
-
           {activity?.series && (
             <Group mb="xs">
               <Text c="dimmed">Series:</Text>
