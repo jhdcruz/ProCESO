@@ -4,7 +4,7 @@ import { runs } from '@trigger.dev/sdk/v3';
 import ActivityNotice from '@/emails/ActivityNotice';
 
 /**
- * Email assigned faculties that they are assigned for an activity.
+ * Email committee heads for an activity.
  *
  * @param req - { activity: Tables<'activities'>; emails: string[] }
  */
@@ -14,24 +14,24 @@ export async function POST(req: NextRequest) {
 
   const run = await runs.retrieve(runId);
   if (!run?.isExecuting) {
-    return new Response('Invalid request', { status: 400 });
+    return new Response('Invalid request', { status: 500 });
   }
 
-  // send email to subscribed users
+  // send email
   const { error } = await resend.batch.send(
     emails.map((email: string) => ({
       from: 'Community Extension Services Office <noreply@mail.deuz.tech>',
       to: email,
-      subject: `CESO will be conducting an activity entitled: ${activity.title}.`,
+      subject: `Conducting an activity entitled: ${activity.title}.`,
       react: ActivityNotice({ activity }),
     })),
   );
 
   if (error) {
     return new Response(error.message, {
-      status: 400,
+      status: 500,
     });
   }
 
-  return new Response('Emails sent successfully', { status: 200 });
+  return new Response('Emails sent successfully', { status: 500 });
 }

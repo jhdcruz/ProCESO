@@ -22,7 +22,7 @@ export default function FacultyAssigned({
     <Template>
       <Text className="mt-8">
         {faculty.name} from {faculty.dept.toUpperCase()} Department has accepted
-        assignment for:
+        assignment for:{' '}
         <Link
           className="font-semibold text-yellow-500 underline underline-offset-1"
           href={link}
