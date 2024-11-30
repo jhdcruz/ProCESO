@@ -33,7 +33,7 @@ export async function triggerSummary(
       },
     },
     {
-      pollIntervalMs: 60000, // 1 minute
+      pollIntervalMs: 5000,
       metadata: { activity: id },
     },
   );

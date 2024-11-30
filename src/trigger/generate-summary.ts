@@ -57,12 +57,12 @@ export const generateSummary = task({
       messages: [
         {
           role: 'system',
-          content: 'You are a professional data analyst and secretary.',
+          content: 'You are a professional analyst and secretary.',
         },
         {
           role: 'user',
           content:
-            'Write a single-paragraph consisting of at least 5 sentences summary report of the feedback evaluation results provided below. Add basic html tags to format the text and highlight important parts, no links.',
+            'Write a paragraph consisting of at least 5 sentences summary report of the feedback evaluation results provided below. Add basic html tags to format the text and highlight important parts, no links.',
         },
         {
           role: 'user',
@@ -70,8 +70,8 @@ export const generateSummary = task({
         },
         {
           role: 'user',
-          content: `The evaluation feedback also shows that the evaluators have ${emotions?.length} distinct emotions, with the top 10 emotions being ${emotions
-            .slice(0, 9)
+          content: `Also, Find out the dominant and frequent emotions that shows: ${emotions
+            .slice(0, 60)
             .map((emotion) => emotion.label)
             .join(', ')}.`,
         },
