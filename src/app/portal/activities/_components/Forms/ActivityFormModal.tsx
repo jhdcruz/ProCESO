@@ -62,7 +62,8 @@ export interface ActivityFormProps {
   id?: string;
   title: string;
   visibility: Enums<'activity_visibility'>;
-  venue?: [number, number];
+  venue?: [number, number] | null;
+  venue_additional?: string | null;
   image_url?: FileWithPath | string;
   series?: string | null;
   date_starting: DateValue;
@@ -103,9 +104,7 @@ export const ActivityFormModal = memo(
       ? URL.createObjectURL(coverFile[0])
       : null;
 
-    const [venue, setVenue] = useState<[number, number]>([
-      120.98851163771423, 14.595059433301486,
-    ]);
+    const [venue, setVenue] = useState<[number, number] | null>(null);
 
     // form submission
     const form = useForm<ActivityFormProps>({
@@ -197,6 +196,27 @@ export const ActivityFormModal = memo(
       close();
     };
 
+    // update additional venue info if the venue is changed
+    useEffect(() => {
+      if (opened && venue?.length === 2) {
+        const getVenueInfo = async () => {
+          const [lng, lat] = venue;
+
+          const response = await fetch(
+            `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${lng}&latitude=${lat}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_PUBLIC}&permanent=true&country=ph&limit=1&types=street`,
+          ).then((res) => res.json());
+
+          form.setFieldValue(
+            'venue_additional',
+            response?.features[0]?.properties?.full_address ?? '',
+          );
+        };
+
+        void getVenueInfo();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [venue]);
+
     useEffect(() => {
       if (activity) {
         const { date_starting, date_ending } = activity;
@@ -223,7 +243,7 @@ export const ActivityFormModal = memo(
 
     // set venue
     useEffect(() => {
-      form.setFieldValue('venue', venue);
+      if (opened) form.setFieldValue('venue', venue);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [venue]);
 
@@ -393,6 +413,15 @@ export const ActivityFormModal = memo(
                 label="Activity Venue"
               >
                 <MapboxGeocoder coordinates={venue} setCoordinates={setVenue} />
+
+                <TextInput
+                  description="Additional information or address about the venue."
+                  key={form.key('venue_additional')}
+                  label="Additional Address"
+                  my="xs"
+                  placeholder="Ex. Anniversary Hall, 6th Floor. TIP Manila, Arlegui Campus."
+                  {...form.getInputProps('venue_additional')}
+                />
               </Input.Wrapper>
 
               <Divider my="xs" />

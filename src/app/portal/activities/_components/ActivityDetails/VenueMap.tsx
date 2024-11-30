@@ -3,25 +3,21 @@ import { ActionIcon, Box } from '@mantine/core';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import MbGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { IconMap } from '@tabler/icons-react';
 
-export const MapboxGeocoder = memo(
+export const VenueMap = memo(
   ({
     coordinates,
-    setCoordinates,
   }: {
     /** lng, lat */
     coordinates: [number, number] | null;
-    setCoordinates: (coords: [number, number]) => void;
   }) => {
     const [style, setStyle] = useState<'streets' | 'sattelite'>('streets');
 
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<mapboxgl.Map | null>(null);
     const markerRef = useRef<mapboxgl.Marker | null>(null);
-    const geocoderRef = useRef<MbGeocoder | null>(null);
 
     // default coordinates (TIP Manila)
     const placeholder: [number, number] = [
@@ -60,63 +56,19 @@ export const MapboxGeocoder = memo(
           zoom: 16,
           maxBounds: philippinesBounds,
           performanceMetricsCollection: false,
-          doubleClickZoom: false,
         });
 
         markerRef.current = new mapboxgl.Marker({
-          draggable: true,
+          draggable: false,
           color: 'red',
         })
           .setLngLat(coordinates ?? placeholder)
           .addTo(mapRef.current);
 
-        geocoderRef.current = new MbGeocoder({
-          // @ts-expect-error wtf is wrong with this type
-          mapboxgl: mapRef.current,
-          accessToken: mapboxgl.accessToken,
-          countries: 'ph',
-
-          // manually update the marker because the built-in one
-          // is ??? to control
-          marker: false,
-        });
-
-        mapRef.current.addControl(geocoderRef.current);
-
-        // Set initial coordinates
-        geocoderRef.current.setProximity({
-          longitude: coordinates?.[0] ?? placeholder[0],
-          latitude: coordinates?.[1] ?? placeholder[1],
-        });
-
-        // update marker position when search result is selected
-        geocoderRef.current.on('result', (e) => {
-          const result = e.result.geometry.coordinates;
-          setCoordinates(result);
-          markerRef.current!.setLngLat(result as [number, number]);
-        });
-
-        // Update coordinates when marker is dragged
-        markerRef.current.on('dragend', () => {
-          const lngLat = markerRef.current!.getLngLat();
-          setCoordinates([lngLat.lng, lngLat.lat]);
-        });
-
         // Update marker position when coordinates prop changes
         mapRef.current.on('load', () => {
           mapRef.current!.setCenter(coordinates ?? placeholder);
-          geocoderRef.current!.setProximity({
-            longitude: coordinates?.[0] ?? placeholder[0],
-            latitude: coordinates?.[1] ?? placeholder[1],
-          });
           markerRef.current!.setLngLat(coordinates ?? placeholder);
-        });
-
-        // Update marker on double click
-        mapRef.current.on('dblclick', (e) => {
-          const lngLat = e.lngLat;
-          setCoordinates([lngLat.lng, lngLat.lat]);
-          markerRef.current!.setLngLat([lngLat.lng, lngLat.lat]);
         });
       }
 
@@ -131,7 +83,7 @@ export const MapboxGeocoder = memo(
     return (
       <Box
         className="rounded-md"
-        h={340}
+        h={640}
         id="editableMap"
         mt={8}
         ref={mapContainerRef}
@@ -152,4 +104,4 @@ export const MapboxGeocoder = memo(
     );
   },
 );
-MapboxGeocoder.displayName = 'MapboxGeocoder';
+VenueMap.displayName = 'VenueMap';

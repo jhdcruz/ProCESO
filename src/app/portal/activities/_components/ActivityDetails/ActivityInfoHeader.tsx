@@ -25,11 +25,14 @@ import {
   IconCalendarClock,
   IconCalendarEvent,
   IconCheck,
+  IconChecklist,
   IconEdit,
   IconEditOff,
-  IconExclamationCircle,
+  IconFolders,
   IconInbox,
   IconInboxOff,
+  IconMap2,
+  IconMapPin,
   IconQrcode,
   IconRss,
   IconTrash,
@@ -54,6 +57,7 @@ import { FacultyAssignmentModal } from '../Forms/FacultyAssignmentModal';
 import { revalidate } from '@/app/actions';
 import dayjs from '@/libs/dayjs';
 import { siteUrl } from '@/utils/url';
+import { PageLoader } from '@/components/Loader/PageLoader';
 
 const ActivityFormModal = dynamic(
   () =>
@@ -62,6 +66,17 @@ const ActivityFormModal = dynamic(
     })),
   {
     ssr: false,
+  },
+);
+
+const VenueMap = dynamic(
+  () =>
+    import('./VenueMap').then((mod) => ({
+      default: mod.VenueMap,
+    })),
+  {
+    ssr: false,
+    loading: () => <PageLoader />,
   },
 );
 
@@ -166,6 +181,8 @@ function ActivityDetailsHeader({
   const activityForm: ActivityFormProps = {
     id: activity.id as string,
     title: activity.title as string,
+    venue: activity.venue as [number, number],
+    venue_additional: activity.venue_additional as string,
     series: activity.series,
     visibility: activity.visibility ?? 'Everyone',
     handled_by: activity.users?.map((user) => user.id as string) ?? undefined,
@@ -290,13 +307,10 @@ function ActivityDetailsHeader({
 
           {/* Activity date and end */}
           {activity?.date_starting && activity?.date_ending && (
-            <Group mb="xs">
+            <Group gap={6} mb={6}>
+              <IconCalendarClock color="gray" size={20} />
               <Text c="dimmed">When:</Text>
-              <Badge
-                leftSection={<IconCalendarClock size={16} />}
-                size="lg"
-                variant="light"
-              >
+              <Badge color="orange" size="lg" variant="outline">
                 {dayjs(activity.date_starting).format(
                   dayjs(activity.date_starting).year() !==
                     dayjs(activity.date_ending).year() ||
@@ -315,8 +329,36 @@ function ActivityDetailsHeader({
             </Group>
           )}
 
+          {activity?.venue_additional && (
+            <Group gap={6} mb={6}>
+              <IconMap2 color="gray" size={20} />
+              <Text c="dimmed">Venue:</Text>
+              <Badge variant="default">{activity.venue_additional}</Badge>
+
+              <ActionIcon
+                aria-label="View on map"
+                color="gray"
+                onClick={() =>
+                  modals.open({
+                    title: 'Venue Map',
+                    size: 'xl',
+                    children: (
+                      <VenueMap
+                        coordinates={activity.venue as [number, number]}
+                      />
+                    ),
+                  })
+                }
+                variant="subtle"
+              >
+                <IconMapPin size={16} />
+              </ActionIcon>
+            </Group>
+          )}
+
           {activity?.series && (
-            <Group mb="xs">
+            <Group gap={6} mb={6}>
+              <IconFolders color="gray" size={20} />
               <Text c="dimmed">Series:</Text>
               <Tooltip
                 label={`This activity is part of the "${activity.series}" activity group.`}
@@ -330,7 +372,8 @@ function ActivityDetailsHeader({
           )}
 
           {isInternal(role) && (
-            <Group mb="xs">
+            <Group gap={6} my={6}>
+              <IconChecklist color="gray" size={20} />
               <Text c="dimmed">Feedback:</Text>
               <Group>
                 <Tooltip

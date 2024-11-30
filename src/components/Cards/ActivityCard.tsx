@@ -12,7 +12,7 @@ import {
   ActionIcon,
   Tooltip,
 } from '@mantine/core';
-import { IconCalendarClock, IconTimeline } from '@tabler/icons-react';
+import { IconCalendarClock, IconMap2, IconTimeline } from '@tabler/icons-react';
 import sanitizeHtml from 'sanitize-html';
 import { Tables } from '@/libs/supabase/_database';
 import classes from '@/components/Cards/Card.module.css';
@@ -65,13 +65,13 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
           <Text fw={500} fz="lg">
             {data.title}
           </Text>
-
           {/* Date range badge label */}
           {data.date_starting && data.date_ending && (
             <Badge
+              color="orange"
               leftSection={<IconCalendarClock size={16} />}
-              my="xs"
-              variant="light"
+              my={6}
+              variant="outline"
             >
               {dayjs(data.date_starting).format(
                 dayjs(data.date_starting).year() !==
@@ -90,6 +90,15 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
             </Badge>
           )}
 
+          {data?.venue_additional && (
+            <Badge
+              color="blue"
+              leftSection={<IconMap2 size={16} />}
+              variant="outline"
+            >
+              {data.venue_additional}
+            </Badge>
+          )}
           <Text fz="sm" lineClamp={2} mt="sm">
             {data.description?.length
               ? sanitizeHtml(data.description, { allowedTags: [] })

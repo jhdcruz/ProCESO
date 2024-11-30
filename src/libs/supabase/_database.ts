@@ -25,6 +25,7 @@ export type Database = {
           title: string
           updated_at: string | null
           venue: number[] | null
+          venue_additional: string | null
           visibility: Database["public"]["Enums"]["activity_visibility"]
         }
         Insert: {
@@ -42,6 +43,7 @@ export type Database = {
           title: string
           updated_at?: string | null
           venue?: number[] | null
+          venue_additional?: string | null
           visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Update: {
@@ -59,6 +61,7 @@ export type Database = {
           title?: string
           updated_at?: string | null
           venue?: number[] | null
+          venue_additional?: string | null
           visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Relationships: [
@@ -683,6 +686,7 @@ export type Database = {
           title: string | null
           updated_at: string | null
           venue: number[] | null
+          venue_additional: string | null
           visibility: Database["public"]["Enums"]["activity_visibility"] | null
         }
         Relationships: []
