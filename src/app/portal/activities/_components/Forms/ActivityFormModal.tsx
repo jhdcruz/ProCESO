@@ -203,7 +203,7 @@ export const ActivityFormModal = memo(
           const [lng, lat] = venue;
 
           const response = await fetch(
-            `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${lng}&latitude=${lat}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_PUBLIC}&permanent=true&country=ph&limit=1&types=street`,
+            `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${lng}&latitude=${lat}&access_token=${process.env.NEXT_PUBLIC_MAPBOX_PUBLIC}&country=ph&limit=1&types=street`,
           ).then((res) => res.json());
 
           form.setFieldValue(
