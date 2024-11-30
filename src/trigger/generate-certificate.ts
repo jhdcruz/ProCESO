@@ -20,6 +20,7 @@ export const generateCerts = task({
   },
   run: async (payload: {
     activity: string;
+    exclude: string[];
     template: string;
     coordinator: string;
     vpsas: string;
@@ -27,7 +28,7 @@ export const generateCerts = task({
     qrPos?: 'left' | 'right';
     send?: boolean;
   }) => {
-    const { activity, type, template, qrPos } = payload;
+    const { activity, exclude, type, template, qrPos } = payload;
 
     // HACK: for RLS policies, we are passing auth cookies,
     // probably a bad thing, probably, I think.
@@ -51,6 +52,7 @@ export const generateCerts = task({
       .in('type', type)
       .limit(9999)
       .not('email', 'is', null)
+      .not('email', 'in', exclude)
       .not('name', 'is', null);
 
     const [activityRes, evalRes] = await Promise.all([

@@ -735,6 +735,7 @@ export type Database = {
           sentiment_negative: number | null
           sentiment_neutral: number | null
           sentiment_positive: number | null
+          submitted_at: string | null
           title: string | null
           type: Database["public"]["Enums"]["feedback_type"] | null
         }

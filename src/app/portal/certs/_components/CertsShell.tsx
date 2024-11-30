@@ -1,6 +1,7 @@
 'use client';
 
 import { memo, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Text,
   Stack,
@@ -18,6 +19,8 @@ import {
   Tooltip,
   Radio,
   ActionIcon,
+  Center,
+  SimpleGrid,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -27,9 +30,9 @@ import {
   IconClock,
   IconFilePencil,
   IconFileZip,
-  IconInfoSquareRounded,
   IconMailFast,
   IconSignature,
+  IconTemplate,
   IconUpload,
 } from '@tabler/icons-react';
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker';
@@ -38,6 +41,12 @@ import { createBrowserClient } from '@/libs/supabase/client';
 import { ActivityInput } from './ActivityInput';
 import type { CertReturnProps } from '@/libs/pdflib/certificate.worker';
 import { triggerGenerateCerts } from '../actions';
+import { Enums } from '@/libs/supabase/_database';
+
+const RespondentsTable = dynamic(
+  () => import('./RespondentsTable').then((mod) => mod.RespondentsTable),
+  { ssr: false, loading: () => <Skeleton h={500} w={500} /> },
+);
 
 const createWorker = createWorkerFactory(
   () => import('@/libs/pdflib/certificate.worker'),
@@ -46,7 +55,7 @@ const createWorker = createWorkerFactory(
 export interface CertsProps {
   activity?: string;
   local: boolean | null;
-  type: string[];
+  type: Enums<'feedback_type'>[];
   template?: string;
   qrPos?: 'left' | 'right';
 }
@@ -62,22 +71,24 @@ function CertsShellComponent() {
   // initialize worker
   const worker = useWorker(createWorker);
 
+  // data
   const [templates, setTemplates] = useState<TemplateProps[]>([]);
   const [customTemplate, setCustomTemplate] = useState<File | null>(null);
+  const [exclude, setExclude] = useState<string[]>([]);
 
   // Signatures
   const [coordinator, setCoordinator] = useState<File | null>(null);
   const [vpsas, setVpsas] = useState<File | null>(null);
 
   const form = useForm<CertsProps>({
-    mode: 'uncontrolled',
-    validateInputOnBlur: true,
+    validateInputOnChange: true,
 
     initialValues: {
       activity: '',
       local: null,
-      type: [],
-      template: '',
+      type: ['beneficiaries', 'implementers', 'partners'],
+      template: 'coa_1.png',
+      qrPos: 'right',
     },
   });
 
@@ -147,6 +158,7 @@ function CertsShellComponent() {
       // trigger the generate-certs trigger
       await triggerGenerateCerts(
         values.activity!,
+        exclude,
         templateDataUrl,
         coordinatorUrl,
         vpsasUrl,
@@ -193,6 +205,7 @@ function CertsShellComponent() {
         .in('type', values.type)
         .limit(9999)
         .not('email', 'is', null)
+        .not('email', 'in', exclude)
         .not('name', 'is', null);
 
       const response = (await worker.generateCertificate({
@@ -283,10 +296,7 @@ function CertsShellComponent() {
       setTemplates(newTemplates);
     };
 
-    form.setValues({ local: true, template: 'coa_1.png', qrPos: 'right' });
     void fetchTemplates();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -334,28 +344,14 @@ function CertsShellComponent() {
         <Skeleton height={290} width="100%" />
       )}
 
-      <Group
-        align="start"
-        gap="xs"
-        grow
-        mt="xs"
-        preventGrowOverflow={false}
-        wrap="wrap-reverse"
-      >
-        {/* Certificate Generation */}
+      {/* Certificate Generation */}
+      <SimpleGrid cols={{ base: 1, sm: 1, md: 2 }} spacing="xs">
         <Fieldset legend="Certification Details">
-          <Group grow justify="space-between" preventGrowOverflow={false}>
-            <div>
-              <Text fw={500} size="sm">
-                Custom Certificate/Signatures
-              </Text>
-              <Text c="dimmed" size="xs">
-                For automated sending of certificates to recipients. or custom
-                certificates template.
-              </Text>
-            </div>
-
-            <Group gap="xs" justify="flex-end">
+          <Input.Wrapper
+            description="For automated sending of certificates to recipients. or custom certificates template."
+            label="Custom Certificate"
+          >
+            <Group gap="xs" mt={6} wrap="nowrap">
               {/* Custom Template Upload */}
               <FileButton
                 accept="image/png,image/jpeg"
@@ -363,6 +359,7 @@ function CertsShellComponent() {
               >
                 {(props) => (
                   <Button
+                    fullWidth
                     leftSection={<IconUpload size={16} stroke={1.5} />}
                     variant="default"
                     {...props}
@@ -385,9 +382,16 @@ function CertsShellComponent() {
                   <IconFilePencil size={18} />
                 </ActionIcon>
               </Tooltip>
+            </Group>
+          </Input.Wrapper>
 
-              <Divider orientation="vertical" />
-
+          <Input.Wrapper
+            description="Signatures must be 800x200, with signature at center."
+            label="Signatures"
+            mt={6}
+            withAsterisk
+          >
+            <Group gap="xs" grow mt={6}>
               {/* Signatures Upload */}
               <FileButton accept="image/png" onChange={setCoordinator}>
                 {(props) => (
@@ -399,7 +403,7 @@ function CertsShellComponent() {
                         <IconSignature size={18} />
                       )
                     }
-                    variant="filled"
+                    variant="light"
                     {...props}
                   >
                     {coordinator ? 'Uploaded' : 'Coordinator'}
@@ -417,22 +421,15 @@ function CertsShellComponent() {
                         <IconSignature size={18} />
                       )
                     }
-                    variant="filled"
+                    variant="light"
                     {...props}
                   >
                     {vpsas ? 'Uploaded' : 'VPSAS'}
                   </Button>
                 )}
               </FileButton>
-
-              <Tooltip
-                label="Must be 800x200px, with signature at center"
-                withArrow
-              >
-                <IconInfoSquareRounded className="cursor-help" size={18} />
-              </Tooltip>
             </Group>
-          </Group>
+          </Input.Wrapper>
 
           <Divider my="md" />
 
@@ -500,7 +497,31 @@ function CertsShellComponent() {
             </Button>
           </Group>
         </Fieldset>
-      </Group>
+
+        <Fieldset legend="Participants List">
+          {form.values.activity && form.values.type ? (
+            <RespondentsTable
+              activity={form.values.activity!}
+              setExclude={setExclude}
+              types={form.values.type}
+            />
+          ) : (
+            <Center h={300}>
+              <Stack gap="xs">
+                <IconTemplate
+                  className="mx-auto"
+                  color="gray"
+                  size={48}
+                  stroke={1.5}
+                />
+                <Text c="dimmed" size="sm" ta="center">
+                  Select an activity and types to view participants.
+                </Text>
+              </Stack>
+            </Center>
+          )}
+        </Fieldset>
+      </SimpleGrid>
     </form>
   );
 }

@@ -21,6 +21,8 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
   const [data, setData] = useState<Tables<'activities_details_view'>[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const limit = 7;
+
   // custom autocomplete item ui
   const renderAutocompleteOption: AutocompleteProps['renderOption'] = ({
     option,
@@ -57,7 +59,7 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
   useEffect(() => {
     const fetchSeries = async () => {
       setLoading(true);
-      const response = await getActivities({ search: activityQuery });
+      const response = await getActivities({ search: activityQuery, limit });
 
       if (response.data) {
         setData(response.data);
@@ -75,11 +77,7 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
       setLoading(false);
     };
 
-    // practivities query on initial render
-    if (activityQuery) {
-      // noinspection JSIgnoredPromiseFromCall
-      void fetchSeries();
-    }
+    void fetchSeries();
   }, [activityQuery]);
 
   return (
@@ -89,7 +87,7 @@ export const ActivityInput = memo((props: AutocompleteProps) => {
         label: activity.title,
       }))}
       label="Activity Title"
-      limit={5}
+      limit={limit}
       onChangeCapture={(e) => setQuery(e.currentTarget.value)}
       placeholder="Brigada Eskwela"
       renderOption={renderAutocompleteOption}

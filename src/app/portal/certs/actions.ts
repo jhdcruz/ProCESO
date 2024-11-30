@@ -5,6 +5,7 @@ import type { generateCerts } from '@/trigger/generate-certificate';
 
 export async function triggerGenerateCerts(
   activity: string,
+  exclude: string[],
   templateDataUrl: string,
   coordinator: string,
   vpsas: string,
@@ -17,6 +18,7 @@ export async function triggerGenerateCerts(
     'generate-certs',
     {
       activity,
+      exclude,
       template: templateDataUrl,
       coordinator,
       vpsas,
