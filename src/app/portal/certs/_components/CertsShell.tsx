@@ -42,10 +42,17 @@ import { ActivityInput } from './ActivityInput';
 import type { CertReturnProps } from '@/libs/pdflib/certificate.worker';
 import { triggerGenerateCerts } from '../actions';
 import { Enums } from '@/libs/supabase/_database';
+import { revalidate } from '@/app/actions';
+import { systemUrl } from '@/app/routes';
 
 const RespondentsTable = dynamic(
   () => import('./RespondentsTable').then((mod) => mod.RespondentsTable),
-  { ssr: false, loading: () => <Skeleton h={500} w={500} /> },
+  { ssr: false, loading: () => <Skeleton h={500} w="100%" /> },
+);
+
+const CertRuns = dynamic(
+  () => import('./CertRuns').then((mod) => mod.CertRuns),
+  { ssr: false, loading: () => <Skeleton h={500} w="100%" /> },
 );
 
 const createWorker = createWorkerFactory(
@@ -142,16 +149,6 @@ function CertsShellComponent() {
         });
         return;
       }
-
-      notifications.show({
-        title: 'Queued certificate generation',
-        message: `${values.type.toLocaleString()} certificates is queued for ${values.activity}.`,
-        icon: <IconClock />,
-        color: 'gray',
-        withBorder: true,
-        autoClose: 4000,
-      });
-
       const coordinatorUrl = await blobToDataURL(new Blob([coordinator]));
       const vpsasUrl = await blobToDataURL(new Blob([vpsas]));
 
@@ -165,6 +162,17 @@ function CertsShellComponent() {
         values.type,
         values.qrPos ?? 'right',
       );
+
+      notifications.show({
+        title: 'Queued certificate generation',
+        message: `${values.type.toLocaleString()} certificates is queued for ${values.activity}.`,
+        icon: <IconClock />,
+        color: 'gray',
+        withBorder: true,
+        autoClose: 4000,
+      });
+
+      await revalidate(`${systemUrl}/certs`);
     } else {
       // Use web worker for local generation, does not send to emails
       if (coordinator === null || vpsas === null) {
@@ -522,6 +530,10 @@ function CertsShellComponent() {
           )}
         </Fieldset>
       </SimpleGrid>
+
+      <Fieldset legend="Certificate Jobs" my="xs">
+        <CertRuns />
+      </Fieldset>
     </form>
   );
 }

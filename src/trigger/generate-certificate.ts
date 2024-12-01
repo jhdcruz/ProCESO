@@ -124,7 +124,14 @@ export const generateCerts = task({
     }
 
     if (payload.send) {
-      await emailCerts.trigger({ activityId: activityRes.data.id });
+      await emailCerts.trigger(
+        {
+          activityId: activityRes.data.id,
+        },
+        {
+          tags: [`title.${activityRes.data.title}`, ...type],
+        },
+      );
     }
   },
 });

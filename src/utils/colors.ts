@@ -87,6 +87,28 @@ export const getEvaluatorColor = (
   }
 };
 
+export const getTriggerStatusColor = (status: string): MantineColor => {
+  switch (status) {
+    case 'WAITING_FOR_DEPLOY':
+    case 'QUEUED':
+    case 'CANCELED':
+      return 'gray.6';
+    case 'FROZEN':
+    case 'EXECUTING':
+      return 'blue';
+    case 'COMPLETED':
+      return 'green';
+    case 'REATTEMPTING':
+    case 'FAILED':
+    case 'CRASHED':
+    case 'INTERRUPTED':
+    case 'SYSTEM_FAILURE':
+      return 'red';
+    default:
+      return 'gray';
+  }
+};
+
 export const getEmotionColor = (emotion: keyof Emotions): MantineColor => {
   switch (emotion) {
     // Positive emotions

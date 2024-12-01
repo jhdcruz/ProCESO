@@ -1,7 +1,8 @@
 'use server';
 
-import { tasks } from '@trigger.dev/sdk/v3';
+import { tasks, runs } from '@trigger.dev/sdk/v3';
 import type { generateCerts } from '@/trigger/generate-certificate';
+import ApiResponse from '@/utils/response';
 
 export async function triggerGenerateCerts(
   activity: string,
@@ -27,7 +28,32 @@ export async function triggerGenerateCerts(
       send,
     },
     {
-      tags: type,
+      tags: [`title.${activity}`, ...type],
     },
   );
+}
+
+/**
+ * List certificate generation and delivery runs
+ */
+export async function getCertRuns(): Promise<ApiResponse> {
+  const response = await runs.list({
+    limit: 10,
+    taskIdentifier: ['generate-certs', 'email-certs'],
+    isTest: false,
+  });
+
+  if (!response.data) {
+    return {
+      status: 2,
+      title: 'Unable to fetch certificate runs',
+      data: response,
+    };
+  }
+
+  return {
+    status: 0,
+    title: 'Fetched certificate runs',
+    data: response.data,
+  };
 }
