@@ -14,7 +14,11 @@ export async function POST(req: NextRequest) {
 
   const run = await runs.retrieve(runId);
   if (!run?.isExecuting) {
-    return new Response('Invalid request', { status: 500 });
+    return new Response('Invalid request', { status: 403 });
+  }
+
+  if (emails.length === 0) {
+    return new Response('No emails provided', { status: 204 });
   }
 
   // send email

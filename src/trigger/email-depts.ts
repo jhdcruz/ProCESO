@@ -83,7 +83,7 @@ export const emailDepts = task({
     //           to avoid additional backend requests.
     //           Currently, using resend API here with react as template
     //           throws an error of `Objects are not valid as a React child`.
-    const assignment = fetch(
+    const assignment = await fetch(
       appUrl.value + '/api/triggers/emails/faculty-request',
       {
         method: 'POST',
@@ -95,32 +95,20 @@ export const emailDepts = task({
       },
     );
 
-    const relay = fetch(appUrl.value + '/api/triggers/emails/activity-notice', {
-      method: 'POST',
-      body: JSON.stringify({
-        runId: ctx.run.id,
-        activity: activityRes?.data,
-        emails: committeeRes?.data?.map((dept) => dept.email) ?? [],
-      }),
-    });
+    logger.info('Faculty assignment email sent', { assignment });
 
-    const [assignmentRes, relayRes] = await Promise.all([assignment, relay]);
+    const relay = await fetch(
+      appUrl.value + '/api/triggers/emails/activity-notice',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          runId: ctx.run.id,
+          activity: activityRes?.data,
+          emails: committeeRes?.data?.map((dept) => dept.email) ?? [],
+        }),
+      },
+    );
 
-    if (!assignmentRes.ok) {
-      logger.error(
-        `${assignmentRes.status}: Failed to send assignment emails`,
-        { ...assignmentRes.body },
-      );
-      throw new Error(
-        `${assignmentRes.status}: Failed to send assignment emails`,
-      );
-    }
-
-    if (!relayRes.ok) {
-      logger.error(`${relayRes.status}: Failed to send relay emails`, {
-        ...relayRes.body,
-      });
-      throw new Error(`${relayRes.status}: Failed to send relay emails`);
-    }
+    logger.info('Faculty info relay email sent', { relay });
   },
 });
