@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
       'dayjs',
       'resend',
       'recharts',
+      'mapbox-gl',
     ],
   },
   images: {
