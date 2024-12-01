@@ -1,7 +1,16 @@
 'use client';
 
 import { memo } from 'react';
-import { Divider, Group, Paper, Space, Stack } from '@mantine/core';
+import {
+  Button,
+  Divider,
+  Group,
+  Paper,
+  PasswordInput,
+  Space,
+  Stack,
+  TextInput,
+} from '@mantine/core';
 import Image from 'next/image';
 import { ThemeSwitcher } from '@/components/Buttons/ThemeSwitcher';
 import cesoLogo from '@/components/_assets/img/ceso-manila.webp';
