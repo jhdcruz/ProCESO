@@ -45,15 +45,18 @@ export const generateCerts = task({
       .single();
 
     // get respondents
-    const evalQuery = supabase
+    let evalQuery = supabase
       .from('activity_eval_view')
       .select('name, email')
       .eq('title', activity)
       .in('type', type)
       .limit(9999)
       .not('email', 'is', null)
-      .not('email', 'in', exclude)
       .not('name', 'is', null);
+
+    if (exclude.length > 0) {
+      evalQuery = evalQuery.not('email', 'in', exclude);
+    }
 
     const [activityRes, evalRes] = await Promise.all([
       activityQuery,

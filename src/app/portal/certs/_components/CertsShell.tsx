@@ -206,15 +206,33 @@ function CertsShellComponent() {
       });
 
       // get respondents
-      const { data: respondents } = await supabase
+      let query = supabase
         .from('activity_eval_view')
         .select('name, email')
         .eq('title', values.activity!)
         .in('type', values.type)
         .limit(9999)
         .not('email', 'is', null)
-        .not('email', 'in', exclude)
         .not('name', 'is', null);
+
+      if (exclude.length > 0) {
+        query = query.not('email', 'in', exclude);
+      }
+
+      const { data: respondents } = await query;
+
+      if (!respondents || respondents.length === 0) {
+        notifications.update({
+          id: 'certs',
+          loading: false,
+          message: 'No respondents found',
+          icon: <IconCheck />,
+          withBorder: true,
+          withCloseButton: true,
+          autoClose: 4000,
+        });
+        return;
+      }
 
       const response = (await worker.generateCertificate({
         respondents: respondents!,
@@ -353,7 +371,7 @@ function CertsShellComponent() {
       )}
 
       {/* Certificate Generation */}
-      <SimpleGrid cols={{ base: 1, sm: 1, md: 2 }} spacing="xs">
+      <SimpleGrid cols={{ base: 1, sm: 1, md: 1, lg: 2 }} spacing="xs">
         <Fieldset legend="Certification Details">
           <Input.Wrapper
             description="For automated sending of certificates to recipients. or custom certificates template."
@@ -441,7 +459,7 @@ function CertsShellComponent() {
 
           <Divider my="md" />
 
-          <Group gap="sm" grow justify="center" preventGrowOverflow={false}>
+          <Stack gap="sm">
             <ActivityInput
               description="Enter name of activity to search"
               key={form.key('activity')}
@@ -475,7 +493,7 @@ function CertsShellComponent() {
                 <Radio label="Top-Right" value="right" />
               </Group>
             </Radio.Group>
-          </Group>
+          </Stack>
 
           <Divider my="md" />
 
