@@ -3,6 +3,8 @@
 **Full Title:**
 ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP Manila – CESO Department
 
+___Skip to [screenshots](#Screenshots).___
+
 > [!IMPORTANT]
 > This system/application is **not meant for public usage**, and is tailored for academic
 > institutional context.
