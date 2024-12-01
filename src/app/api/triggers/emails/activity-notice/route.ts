@@ -33,5 +33,5 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  return new Response('Emails sent successfully', { status: 500 });
+  return new Response('Emails sent successfully', { status: 200 });
 }

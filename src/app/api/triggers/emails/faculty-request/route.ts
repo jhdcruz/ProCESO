@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
   if (error) {
     return new Response(error.message, {
-      status: 400,
+      status: 500,
     });
   }
 
