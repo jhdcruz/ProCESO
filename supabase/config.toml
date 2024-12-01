@@ -1,6 +1,6 @@
 # A string used to distinguish different Supabase projects on the same host. Defaults to the
 # working directory name when running `supabase init`.
-project_id = "env(SUPABASE_PROJECT)"
+project_id = "proceso"
 
 [api]
 enabled = true
@@ -220,7 +220,7 @@ policy = "oneshot"
 inspector_port = 8083
 
 [analytics]
-enabled = true
+enabled = false
 port = 54327
 # Configure one of the supported backends: `postgres`, `bigquery`.
 backend = "postgres"
