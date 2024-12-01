@@ -165,9 +165,7 @@ export const RespondentsTable = memo(
               />
               <Button.Group>
                 <Button
-                  disabled={
-                    range[0] === 0 || respondents.length < 14 || count === 0
-                  }
+                  disabled={count === 0 || range[0] <= 0}
                   onClick={() =>
                     setRange((current) => [current[0] - 14, current[1] - 14])
                   }
@@ -176,7 +174,9 @@ export const RespondentsTable = memo(
                   Previous
                 </Button>
                 <Button
-                  disabled={respondents.length < 14 || count === 0}
+                  disabled={
+                    count === 0 || range[1] >= count || respondents.length < 14
+                  }
                   onClick={() =>
                     setRange((current) => [current[0] + 14, current[1] + 14])
                   }
