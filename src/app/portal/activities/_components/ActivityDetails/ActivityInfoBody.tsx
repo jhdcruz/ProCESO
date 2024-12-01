@@ -477,8 +477,8 @@ function ActivityDetailsBody({
   return (
     <Grid align="start" justify="space-between">
       <Grid.Col
-        order={{ base: 1, md: 2, lg: 1 }}
-        span={{ base: 'auto', md: 12, lg: 9 }}
+        order={{ base: 1, sm: 2, md: 2, lg: 1 }}
+        span={{ base: 'auto', sm: 12, md: 12, lg: 8 }}
       >
         <RTEditor
           content={content}
@@ -490,7 +490,7 @@ function ActivityDetailsBody({
 
       <Grid.Col
         order={{ base: 2, md: 1, lg: 2 }}
-        span={{ base: 'auto', md: 12, lg: 3 }}
+        span={{ base: 'auto', sm: 12, md: 12, lg: 4 }}
       >
         {isPrivate(role) && (
           <>
@@ -569,83 +569,85 @@ function ActivityDetailsBody({
                               role={faculty.role!}
                             />
 
-                            {currentUser === faculty.id ? (
-                              // RSVP controls for current logged-in faculty
-                              <ActionIcon.Group my={6}>
-                                <Tooltip label="Will Go" withArrow>
-                                  <ActionIcon
-                                    color="green"
-                                    loading={acceptLoading}
-                                    onClick={() =>
-                                      handleRsvp(
-                                        true,
-                                        faculty,
-                                        group.referrerEmail,
-                                      )
-                                    }
-                                    size="lg"
-                                    variant={
-                                      accept === true ? 'filled' : 'outline'
-                                    }
-                                  >
-                                    <IconFlagCheck size={16} />
-                                  </ActionIcon>
-                                </Tooltip>
+                            <Box ml="auto">
+                              {currentUser === faculty.id ? (
+                                // RSVP controls for current logged-in faculty
+                                <ActionIcon.Group my={6}>
+                                  <Tooltip label="Will Go" withArrow>
+                                    <ActionIcon
+                                      color="green"
+                                      loading={acceptLoading}
+                                      onClick={() =>
+                                        handleRsvp(
+                                          true,
+                                          faculty,
+                                          group.referrerEmail,
+                                        )
+                                      }
+                                      size="lg"
+                                      variant={
+                                        accept === true ? 'filled' : 'outline'
+                                      }
+                                    >
+                                      <IconFlagCheck size={16} />
+                                    </ActionIcon>
+                                  </Tooltip>
 
-                                <Tooltip label="Can't Go" withArrow>
+                                  <Tooltip label="Can't Go" withArrow>
+                                    <ActionIcon
+                                      color="red"
+                                      loading={acceptLoading}
+                                      onClick={() =>
+                                        handleRsvp(
+                                          false,
+                                          faculty,
+                                          group.referrerEmail,
+                                        )
+                                      }
+                                      size="lg"
+                                      variant={
+                                        accept === false ? 'filled' : 'outline'
+                                      }
+                                    >
+                                      <IconFlagX size={16} />
+                                    </ActionIcon>
+                                  </Tooltip>
+                                </ActionIcon.Group>
+                              ) : (
+                                // Show RSVP status for other faculty
+                                <Tooltip
+                                  label={
+                                    faculty.rsvp === null
+                                      ? 'Waiting for response'
+                                      : faculty.rsvp
+                                        ? 'Will Go'
+                                        : "Can't Go"
+                                  }
+                                  withArrow
+                                >
                                   <ActionIcon
-                                    color="red"
-                                    loading={acceptLoading}
-                                    onClick={() =>
-                                      handleRsvp(
-                                        false,
-                                        faculty,
-                                        group.referrerEmail,
-                                      )
+                                    className="cursor-default"
+                                    color={
+                                      faculty.rsvp === null
+                                        ? 'gray'
+                                        : faculty.rsvp
+                                          ? 'green'
+                                          : 'red'
                                     }
                                     size="lg"
-                                    variant={
-                                      accept === false ? 'filled' : 'outline'
-                                    }
+                                    variant="light"
                                   >
-                                    <IconFlagX size={16} />
+                                    {faculty.rsvp === null ? (
+                                      <IconFlagQuestion size={16} />
+                                    ) : faculty.rsvp ? (
+                                      <IconFlagCheck size={16} />
+                                    ) : (
+                                      <IconFlagX size={16} />
+                                    )}
                                   </ActionIcon>
                                 </Tooltip>
-                              </ActionIcon.Group>
-                            ) : (
-                              // Show RSVP status for other faculty
-                              <Tooltip
-                                label={
-                                  faculty.rsvp === null
-                                    ? 'Waiting for response'
-                                    : faculty.rsvp
-                                      ? 'Will Go'
-                                      : "Can't Go"
-                                }
-                                withArrow
-                              >
-                                <ActionIcon
-                                  className="cursor-default"
-                                  color={
-                                    faculty.rsvp === null
-                                      ? 'gray'
-                                      : faculty.rsvp
-                                        ? 'green'
-                                        : 'red'
-                                  }
-                                  size="lg"
-                                  variant="light"
-                                >
-                                  {faculty.rsvp === null ? (
-                                    <IconFlagQuestion size={16} />
-                                  ) : faculty.rsvp ? (
-                                    <IconFlagCheck size={16} />
-                                  ) : (
-                                    <IconFlagX size={16} />
-                                  )}
-                                </ActionIcon>
-                              </Tooltip>
-                            )}
+                              )}
+                            </Box>
                           </Group>
                         </Timeline.Item>
                       ))}

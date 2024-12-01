@@ -70,6 +70,7 @@ export const SidebarUser = memo(
             email={email}
             name={name}
             other_roles={other_roles}
+            preventCopy
             role={role}
           />
         </UnstyledButton>
