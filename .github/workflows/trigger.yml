@@ -6,10 +6,8 @@ on:
     paths:
       - 'src/trigger/*'
       - 'trigger.config.ts'
-  pull_request:
-    paths:
-      - 'src/trigger/*'
-      - 'trigger.config.ts'
+    branches:
+      - main
 
 jobs:
   deploy:
