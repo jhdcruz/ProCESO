@@ -1,10 +1,10 @@
-# ProCESO – Community Outreach Management System
+# ProCESO – AI-Integrated Community Outreach Management System
 
-AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP
-Manila – CESO Department.
+**Full Title:**
+ProCESO – AI-Integrated Community Outreach Management System with Sentiment Analysis and Automated E-Certificate for TIP Manila – CESO Department
 
 > [!IMPORTANT]
-> This system/application is **not meant for public usage**, and is tailored for a specific client in academic
+> This system/application is **not meant for public usage**, and is tailored for academic
 > institutional context.
 >
 > This "system" only serves as public reference for similar system or application.
@@ -15,13 +15,9 @@ This capstone project aims to develop an AI-integrated web-based community outre
 and centralizes administrative tasks to enhance the efficiency and impact of the institution’s community extension
 services in fostering sustainable community relationships.
 
-1. **To develop a system that facilitates the internal planning and coordination of community outreach activities**,
-   such as managing faculty assignment, and uploading of reports.
-2. **To implement automated processes for generating, distributing, and validating e-certificates** of participants,
-   thereby reducing manual workload and improving operational efficiency;
-3. **To integrate AI models for analyzing and evaluating feedback**, such as sentiment analysis, alternative textual
-   analytics and analytics dashboard to effectively collect feedback and support data-driven decision-making through
-   AI-assisted summary and insights.
+1. **To develop a system feature that facilitates the internal coordination of community outreach activities**, such as managing faculty assignment, uploading of reports, and historical archiving for preserving past activities’ analytics.
+2. **To implement automated processes for generating, distributing, and validating e-certificates of participants**, thereby reducing manual workload and improving operational efficiency;
+3. **To integrate AI models for analyzing and evaluating feedback**, such as sentiment analysis and emotion classification, to effectively collect feedback and support data-driven decision-making through AI-assisted insights.
 
 ## Tech Stack
 
@@ -53,13 +49,17 @@ Overview of current technologies and resources to be used in the system.
 ### AI Models
 
 - [cardiffnlp/twitter-roberta-base-sentiment-latest](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest) (Sentiment Analysis)
-   - [TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX](https://huggingface.co/TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX)
+  - [TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX](https://huggingface.co/TrumpMcDonaldz/cardiffnlp-twitter-roberta-base-sentiment-latest-ONNX)
 - [SamLowe/roberta-base-go_emotions-onnx](https://huggingface.co/SamLowe/roberta-base-go_emotions-onnx) (Emotion/Text Classification)
-- [microsoft/Phi-3.5-mini-instruct-onnx](https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx) (Text Generation)
+- [OpenAI GPT-4.0 mini](https://github.com/marketplace/models/azure-openai/gpt-4o-mini) (Summary & Report Generation)
+  - Should be replaced with lightweight variant, such as: [microsoft/Phi-3.5-mini-instruct-onnx](https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx).
+  - Opted due to: Trigger.dev doesn't support downloading of ONNX model_data locally, and with separate central dedicated hardware unavailable for local use, and development time.
 
 > [!NOTE]
 > **All models uses quantized version** of their original model for lightweight, and are run locally using
 > [`@huggingface/transformers`](https://www.npmjs.com/package/@huggingface/transformers).
+>
+> With the exception of OpenAI GPT-4.0 mini.
 
 ### Utilities
 
@@ -76,6 +76,64 @@ Overview of current technologies and resources to be used in the system.
 - [Baselime.io](https://baselime.io/) (Observability)
 - [Snyk.io](https://snyk.io/) (Application Security)
 
+## Screenshots
+
+Some screenshots were not included, such as:
+
+- Login Page
+- User Management
+- Series Page (similar to Activities but categorized per series)
+- Emails sent by the system
+
+### Dashboard
+
+![Dashboard 1](docs/2-1.png)<br />
+_Dashboard Calendar using FullCalendar library._
+
+![Dashboard 2](docs/2-2.png)<br />
+_Dashboard Calendar Yearly Overview (FullCalendar.js)._
+
+### Activities/Events
+
+![Activites 1](docs/3-1.png)<br />
+_Event List_
+
+![Activities 2](docs/3-2.png)<br />
+_Event details with WYSIWYG editor, File uploads (Reports), Faculty Assignment (Delegation)._
+
+![Activities 2.1](docs/3-2-1.png)<br />
+_Event delegation response (w/ Email notice to respective authorities)._
+
+![Activities 3](docs/3-3.png)<br />
+_New/Update Event Form Modal with Mapbox Integration._
+
+![Activities 4](docs/3-4.png)<br />
+_Goals & Objectives, Dept. to notify (email)._
+
+![Activities 5](docs/4-1.png)<br />
+_AI-Generated summary with overall ratings._
+
+![Activities 6](docs/4-2.png)<br />
+_World cloud and overview of overall evaluation analysis._
+
+![Activities 7](docs/4-3.png)<br />
+_Sentiment Analysis and Emotion Analysis per evaluation._
+
+![Activities 8](docs/4-4.png)<br />
+_Copy of submitted evaluation form._
+
+### Certificates
+
+![Certificates 1](docs/5-1.png)<br />
+_Participant lists for excluding in generation (attendance-related)._
+
+The generated certificate also contains QR code for validation.
+
+The `Generate` generates certificates locally (offline use), and downloads as ZIP file. The `Send` uses Trigger.dev integration.
+
+![Certificates 2](docs/5-2.png)<br />
+_Integrated with Trigger.dev, monitor the status of the generation process._
+
 ## Development
 
 ### Prerequisites
@@ -89,6 +147,7 @@ Overview of current technologies and resources to be used in the system.
    - [Trigger.dev](https://cloud.trigger.dev/)
    - [Resend](https://resend.com/login)
    - [HuggingFace](https://huggingface.co/)
+   - GitHub Token (for GitHub Models, OpenAI GPT-4.0 mini)
 
 3. Install dependencies using `bun install` or `bun i`.
 
