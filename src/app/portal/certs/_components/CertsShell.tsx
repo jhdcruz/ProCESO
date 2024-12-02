@@ -175,16 +175,6 @@ function CertsShellComponent() {
       await revalidate(`${systemUrl}/certs`);
     } else {
       // Use web worker for local generation, does not send to emails
-      if (coordinator === null || vpsas === null) {
-        notifications.show({
-          title: 'Missing signatures',
-          message: 'Please upload the coordinator and VPSAS signatures',
-          color: 'red',
-          withBorder: true,
-          autoClose: 6000,
-        });
-        return;
-      }
       if (!activity) {
         notifications.show({
           title: 'No activity selected',

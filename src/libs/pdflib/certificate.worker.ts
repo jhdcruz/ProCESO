@@ -29,8 +29,8 @@ export async function generateCertificate({
   activityTitle: string;
   activityEnd: string;
   template: string;
-  coordinator: File;
-  vpsas: File;
+  coordinator?: File | null;
+  vpsas?: File | null;
   qrPos?: 'left' | 'right';
 }): Promise<CertReturnProps> {
   const supabase = createBrowserClient();
@@ -39,8 +39,10 @@ export async function generateCertificate({
   const zipWriter = new ZipWriter(new BlobWriter());
 
   // Object URLs for coordinator and VPSAs signatures
-  const coordinatorUrl = await blobToDataURL(new Blob([coordinator]));
-  const vpsasUrl = await blobToDataURL(new Blob([vpsas]));
+  const coordinatorUrl = coordinator
+    ? await blobToDataURL(new Blob([coordinator]))
+    : null;
+  const vpsasUrl = vpsas ? await blobToDataURL(new Blob([vpsas])) : null;
 
   for (const respondent of respondents) {
     // Generate hash using activityId, respondent name and email
