@@ -53,7 +53,7 @@ export const VenueMap = memo(
           container: mapContainerRef.current,
           style: 'mapbox://styles/mapbox/streets-v12',
           localFontFamily: 'Inter',
-          zoom: 16,
+          zoom: 18,
           maxBounds: philippinesBounds,
           performanceMetricsCollection: false,
         });
@@ -82,24 +82,23 @@ export const VenueMap = memo(
 
     return (
       <Box
-        className="rounded-md"
+        className="relative"
         h={640}
         id="editableMap"
         mt={8}
         ref={mapContainerRef}
         w="100%"
       >
-        <ActionIcon
-          aria-label={`Toggle map style to ${style}.`}
-          c="black"
-          className="z-10"
-          ml={8}
-          mt={10}
-          onClick={toggleStyle}
-          variant="white"
-        >
-          <IconMap size={18} stroke={1.5} />
-        </ActionIcon>
+        <Box className="absolute left-3 top-3 z-10">
+          <ActionIcon
+            aria-label={`Toggle map style to ${style}.`}
+            c="black"
+            onClick={toggleStyle}
+            variant="white"
+          >
+            <IconMap size={18} stroke={1.5} />
+          </ActionIcon>
+        </Box>
       </Box>
     );
   },

@@ -104,7 +104,9 @@ export const ActivityFormModal = memo(
       ? URL.createObjectURL(coverFile[0])
       : null;
 
-    const [venue, setVenue] = useState<[number, number] | null>(null);
+    const [venue, setVenue] = useState<[number, number] | null>(
+      activity?.venue ?? null,
+    );
 
     // form submission
     const form = useForm<ActivityFormProps>({
@@ -219,12 +221,13 @@ export const ActivityFormModal = memo(
 
     useEffect(() => {
       if (activity) {
-        const { date_starting, date_ending } = activity;
+        const { series, date_starting, date_ending } = activity;
 
         const data = {
           ...activity,
           date_starting: new Date(date_starting!),
           date_ending: new Date(date_ending!),
+          series: series ?? '',
           objective_1: activity.objectives?.[0] ?? '',
           objective_2: activity.objectives?.[1] ?? '',
           objective_3: activity.objectives?.[2] ?? '',

@@ -57,19 +57,11 @@ export const MapboxGeocoder = memo(
           container: mapContainerRef.current,
           style: 'mapbox://styles/mapbox/streets-v12',
           localFontFamily: 'Inter',
-          zoom: 16,
+          zoom: 18,
           maxBounds: philippinesBounds,
           performanceMetricsCollection: false,
           doubleClickZoom: false,
         });
-
-        markerRef.current = new mapboxgl.Marker({
-          draggable: true,
-          color: 'red',
-        })
-          .setLngLat(coordinates ?? placeholder)
-          .addTo(mapRef.current);
-
         geocoderRef.current = new MbGeocoder({
           // @ts-expect-error wtf is wrong with this type
           mapboxgl: mapRef.current,
@@ -80,8 +72,14 @@ export const MapboxGeocoder = memo(
           // is ??? to control
           marker: false,
         });
-
         mapRef.current.addControl(geocoderRef.current);
+
+        markerRef.current = new mapboxgl.Marker({
+          draggable: true,
+          color: 'red',
+        })
+          .setLngLat(coordinates ?? placeholder)
+          .addTo(mapRef.current);
 
         // Set initial coordinates
         geocoderRef.current.setProximity({
@@ -105,10 +103,6 @@ export const MapboxGeocoder = memo(
         // Update marker position when coordinates prop changes
         mapRef.current.on('load', () => {
           mapRef.current!.setCenter(coordinates ?? placeholder);
-          geocoderRef.current!.setProximity({
-            longitude: coordinates?.[0] ?? placeholder[0],
-            latitude: coordinates?.[1] ?? placeholder[1],
-          });
           markerRef.current!.setLngLat(coordinates ?? placeholder);
         });
 
@@ -130,24 +124,23 @@ export const MapboxGeocoder = memo(
 
     return (
       <Box
-        className="rounded-md"
-        h={340}
+        className="relative"
+        h={380}
         id="editableMap"
         mt={8}
         ref={mapContainerRef}
         w="100%"
       >
-        <ActionIcon
-          aria-label={`Toggle map style to ${style}.`}
-          c="black"
-          className="z-10"
-          ml={8}
-          mt={10}
-          onClick={toggleStyle}
-          variant="white"
-        >
-          <IconMap size={18} stroke={1.5} />
-        </ActionIcon>
+        <Box className="absolute left-3 top-3 z-10">
+          <ActionIcon
+            aria-label={`Toggle map style to ${style}.`}
+            c="black"
+            onClick={toggleStyle}
+            variant="white"
+          >
+            <IconMap size={18} stroke={1.5} />
+          </ActionIcon>
+        </Box>
       </Box>
     );
   },
