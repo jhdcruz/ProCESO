@@ -49,11 +49,11 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
           className="object-cover"
           component={NextImage}
           fallbackSrc="/assets/no-image.png"
-          h="auto"
-          height={180}
+          h={190}
+          height={190}
           src={data.image_url}
-          w={326}
-          width={326}
+          w={328}
+          width={328}
         />
       </Card.Section>
 
@@ -99,7 +99,7 @@ export const ActivityCard = memo((data: Tables<'activities_details_view'>) => {
               {data.venue_additional}
             </Badge>
           )}
-          <Text fz="sm" lineClamp={2} mt="sm">
+          <Text fz="sm" lineClamp={4} mt="sm">
             {data.description?.length
               ? sanitizeHtml(data.description, { allowedTags: [] })
               : 'No description provided for this activity yet.'}
