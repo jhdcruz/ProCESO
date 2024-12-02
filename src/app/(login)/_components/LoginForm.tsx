@@ -32,27 +32,7 @@ export function LoginFormComponent() {
             />
           </Stack>
 
-          <TextInput
-            autoCapitalize="none"
-            autoComplete="email"
-            autoCorrect="off"
-            label="Email address"
-            name="email"
-            placeholder="admin@tip.edu.ph"
-          />
-          <PasswordInput
-            autoCapitalize="none"
-            autoCorrect="off"
-            label="Password"
-            mt="md"
-            name="password"
-            placeholder="Your password"
-          />
-          <Button fullWidth mt="xl" type="submit">
-            Login
-          </Button>
-
-          <Divider label="Or continue using" labelPosition="center" my="lg" />
+          <Divider label="Login using" labelPosition="center" my="lg" />
 
           <GoogleButton />
         </main>
