@@ -62,8 +62,8 @@
     "@tiptap/pm": "2.10.3",
     "@tiptap/react": "2.10.3",
     "@tiptap/starter-kit": "2.10.3",
-    "@trigger.dev/build": "3.3.2",
-    "@trigger.dev/sdk": "3.3.2",
+    "@trigger.dev/build": "3.3.3",
+    "@trigger.dev/sdk": "3.3.3",
     "@zip.js/zip.js": "2.7.53",
     "blob-util": "2.0.2",
     "dayjs": "1.11.13",
@@ -109,7 +109,7 @@
     "tailwindcss": "3.4.15",
     "tailwindcss-animate": "1.0.7",
     "transform-loader": "0.2.4",
-    "trigger.dev": "3.3.2",
+    "trigger.dev": "3.3.3",
     "typescript": "5.7.2"
   },
   "lint-staged": {
