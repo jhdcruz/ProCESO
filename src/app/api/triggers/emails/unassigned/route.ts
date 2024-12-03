@@ -15,6 +15,10 @@ export async function POST(req: NextRequest) {
     return new Response('Invalid request', { status: 500 });
   }
 
+  if (emails.length === 0) {
+    return new Response('No emails provided', { status: 204 });
+  }
+
   // send email to subscribed users
   const { error } = await resend.batch.send(
     emails.map((email: string) => ({

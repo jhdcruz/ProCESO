@@ -21,18 +21,22 @@ export const emailUnassigned = task({
     },
     { ctx },
   ) => {
-    // HACK: for RLS policies, we are passing auth cookies,
-    // probably a bad thing, probably, I think.
     await envvars.retrieve('SUPABASE_URL');
     await envvars.retrieve('SUPABASE_SERVICE_KEY');
     const supabase = createAdminClient();
+
+    if (!payload.ids.length) {
+      logger.info('No faculty to send email');
+      return;
+    }
 
     logger.info('Getting users and activity information...');
     // fetch faculty emails
     const usersQuery = supabase
       .from('users')
       .select('email')
-      .in('id', payload.ids);
+      .in('id', payload.ids)
+      .not('email', 'is', null);
 
     // get activity id
     const activityQuery = supabase
@@ -49,14 +53,14 @@ export const emailUnassigned = task({
 
     if (usersRes.error) {
       logger.error(
-        usersRes?.error?.message,
+        'Failed to get users',
         usersRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(usersRes?.error?.message);
     }
     if (activityRes.error) {
       logger.error(
-        activityRes?.error?.message,
+        'Failed to get activity',
         activityRes?.error as unknown as Record<string, unknown>,
       );
       throw new Error(activityRes?.error?.message);
@@ -80,10 +84,6 @@ export const emailUnassigned = task({
       },
     );
 
-    if (!response.ok) {
-      throw new Error(await response.json());
-    }
-
-    return response;
+    logger.info('Unassigned email sent', { response });
   },
 });

@@ -232,10 +232,14 @@ export async function assignFaculty(
     if (delResponse.status !== 0) return delResponse;
 
     // send email notice to unassigned faculties
-    await tasks.trigger<typeof emailUnassigned>('email-unassigned', {
-      activityId: activityId,
-      ids: faculty.filter((id) => !original?.includes(id)),
-    });
+    const facultiesToEmail = faculty.filter((id) => !original?.includes(id));
+
+    if (facultiesToEmail.length > 0) {
+      await tasks.trigger<typeof emailUnassigned>('email-unassigned', {
+        activityId: activityId,
+        ids: facultiesToEmail,
+      });
+    }
   }
 
   revalidate(
