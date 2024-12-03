@@ -50,7 +50,7 @@
     "@shopify/react-web-worker": "5.1.6",
     "@supabase/ssr": "0.5.2",
     "@supabase/supabase-js": "2.46.2",
-    "@tabler/icons-react": "3.23.0",
+    "@tabler/icons-react": "3.24.0",
     "@tiptap/extension-color": "2.10.3",
     "@tiptap/extension-highlight": "2.10.3",
     "@tiptap/extension-link": "2.10.3",
