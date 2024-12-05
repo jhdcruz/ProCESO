@@ -14,9 +14,12 @@ import {
   Grid,
   Stack,
   Code,
+  Textarea,
+  Modal,
+  Button,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { useClipboard } from '@mantine/hooks';
+import { useClipboard, useDisclosure } from '@mantine/hooks';
 import type { Enums, Tables } from '@/libs/supabase/_database';
 import { ActivityDetailsProps } from '@/libs/supabase/api/_response';
 import { getAssignedFaculties } from '@/libs/supabase/api/faculty-assignments';
@@ -60,6 +63,15 @@ const RTEditor = dynamic(
   },
 );
 
+interface FacultyAssignment {
+  rsvp: boolean;
+  faculty: Pick<
+    Tables<'activities_faculties_view'>,
+    'name' | 'email' | 'department'
+  >;
+  referrer: string;
+}
+
 interface FacultyGroup {
   referrerEmail: string;
   referrer: Tables<'activities_faculties_view'> | null;
@@ -93,8 +105,13 @@ function ActivityDetailsBody({
   const [files, setFiles] = useState<Tables<'activity_files'>[] | null>();
 
   // RSVP assignment of current user
+  const [reasonModal, { open: reasonOpen, close: reasonClose }] =
+    useDisclosure(false);
+  const [assignSelection, setAssignSelection] =
+    useState<FacultyAssignment | null>(null);
   const [acceptLoading, setAcceptLoading] = useState(false);
   const [accept, setAccept] = useState<boolean | null>(null);
+  const [reason, setReason] = useState<string>('');
 
   const saveFile = async (fileName: string, localChecksum: string) => {
     notifications.show({
@@ -303,14 +320,7 @@ function ActivityDetailsBody({
     });
   };
 
-  const handleRsvp = async (
-    rsvp: boolean,
-    faculty: Pick<
-      Tables<'activities_faculties_view'>,
-      'name' | 'email' | 'department'
-    >,
-    referrer: string,
-  ) => {
+  const handleRsvp = async ({ rsvp, faculty, referrer }: FacultyAssignment) => {
     if (accept === rsvp) return;
 
     setAcceptLoading(true);
@@ -319,7 +329,10 @@ function ActivityDetailsBody({
     // save rsvp resposne
     const { error } = await supabase
       .from('faculty_assignments')
-      .update({ rsvp })
+      .update({
+        rsvp,
+        rsvp_comments: reason,
+      })
       .eq('activity_id', activity.id!)
       .eq('user_id', currentUser);
 
@@ -332,6 +345,7 @@ function ActivityDetailsBody({
       body: JSON.stringify({
         activity,
         rsvp: rsvp,
+        reason: reason,
         faculty: {
           name: faculty.name,
           email: faculty.email,
@@ -530,6 +544,39 @@ function ActivityDetailsBody({
           my="md"
         />
 
+        <Modal
+          centered
+          onClose={reasonClose}
+          opened={reasonModal}
+          size="md"
+          title="Please state your reason"
+        >
+          <Textarea
+            onChange={(e) => setReason(e.currentTarget.value)}
+            placeholder="I would not be able to go due to ..."
+            required
+            rows={5}
+            value={reason}
+          />
+
+          <Group justify="flex-end" mt="lg">
+            <Button onClick={reasonClose} variant="subtle">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                handleRsvp({
+                  rsvp: false,
+                  faculty: assignSelection!.faculty,
+                  referrer: assignSelection!.referrer,
+                });
+                reasonClose();
+              }}
+            >
+              Submit
+            </Button>
+          </Group>
+        </Modal>
         {faculties ? (
           <>
             {faculties.length ? (
@@ -551,6 +598,7 @@ function ActivityDetailsBody({
                         />
                       </Box>
                     )}
+
                     <Timeline bulletSize={22} lineWidth={2} my="lg">
                       {group.members.map((faculty) => (
                         <Timeline.Item
@@ -578,11 +626,11 @@ function ActivityDetailsBody({
                                       color="green"
                                       loading={acceptLoading}
                                       onClick={() =>
-                                        handleRsvp(
-                                          true,
+                                        handleRsvp({
+                                          rsvp: true,
                                           faculty,
-                                          group.referrerEmail,
-                                        )
+                                          referrer: group.referrerEmail,
+                                        })
                                       }
                                       size="lg"
                                       variant={
@@ -597,13 +645,14 @@ function ActivityDetailsBody({
                                     <ActionIcon
                                       color="red"
                                       loading={acceptLoading}
-                                      onClick={() =>
-                                        handleRsvp(
-                                          false,
+                                      onClick={() => {
+                                        setAssignSelection({
+                                          rsvp: false,
                                           faculty,
-                                          group.referrerEmail,
-                                        )
-                                      }
+                                          referrer: group.referrerEmail,
+                                        });
+                                        reasonOpen();
+                                      }}
                                       size="lg"
                                       variant={
                                         accept === false ? 'filled' : 'outline'

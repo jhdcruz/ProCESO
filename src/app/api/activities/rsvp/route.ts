@@ -8,7 +8,7 @@ import { createServerClient } from '@/libs/supabase/server';
  * Email referrer or staff about faculty assignment response.
  */
 export async function POST(req: NextRequest) {
-  const { activity, referrer, faculty, rsvp } = await req.json();
+  const { activity, referrer, faculty, rsvp, reason } = await req.json();
   const resend = new Resend(process.env.RESEND_API);
 
   if (rsvp === null) {
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
       from: 'Community Extension Services Office <noreply@mail.deuz.tech>',
       to: referrer,
       subject: `A faculty member you nominated will be unavailable for: ${activity.title}`,
-      react: FacultyReject({ activity, faculty }),
+      react: FacultyReject({ activity, reason, faculty }),
     });
 
     if (error) {

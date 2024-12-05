@@ -7,9 +7,11 @@ import '@mantine/core/styles.css';
 
 export default function FacultyReject({
   activity,
+  reason,
   faculty,
 }: {
   activity: Tables<'activities'>;
+  reason: string;
   faculty: {
     name: string;
     email: string;
@@ -21,11 +23,15 @@ export default function FacultyReject({
     <Template>
       <Text className="mt-8">
         {faculty.name} ({faculty.email}) &gt;&rdquo; won&apos;t be able to go
-        to: <br />
+        to:{' '}
         <Link className="font-semibold text-yellow-500" href={link}>
           {activity?.title ?? 'Untitled Activity'}
         </Link>
         .
+      </Text>
+
+      <Text className="ml-6 mt-4 italic">
+        <span className="font-semibold">{reason}</span>
       </Text>
 
       {activity?.date_starting && activity?.date_ending ? (
