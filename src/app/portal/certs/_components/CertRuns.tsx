@@ -58,7 +58,7 @@ export const CertRuns = memo(() => {
       </Table.Td>
       <Table.Td>
         {run.tags?.map((tag: string) => (
-          <Badge key={tag} size="sm" variant="default">
+          <Badge key={tag} mr={4} size="sm" variant="default">
             {tag}
           </Badge>
         ))}
