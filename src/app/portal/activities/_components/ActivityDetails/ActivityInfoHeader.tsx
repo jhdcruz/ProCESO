@@ -573,6 +573,7 @@ function ActivityDetailsHeader({
 
                   <Button
                     color="red"
+                    disabled={dayjs().isAfter(activity.date_ending!)}
                     leftSection={<IconTrash size={16} />}
                     onClick={() =>
                       deleteModal(activity.id as string, router, startProgress)
