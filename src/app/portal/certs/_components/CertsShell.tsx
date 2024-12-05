@@ -44,6 +44,7 @@ import { triggerGenerateCerts } from '../actions';
 import { Enums } from '@/libs/supabase/_database';
 import { revalidate } from '@/app/actions';
 import { systemUrl } from '@/app/routes';
+import { ManualList, type ManualRespondent } from './ManualList';
 
 const RespondentsTable = dynamic(
   () => import('./RespondentsTable').then((mod) => mod.RespondentsTable),
@@ -62,6 +63,7 @@ const createWorker = createWorkerFactory(
 export interface CertsProps {
   activity?: string;
   local: boolean | null;
+  manual: boolean;
   type: Enums<'feedback_type'>[];
   template?: string;
   qrPos?: 'left' | 'right';
@@ -83,6 +85,9 @@ function CertsShellComponent() {
   const [customTemplate, setCustomTemplate] = useState<File | null>(null);
   const [exclude, setExclude] = useState<string[]>([]);
 
+  // manual respondents
+  const [respondents, setRespondents] = useState<ManualRespondent[]>([]);
+
   // Signatures
   const [coordinator, setCoordinator] = useState<File | null>(null);
   const [vpsas, setVpsas] = useState<File | null>(null);
@@ -96,6 +101,7 @@ function CertsShellComponent() {
       type: ['beneficiaries', 'implementers', 'partners'],
       template: 'coa_1.png',
       qrPos: 'right',
+      manual: false,
     },
   });
 
@@ -139,6 +145,7 @@ function CertsShellComponent() {
         });
         return;
       }
+
       if (!activity) {
         notifications.show({
           title: 'No activity selected',
@@ -195,37 +202,43 @@ function CertsShellComponent() {
         autoClose: false,
       });
 
-      // get respondents
-      let query = supabase
-        .from('activity_eval_view')
-        .select('name, email')
-        .eq('title', values.activity!)
-        .in('type', values.type)
-        .limit(9999)
-        .not('email', 'is', null)
-        .not('name', 'is', null);
+      let respondentsList;
 
-      if (exclude.length > 0) {
-        query = query.not('email', 'in', exclude);
-      }
+      if (values.manual) {
+        respondentsList = respondents;
+      } else {
+        // get respondents
+        let query = supabase
+          .from('activity_eval_view')
+          .select('name, email')
+          .eq('title', values.activity!)
+          .in('type', values.type)
+          .limit(9999)
+          .not('email', 'is', null)
+          .not('name', 'is', null);
 
-      const { data: respondents } = await query;
+        if (exclude.length > 0) {
+          query = query.not('email', 'in', exclude);
+        }
 
-      if (!respondents || respondents.length === 0) {
-        notifications.update({
-          id: 'certs',
-          loading: false,
-          message: 'No respondents found',
-          icon: <IconCheck />,
-          withBorder: true,
-          withCloseButton: true,
-          autoClose: 4000,
-        });
-        return;
+        respondentsList = (await query).data;
+
+        if (!respondentsList) {
+          notifications.update({
+            id: 'certs',
+            loading: false,
+            message: 'No respondents found',
+            icon: <IconCheck />,
+            withBorder: true,
+            withCloseButton: true,
+            autoClose: 4000,
+          });
+          return;
+        }
       }
 
       const response = (await worker.generateCertificate({
-        respondents: respondents!,
+        respondents: respondentsList!,
         activityId: activity?.id!,
         activityTitle: values.activity!,
         activityEnd: activity?.date_ending!,
@@ -450,12 +463,27 @@ function CertsShellComponent() {
           <Divider my="md" />
 
           <Stack gap="sm">
-            <ActivityInput
-              description="Enter name of activity to search"
-              key={form.key('activity')}
-              required
-              {...form.getInputProps('activity')}
-            />
+            <Group
+              align="flex-end"
+              grow
+              preventGrowOverflow={false}
+              wrap="nowrap"
+            >
+              <ActivityInput
+                description="Enter name of activity to search"
+                key={form.key('activity')}
+                required
+                {...form.getInputProps('activity')}
+              />
+
+              <Checkbox
+                description="Add participants list manually"
+                key={form.key('manual')}
+                label="List manually"
+                w="max-content"
+                {...form.getInputProps('manual', { type: 'checkbox' })}
+              />
+            </Group>
 
             <Checkbox.Group
               description="Respondents type to generate certificates for."
@@ -515,12 +543,21 @@ function CertsShellComponent() {
         </Fieldset>
 
         <Fieldset legend="Participants List">
-          {form.values.activity && form.values.type ? (
-            <RespondentsTable
-              activity={form.values.activity!}
-              setExclude={setExclude}
-              types={form.values.type}
-            />
+          {form.values.activity ? (
+            <>
+              {form.values.manual ? (
+                <ManualList
+                  respondents={respondents}
+                  setRespondents={setRespondents}
+                />
+              ) : (
+                <RespondentsTable
+                  activity={form.values.activity!}
+                  setExclude={setExclude}
+                  types={form.values.type}
+                />
+              )}
+            </>
           ) : (
             <Center h={300}>
               <Stack gap="xs">

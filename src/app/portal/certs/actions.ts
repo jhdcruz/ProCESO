@@ -3,6 +3,7 @@
 import { tasks, runs } from '@trigger.dev/sdk/v3';
 import type { generateCerts } from '@/trigger/generate-certificate';
 import ApiResponse from '@/utils/response';
+import { type ManualRespondent } from './_components/ManualList';
 
 export async function triggerGenerateCerts(
   activity: string,
@@ -13,6 +14,7 @@ export async function triggerGenerateCerts(
   type: string[],
   qrPos: 'left' | 'right',
   send: boolean = true,
+  respondents?: ManualRespondent[],
 ) {
   // queue the generate-certs trigger
   return await tasks.trigger<typeof generateCerts>(
@@ -26,6 +28,7 @@ export async function triggerGenerateCerts(
       type,
       qrPos,
       send,
+      respondents,
     },
     {
       tags: [`title.${activity}`, ...type],

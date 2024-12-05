@@ -4,6 +4,7 @@ import { bytesToHex } from '@noble/hashes/utils';
 import { createAdminClient } from '@/libs/supabase/admin-client';
 import { generateCert } from '@/libs/pdflib/certificate';
 import { emailCerts } from './email-certs';
+import { type ManualRespondent } from '@/app/portal/certs/_components/ManualList';
 
 /**
  * Send notification email to unassigned faculties that
@@ -27,13 +28,13 @@ export const generateCerts = task({
     type: string[];
     qrPos?: 'left' | 'right';
     send?: boolean;
+    respondents?: ManualRespondent[];
   }) => {
-    const { activity, exclude, type, template, qrPos } = payload;
+    const { activity, exclude, type, template, qrPos, respondents } = payload;
 
-    // HACK: for RLS policies, we are passing auth cookies,
-    // probably a bad thing, probably, I think.
-    await envvars.retrieve('SUPABASE_URL');
-    await envvars.retrieve('SUPABASE_SERVICE_KEY');
+    const supaUrl = envvars.retrieve('SUPABASE_URL');
+    const supaKey = envvars.retrieve('SUPABASE_SERVICE_KEY');
+    await Promise.allSettled([supaUrl, supaKey]);
     const supabase = createAdminClient();
 
     // get activity details
@@ -44,24 +45,32 @@ export const generateCerts = task({
       .limit(1)
       .single();
 
-    // get respondents
-    let evalQuery = supabase
-      .from('activity_eval_view')
-      .select('name, email')
-      .eq('title', activity)
-      .in('type', type)
-      .limit(9999)
-      .not('email', 'is', null)
-      .not('name', 'is', null);
+    let evalRes;
 
-    if (exclude.length > 0) {
-      evalQuery = evalQuery.not('email', 'in', exclude);
+    if (respondents && respondents.length > 0) {
+      evalRes = {
+        data: respondents,
+        error: null,
+      };
+    } else {
+      // get respondents
+      let evalQuery = supabase
+        .from('activity_eval_view')
+        .select('name, email')
+        .eq('title', activity)
+        .in('type', type)
+        .limit(9999)
+        .not('email', 'is', null)
+        .not('name', 'is', null);
+
+      if (exclude.length > 0) {
+        evalQuery = evalQuery.not('email', 'in', exclude);
+      }
+
+      evalRes = await evalQuery;
     }
 
-    const [activityRes, evalRes] = await Promise.all([
-      activityQuery,
-      evalQuery,
-    ]);
+    const [activityRes] = await Promise.all([activityQuery]);
 
     logger.info('activity result', { activityRes });
     logger.info('eval result', { evalRes });
