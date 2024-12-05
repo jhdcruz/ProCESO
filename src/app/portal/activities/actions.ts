@@ -94,6 +94,7 @@ export async function submitActivity(
         venue: activity.venue,
         venue_additional: activity.venue_additional,
         created_by: session.user.id,
+        target: activity.target,
         objectives: [
           activity.objective_1?.trim() ?? '',
           activity.objective_2?.trim() ?? '',
@@ -113,6 +114,7 @@ export async function submitActivity(
         date_starting: activity.date_starting?.toUTCString(),
         venue: activity.venue,
         venue_additional: activity.venue_additional,
+        target: activity.target,
         objectives: [
           activity.objective_1?.trim() ?? '',
           activity.objective_2?.trim() ?? '',

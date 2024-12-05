@@ -22,6 +22,7 @@ export type Database = {
           objectives: string[]
           outcomes: string[]
           series: string | null
+          target: number | null
           title: string
           updated_at: string | null
           venue: number[] | null
@@ -40,6 +41,7 @@ export type Database = {
           objectives?: string[]
           outcomes?: string[]
           series?: string | null
+          target?: number | null
           title: string
           updated_at?: string | null
           venue?: number[] | null
@@ -58,6 +60,7 @@ export type Database = {
           objectives?: string[]
           outcomes?: string[]
           series?: string | null
+          target?: number | null
           title?: string
           updated_at?: string | null
           venue?: number[] | null
@@ -166,6 +169,13 @@ export type Database = {
             referencedColumns: ["activity_id"]
           },
           {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "activity_feedback_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -255,6 +265,13 @@ export type Database = {
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["activity_id"]
           },
+          {
+            foreignKeyName: "event_files_event_fkey"
+            columns: ["activity"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       activity_subscriptions: {
@@ -304,6 +321,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "participants_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "participants_user_id_fkey"
@@ -398,6 +422,13 @@ export type Database = {
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["activity_id"]
           },
+          {
+            foreignKeyName: "analytics_metadata_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       certs: {
@@ -461,6 +492,13 @@ export type Database = {
             referencedColumns: ["activity_id"]
           },
           {
+            foreignKeyName: "certs_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "certs_generated_by_fkey"
             columns: ["generated_by"]
             isOneToOne: false
@@ -497,6 +535,7 @@ export type Database = {
           id: number
           referrer: string | null
           rsvp: boolean | null
+          rsvp_comments: string | null
           user_id: string | null
         }
         Insert: {
@@ -505,6 +544,7 @@ export type Database = {
           id?: number
           referrer?: string | null
           rsvp?: boolean | null
+          rsvp_comments?: string | null
           user_id?: string | null
         }
         Update: {
@@ -513,6 +553,7 @@ export type Database = {
           id?: number
           referrer?: string | null
           rsvp?: boolean | null
+          rsvp_comments?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -543,6 +584,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "event_handlers_event_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "event_handlers_user_id_fkey"
@@ -683,6 +731,7 @@ export type Database = {
           outcomes: string[] | null
           series: string | null
           series_color: string | null
+          target: number | null
           title: string | null
           updated_at: string | null
           venue: number[] | null
@@ -722,6 +771,34 @@ export type Database = {
           subscriber_email: string | null
           subscriber_id: string | null
           subscriber_name: string | null
+        }
+        Relationships: []
+      }
+      activitiesdetails_view: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          creator_avatar: string | null
+          creator_department: Database["public"]["Enums"]["roles_dept"] | null
+          creator_email: string | null
+          creator_other_roles: Database["public"]["Enums"]["roles_pos"][] | null
+          creator_role: Database["public"]["Enums"]["roles_user"] | null
+          date_ending: string | null
+          date_starting: string | null
+          description: string | null
+          feedback: boolean | null
+          id: string | null
+          image_url: string | null
+          objectives: string[] | null
+          outcomes: string[] | null
+          series: string | null
+          series_color: string | null
+          target: number | null
+          title: string | null
+          updated_at: string | null
+          venue: number[] | null
+          venue_additional: string | null
+          visibility: Database["public"]["Enums"]["activity_visibility"] | null
         }
         Relationships: []
       }
@@ -778,6 +855,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "activities_subscriptions_view"
             referencedColumns: ["activity_id"]
+          },
+          {
+            foreignKeyName: "activity_feedback_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activitiesdetails_view"
+            referencedColumns: ["id"]
           },
         ]
       }

@@ -63,7 +63,7 @@ function ActivityAnalyticsShell({
 
       <Grid align="flex-start" justify="space-between">
         <Grid.Col span={{ base: 12, sm: 12, md: 12, lg: 8 }}>
-          {/* Respondents Table */}
+          {/* Word Cloud */}
           <Paper
             bg="light-dark(
               var(--mantine-color-gray-0),

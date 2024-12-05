@@ -184,6 +184,7 @@ function ActivityDetailsHeader({
     venue: activity.venue as [number, number],
     venue_additional: activity.venue_additional as string,
     series: activity.series,
+    target: activity.target,
     visibility: activity.visibility ?? 'Everyone',
     handled_by: activity.users?.map((user) => user.id as string) ?? undefined,
     objectives: activity.objectives!,

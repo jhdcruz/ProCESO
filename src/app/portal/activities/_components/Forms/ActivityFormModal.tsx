@@ -13,6 +13,7 @@ import {
   Indicator,
   Input,
   Modal,
+  NumberInput,
   SegmentedControl,
   Text,
   TextInput,
@@ -74,6 +75,7 @@ export interface ActivityFormProps {
   objective_2?: string;
   objective_3?: string;
   handled_by?: string[];
+  target: number | null;
   notify?: Enums<'roles_dept'>[];
 }
 
@@ -122,6 +124,7 @@ export const ActivityFormModal = memo(
         objective_2: '',
         objective_3: '',
         handled_by: [],
+        target: null,
       },
 
       validate: {
@@ -334,6 +337,17 @@ export const ActivityFormModal = memo(
                 classNames={classes}
                 key={form.key('series')}
                 {...form.getInputProps('series')}
+              />
+
+              <NumberInput
+                allowDecimal={false}
+                allowNegative={false}
+                className="my-2"
+                classNames={classes}
+                key={form.key('target')}
+                label="Target Participants"
+                placeholder="Ex. 50"
+                {...form.getInputProps('target')}
               />
 
               <Input.Wrapper

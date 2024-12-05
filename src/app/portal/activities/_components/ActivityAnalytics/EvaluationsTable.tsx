@@ -350,6 +350,7 @@ export const EvaluationsTable = memo(
             ) : (
               <Badge size="sm" variant="default">
                 {total}
+                {activity?.target && ` / ${activity.target}`}
               </Badge>
             )}
           </Group>
