@@ -48,6 +48,7 @@ function UserEdit({
     if (!selected?.id) return;
 
     modals.openConfirmModal({
+      id: 'delete-user',
       centered: true,
       title: 'Delete User?',
       children: (
@@ -77,6 +78,8 @@ function UserEdit({
         });
       },
     });
+
+    modals.close('delete-user');
   };
 
   const handleSubmit = async () => {
