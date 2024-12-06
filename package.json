@@ -76,7 +76,7 @@
     "react": "19.0.0-rc-7670501b-20241124",
     "react-dom": "19.0.0-rc-7670501b-20241124",
     "react-transition-progress": "0.0.4",
-    "recharts": "2.13.3",
+    "recharts": "2.14.1",
     "resend": "4.0.1",
     "sanitize-html": "2.13.1",
     "sharp": "0.33.5"
