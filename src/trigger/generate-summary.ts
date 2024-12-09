@@ -42,8 +42,14 @@ export const generateSummary = task({
     if (error) {
       logger.error('Unable to get evaluation emotions', { error });
     }
+    if (!emotionsRes) {
+      logger.warn('No evaluation emotions found');
+      return;
+    } else {
+      logger.info('Evaluation emotions found', { emotionsRes });
+    }
 
-    const emotions = aggregateEmotions(emotionsRes!, true, true);
+    const emotions = aggregateEmotions(emotionsRes, true, true);
 
     // ignore summary when no responses
 
@@ -62,7 +68,7 @@ export const generateSummary = task({
         {
           role: 'user',
           content:
-            'Write a paragraph consisting of at least 5 sentences summary report of the feedback evaluation results provided below. Add basic html tags to format the text and highlight important parts, no links and headers.',
+            'Write a paragraph consisting of at least 2 paragraphs summary report of the feedback evaluation results provided in the following prompts. use proper and basic html tags for formatting, no links.',
         },
         {
           role: 'user',

@@ -10,6 +10,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
+  IconFileExport,
   IconFileTextAi,
   IconFileTextSpark,
 } from '@tabler/icons-react';
@@ -69,6 +70,69 @@ function Summary({
     setLoading(false);
   };
 
+  const handleExport = async () => {
+    setLoading(true);
+
+    notifications.show({
+      id: 'export',
+      loading: true,
+      title: 'Exporting summary',
+      message: 'Please wait...',
+      withBorder: true,
+      autoClose: false,
+    });
+
+    const [
+      unifiedLib,
+      markdown,
+      docx,
+      rehypeRemark,
+      rehypeParse,
+      remarkStringify,
+    ] = await Promise.all([
+      import('unified').then((u) => u.unified),
+      import('remark-parse').then((r) => r.default),
+      import('remark-docx').then((d) => d.default),
+      import('rehype-remark').then((r) => r.default),
+      import('rehype-parse').then((r) => r.default),
+      import('remark-stringify').then((r) => r.default),
+    ]);
+
+    // HTML >> MD
+    const htmProcessor = await unifiedLib()
+      .use(rehypeParse)
+      .use(rehypeRemark)
+      .use(remarkStringify)
+      .process(summary);
+
+    // MD >> DOCX
+    const mdProcessor = unifiedLib()
+      .use(markdown)
+      // @ts-expect-error i dunno
+      .use(docx, { output: 'blob' });
+
+    const doc = await mdProcessor.process(String(htmProcessor));
+    const blob = (await doc.result) as Blob;
+
+    // download the file
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `summary-${id}.docx`;
+    a.click();
+
+    notifications.update({
+      id: 'export',
+      loading: false,
+      icon: <IconCheck />,
+      message: 'Summary exported successfully',
+      withBorder: true,
+      autoClose: 4000,
+    });
+
+    setLoading(false);
+  };
+
   const fetchSummary = async (activity: string) => {
     setLoading(true);
     const supabase = createBrowserClient();
@@ -115,6 +179,17 @@ function Summary({
               {summary === '' ? 'Generate' : 'Regenerate'}
             </Button>
           </Tooltip>
+
+          <Button
+            disabled={summary.length === 0}
+            leftSection={<IconFileExport size={14} />}
+            loaderProps={{ type: 'dots' }}
+            onClick={() => handleExport()}
+            size="xs"
+            variant="default"
+          >
+            Export
+          </Button>
 
           <IconFileTextAi
             className={utilStyles.icon}

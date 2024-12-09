@@ -77,9 +77,15 @@
     "react-dom": "19.0.0-rc-7670501b-20241124",
     "react-transition-progress": "0.0.4",
     "recharts": "2.13.3",
+    "rehype-parse": "9.0.1",
+    "rehype-remark": "10.0.0",
+    "remark-docx": "0.1.6",
+    "remark-parse": "11.0.0",
+    "remark-stringify": "11.0.0",
     "resend": "4.0.1",
     "sanitize-html": "2.13.1",
-    "sharp": "0.33.5"
+    "sharp": "0.33.5",
+    "unified": "11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.2.0",

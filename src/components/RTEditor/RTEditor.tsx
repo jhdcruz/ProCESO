@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Button } from '@mantine/core';
+import { Button, type MantineStyleProps } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -10,6 +10,7 @@ import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
+import sanitizeHtml from 'sanitize-html';
 import '@mantine/tiptap/styles.layer.css';
 
 /**
@@ -25,15 +26,16 @@ function RichText({
   loading,
   onSubmit,
   content,
+  ...props
 }: {
   editable: boolean;
-  loading: boolean;
-  onSubmit: (content: string) => void;
+  loading?: boolean;
+  onSubmit?: (content: string) => void;
   content?: string | null;
-}) {
-  const bodyContent =
-    content ??
-    '<p>This activity has no description yet. Come back again later.</p>';
+} & MantineStyleProps) {
+  const bodyContent = content
+    ? sanitizeHtml(content)
+    : '<p>This activity has no description yet. Come back again later.</p>';
 
   const editor = useEditor(
     {
@@ -56,7 +58,7 @@ function RichText({
   );
 
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor editor={editor} {...props}>
       {editor && editable && (
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
           {/* Saving/discarding controls */}
@@ -69,14 +71,16 @@ function RichText({
             >
               Reset
             </Button>
-            <Button
-              loaderProps={{ type: 'dots' }}
-              loading={loading}
-              onClick={() => onSubmit(editor.getHTML())}
-              size="compact-sm"
-            >
-              Save Changes
-            </Button>
+            {onSubmit && (
+              <Button
+                loaderProps={{ type: 'dots' }}
+                loading={loading}
+                onClick={() => onSubmit(editor.getHTML())}
+                size="compact-sm"
+              >
+                Save Changes
+              </Button>
+            )}
           </Button.Group>
 
           <RichTextEditor.ControlsGroup>
