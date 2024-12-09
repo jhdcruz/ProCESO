@@ -62,7 +62,7 @@ export const generateSummary = task({
         {
           role: 'user',
           content:
-            'Write a paragraph consisting of at least 5 sentences summary report of the feedback evaluation results provided below. Add basic html tags to format the text and highlight important parts, no links.',
+            'Write a paragraph consisting of at least 5 sentences summary report of the feedback evaluation results provided below. Add basic html tags to format the text and highlight important parts, no links and headers.',
         },
         {
           role: 'user',
