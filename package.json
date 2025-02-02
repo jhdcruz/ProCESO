@@ -64,7 +64,7 @@
     "@tiptap/starter-kit": "2.10.3",
     "@trigger.dev/build": "3.3.12",
     "@trigger.dev/sdk": "3.3.5",
-    "@zip.js/zip.js": "2.7.54",
+    "@zip.js/zip.js": "2.7.57",
     "blob-util": "2.0.2",
     "dayjs": "1.11.13",
     "framer-motion": "11.12.0",
