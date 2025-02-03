@@ -116,7 +116,7 @@
     "tailwindcss-animate": "1.0.7",
     "transform-loader": "0.2.4",
     "trigger.dev": "3.3.12",
-    "typescript": "5.7.2"
+    "typescript": "5.7.3"
   },
   "lint-staged": {
     "*.(md,json,yml)": "prettier --write",
