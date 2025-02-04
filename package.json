@@ -76,7 +76,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-transition-progress": "0.0.4",
-    "recharts": "2.13.3",
+    "recharts": "2.15.1",
     "rehype-parse": "9.0.1",
     "rehype-remark": "10.0.0",
     "remark-docx": "0.1.6",
